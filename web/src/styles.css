@@ -89,3 +89,40 @@ td { padding: 10px 8px; border-bottom: 1px solid var(--line-soft); vertical-alig
 .login-card { width: 100%; max-width: 460px; }
 .login-card .brand { padding: 0 0 16px; }
 .name-list { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+
+/* 规则引擎 */
+.st-set { background: #e6f2ec; color: #2f7a5b; }
+.st-review { background: #e8eff9; color: var(--blue); }
+.st-sample { background: #fdf1e6; color: #9a4a12; }
+.st-empty { background: #fde4e4; color: var(--red); }
+.ck-PASS { background: #e6f2ec; color: #2f7a5b; }
+.ck-NOTE { background: #fdf1e6; color: #9a4a12; }
+.ck-BLOCK { background: #fde4e4; color: var(--red); }
+.pill { padding: 6px 14px; border-radius: 16px; border: 1px solid var(--line); background: #fff; font-weight: 600; }
+.pill.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+.mono { font-family: ui-monospace, Consolas, monospace; }
+.small { font-size: 12px; }
+.warn { color: #9a4a12; }
+.num { width: 110px; }
+.row.tight { margin-top: 0; gap: 4px; }
+tr.changed td { background: #fffbf5; }
+tr.clickable { cursor: pointer; }
+.rule { border-top: 1px solid var(--line-soft); padding: 10px 0; }
+.rule-head { display: flex; flex-wrap: wrap; gap: 10px; align-items: baseline; }
+.output { margin: 6px 0 0 12px; }
+.out-name { display: inline-block; margin-bottom: 4px; }
+.case { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
+.case .when { flex: 1 1 200px; max-width: 280px; }
+.case .expr { flex: 3 1 320px; }
+.form.inputs { margin: 10px 0; }
+.form.inputs label { font-weight: 500; }
+.detail { background: var(--chip); border-radius: 8px; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; }
+.param { display: inline-flex; gap: 4px; align-items: center; margin-right: 12px; }
+.btn-outline.small { height: 28px; padding: 0 10px; margin-left: 4px; }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+.savebar {
+  position: sticky; bottom: 0; display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
+  padding: 12px 18px; background: #fff; border: 1px solid var(--line); border-radius: 12px;
+}
+.savebar.on { border-color: var(--orange); }
+.savebar input { flex: 1 1 240px; }

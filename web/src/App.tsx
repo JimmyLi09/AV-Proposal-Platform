@@ -3,6 +3,7 @@ import { api, User } from "./api";
 import Login from "./Login";
 import ProjectDetail from "./ProjectDetail";
 import Projects from "./Projects";
+import Rules from "./Rules";
 
 function useHash() {
   const [hash, setHash] = useState(location.hash);
@@ -26,6 +27,7 @@ export default function App() {
   if (user === null) return <Login onLogin={setUser} />;
 
   const projectId = hash.match(/^#\/projects\/(\d+)/)?.[1];
+  const isRules = hash.startsWith("#/rules");
 
   async function switchName() {
     await api("/session", { method: "DELETE" });
@@ -39,8 +41,11 @@ export default function App() {
           <div className="brand-name">AUDAX</div>
           <div className="brand-sub">AV PROPOSAL PLATFORM</div>
         </div>
-        <a href="#/" className="nav-item active">
+        <a href="#/" className={`nav-item ${isRules ? "" : "active"}`}>
           Projects<span className="zh">项目</span>
+        </a>
+        <a href="#/rules" className={`nav-item ${isRules ? "active" : ""}`}>
+          Rules Engine<span className="zh">规则引擎</span>
         </a>
       </nav>
       <div className="body">
@@ -53,7 +58,7 @@ export default function App() {
             Switch name 切换名字
           </button>
         </header>
-        <main className="main">{projectId ? <ProjectDetail id={Number(projectId)} /> : <Projects />}</main>
+        <main className="main">{isRules ? <Rules /> : projectId ? <ProjectDetail id={Number(projectId)} /> : <Projects />}</main>
       </div>
     </div>
   );

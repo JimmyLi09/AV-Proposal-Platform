@@ -216,3 +216,11 @@ def test_substitute_shows_values():
     ctx = {"a": Decimal(1835008), "b": Decimal(560000)}
     assert substitute(tree, ctx) == "ceil(1,835,008 / 560,000) + 1"
     assert evaluate(tree, ctx) == 5
+
+
+def test_tier_without_condition_must_be_last():
+    content = edited("F10", "spare_modules", "ceil(modules * 0.1)")
+    out = next(o for rule in content["rules"] if rule["id"] == "F10" for o in rule["outputs"])
+    out["cases"].insert(0, {"when": None, "expr": "1"})  # 没写条件的行挡住了后面的分档
+    with pytest.raises(ExprError):
+        validate(content, CONTENT)

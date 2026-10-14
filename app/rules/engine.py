@@ -59,6 +59,8 @@ def validate(content: dict, base: dict) -> None:
         for out in rule["outputs"]:
             if not out["cases"]:
                 raise ExprError(f"{rule['id']} {out['name']}：至少要有一条算式")
+            if any(not c.get("when") for c in out["cases"][:-1]):
+                raise ExprError(f"{rule['id']} {out['name']}：分档时除最后一行外每行都要写条件")
             for case in out["cases"]:
                 for text in filter(None, (case.get("when"), case["expr"])):
                     unknown = {n for n in names(parse(text)) if n not in known and not n.startswith("cabinet_")}
