@@ -56,8 +56,32 @@ class SourceFile(Base):
     size: Mapped[int]
     uploaded_by: Mapped[int] = mapped_column(ForeignKey("users.id"))
     uploaded_at: Mapped[datetime] = mapped_column(default=utcnow)
+    # 第 4 步：服务器读取结果（读取方式见 app/extract/run.py）
+    read_status: Mapped[str | None] = mapped_column(String(10))  # reading / read / attached / failed
+    read_method: Mapped[str | None] = mapped_column(String(20))
+    read_note: Mapped[str | None] = mapped_column(Text)
+    read_text: Mapped[str | None] = mapped_column(Text)  # 读到的文字（前 2000 字），供核对
+    read_at: Mapped[datetime | None]
 
     uploader: Mapped[User] = relationship()
+    extracted: Mapped[list["ExtractedField"]] = relationship(order_by="ExtractedField.id", back_populates="source_file")
+
+
+class ExtractedField(Base):
+    """从文件里认出的字段（候选值）。重新读取时整份替换；方案里采用的值另存在 Rev 上。"""
+    __tablename__ = "extracted_fields"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    source_file_id: Mapped[int] = mapped_column(ForeignKey("source_files.id"), index=True)
+    field: Mapped[str] = mapped_column(String(40))
+    value: Mapped[object] = mapped_column(JSON)
+    confidence: Mapped[str] = mapped_column(String(6))  # high / medium / low
+    page: Mapped[int | None]
+    location: Mapped[str] = mapped_column(String(120), default="")  # p.2、LED!B6、图层 · 坐标
+    snippet: Mapped[str] = mapped_column(Text, default="")  # 原文
+    crop_path: Mapped[str | None] = mapped_column(String(300))  # 原文截图（副本），相对资料目录
+
+    source_file: Mapped[SourceFile] = relationship(back_populates="extracted")
 
 
 class Proposal(Base):
@@ -93,6 +117,9 @@ class Revision(Base):
     manual_lines: Mapped[list | None] = mapped_column(JSON)  # BOQ 人工增加的行（带单价，标「手工」）
     sell_price_cents: Mapped[int | None]  # 售价人工填写，可空
     price_display: Mapped[str | None] = mapped_column(String(10))  # PDF 里的价格：none / total / itemised
+    # 每个输入的来源与确认：{字段: {source: manual|file, confidence, filename, location, snippet,
+    #                              extracted_id, confirmed_by, confirmed_at}}
+    input_meta: Mapped[dict | None] = mapped_column(JSON)
 
     author: Mapped[User] = relationship(foreign_keys=[author_id])
 

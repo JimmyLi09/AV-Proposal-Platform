@@ -4,3 +4,6 @@ port: 8081
 # 资料目录：数据库、原件、生成文件都放这里。相对路径以项目根目录为准。
 # 示例值，正式路径见清单 A9（例：D:\avcalc-data）。
 data_dir: ./data
+# DWG 读取：免费的 ODA File Converter 安装路径，例：'C:\Program Files\ODA\ODAFileConverter\ODAFileConverter.exe'
+# 留空 = 没装，DWG 只随项目保存。
+oda_converter: ""

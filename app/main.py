@@ -19,13 +19,15 @@ def load_config() -> dict:
 
 
 def create_app(data_dir: Path | None = None) -> FastAPI:
-    data_dir = Path(data_dir or ROOT / load_config()["data_dir"]).resolve()
+    cfg = load_config()
+    data_dir = Path(data_dir or ROOT / cfg["data_dir"]).resolve()
     data_dir.mkdir(parents=True, exist_ok=True)
     engine = make_engine(data_dir / "avp.db")
     migrate(engine)
 
     app = FastAPI(title="AV Proposal Platform")
     app.state.data_dir = data_dir
+    app.state.oda = cfg.get("oda_converter") or None
     app.state.Session = sessionmaker(engine, expire_on_commit=False)
     with app.state.Session() as db:
         for module in (rules_api, products_api, costs):
