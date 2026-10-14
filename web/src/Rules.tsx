@@ -1,30 +1,9 @@
-import { Fragment, useEffect, useState } from "react";
-import { api, InputDef, Param, RuleContent, RuleResult, RuleVersion, RunResult, send } from "./api";
+import { useEffect, useState } from "react";
+import { api, InputDef, Param, RuleContent, RuleVersion, RunResult, send } from "./api";
+import { Choices, InputsForm, nextVersion, ResultsTable, STATUS, StatusChip } from "./Calc";
 import { fmtDate } from "./labels";
 
 const LINE = "LED";
-
-export const STATUS: Record<string, string> = {
-  set: "Set 已定",
-  review: "Under review 审核中",
-  sample: "Sample value 示例值 · 待填",
-  empty: "Empty 未填",
-};
-
-export function StatusChip({ status }: { status: string }) {
-  return <span className={`tag st-${status}`}>{STATUS[status] ?? status}</span>;
-}
-
-function CheckChip({ check }: { check: string | null }) {
-  if (!check) return null;
-  const label: Record<string, string> = { PASS: "PASS 通过", NOTE: "NOTE 提示", BLOCK: "BLOCK 阻断" };
-  return <span className={`tag ck-${check}`}>{label[check] ?? check}</span>;
-}
-
-function nextVersion(v: string) {
-  const m = v.match(/^v(\d+)\.(\d+)$/);
-  return m ? `v${m[1]}.${Number(m[2]) + 1}` : v;
-}
 
 export default function Rules() {
   const [saved, setSaved] = useState<RuleVersion | null>(null);
@@ -169,7 +148,7 @@ export default function Rules() {
         ))}
       </section>
 
-      <TryCalc inputs={inputs} setInputs={setInputs} defs={draft.inputs} saved={saved} draft={dirty ? draft : null} />
+      <TryCalc inputs={inputs} setInputs={setInputs} defs={draft.inputs} hidden={saved.product_fed} saved={saved} draft={dirty ? draft : null} />
 
       <section className="card">
         <h2>
@@ -240,56 +219,17 @@ function ParamRow({ p, changed, onChange }: { p: Param; changed: boolean; onChan
   );
 }
 
-function InputField({ def, value, onChange }: { def: InputDef; value: unknown; onChange: (v: unknown) => void }) {
-  const num = (s: string) => (s === "" ? null : Number(s));
-  if (def.type === "choice")
-    return (
-      <select aria-label={def.label} value={String(value ?? "")} onChange={(e) => onChange(e.target.value)}>
-        {def.options!.map((o) => (
-          <option key={o}>{o}</option>
-        ))}
-      </select>
-    );
-  if (def.type === "range") {
-    const [lo, hi] = (value as number[] | null) ?? [null, null];
-    return (
-      <span className="row tight">
-        <input type="number" step="any" className="num" aria-label={`${def.label} min`} value={lo ?? ""} onChange={(e) => onChange([num(e.target.value), hi])} />
-        –
-        <input type="number" step="any" className="num" aria-label={`${def.label} max`} value={hi ?? ""} onChange={(e) => onChange([lo, num(e.target.value)])} />
-      </span>
-    );
-  }
-  if (def.type === "sizes") {
-    const text = ((value as number[][] | null) ?? []).map((s) => s.join("x")).join(", ");
-    return <SizesInput label={def.label} text={text} onChange={onChange} />;
-  }
-  return <input type="number" step="any" className="num" aria-label={def.label} value={(value as number | null) ?? ""} onChange={(e) => onChange(num(e.target.value))} />;
-}
-
-function SizesInput({ label, text, onChange }: { label: string; text: string; onChange: (v: unknown) => void }) {
-  const [raw, setRaw] = useState(text);
-  return (
-    <input aria-label={label} value={raw} placeholder="640x480, 640x640"
-      onChange={(e) => {
-        setRaw(e.target.value);
-        const sizes = e.target.value.split(",").map((s) => s.trim().split(/[x×*]/).map(Number));
-        if (sizes.every((s) => s.length === 2 && s.every((n) => n > 0))) onChange(sizes);
-      }} />
-  );
-}
-
-function TryCalc({ inputs, setInputs, defs, saved, draft }: {
+function TryCalc({ inputs, setInputs, defs, hidden, saved, draft }: {
   inputs: Record<string, unknown>;
   setInputs: (v: Record<string, unknown>) => void;
   defs: InputDef[];
+  hidden: string[];
   saved: RuleVersion;
   draft: RuleContent | null;
 }) {
   const [base, setBase] = useState<RunResult | null>(null);
   const [after, setAfter] = useState<RunResult | null>(null);
   const [error, setError] = useState("");
-  const [open, setOpen] = useState<string | null>(null);
 
   useEffect(() => {
     const t = setTimeout(async () => {
@@ -306,121 +246,23 @@ function TryCalc({ inputs, setInputs, defs, saved, draft }: {
     return () => clearTimeout(t);
   }, [inputs, draft, saved.id]);
 
-  const afterById = Object.fromEntries((after?.rules ?? []).map((r) => [r.id, r]));
-
+  const cabinet = base?.recommendation?.cabinet;
   return (
     <section className="card">
       <h2>
         Try calculation <span className="zh">试算</span>
       </h2>
-      <p className="muted">默认填的是 143-Royal Plaza LED-1 的输入。改了参数或算式，下面会同时显示「{saved.version}」和「修改后」的结果。点一行展开算式。</p>
-      <div className="form inputs">
-        {defs.map((d) => (
-          <label key={d.name}>
-            {d.label} {d.unit && <span className="muted">({d.unit})</span>}
-            <InputField def={d} value={inputs[d.name]} onChange={(v) => setInputs({ ...inputs, [d.name]: v })} />
-          </label>
-        ))}
-      </div>
-      {error && <p className="error">修改后的规则有误：{error}</p>}
-      {base && Object.keys(base.choices).length > 0 && (
-        <p className="warn">
-          尺寸不是模组的整数倍，请先选一个有效尺寸：
-          {Object.entries(base.choices).map(([k, opts]) => (
-            <span key={k}>
-              {" "}
-              {k}{" "}
-              {opts.map((o) => (
-                <button key={o} className="btn-outline small" onClick={() => setInputs({ ...inputs, [k]: o })}>
-                  {o}
-                </button>
-              ))}
-            </span>
-          ))}
-        </p>
-      )}
-      {base && base.rules.length > 0 && (
-        <div className="table-wrap">
-          <table className="calc">
-            <thead>
-              <tr>
-                <th>Rule 规则</th>
-                <th>Result 结果 · {saved.version}</th>
-                {draft && <th>After change 修改后</th>}
-                <th>As calculated 计算式</th>
-                <th>Status 状态</th>
-              </tr>
-            </thead>
-            <tbody>
-              {base.rules.map((r) => {
-                const a = afterById[r.id];
-                const differs = a && (a.display !== r.display || a.check !== r.check || a.trace !== r.trace);
-                return (
-                  <Fragment key={r.id}>
-                    <tr className={`clickable ${differs ? "changed" : ""}`} onClick={() => setOpen(open === r.id ? null : r.id)}>
-                      <td className="strong">
-                        {r.id} {r.title}
-                      </td>
-                      <td>
-                        <Outcome r={r} />
-                      </td>
-                      {draft && <td>{a ? <Outcome r={a} /> : "—"}</td>}
-                      <td className="mono small">{(a ?? r).trace}</td>
-                      <td>
-                        <StatusChip status={(a ?? r).status} />
-                      </td>
-                    </tr>
-                    {open === r.id && (
-                      <tr>
-                        <td colSpan={draft ? 5 : 4}>
-                          <Detail r={a ?? r} />
-                        </td>
-                      </tr>
-                    )}
-                  </Fragment>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </section>
-  );
-}
-
-function Outcome({ r }: { r: RuleResult }) {
-  if (r.error) return <span className="error">{r.error}</span>;
-  if (r.missing.length) return <span className="warn">缺少：{r.missing.join(", ")}</span>;
-  return (
-    <span>
-      {r.display} <CheckChip check={r.check} />
-    </span>
-  );
-}
-
-function Detail({ r }: { r: RuleResult }) {
-  return (
-    <div className="detail">
-      <p>
-        <b>Why this number 数字由来：</b>
-        {r.note}
-      </p>
-      {r.lines.map((l) => (
-        <div key={l.name} className="mono small">
-          {l.when && <span className="muted">当 {l.when}：</span>}
-          {l.name} = {l.expr ?? ""} {l.substituted && `→ ${l.substituted}`} = <b>{l.display}</b> {l.unit}
-        </div>
-      ))}
-      {r.params.length > 0 && (
+      <p className="muted">默认填的是 143-Royal Plaza LED-1 的输入，箱体从产品库推荐。改了参数或算式，下面会同时显示「{saved.version}」和「修改后」的结果。点一行展开算式。</p>
+      <InputsForm defs={defs} hidden={hidden} inputs={inputs} setInputs={setInputs} />
+      {base && (
         <p>
-          <b>Parameters 参数：</b>
-          {r.params.map((p) => (
-            <span key={p.name} className="param">
-              {p.label} {p.value ?? "—"} {p.unit} <StatusChip status={p.status} />
-            </span>
-          ))}
+          Cabinet 箱体：{cabinet ? `${cabinet.brand} ${cabinet.model}` : <span className="error">{base.recommendation.block ?? "—"}</span>}
+          <span className="muted"> · Product Library 产品库 {base.library_version}</span>
         </p>
       )}
-    </div>
+      {error && <p className="error">修改后的规则有误：{error}</p>}
+      {base && <Choices result={base} onPick={(k, v) => setInputs({ ...inputs, [k]: v })} />}
+      {base && <ResultsTable base={base} after={after} label={saved.version} />}
+    </section>
   );
 }

@@ -5,6 +5,7 @@ export const LINE_LABEL: Record<string, string> = {
 
 const STATUS_LABEL: Record<string, string> = {
   draft: "Draft 草稿",
+  calculated: "Calculated 已计算",
 };
 
 export function StatusTag({ status, rev }: { status: string; rev: number }) {

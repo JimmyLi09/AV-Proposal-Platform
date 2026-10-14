@@ -3,7 +3,9 @@ import { api, User } from "./api";
 import Login from "./Login";
 import ProjectDetail from "./ProjectDetail";
 import Projects from "./Projects";
+import Products from "./Products";
 import Rules from "./Rules";
+import Workspace from "./Workspace";
 
 function useHash() {
   const [hash, setHash] = useState(location.hash);
@@ -27,7 +29,8 @@ export default function App() {
   if (user === null) return <Login onLogin={setUser} />;
 
   const projectId = hash.match(/^#\/projects\/(\d+)/)?.[1];
-  const isRules = hash.startsWith("#/rules");
+  const proposalId = hash.match(/^#\/proposals\/(\d+)/)?.[1];
+  const page = hash.startsWith("#/rules") ? "rules" : hash.startsWith("#/products") ? "products" : "projects";
 
   async function switchName() {
     await api("/session", { method: "DELETE" });
@@ -41,10 +44,13 @@ export default function App() {
           <div className="brand-name">AUDAX</div>
           <div className="brand-sub">AV PROPOSAL PLATFORM</div>
         </div>
-        <a href="#/" className={`nav-item ${isRules ? "" : "active"}`}>
+        <a href="#/" className={`nav-item ${page === "projects" ? "active" : ""}`}>
           Projects<span className="zh">项目</span>
         </a>
-        <a href="#/rules" className={`nav-item ${isRules ? "active" : ""}`}>
+        <a href="#/products" className={`nav-item ${page === "products" ? "active" : ""}`}>
+          Product Library<span className="zh">产品库</span>
+        </a>
+        <a href="#/rules" className={`nav-item ${page === "rules" ? "active" : ""}`}>
           Rules Engine<span className="zh">规则引擎</span>
         </a>
       </nav>
@@ -58,7 +64,10 @@ export default function App() {
             Switch name 切换名字
           </button>
         </header>
-        <main className="main">{isRules ? <Rules /> : projectId ? <ProjectDetail id={Number(projectId)} /> : <Projects />}</main>
+        <main className="main">
+          {page === "rules" ? <Rules /> : page === "products" ? <Products /> : proposalId ? <Workspace id={Number(proposalId)} />
+            : projectId ? <ProjectDetail id={Number(projectId)} /> : <Projects />}
+        </main>
       </div>
     </div>
   );

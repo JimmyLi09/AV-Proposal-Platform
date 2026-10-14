@@ -190,7 +190,9 @@ function Proposals({ project, onCreated }: { project: Project; onCreated: () => 
           <tbody>
             {project.proposals.map((x) => (
               <tr key={x.id}>
-                <td className="strong">{x.name}</td>
+                <td className="strong">
+                  <a href={`#/proposals/${x.id}`}>{x.name}</a>
+                </td>
                 <td>{LINE_LABEL[x.business_line]}</td>
                 <td>A Light 轻量</td>
                 <td>
