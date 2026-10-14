@@ -1,0 +1,81 @@
+{
+  "business_line": "LED",
+  "inputs": [
+    {"name": "environment", "label": "Environment 使用环境", "type": "choice", "options": ["indoor", "outdoor", "rental"]},
+    {"name": "pixel_pitch_mm", "label": "Pixel pitch 点间距", "unit": "mm", "type": "number"},
+    {"name": "width_mm", "label": "Screen width 屏宽", "unit": "mm", "type": "number"},
+    {"name": "height_mm", "label": "Screen height 屏高", "unit": "mm", "type": "number"},
+    {"name": "module_w_mm", "label": "Module width 模组宽", "unit": "mm", "type": "number"},
+    {"name": "module_h_mm", "label": "Module height 模组高", "unit": "mm", "type": "number"},
+    {"name": "cabinet_sizes_mm", "label": "Cabinet sizes 箱体尺寸（第一个为主尺寸）", "unit": "mm", "type": "sizes"},
+    {"name": "viewing_distance_m", "label": "Viewing distance 观看距离", "unit": "m", "type": "range"},
+    {"name": "installation", "label": "Installation 安装方式", "type": "choice", "options": ["wall", "floor", "hanging", "embedded"]},
+    {"name": "maintenance", "label": "Maintenance 维护方式", "type": "choice", "options": ["front", "rear"]},
+    {"name": "brightness_required_nits", "label": "Required brightness 亮度要求", "unit": "nits", "type": "number"},
+    {"name": "signal_sources", "label": "Signal sources 信号源数量", "unit": "路", "type": "number"}
+  ],
+  "params": [
+    {"name": "circuit_kw", "group": "Power & cables 电源与线缆", "label": "Power per circuit 每回路功率", "unit": "kW", "value": 2.5, "status": "set"},
+    {"name": "spare_power_cables", "group": "Power & cables 电源与线缆", "label": "Spare power cables 备用电源线", "unit": "根", "value": 1, "status": "review"},
+    {"name": "px_per_data_cable", "group": "Power & cables 电源与线缆", "label": "Pixels per data cable 每路信号线像素", "unit": "px", "value": 560000, "status": "review"},
+    {"name": "spare_data_cables", "group": "Power & cables 电源与线缆", "label": "Spare data cables 备用信号线", "unit": "根", "value": 1, "status": "set"},
+    {"name": "circuits_per_db_box", "group": "Power & cables 电源与线缆", "label": "Circuits per DB box 每配电箱回路数", "unit": "路", "value": 4, "status": "sample"},
+    {"name": "w_per_m2_indoor", "group": "Power density 功率密度", "label": "Indoor fixed 室内固装", "unit": "W/㎡", "value": 500, "status": "set"},
+    {"name": "w_per_m2_outdoor", "group": "Power density 功率密度", "label": "Outdoor fixed 户外固装", "unit": "W/㎡", "value": 800, "status": "sample"},
+    {"name": "w_per_m2_rental", "group": "Power density 功率密度", "label": "Rental 租赁", "unit": "W/㎡", "value": 600, "status": "sample"},
+    {"name": "spare_module_ratio", "group": "Spares 备品", "label": "Module spare rate 模组备品比例", "unit": "", "value": 0.05, "status": "sample"},
+    {"name": "spare_module_min", "group": "Spares 备品", "label": "Module spare minimum 模组备品最少", "unit": "块", "value": 2, "status": "sample"},
+    {"name": "spare_psu_ratio", "group": "Spares 备品", "label": "PSU / receiving card spare rate 电源 / 接收卡备品比例", "unit": "", "value": 0.02, "status": "sample"},
+    {"name": "spare_psu_min", "group": "Spares 备品", "label": "PSU / receiving card spare minimum 电源 / 接收卡备品最少", "unit": "个", "value": 1, "status": "sample"},
+    {"name": "viewing_m_per_mm", "group": "Checks 校核", "label": "Min. viewing distance 最近观看距离（每 mm 点间距）", "unit": "m", "value": 1.0, "status": "review"}
+  ],
+  "rules": [
+    {"id": "F1", "title": "Area 面积", "note": "屏宽 × 屏高。",
+     "outputs": [{"name": "area_m2", "unit": "㎡", "decimals": 2, "cases": [{"expr": "width_mm * height_mm / 1000000"}]}]},
+    {"id": "F2", "title": "Modules 模组", "note": "宽、高各除以模组尺寸取整后相乘。",
+     "outputs": [
+       {"name": "modules_x", "unit": "块", "cases": [{"expr": "floor(width_mm / module_w_mm)"}]},
+       {"name": "modules_y", "unit": "块", "cases": [{"expr": "floor(height_mm / module_h_mm)"}]},
+       {"name": "modules", "unit": "块", "cases": [{"expr": "modules_x * modules_y"}]}]},
+    {"id": "F3", "title": "Cabinet layout 箱体排布", "note": "每列先尽量用主尺寸（第一个箱体尺寸），余下用其它尺寸补齐。", "step": "cabinet_layout"},
+    {"id": "F4", "title": "Resolution 分辨率", "note": "模组数 × 每块模组的像素。", "display": "{res_x} × {res_y}",
+     "outputs": [
+       {"name": "res_x", "unit": "px", "cases": [{"expr": "modules_x * round(module_w_mm / pixel_pitch_mm)"}]},
+       {"name": "res_y", "unit": "px", "cases": [{"expr": "modules_y * round(module_h_mm / pixel_pitch_mm)"}]},
+       {"name": "total_pixels", "unit": "px", "cases": [{"expr": "res_x * res_y"}]}]},
+    {"id": "F5", "title": "Power 功率", "note": "面积 × 每平米功耗（按屏幕类型分档）。",
+     "outputs": [{"name": "power_kw", "unit": "kW", "decimals": 2, "cases": [
+       {"when": "environment == 'indoor'", "expr": "area_m2 * w_per_m2_indoor / 1000"},
+       {"when": "environment == 'outdoor'", "expr": "area_m2 * w_per_m2_outdoor / 1000"},
+       {"when": "environment == 'rental'", "expr": "area_m2 * w_per_m2_rental / 1000"}]}]},
+    {"id": "F6", "title": "Power circuits 电源回路", "note": "功率 ÷ 每回路功率，向上取整。",
+     "outputs": [{"name": "circuits", "unit": "路", "cases": [{"expr": "ceil(power_kw / circuit_kw)"}]}]},
+    {"id": "F7", "title": "Power cables 电源线", "note": "回路数 + 备用。",
+     "outputs": [{"name": "power_cables", "unit": "根", "cases": [{"expr": "circuits + spare_power_cables"}]}]},
+    {"id": "F8", "title": "Spare PSU / receiving card 备用电源 / 接收卡", "note": "按箱体数取比例向上取整，不低于最少数（按每箱 1 个电源、1 张接收卡估算）。",
+     "display": "{spare_psu} + {spare_rx_cards}",
+     "outputs": [
+       {"name": "spare_psu", "unit": "个", "cases": [{"expr": "max(ceil(cabinets * spare_psu_ratio), spare_psu_min)"}]},
+       {"name": "spare_rx_cards", "unit": "张", "cases": [{"expr": "max(ceil(cabinets * spare_psu_ratio), spare_psu_min)"}]}]},
+    {"id": "F9", "title": "Data cables 数据线", "note": "总像素除以每根线的带载量，向上取整，再加备用。",
+     "outputs": [
+       {"name": "data_runs", "unit": "路", "cases": [{"expr": "ceil(total_pixels / px_per_data_cable)"}]},
+       {"name": "data_cables", "unit": "根", "cases": [{"expr": "data_runs + spare_data_cables"}]}]},
+    {"id": "F10", "title": "Spare modules 备用模组", "note": "模组数取比例向上取整，不低于最少数。",
+     "outputs": [{"name": "spare_modules", "unit": "块", "cases": [{"expr": "max(ceil(modules * spare_module_ratio), spare_module_min)"}]}]},
+    {"id": "F11", "title": "Controller 控制器", "note": "带载像素和网口数都要够，否则阻断。", "step": "controller_pick"},
+    {"id": "F12", "title": "DB box 配电箱", "note": "回路数 ÷ 每配电箱回路数，向上取整。",
+     "outputs": [{"name": "db_boxes", "unit": "个", "cases": [{"expr": "ceil(circuits / circuits_per_db_box)"}]}]},
+    {"id": "F13", "title": "Video processor 视频处理器", "note": "按信号源数量和分辨率选型。", "step": "processor_pick"},
+    {"id": "F14", "title": "Viewing distance 观看距离", "note": "点间距 × 每 mm 对应的米数 ≤ 最近观看距离。", "check": true,
+     "outputs": [{"name": "viewing_check", "cases": [{"expr": "'PASS' if pixel_pitch_mm * viewing_m_per_mm <= min(viewing_distance_m) else 'NOTE'"}]}]},
+    {"id": "F15", "title": "Brightness 亮度", "note": "产品亮度 ≥ 环境要求的亮度。", "check": true,
+     "outputs": [{"name": "brightness_check", "cases": [{"expr": "'PASS' if cabinet_brightness_nits >= brightness_required_nits else 'NOTE'"}]}]},
+    {"id": "F16", "title": "Installation 安装", "note": "按安装方式带出配件。", "status": "sample",
+     "outputs": [{"name": "installation_items", "cases": [
+       {"when": "installation == 'wall'", "expr": "'墙面支架 1 套（不含钢结构）'"},
+       {"when": "installation == 'floor'", "expr": "'落地支架 1 套（不含钢结构）'"},
+       {"when": "installation == 'hanging'", "expr": "'吊装支架 1 套（不含钢结构）'"},
+       {"when": "installation == 'embedded'", "expr": "'嵌入式边框 1 套（不含钢结构）'"}]}]}
+  ]
+}
