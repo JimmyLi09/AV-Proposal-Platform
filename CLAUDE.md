@@ -4,7 +4,7 @@ Audax 内部的**售前 Proposal 生成平台**（不是报价工具）。V1 覆
 产品负责人：Jimmy（PM，新加坡）。有疑问先问 Jimmy，不要自己猜。
 
 ## 先读这些
-1. `docs/platform-plan-v1.md` — 完整平台方案（范围、页面、规则 F1–F16 / P1–P13、数据对象、Rev、部署、开发顺序）。**这是需求的唯一来源。**
+1. `docs/platform-plan-v1.md` — 完整平台方案（范围、页面、规则 F1–F16 / P1–P13、数据对象、Rev、部署、开发顺序）。**这是需求的唯一来源**；下面「技术选型」里 2026-10-14 确认的决策覆盖方案中对应的内容。
 2. `docs/prototype/` — 23 页可点原型（`*.dc.html` + `canvas.json`）。在线版：https://claude.ai/artifact/CBfKgWjwHyagU1sMhQfAch 。`UI-SPEC.md` 是双语和配色规范。原型只定界面和流程，**不是可复用的前端代码**。
 3. `tests/fixtures/regression_cases.json` — 两组金标准：LED（143-Royal Plaza）和投影（114 Showroom）。规则引擎必须算出完全一致的结果。
 
@@ -18,19 +18,25 @@ Audax 内部的**售前 Proposal 生成平台**（不是报价工具）。V1 覆
 - 轻账号：选名字登录，无密码无权限；可以自审自己的 Rev（记录审核人和时间）。
 - Rev 锁定 6 样：确认后的输入、规则版本、产品库版本、Cost 快照、模板版本、生成文件。锁定后永不重算，改动开新 Rev。
 - 两道关：确认关（Medium/Low 置信度字段逐个确认后才能计算）；审核关（批准后才能正式导出，须联网）。
-- 离线时 Local Agent 用缓存规则可算、可标注、可存草稿；不能审核、不能正式导出、不能改库。
-- 系数、常量、产品、模板全部**界面可编辑并带版本**；IT 不改 `app/config/*.yaml`（yaml 只放部署配置）。
+- 不做离线模式：服务器始终在线（2026-10-14 Jimmy 确认，取代方案中「离线可算、可存草稿」）。
+- 系数、常量、产品、模板、**规则算式**全部**界面可编辑并带版本**（算式要能改：不同点间距的需求不一样）；IT 不改 `app/config/*.yaml`（yaml 只放部署配置）。
 - 界面中英双语：标签写「English 中文」，说明句只写中文（见 `docs/prototype/UI-SPEC.md`）。品牌按 Audax VI，平台名 AV Proposal Platform。
 - 显卡不考虑（OCR 必须能在普通办公电脑 CPU 上跑）。
 - V1 不做：DWG 自动出图 / DXF 输出、RCP、施工接线图（Level 3）、自动报价 / Markup、多人同时编辑、完整 B 模式、修改原 CAD、互动投影、多面 / 弧幕 / 地面 / 模型投影。
 
-## 技术选型（建议，第 0 步先和 Jimmy 确认）
-方案文档没有锁定技术栈。以下是满足约束的默认建议，开工前确认：
-- 服务器：Python 3.12 + FastAPI；PostgreSQL（或先用 SQLite，后迁移）；文件存服务器资料目录。
-- 前端：React + Vite + TypeScript，一套代码，服务器提供，Local Agent 也打包一份（离线可用）。
-- Local Agent：Windows 托盘程序（Python + pystray，PyInstaller 打包），只监听 127.0.0.1；OCR 用本地 PaddleOCR 或 Tesseract（CPU）；DWG→DXF：有 AutoCAD 用 accoreconsole，没有就用免费 ODA File Converter。
-- 输出：PDF（HTML 模板 + 无头 Chromium 或 WeasyPrint）、Word（python-docx）、JPG Boards。
-- 需要 Jimmy / IT 确认：服务器操作系统、是否允许装 PostgreSQL、备份位置（清单 A9–A11）。
+## 技术选型（2026-10-14 与 Jimmy 确认）
+- 服务器：Python 3.12 + FastAPI，和 Project Platform 同一台服务器（192.168.1.241，按 Project Platform 装机文档是 Windows，待 IT 在清单 A2 确认），端口 8081，用 pm2 常驻。
+- 数据库：SQLite（WAL 模式），通过 SQLAlchemy 2 + Alembic 访问；以后要换 PostgreSQL，只改连接配置再迁移一次数据。原件和生成文件存服务器资料目录（路径写在 `app/config/deploy.yaml`）。
+- 前端：React + Vite + TypeScript，由服务器提供。
+- 规则引擎：独立的 Python 模块，只在服务器上跑。算式可在界面编辑，用白名单表达式求值，**不用 `eval`**；F3 这类算法规则写在代码里，参数可编辑。长度用整数 mm 或 Decimal 计算，避免向上取整时的浮点误差。
+- 读文件：PDF 先读文字层，Excel 按列名读；读不到再走 OCR（RapidOCR 或 Tesseract，第 4 步用样本实测后定，CPU 运行）。
+- 输出：PDF 和 JPG Boards 用同一套 HTML 模板 + 无头 Chromium（Playwright）；Word 用 python-docx；PDF 文件属性用 pypdf 写入 Rev、规则版本、产品库版本。
+
+### 待定（不阻塞第 1–3 步）
+- **Local Agent 的形式**：Chrome / Edge 新版会拦「内网 http 页面访问本机 127.0.0.1」，浏览器不能直接调 Agent。二选一，等 Jimmy 定，定了再改第 4、5 步：
+  - A：取消 Agent，文字识别和 DWG 转换（免费 ODA File Converter）都放到服务器，各电脑什么都不用装。
+  - B：保留 Agent，由 Agent 主动连服务器领任务（识别、AutoCAD 转换），浏览器只连服务器。
+- 清单 A3（服务器 CPU / 内存 / 磁盘）、A9（资料目录与容量）、B1（用户名单与角色）。
 
 ## 开发顺序（每步完成都要通过验收再进下一步）
 1. 数据底座：数据库、文件存储、轻账号、项目与 Rev 骨架。验收：能建项目、传文件，原件无法被覆盖。
