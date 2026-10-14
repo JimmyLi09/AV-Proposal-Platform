@@ -9,6 +9,10 @@ export type SourceFile = {
   sha256: string;
   uploaded_by: string;
   uploaded_at: string;
+  read_status: string | null;
+  read_method: string;
+  read_note: string;
+  fields_found: number;
 };
 
 export type Proposal = {
@@ -124,6 +128,27 @@ export type BoqLine = {
 export type Boq = { lines: BoqLine[]; subtotal: number; priced: number; count: number; missing: number; expired: number };
 export type ManualLine = { item: string; model: string; qty: number | null; unit: string; unit_cost: number | null; why: string };
 
+export type InputMeta = {
+  source: "manual" | "file";
+  confidence: string;
+  filename?: string;
+  location?: string;
+  snippet?: string;
+  extracted_id?: number;
+  confirmed_by: string | null;
+  confirmed_at?: string;
+};
+export type Candidate = {
+  id: number;
+  value: unknown;
+  confidence: string;
+  file_id: number;
+  filename: string;
+  location: string;
+  snippet: string;
+  crop: boolean;
+};
+
 export type WorkspaceView = {
   proposal: Proposal;
   project: { id: number };
@@ -132,10 +157,14 @@ export type WorkspaceView = {
     status: string;
     inputs: Record<string, unknown>;
     cabinet_id: string | null;
+    input_meta: Record<string, InputMeta>;
     manual_lines: ManualLine[];
     sell_price_cents: number | null;
     price_display: string;
   };
+  pending: string[];
+  files: SourceFile[];
+  candidates: Record<string, Candidate[]>;
   rules_version: string;
   library_version: string;
   input_defs: InputDef[];

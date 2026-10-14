@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, Boq, ManualLine, RuleResult, send, WorkspaceView } from "./api";
-import { CheckChip, Choices, InputsForm, money, Outcome, ResultsTable, StatusChip } from "./Calc";
+import { CheckChip, Choices, money, Outcome, ResultsTable, StatusChip } from "./Calc";
+import ConfirmInputs from "./Confirm";
 import { LINE_LABEL, StatusTag } from "./labels";
 import { PRODUCT_STATUS } from "./Products";
 
@@ -25,6 +26,12 @@ export default function Workspace({ id }: { id: number }) {
   useEffect(() => {
     apply(api<WorkspaceView>(`/proposals/${id}`));
   }, [id]);
+  const reading = view?.files.some((f) => f.read_status === "reading");
+  useEffect(() => {  // 文件还在读取（提取中）时每 1.5 秒刷新一次
+    if (!reading) return;
+    const t = setTimeout(() => api<WorkspaceView>(`/proposals/${id}`).then(setView), 1500);
+    return () => clearTimeout(t);
+  }, [reading, view, id]);
 
   if (!view) return error ? <p className="error">{error}</p> : null;
   const { proposal, rev, result } = view;
@@ -43,20 +50,8 @@ export default function Workspace({ id }: { id: number }) {
         </p>
       </div>
 
-      <section className="card">
-        <h2>
-          Confirmed inputs <span className="zh">已确认输入</span>
-        </h2>
-        <p className="muted">第 4 步会从客户文件里读取并逐项确认；现在先手工录入。模组和箱体尺寸由产品库里选定的箱体带出。</p>
-        <InputsForm defs={view.input_defs} hidden={view.product_fed} inputs={inputs} setInputs={setInputs} />
-        <div className="row">
-          <button className="btn-primary" onClick={() => saveInputs()}>
-            Save &amp; calculate 保存并计算
-          </button>
-          {error && <span className="error">{error}</span>}
-        </div>
-        {result && <Choices result={result} onPick={(k, v) => setInputs({ ...inputs, [k]: v })} />}
-      </section>
+      <ConfirmInputs view={view} inputs={inputs} setInputs={setInputs} onApply={apply} error={error} />
+      {result && <Choices result={result} onPick={(k, v) => setInputs({ ...inputs, [k]: v })} />}
 
       {result && (
         <>

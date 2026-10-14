@@ -28,7 +28,7 @@ export function money(cents: number | null | undefined) {
   return (cents / 100).toLocaleString("en-SG", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 }
 
-function InputField({ def, value, onChange }: { def: InputDef; value: unknown; onChange: (v: unknown) => void }) {
+export function InputField({ def, value, onChange }: { def: InputDef; value: unknown; onChange: (v: unknown) => void }) {
   const num = (s: string) => (s === "" ? null : Number(s));
   if (def.type === "choice")
     return (

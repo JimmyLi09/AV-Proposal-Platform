@@ -138,3 +138,11 @@ label.check { font-weight: 400; }
 .tile-value { font-size: 18px; font-weight: 700; color: var(--navy); }
 .checks { margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
 .totals { margin-top: 14px; display: flex; flex-direction: column; gap: 8px; border-top: 1px solid var(--line); padding-top: 12px; }
+
+/* 确认输入 */
+.conf-high { background: #e6f2ec; color: #2f7a5b; }
+.conf-medium { background: #fdf1e6; color: #9a4a12; }
+.conf-low { background: #fde4e4; color: var(--red); }
+tr.needs td { background: #fffbf5; }
+.btn-primary.small { height: 30px; padding: 0 12px; }
+img.crop { max-width: 100%; border: 1px solid var(--line); border-radius: 6px; background: #fff; align-self: flex-start; }

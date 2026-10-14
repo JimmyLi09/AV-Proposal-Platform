@@ -71,9 +71,27 @@ function ProjectNo({ project, onSaved }: { project: Project; onSaved: (p: Projec
   );
 }
 
+const READ: Record<string, string> = {
+  reading: "Reading 读取中…",
+  read: "Read 已读取",
+  attached: "Attached 已附加",
+  failed: "Failed 读取失败",
+};
+
 function Files({ project, onUploaded }: { project: Project; onUploaded: () => void }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const reading = project.files.some((f) => f.read_status === "reading");
+  useEffect(() => {  // 读取在后台进行，读完前每 1.5 秒刷新
+    if (!reading) return;
+    const t = setTimeout(onUploaded, 1500);
+    return () => clearTimeout(t);
+  }, [reading, project]);
+
+  async function reread() {
+    await api(`/projects/${project.id}/read`, { method: "POST" });
+    onUploaded();
+  }
 
   async function upload(list: File[]) {
     if (!list.length) return;
@@ -98,8 +116,14 @@ function Files({ project, onUploaded }: { project: Project; onUploaded: () => vo
           <h2>
             Customer files <span className="zh">客户文件</span>
           </h2>
-          <p className="muted">原件只读保存，不会被覆盖。同名文件再传会另存一份。</p>
+          <p className="muted">原件只读保存，不会被覆盖。同名文件再传会另存一份。上传后服务器自动读取文字和尺寸。</p>
+          <p className="muted small">A：数值直接读取 · B：数值靠文字识别，必须逐项确认 · C：随项目保存，不用于计算数量。</p>
         </div>
+        {project.files.length > 0 && (
+          <button className="btn-outline" disabled={reading} onClick={reread}>
+            Re-read 重新读取
+          </button>
+        )}
         <label className="btn-primary">
           {busy ? "Uploading 上传中…" : "Choose files 选择文件"}
           <input type="file" multiple hidden disabled={busy} onChange={(e) => {
@@ -115,11 +139,12 @@ function Files({ project, onUploaded }: { project: Project; onUploaded: () => vo
           <thead>
             <tr>
               <th>File 文件</th>
-              <th>Type 类型</th>
+              <th>Grade 等级</th>
+              <th>How it is read 读取方式</th>
+              <th>Status 状态</th>
               <th>Size 大小</th>
               <th>Fingerprint 指纹</th>
               <th>Added 添加</th>
-              <th>Status 状态</th>
             </tr>
           </thead>
           <tbody>
@@ -127,8 +152,19 @@ function Files({ project, onUploaded }: { project: Project; onUploaded: () => vo
               <tr key={f.id}>
                 <td className="strong">
                   <a href={`/api/files/${f.id}`}>{f.filename}</a>
+                  <div>
+                    <span className="tag">Original 原件 · read-only 只读</span>
+                  </div>
                 </td>
-                <td>{f.file_type.toUpperCase()}</td>
+                <td>{f.grade ?? "—"}</td>
+                <td>
+                  {f.read_method || "—"}
+                  {f.read_note && <div className="muted small">{f.read_note}</div>}
+                </td>
+                <td>
+                  {f.read_status ? READ[f.read_status] : "—"}
+                  {f.read_status === "read" && <div className="muted small">{f.fields_found} 个候选值</div>}
+                </td>
                 <td>{fmtSize(f.size)}</td>
                 <td>
                   <code title={f.sha256}>{f.sha256.slice(0, 10)}</code>
@@ -136,14 +172,11 @@ function Files({ project, onUploaded }: { project: Project; onUploaded: () => vo
                 <td>
                   {fmtDate(f.uploaded_at)} · {f.uploaded_by}
                 </td>
-                <td>
-                  <span className="tag">Original 原件 · read-only 只读</span>
-                </td>
               </tr>
             ))}
             {project.files.length === 0 && (
               <tr>
-                <td colSpan={6} className="muted">
+                <td colSpan={7} className="muted">
                   还没有文件。PDF、Excel、JPG、PNG、DWG 都可以上传。
                 </td>
               </tr>
