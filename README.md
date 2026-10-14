@@ -1,0 +1,31 @@
+# AV Proposal Platform
+
+Audax 售前 Proposal 生成平台 V1（LED + 投影单面墙）。需求见 `docs/platform-plan-v1.md`，开发约定见 `CLAUDE.md`。
+
+## 本机运行（开发）
+
+需要 Python 3.12、Node.js 22。
+
+```bash
+python3.12 -m venv .venv
+.venv/bin/pip install -r requirements-dev.txt     # Windows: .venv\Scripts\pip ...
+(cd web && npm install && npm run build)
+.venv/bin/python -m app                             # http://localhost:8081
+```
+
+改界面时可另开 `cd web && npm run dev`（http://localhost:5173，`/api` 自动转到 8081）。
+
+端口、资料目录在 `app/config/deploy.yaml`。数据库 `avp.db` 和原件都在资料目录里，启动时自动建表 / 升级。
+
+## 测试
+
+```bash
+.venv/bin/python -m pytest
+```
+
+## 进度
+
+- [x] 第 1 步 数据底座：选名字登录、建项目（编号可后补）、上传原件（只读、同名不覆盖）、Proposal 从 Rev 0 草稿开始
+- [ ] 第 2 步 规则引擎框架 + LED F1–F16
+
+服务器（192.168.1.241）安装步骤在 LED V1 上线前（第 6 步）写成给 IT 的指引。
