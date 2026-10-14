@@ -1,14 +1,17 @@
 {
-  "_note": "试算样本与示例产品（sample）。产品在第 3 步改由产品库提供。",
+  "_note": "试算样本：143-Royal Plaza LED-1 的输入。模组和箱体尺寸由产品库里推荐的箱体带出。",
   "input": {
-    "environment": "indoor", "pixel_pitch_mm": 2.5, "width_mm": 4480, "height_mm": 2560,
-    "module_w_mm": 320, "module_h_mm": 160, "cabinet_sizes_mm": [[640, 480], [640, 640]],
-    "viewing_distance_m": [4, 6], "installation": "wall", "maintenance": "front",
-    "brightness_required_nits": 600, "signal_sources": 1
-  },
-  "catalog": {
-    "cabinet": {"model": "Sample P2.5 Indoor", "brightness_nits": 800, "sample": true},
-    "controllers": [{"model": "Sample SC-4", "capacity_px": 2300000, "ports": 4, "sample": true}],
-    "processors": [{"model": "Sample SP-1", "inputs": 2, "max_px": 2300000, "sample": true}]
+    "environment": "indoor",
+    "pixel_pitch_mm": 2.5,
+    "width_mm": 4480,
+    "height_mm": 2560,
+    "viewing_distance_m": [
+      4,
+      6
+    ],
+    "installation": "wall",
+    "maintenance": "front",
+    "brightness_required_nits": 600,
+    "signal_sources": 1
   }
 }

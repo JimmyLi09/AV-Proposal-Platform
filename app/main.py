@@ -5,10 +5,10 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import sessionmaker
 
-from . import api
+from . import api, costs, workspace
 from .db import make_engine, migrate
-from .rules.api import ensure_seed
-from .rules.api import router as rules_router
+from .products import api as products_api
+from .rules import api as rules_api
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB_DIST = ROOT / "web" / "dist"
@@ -28,9 +28,10 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
     app.state.data_dir = data_dir
     app.state.Session = sessionmaker(engine, expire_on_commit=False)
     with app.state.Session() as db:
-        ensure_seed(db)
-    app.include_router(api.router, prefix="/api")
-    app.include_router(rules_router, prefix="/api")
+        for module in (rules_api, products_api, costs):
+            module.ensure_seed(db)
+    for module in (api, rules_api, products_api, costs, workspace):
+        app.include_router(module.router, prefix="/api")
     if WEB_DIST.is_dir():
         app.mount("/", StaticFiles(directory=WEB_DIST, html=True), name="web")
     return app

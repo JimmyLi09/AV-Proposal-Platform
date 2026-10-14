@@ -8,7 +8,9 @@ from . import led
 from .expr import ExprError, evaluate, fmt, names, num, parse, substitute
 
 SEED = Path(__file__).parent / "seed"
-LINES = {"LED": {"steps": led.STEPS, "precheck": led.size_choices}}
+LINES = {"LED": {"steps": led.STEPS, "precheck": led.size_choices, "recommend": led.recommend,
+                 "product_inputs": led.product_inputs, "catalog": led.catalog, "boq": led.boq,
+                 "product_fed": led.PRODUCT_INPUTS}}
 STATUSES = ["set", "review", "sample", "empty"]  # 越往后越不确定
 
 
@@ -169,3 +171,14 @@ def _step_display(step: str, outputs: dict) -> str:
     if step == "processor_pick" and outputs:
         return f"{_show(outputs['processor_qty'])} × {outputs['processor']}"
     return ""
+
+
+def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None = None) -> dict:
+    """完整流程：从产品库推荐 → 带出产品参数 → 跑规则 → 出 BOQ 行（未加价）。"""
+    line = LINES[content["business_line"]]
+    rec = line["recommend"](inputs, library, cabinet_id)
+    out = run(content, {**inputs, **line["product_inputs"](rec["cabinet"])}, line["catalog"](library, rec["cabinet"]))
+    values = {ln["name"]: ln["value"] for r in out["rules"] for ln in r["lines"]}
+    out["recommendation"] = rec
+    out["boq"] = line["boq"](values, rec["cabinet"], inputs, library)
+    return out

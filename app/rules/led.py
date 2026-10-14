@@ -1,6 +1,7 @@
 """LED 业务线：尺寸吸附，以及步骤类规则（步骤写在代码里，只改参数）。"""
 from decimal import Decimal
 
+from ..products.library import active, name
 from .expr import fmt
 
 
@@ -49,6 +50,7 @@ def cabinet_layout(ctx: dict, catalog: dict) -> dict:
         "outputs": {
             "cabinets": total,
             "layout": " + ".join(f"{_n(cols * c)} x {_n(w)}x{_n(h)}" for c, h in used),
+            "cabinet_counts": [[w, h, cols * c] for c, h in used],
         },
         "trace": f"cols {_n(cols)} × {_n(w)} · rows " + " + ".join(f"{c} × {_n(h)}" for c, h in used)
                  + " → " + " + ".join(_n(cols * c) for c, _ in used),
@@ -63,7 +65,7 @@ def controller_pick(ctx: dict, catalog: dict) -> dict:
         if load <= cap and runs <= ports:
             return {
                 "outputs": {
-                    "controller": c["model"], "controller_qty": Decimal(1),
+                    "controller": c["model"], "controller_id": c.get("id"), "controller_qty": Decimal(1),
                     "load_mp": load / 1_000_000, "capacity_mp": cap / 1_000_000,
                     "ports_used": runs, "ports": ports,
                 },
@@ -82,7 +84,7 @@ def processor_pick(ctx: dict, catalog: dict) -> dict:
     for p in catalog.get("processors", []):
         if sources <= p["inputs"] and load <= p["max_px"]:
             return {
-                "outputs": {"processor": p["model"], "processor_qty": Decimal(1)},
+                "outputs": {"processor": p["model"], "processor_id": p.get("id"), "processor_qty": Decimal(1)},
                 "trace": f"{_n(sources)} 路信号源，{load / 1_000_000:.2f} MP ≤ {Decimal(p['max_px']) / 1_000_000:.2f} MP",
                 "sample": p.get("sample", False),
             }
@@ -91,8 +93,85 @@ def processor_pick(ctx: dict, catalog: dict) -> dict:
 
 # 步骤名 → (函数, 需要的名称, 产出的名称)
 STEPS = {
-    "cabinet_layout": (cabinet_layout, ["width_mm", "height_mm", "cabinet_sizes_mm"], ["cabinets", "layout"]),
+    "cabinet_layout": (cabinet_layout, ["width_mm", "height_mm", "cabinet_sizes_mm"],
+                       ["cabinets", "layout", "cabinet_counts"]),
     "controller_pick": (controller_pick, ["total_pixels", "data_runs"],
-                        ["controller", "controller_qty", "load_mp", "capacity_mp", "ports_used", "ports"]),
-    "processor_pick": (processor_pick, ["total_pixels", "signal_sources"], ["processor", "processor_qty"]),
+                        ["controller", "controller_id", "controller_qty", "load_mp", "capacity_mp", "ports_used", "ports"]),
+    "processor_pick": (processor_pick, ["total_pixels", "signal_sources"], ["processor", "processor_id", "processor_qty"]),
 }
+
+
+# ---- 推荐与 BOQ ----
+
+PRODUCT_INPUTS = ["module_w_mm", "module_h_mm", "cabinet_sizes_mm"]  # 由选定的箱体带出，不用手填
+
+
+def recommend(inputs: dict, library: dict, cabinet_id: str | None = None) -> dict:
+    """箱体只从产品库里选：点间距、使用环境、维护方式都对得上，首选在前。可以换成其它符合的型号。"""
+    missing = [k for k in ("pixel_pitch_mm", "environment", "maintenance") if inputs.get(k) in (None, "")]
+    if missing:
+        return {"cabinet": None, "candidates": [], "block": None, "missing": missing}
+    pitch = Decimal(str(inputs["pixel_pitch_mm"]))
+    candidates = [p for p in active(library, "cabinet")
+                  if p.get("pixel_pitch_mm") and Decimal(str(p["pixel_pitch_mm"])) == pitch
+                  and inputs["environment"] in p["scenes"] and p["maintenance"] in (inputs["maintenance"], "both")]
+    chosen = next((p for p in candidates if p["id"] == cabinet_id), candidates[0] if candidates else None)
+    block = None if chosen else (f"产品库里没有符合的箱体：P{_n(pitch)} · {inputs['environment']} · "
+                                 f"{inputs['maintenance']}，请先在产品库添加")
+    return {"cabinet": chosen, "candidates": candidates, "block": block, "missing": []}
+
+
+def product_inputs(cabinet: dict | None) -> dict:
+    return {k: cabinet[k] for k in PRODUCT_INPUTS if cabinet and cabinet.get(k) is not None}
+
+
+def catalog(library: dict, cabinet: dict | None) -> dict:
+    """规则引擎用到的产品：选定的箱体，以及按首选顺序排好的控制器、视频处理器。"""
+    return {
+        "cabinet": {"model": name(cabinet), "brightness_nits": cabinet.get("brightness_nits"),
+                    "sample": cabinet.get("sample", False)} if cabinet else {},
+        "controllers": [{"id": c["id"], "model": name(c), "capacity_px": c["capacity_px"], "ports": c["ports"],
+                         "sample": c.get("sample", False)}
+                        for c in active(library, "controller") if c.get("capacity_px") and c.get("ports")],
+        "processors": [{"id": p["id"], "model": name(p), "inputs": p["inputs"], "max_px": p["max_px"],
+                        "sample": p.get("sample", False)}
+                       for p in active(library, "processor") if p.get("inputs") and p.get("max_px")],
+    }
+
+
+def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict) -> list[dict]:
+    """BOQ 行：数量全部来自规则结果，「数量依据」写规则编号。key 用来对应单价。"""
+    lines = []
+    products = {p["id"]: p for p in library["products"]}
+
+    def add(key, item, model, qty, unit, why, rule, included=False):
+        if qty is not None:
+            lines.append({"key": key, "item": item, "model": model, "qty": qty, "unit": unit, "why": why,
+                          "rule": rule, "included": included, "manual": False})
+
+    if cabinet:
+        m = cabinet["model"]
+        for i, (w, h, n) in enumerate(values.get("cabinet_counts") or []):
+            add(f"{cabinet['id']}:{w}x{h}", f"LED cabinet 箱体 {w} × {h}", m, n, "个", ("主尺寸，" if i == 0 else "") + "F3", "F3")
+        add(f"{cabinet['id']}:module", f"Spare modules 备用模组 {cabinet['module_w_mm']} × {cabinet['module_h_mm']}",
+            m, values.get("spare_modules"), "块", "F10", "F10")
+        if values.get("cabinets") is not None:
+            psu, rx = cabinet.get("psu_per_cabinet") or 1, cabinet.get("rx_per_cabinet") or 1
+            add("", "Power supply 电源", "箱内", values["cabinets"] * psu, "个", f"每箱 {psu} 个", "F3", included=True)
+            add("", "Receiving card 接收卡", "箱内", values["cabinets"] * rx, "张", f"每箱 {rx} 张", "F3", included=True)
+        add(f"{cabinet['id']}:psu", "Spare PSU 备用电源", m, values.get("spare_psu"), "个", "F8", "F8")
+        add(f"{cabinet['id']}:rx", "Spare receiving card 备用接收卡", m, values.get("spare_rx_cards"), "张", "F8", "F8")
+    if values.get("controller_id") in products:
+        add(values["controller_id"], "Controller 控制器", products[values["controller_id"]]["model"],
+            values["controller_qty"], "台", f"{values['load_mp']:.2f} / {values['capacity_mp']:.2f} MP，F11", "F11")
+    if values.get("processor_id") in products:
+        add(values["processor_id"], "Video processor 视频处理器", products[values["processor_id"]]["model"],
+            values["processor_qty"], "台", f"{inputs.get('signal_sources')} 路信号源，F13", "F13")
+    if values.get("circuits") is not None:
+        add("power_cable", "Power cable 电源线", "—", values.get("power_cables"), "路", f"{values['circuits']} 回路 + 备用，F7", "F7")
+        add("db_box", "DB box with MCB 配电箱（含 MCB）", "定制", values.get("db_boxes"), "个", f"{values['circuits']} 回路，F12", "F12")
+    if values.get("data_runs") is not None:
+        add("data_cable", "Data cable 数据线", "Cat6", values.get("data_cables"), "路", f"{values['data_runs']} 路 + 备用，F9", "F9")
+    if values.get("installation_items"):
+        add(f"install:{inputs.get('installation')}", values["installation_items"], "—", 1, "套", "F16", "F16")
+    return lines

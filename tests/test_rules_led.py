@@ -6,12 +6,17 @@ from pathlib import Path
 
 import pytest
 
+from app.products.library import load_seed as load_library
+from app.rules import led
 from app.rules.engine import load_seed, run, validate
 from app.rules.expr import ExprError, evaluate, parse, substitute
 
 FIXTURE = json.loads((Path(__file__).parent / "fixtures" / "regression_cases.json").read_text(encoding="utf-8"))
 CASE = FIXTURE["led_royal_plaza"]
-CONTENT, SAMPLE = load_seed("LED")
+CONTENT, _ = load_seed("LED")
+LIBRARY = load_library("LED")
+IC25 = next(p for p in LIBRARY["products"] if p["id"] == "IC-25")
+CATALOG = led.catalog(LIBRARY, IC25)  # 产品库示例 v1.0：IC-25 箱体，SC-4 / SC-2 控制器，SP-1 处理器
 
 
 def fixture_input(**changes) -> dict:
@@ -24,7 +29,7 @@ def fixture_input(**changes) -> dict:
 
 
 def calc(content=CONTENT, **changes) -> dict:
-    out = run(content, fixture_input(**changes), SAMPLE["catalog"])
+    out = run(content, fixture_input(**changes), CATALOG)
     return {r["id"]: r for r in out["rules"]}
 
 
@@ -38,6 +43,11 @@ def r():
 
 
 # ---- 金标准 ----
+
+def test_library_cabinet_matches_fixture_input():
+    assert [IC25["module_w_mm"], IC25["module_h_mm"]] == CASE["input"]["module_mm"]
+    assert IC25["cabinet_sizes_mm"] == CASE["input"]["cabinet_sizes_mm"]
+
 
 def test_seed_constants_match_fixture():
     params = {p["name"]: p for p in CONTENT["params"]}
@@ -78,7 +88,7 @@ def test_royal_plaza_golden(r):
 
 def test_size_snapping_offers_two_sizes_without_error():
     s = CASE["size_snapping_case"]
-    out = run(CONTENT, fixture_input(width_mm=s["input_width_mm"]), SAMPLE["catalog"])
+    out = run(CONTENT, fixture_input(width_mm=s["input_width_mm"]), CATALOG)
     assert out["choices"] == {"width_mm": s["expect_options_mm"]}
     assert out["rules"] == []  # 选定尺寸之前不计算
 
@@ -144,9 +154,9 @@ def test_f10_spare_modules_has_no_float_error():
 
 
 def test_f11_blocks_when_controller_too_small():
-    catalog = copy.deepcopy(SAMPLE["catalog"])
-    catalog["controllers"][0]["ports"] = 3
-    x = {r["id"]: r for r in run(CONTENT, fixture_input(), catalog)["rules"]}
+    library = copy.deepcopy(LIBRARY)
+    next(p for p in library["products"] if p["id"] == "SC-4")["ports"] = 3  # SC-2 带载也不够
+    x = {r["id"]: r for r in run(CONTENT, fixture_input(), led.catalog(library, IC25))["rules"]}
     assert x["F11"]["check"] == "BLOCK"
 
 
