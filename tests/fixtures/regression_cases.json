@@ -1,0 +1,110 @@
+{
+  "_note": "Golden cases. The rules engine must reproduce every 'expect' value. Values marked sample:true come from sample constants and will change when Jimmy fills the checklists — update the fixture together with the constant, never silently.",
+  "led_royal_plaza": {
+    "source": "143-Royal Plaza LED-1 (prototype example, numbers corrected 2026-10)",
+    "rules_version": "v1.3",
+    "input": {
+      "environment": "indoor",
+      "pixel_pitch_mm": 2.5,
+      "width_mm": 4480,
+      "height_mm": 2560,
+      "module_mm": [320, 160],
+      "cabinet_sizes_mm": [[640, 480], [640, 640]],
+      "viewing_distance_m": [4, 6],
+      "installation": "wall",
+      "maintenance": "front",
+      "brightness_required_nits": 600,
+      "power_distance_m": 25
+    },
+    "constants": {
+      "w_per_m2_indoor": 500,
+      "circuit_kw": 2.5,
+      "px_per_data_cable": 560000,
+      "spare_module_ratio": 0.05,
+      "spare_module_min": 2,
+      "circuits_per_db_box": 4,
+      "viewing_m_per_mm": 1.0
+    },
+    "expect": {
+      "F1_area_m2": 11.47,
+      "F2_modules": 224,
+      "F2_grid": [14, 16],
+      "F3_cabinets": 35,
+      "F3_layout": "28 x 640x480 + 7 x 640x640",
+      "F4_resolution": [1792, 1024],
+      "F5_power_kw": 5.73,
+      "F6_circuits": 3,
+      "F7_power_cables": 4,
+      "F9_data_cables": 5,
+      "F10_spare_modules": 12,
+      "F11_controller": {"model": "Sample SC-4", "qty": 1, "load_mp": 1.84, "capacity_mp": 2.3, "ports_used": 4, "ports": 4, "check": "PASS", "note": "all ports used, spare cable has no spare port"},
+      "F12_db_box": 1,
+      "F14_viewing_check": "PASS",
+      "F15_brightness_check": {"result": "PASS", "sample": true}
+    },
+    "size_snapping_case": {"input_width_mm": 4500, "expect_options_mm": [4480, 4800], "expect_error": false}
+  },
+  "projection_114": {
+    "source": "114 Showroom, completed project. 5 x PT-BHZ611C with domestic 0.5 fixed lens, confirmed by Jimmy 2026-10-14",
+    "rules_version": "v1.3",
+    "conventions": [
+      "Throw distance is measured from the LENS FRONT to the surface (114 drawing shows 2340 mm to the projector body; lens front is ~2.24 m).",
+      "Fixed lens: choose the lens first, back-calculate the mount distance, then check blend is within 15-30 %.",
+      "V1 handles a single row only."
+    ],
+    "input": {
+      "wall_width_mm": 18325,
+      "wall_height_mm": 2700,
+      "available_depth_mm": 3200,
+      "ceiling_height_mm": 3000,
+      "mounting": "ceiling",
+      "mount_height_m": 2.8,
+      "ambient_lux": 150,
+      "surface_gain": 1.0,
+      "nearest_viewing_m": 1.5,
+      "signal_run_m": 35,
+      "projector": "PT-BHZ611C",
+      "lens_throw_ratio": 0.5,
+      "mount_distance_m": 2.24,
+      "native_px": [1920, 1200]
+    },
+    "constants": {
+      "aspect": 1.6,
+      "overlap_min": 0.15,
+      "overlap_max": 0.30,
+      "derate": {"value": 0.8, "sample": true},
+      "target_nits": {"value": 100, "sample": true},
+      "pixel_rule_m_per_mm": 1.0,
+      "person_height_m": 1.8,
+      "circuit_kw": 2.5,
+      "fiber_over_m": 50,
+      "projector_w": {"value": 450, "sample": true},
+      "media_pc_w": {"value": 500, "sample": true},
+      "canvas_height_px": 1200
+    },
+    "expect": {
+      "P1_single_width_m": 4.32,
+      "P2_count": 5,
+      "P3_min_distance_m": 2.16,
+      "P3_lens": 0.5,
+      "P4_actual_width_m": 4.48,
+      "P4_actual_height_m": 2.80,
+      "P5_overlap_ratio": 0.227,
+      "P5_overlap_m": 1.02,
+      "P5_check": "PASS",
+      "P6_height_check": "PASS",
+      "P7_blended_px": [7854, 1200],
+      "P8_pixel_mm": 2.3,
+      "P8_check": "NOTE",
+      "P9_lumens_required": {"value": 4926, "sample": true},
+      "P10_occlusion_within_m": 1.44,
+      "P10_check": "NOTE",
+      "P11_blender": {"required": true, "min_outputs": 5, "pick": "ZWIN 16ch", "qty": 1},
+      "P12_power_kw": {"value": 2.75, "sample": true},
+      "P12_circuits": 2,
+      "P12_transport": "HDBaseT",
+      "P13_canvas_px": [7854, 1200]
+    },
+    "tolerance": {"length_m": 0.01, "ratio": 0.001, "px": 2, "lumens": 5}
+  }
+}

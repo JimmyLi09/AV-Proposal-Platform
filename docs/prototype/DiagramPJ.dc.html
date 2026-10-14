@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Diagram 示意图（投影）</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div><div style="font-size: 12px; color: #6B6558">114-Showroom · PJ-1 展厅投影墙 · Rev 0 · 规则 Rules v1.3 · 产品库 Library v1.0</div><h1 style="margin: 0; font-size: 24px; color: #15203A">Projection Diagram <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">投影示意图</span></h1><p style="margin: 2px 0 0; color: #6B6558">由 BOQ 生成。图中每台设备、每根线都对应一条 BOQ；尺寸取自已确认输入和 P1–P13 计算结果。</p></div>
+
+<nav aria-label="Proposal steps" style="display: flex; flex-wrap: wrap; gap: 6px">
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">1 Project &amp; Files 项目与文件</a>
+<a href="ConfirmPJ.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">2 Confirm Inputs 确认输入</a>
+<a href="WorkspacePJ.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none">3 Recommendation 推荐</a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">4 Cost &amp; BOQ 成本与 BOQ</a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">5 Annotate 标注</a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">6 Review &amp; Export 审核导出</a>
+</nav>
+
+<div style="display: flex; flex-wrap: wrap; gap: 22px; border-bottom: 1px solid #E6E0D6">
+<a href="WorkspacePJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none">Recommendation 推荐</a>
+<a href="CalcPJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none">Calculations 计算依据</a>
+<a href="DiagramPJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid #15203A; color: #15203A; font-weight: 700; text-decoration: none">Diagram 示意图</a>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+<span style="padding: 7px 14px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px">Level 1 · Concept 概念</span>
+<span style="padding: 7px 14px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px">Level 2 · Schematic 原理</span>
+<span style="padding: 7px 14px; border-radius: 16px; border: 1px solid #EFEBE4; background: #FAF8F4; color: #6B6558; font-size: 12.5px">Level 3 · Construction 施工（B 模式，下一版）</span>
+<div style="flex: 1"></div>
+<button type="button" style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer; font-weight: 600">Edit labels 编辑标注</button>
+<button type="button" style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">Reset layout 重置布局</button>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr)); gap: 16px">
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 4px; font-size: 15px">a · Elevation <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">立面融合区图</span></h2>
+<p style="margin: 0 0 12px; color: #6B6558">5 台横向排开，相邻画面重叠约 1020 mm（P5，22.7 %）。</p>
+<div style="overflow-x: auto">
+<svg viewBox="0 0 1000 300" role="img" aria-label="Elevation 立面融合区图" style="width: 100%; height: auto; display: block; min-width: 560px; font-family: inherit">
+<rect x="50" y="80" width="900" height="132.6" fill="#F5F2EC" stroke="#15203A" stroke-width="2"/>
+<rect x="50" y="77.5" width="220" height="137.5" fill="#2C5AA0" fill-opacity="0.05" stroke="#2C5AA0" stroke-width="1" stroke-dasharray="4 3"/>
+<rect x="220" y="77.5" width="220" height="137.5" fill="#2C5AA0" fill-opacity="0.05" stroke="#2C5AA0" stroke-width="1" stroke-dasharray="4 3"/>
+<rect x="390" y="77.5" width="220" height="137.5" fill="#2C5AA0" fill-opacity="0.05" stroke="#2C5AA0" stroke-width="1" stroke-dasharray="4 3"/>
+<rect x="560" y="77.5" width="220" height="137.5" fill="#2C5AA0" fill-opacity="0.05" stroke="#2C5AA0" stroke-width="1" stroke-dasharray="4 3"/>
+<rect x="730" y="77.5" width="220" height="137.5" fill="#2C5AA0" fill-opacity="0.05" stroke="#2C5AA0" stroke-width="1" stroke-dasharray="4 3"/>
+<rect x="220" y="77.5" width="50" height="137.5" fill="#C2410C" fill-opacity="0.28"/>
+<text x="245" y="202.6" text-anchor="middle" font-size="10.5" fill="#9A4A12" font-weight="600">≈1020</text>
+<rect x="390" y="77.5" width="50" height="137.5" fill="#C2410C" fill-opacity="0.28"/>
+<text x="415" y="202.6" text-anchor="middle" font-size="10.5" fill="#9A4A12" font-weight="600">≈1020</text>
+<rect x="560" y="77.5" width="50" height="137.5" fill="#C2410C" fill-opacity="0.28"/>
+<text x="585" y="202.6" text-anchor="middle" font-size="10.5" fill="#9A4A12" font-weight="600">≈1020</text>
+<rect x="730" y="77.5" width="50" height="137.5" fill="#C2410C" fill-opacity="0.28"/>
+<text x="755" y="202.6" text-anchor="middle" font-size="10.5" fill="#9A4A12" font-weight="600">≈1020</text>
+<text x="160" y="146.3" text-anchor="middle" font-size="12" fill="#15203A" font-weight="700">PJ1</text>
+<text x="330" y="146.3" text-anchor="middle" font-size="12" fill="#15203A" font-weight="700">PJ2</text>
+<text x="500" y="146.3" text-anchor="middle" font-size="12" fill="#15203A" font-weight="700">PJ3</text>
+<text x="670" y="146.3" text-anchor="middle" font-size="12" fill="#15203A" font-weight="700">PJ4</text>
+<text x="840" y="146.3" text-anchor="middle" font-size="12" fill="#15203A" font-weight="700">PJ5</text>
+<line x1="50" y1="48" x2="270" y2="48" stroke="#6B6558" stroke-width="1"/>
+<line x1="50" y1="42" x2="50" y2="76" stroke="#6B6558" stroke-width="0.8"/>
+<line x1="270" y1="42" x2="270" y2="76" stroke="#6B6558" stroke-width="0.8"/>
+<text x="160" y="42" text-anchor="middle" font-size="11" fill="#6B6558">4480 单台画面宽 Image width</text>
+<text x="280" y="42" font-size="11" fill="#9A4A12">融合带 Blend 22.7 % ≈ 1020 × 4</text>
+<line x1="50" y1="262" x2="950" y2="262" stroke="#15203A" stroke-width="1"/>
+<line x1="50" y1="254" x2="50" y2="270" stroke="#15203A" stroke-width="1"/>
+<line x1="950" y1="254" x2="950" y2="270" stroke="#15203A" stroke-width="1"/>
+<rect x="395" y="253" width="210" height="18" fill="#FFFFFF"/>
+<text x="500" y="266" text-anchor="middle" font-size="12" fill="#15203A" font-weight="700">18325 墙宽 Wall width</text>
+<line x1="970" y1="80" x2="970" y2="212.6" stroke="#6B6558" stroke-width="1"/>
+<line x1="964" y1="80" x2="976" y2="80" stroke="#6B6558"/>
+<line x1="964" y1="212.6" x2="976" y2="212.6" stroke="#6B6558"/>
+<text x="964" y="146.3" text-anchor="middle" font-size="11" fill="#6B6558" transform="rotate(-90 964 146.3)">2700</text>
+<rect x="50" y="283" width="14" height="10" fill="#C2410C" fill-opacity="0.28"/><text x="70" y="292" font-size="11" fill="#6B6558">融合区 Blend zone</text>
+<rect x="200" y="283" width="14" height="10" fill="#2C5AA0" fill-opacity="0.05" stroke="#2C5AA0" stroke-dasharray="3 2"/><text x="220" y="292" font-size="11" fill="#6B6558">单台画面 4480 × 2800，上下各超出墙面 50</text>
+<text x="950" y="292" text-anchor="end" font-size="11" fill="#6B6558">单位 mm</text>
+</svg>
+</div>
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 4px; font-size: 15px">b · Plan <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">平面机位图</span></h2>
+<p style="margin: 0 0 12px; color: #6B6558">镜头前端离墙 2.24 m（P3/P4）；可用进深 3.2 m，机身后方仍有余量。</p>
+<div style="overflow-x: auto">
+<svg viewBox="0 0 1000 270" role="img" aria-label="Plan 平面机位图" style="width: 100%; height: auto; display: block; min-width: 560px; font-family: inherit">
+<rect x="60" y="40" width="880" height="10" fill="#E6E0D6" stroke="#15203A" stroke-width="1.5"/>
+<text x="500" y="34" text-anchor="middle" font-size="12" fill="#15203A" font-weight="700">Wall 投影墙 · 18325</text>
+<line x1="60" y1="203.7" x2="940" y2="203.7" stroke="#6B6558" stroke-width="1" stroke-dasharray="6 4"/>
+<text x="64" y="219.7" font-size="11" fill="#6B6558">可用进深边界（平面图 PDF p2）</text>
+<polygon points="167.6,157.6 60,50 275.1,50" fill="#2C5AA0" fill-opacity="0.07" stroke="#2C5AA0" stroke-width="0.8" stroke-opacity="0.6"/>
+<polygon points="333.8,157.6 226.2,50 441.4,50" fill="#2C5AA0" fill-opacity="0.07" stroke="#2C5AA0" stroke-width="0.8" stroke-opacity="0.6"/>
+<polygon points="500,157.6 392.4,50 607.6,50" fill="#2C5AA0" fill-opacity="0.07" stroke="#2C5AA0" stroke-width="0.8" stroke-opacity="0.6"/>
+<polygon points="666.2,157.6 558.6,50 773.8,50" fill="#2C5AA0" fill-opacity="0.07" stroke="#2C5AA0" stroke-width="0.8" stroke-opacity="0.6"/>
+<polygon points="832.4,157.6 724.9,50 940,50" fill="#2C5AA0" fill-opacity="0.07" stroke="#2C5AA0" stroke-width="0.8" stroke-opacity="0.6"/>
+<rect x="161.6" y="157.6" width="12" height="6" fill="#15203A"/>
+<rect x="145.6" y="163.6" width="44" height="22" rx="3" fill="#FFFFFF" stroke="#15203A" stroke-width="1.5"/>
+<text x="167.6" y="178.6" text-anchor="middle" font-size="10.5" fill="#15203A" font-weight="700">PJ1</text>
+<rect x="327.8" y="157.6" width="12" height="6" fill="#15203A"/>
+<rect x="311.8" y="163.6" width="44" height="22" rx="3" fill="#FFFFFF" stroke="#15203A" stroke-width="1.5"/>
+<text x="333.8" y="178.6" text-anchor="middle" font-size="10.5" fill="#15203A" font-weight="700">PJ2</text>
+<rect x="494" y="157.6" width="12" height="6" fill="#15203A"/>
+<rect x="478" y="163.6" width="44" height="22" rx="3" fill="#FFFFFF" stroke="#15203A" stroke-width="1.5"/>
+<text x="500" y="178.6" text-anchor="middle" font-size="10.5" fill="#15203A" font-weight="700">PJ3</text>
+<rect x="660.2" y="157.6" width="12" height="6" fill="#15203A"/>
+<rect x="644.2" y="163.6" width="44" height="22" rx="3" fill="#FFFFFF" stroke="#15203A" stroke-width="1.5"/>
+<text x="666.2" y="178.6" text-anchor="middle" font-size="10.5" fill="#15203A" font-weight="700">PJ4</text>
+<rect x="826.4" y="157.6" width="12" height="6" fill="#15203A"/>
+<rect x="810.4" y="163.6" width="44" height="22" rx="3" fill="#FFFFFF" stroke="#15203A" stroke-width="1.5"/>
+<text x="832.4" y="178.6" text-anchor="middle" font-size="10.5" fill="#15203A" font-weight="700">PJ5</text>
+<line x1="962" y1="50" x2="962" y2="157.6" stroke="#C2410C" stroke-width="1.2"/>
+<line x1="956" y1="157.6" x2="968" y2="157.6" stroke="#C2410C"/>
+<line x1="940" y1="157.6" x2="956" y2="157.6" stroke="#C2410C" stroke-width="0.8" stroke-dasharray="3 3"/>
+<text x="976" y="103.8" text-anchor="middle" font-size="11" fill="#C2410C" font-weight="600" transform="rotate(-90 976 103.8)">2.24 m 镜头前端</text>
+<line x1="28" y1="50" x2="28" y2="203.7" stroke="#6B6558" stroke-width="1"/>
+<line x1="22" y1="50" x2="34" y2="50" stroke="#6B6558"/>
+<line x1="22" y1="203.7" x2="34" y2="203.7" stroke="#6B6558"/>
+<text x="20" y="126.8" text-anchor="middle" font-size="11" fill="#6B6558" transform="rotate(-90 20 126.8)">进深 Depth 3.2 m</text>
+<text x="940" y="219.7" text-anchor="end" font-size="11" fill="#6B6558">5 台吊顶安装 · 定焦 0.5 · 中心间距 3461 · 镜头前端后方余 0.96 m（含机身）</text>
+</svg>
+</div>
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 4px; font-size: 15px">c · Section <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">剖面遮挡图</span></h2>
+<p style="margin: 0 0 12px; color: #6B6558">机位高 2.8 m，光线打到画面底边；按人高 1.8 m 检查遮挡（P10）。</p>
+<div style="overflow-x: auto">
+<svg viewBox="0 0 720 380" role="img" aria-label="Section 剖面遮挡图" style="width: 100%; height: auto; display: block; min-width: 520px; font-family: inherit">
+<rect x="90" y="290" width="115.2" height="8" fill="#C2410C" fill-opacity="0.35"/>
+<line x1="90" y1="290" x2="370" y2="290" stroke="#15203A" stroke-width="2"/>
+<line x1="90" y1="50" x2="370" y2="50" stroke="#6B6558" stroke-width="1.5"/>
+<text x="370" y="44" text-anchor="end" font-size="11" fill="#6B6558">Ceiling 天花</text>
+<text x="370" y="312" text-anchor="end" font-size="11" fill="#6B6558">Floor 地面</text>
+<rect x="80" y="50" width="10" height="240" fill="#E6E0D6" stroke="#15203A" stroke-width="1.5"/>
+<line x1="90" y1="74" x2="90" y2="290" stroke="#2C5AA0" stroke-width="3"/>
+<polygon points="269.2,66 90,70 90,290" fill="#2C5AA0" fill-opacity="0.08"/>
+<line x1="269.2" y1="66" x2="90" y2="70" stroke="#2C5AA0" stroke-width="1" stroke-dasharray="4 3"/>
+<line x1="269.2" y1="66" x2="90" y2="290" stroke="#C2410C" stroke-width="1.5"/>
+<line x1="283.2" y1="50" x2="283.2" y2="60" stroke="#15203A" stroke-width="2"/>
+<rect x="269.2" y="60" width="34" height="14" rx="2" fill="#FFFFFF" stroke="#15203A" stroke-width="1.5"/>
+<rect x="264.2" y="63" width="5" height="8" fill="#15203A"/>
+<text x="309.2" y="71" font-size="11" fill="#15203A" font-weight="700">PJ</text>
+<circle cx="205.2" cy="155" r="9" fill="none" stroke="#15203A" stroke-width="1.5"/>
+<line x1="205.2" y1="164" x2="205.2" y2="222" stroke="#15203A" stroke-width="1.5"/>
+<line x1="191.2" y1="182" x2="219.2" y2="182" stroke="#15203A" stroke-width="1.5"/>
+<line x1="205.2" y1="222" x2="194.2" y2="290" stroke="#15203A" stroke-width="1.5"/>
+<line x1="205.2" y1="222" x2="216.2" y2="290" stroke="#15203A" stroke-width="1.5"/>
+<text x="223.2" y="210" font-size="11" fill="#15203A">1.8 m</text>
+<line x1="90" y1="326" x2="205.2" y2="326" stroke="#C2410C" stroke-width="1"/>
+<line x1="90" y1="321" x2="90" y2="331" stroke="#C2410C"/>
+<line x1="205.2" y1="321" x2="205.2" y2="331" stroke="#C2410C"/>
+<text x="213.2" y="330" font-size="11" fill="#C2410C" font-weight="600">1.44 m 内会挡光</text>
+<line x1="90" y1="348" x2="269.2" y2="348" stroke="#6B6558" stroke-width="1"/>
+<line x1="90" y1="343" x2="90" y2="353" stroke="#6B6558"/>
+<line x1="269.2" y1="343" x2="269.2" y2="353" stroke="#6B6558"/>
+<text x="277.2" y="352" font-size="11" fill="#6B6558" font-weight="600">2.24 m 离墙（镜头前端）</text>
+<line x1="90" y1="370" x2="346" y2="370" stroke="#6B6558" stroke-width="1"/>
+<line x1="90" y1="365" x2="90" y2="375" stroke="#6B6558"/>
+<line x1="346" y1="365" x2="346" y2="375" stroke="#6B6558"/>
+<text x="354" y="374" font-size="11" fill="#6B6558" font-weight="600">3.2 m 可用进深</text>
+<line x1="58" y1="74" x2="58" y2="290" stroke="#6B6558" stroke-width="1"/>
+<line x1="53" y1="74" x2="63" y2="74" stroke="#6B6558"/>
+<line x1="53" y1="290" x2="63" y2="290" stroke="#6B6558"/>
+<text x="52" y="182" text-anchor="middle" font-size="11" fill="#6B6558" transform="rotate(-90 52 182)">2.7 m 墙高</text>
+<line x1="26" y1="50" x2="26" y2="290" stroke="#6B6558" stroke-width="1"/>
+<line x1="21" y1="50" x2="31" y2="50" stroke="#6B6558"/>
+<line x1="21" y1="290" x2="31" y2="290" stroke="#6B6558"/>
+<text x="20" y="170" text-anchor="middle" font-size="11" fill="#6B6558" transform="rotate(-90 20 170)">3.0 m 天花</text>
+<line x1="339.2" y1="66" x2="339.2" y2="290" stroke="#6B6558" stroke-width="1" stroke-dasharray="3 3"/>
+<line x1="334.2" y1="66" x2="344.2" y2="66" stroke="#6B6558"/>
+<text x="353.2" y="178" text-anchor="middle" font-size="11" fill="#6B6558" transform="rotate(-90 353.2 178)">2.8 m 机位高</text>
+<rect x="480" y="40" width="226" height="132" rx="8" fill="#FDF1E6" stroke="#E4B596"/>
+<text x="492" y="62" font-size="12" fill="#9A4A12" font-weight="700">P10 · NOTE 提示</text>
+<text x="492" y="84" font-size="11.5" fill="#1F2430">光线最低一条打到画面底边（地面）</text>
+<text x="492" y="103" font-size="11.5" fill="#1F2430">人高 1.8 m 时，离墙 1.44 m 以内</text>
+<text x="492" y="122" font-size="11.5" fill="#1F2430">会挡光，在墙上留下人影</text>
+<text x="492" y="141" font-size="11.5" fill="#1F2430">1.44 = 1.8 × 2.24 ÷ 2.8</text>
+<text x="492" y="160" font-size="11.5" fill="#1F2430">剖面图缺失，天花 3.0 m 为手填</text>
+<rect x="480" y="190" width="14" height="10" fill="#C2410C" fill-opacity="0.35"/><text x="500" y="199" font-size="11" fill="#6B6558">挡光区 Shadow zone</text>
+<line x1="480" y1="216" x2="494" y2="216" stroke="#2C5AA0" stroke-width="3"/><text x="500" y="220" font-size="11" fill="#6B6558">墙面投影区 2.7 m</text>
+</svg>
+</div>
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 4px; font-size: 15px">d · Signal chain L1 <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">信号链</span></h2>
+<p style="margin: 0 0 12px; color: #6B6558">信号从左到右；一台融合器输出 5 路，经 HDBaseT 送到各投影机（P11、P12）。</p>
+<div style="overflow-x: auto">
+<svg viewBox="0 0 1000 320" role="img" aria-label="Signal chain L1 信号链" style="width: 100%; height: auto; display: block; min-width: 620px; font-family: inherit">
+<defs><marker id="pjArrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#15203A"/></marker></defs>
+<rect x="20" y="125" width="140" height="64" rx="8" fill="#FFFFFF" stroke="#C9BFAE" stroke-width="1.2"/>
+<text x="90.0" y="154.0" text-anchor="middle" font-size="12" fill="#15203A" font-weight="700">Media PC 播控电脑</text>
+<text x="90.0" y="169.0" text-anchor="middle" font-size="10.5" fill="#6B6558">× 1 · 500 W</text>
+<line x1="160" y1="157" x2="208" y2="157" stroke="#15203A" stroke-width="1.5" marker-end="url(#pjArrow)"/>
+<rect x="210" y="121" width="150" height="72" rx="8" fill="#F3F5FA" stroke="#15203A" stroke-width="2"/>
+<text x="285.0" y="154.0" text-anchor="middle" font-size="12" fill="#15203A" font-weight="700">ZWIN 16ch 融合器</text>
+<text x="285.0" y="169.0" text-anchor="middle" font-size="10.5" fill="#6B6558">Blender × 1 · 16 out</text>
+<path d="M360,157 C395,157 395,57 428,57" fill="none" stroke="#15203A" stroke-width="1.2" marker-end="url(#pjArrow)"/>
+<rect x="430" y="40" width="150" height="34" rx="8" fill="#FFFFFF" stroke="#C9BFAE" stroke-width="1.2"/>
+<text x="505.0" y="61.0" text-anchor="middle" font-size="11" fill="#15203A" font-weight="600">HDBaseT Tx/Rx 1</text>
+<line x1="580" y1="57" x2="648" y2="57" stroke="#15203A" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#pjArrow)"/>
+<rect x="650" y="40" width="140" height="34" rx="8" fill="#FFFFFF" stroke="#C9BFAE" stroke-width="1.2"/>
+<text x="720.0" y="61.0" text-anchor="middle" font-size="11" fill="#15203A" font-weight="600">PJ1 · PT-BHZ611C</text>
+<line x1="790" y1="57" x2="848" y2="57" stroke="#C2410C" stroke-width="1.5" stroke-opacity="0.7" marker-end="url(#pjArrow)"/>
+<path d="M360,157 C395,157 395,107 428,107" fill="none" stroke="#15203A" stroke-width="1.2" marker-end="url(#pjArrow)"/>
+<rect x="430" y="90" width="150" height="34" rx="8" fill="#FFFFFF" stroke="#C9BFAE" stroke-width="1.2"/>
+<text x="505.0" y="111.0" text-anchor="middle" font-size="11" fill="#15203A" font-weight="600">HDBaseT Tx/Rx 2</text>
+<line x1="580" y1="107" x2="648" y2="107" stroke="#15203A" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#pjArrow)"/>
+<rect x="650" y="90" width="140" height="34" rx="8" fill="#FFFFFF" stroke="#C9BFAE" stroke-width="1.2"/>
+<text x="720.0" y="111.0" text-anchor="middle" font-size="11" fill="#15203A" font-weight="600">PJ2 · PT-BHZ611C</text>
+<line x1="790" y1="107" x2="848" y2="107" stroke="#C2410C" stroke-width="1.5" stroke-opacity="0.7" marker-end="url(#pjArrow)"/>
+<path d="M360,157 C395,157 395,157 428,157" fill="none" stroke="#15203A" stroke-width="1.2" marker-end="url(#pjArrow)"/>
+<rect x="430" y="140" width="150" height="34" rx="8" fill="#FFFFFF" stroke="#C9BFAE" stroke-width="1.2"/>
+<text x="505.0" y="161.0" text-anchor="middle" font-size="11" fill="#15203A" font-weight="600">HDBaseT Tx/Rx 3</text>
+<line x1="580" y1="157" x2="648" y2="157" stroke="#15203A" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#pjArrow)"/>
+<rect x="650" y="140" width="140" height="34" rx="8" fill="#FFFFFF" stroke="#C9BFAE" stroke-width="1.2"/>
+<text x="720.0" y="161.0" text-anchor="middle" font-size="11" fill="#15203A" font-weight="600">PJ3 · PT-BHZ611C</text>
+<line x1="790" y1="157" x2="848" y2="157" stroke="#C2410C" stroke-width="1.5" stroke-opacity="0.7" marker-end="url(#pjArrow)"/>
+<path d="M360,157 C395,157 395,207 428,207" fill="none" stroke="#15203A" stroke-width="1.2" marker-end="url(#pjArrow)"/>
+<rect x="430" y="190" width="150" height="34" rx="8" fill="#FFFFFF" stroke="#C9BFAE" stroke-width="1.2"/>
+<text x="505.0" y="211.0" text-anchor="middle" font-size="11" fill="#15203A" font-weight="600">HDBaseT Tx/Rx 4</text>
+<line x1="580" y1="207" x2="648" y2="207" stroke="#15203A" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#pjArrow)"/>
+<rect x="650" y="190" width="140" height="34" rx="8" fill="#FFFFFF" stroke="#C9BFAE" stroke-width="1.2"/>
+<text x="720.0" y="211.0" text-anchor="middle" font-size="11" fill="#15203A" font-weight="600">PJ4 · PT-BHZ611C</text>
+<line x1="790" y1="207" x2="848" y2="207" stroke="#C2410C" stroke-width="1.5" stroke-opacity="0.7" marker-end="url(#pjArrow)"/>
+<path d="M360,157 C395,157 395,257 428,257" fill="none" stroke="#15203A" stroke-width="1.2" marker-end="url(#pjArrow)"/>
+<rect x="430" y="240" width="150" height="34" rx="8" fill="#FFFFFF" stroke="#C9BFAE" stroke-width="1.2"/>
+<text x="505.0" y="261.0" text-anchor="middle" font-size="11" fill="#15203A" font-weight="600">HDBaseT Tx/Rx 5</text>
+<line x1="580" y1="257" x2="648" y2="257" stroke="#15203A" stroke-width="1.2" stroke-dasharray="5 3" marker-end="url(#pjArrow)"/>
+<rect x="650" y="240" width="140" height="34" rx="8" fill="#FFFFFF" stroke="#C9BFAE" stroke-width="1.2"/>
+<text x="720.0" y="261.0" text-anchor="middle" font-size="11" fill="#15203A" font-weight="600">PJ5 · PT-BHZ611C</text>
+<line x1="790" y1="257" x2="848" y2="257" stroke="#C2410C" stroke-width="1.5" stroke-opacity="0.7" marker-end="url(#pjArrow)"/>
+<rect x="850" y="36" width="130" height="242" rx="6" fill="#E6E0D6" stroke="#15203A" stroke-width="2"/>
+<text x="915" y="150" text-anchor="middle" font-size="12" fill="#15203A" font-weight="700">Wall 投影墙</text>
+<text x="915" y="168" text-anchor="middle" font-size="10.5" fill="#6B6558">18325 × 2700</text>
+<text x="915" y="184" text-anchor="middle" font-size="10.5" fill="#6B6558">7854 × 1200 px</text>
+<text x="185" y="306" text-anchor="middle" font-size="11" fill="#6B6558">HDMI</text>
+<text x="395" y="306" text-anchor="middle" font-size="11" fill="#6B6558">HDMI × 5</text>
+<text x="615" y="306" text-anchor="middle" font-size="11" fill="#6B6558">Cat6 × 5 · 35 m</text>
+<text x="820" y="306" text-anchor="middle" font-size="11" fill="#6B6558">光路 Light</text>
+<line x1="20" y1="290" x2="980" y2="290" stroke="#EFEBE4"/>
+</svg>
+</div>
+</section>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 4px; font-size: 15px">Level 2 · Schematic <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">原理说明</span></h2>
+<p style="margin: 0 0 12px; color: #6B6558">型号和数量取自产品库 v1.0 与 BOQ；单价在 Cost 页录入。</p>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 600px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Device 设备</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Model 型号</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Qty 数量</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Cable 线缆</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">BOQ line BOQ 行</th></tr></thead>
+<tbody>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Media PC 播控电脑</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">按项目配置</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">1</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">HDMI → ZWIN</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Line 4</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Blender 融合器</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">ZWIN 16ch</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">1</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">HDMI × 5 → HDBaseT Tx</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Line 3</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">HDBaseT Tx/Rx 发送/接收</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">—</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">5 套</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Cat6 × 5 · 35 m</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Line 5</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Projector 投影机</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">PT-BHZ611C</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">5</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">HDBaseT Rx → HDMI</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Line 1</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Lens 镜头</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">国产定焦 0.5</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">5</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">—</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Line 2</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Ceiling mount 吊架</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">按现场</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">5</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">—</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Line 6 · 视现场</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Power 电源</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">2.5 kW 回路</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">2 路</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">5 × 450 W（示例）+ 500 W</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">By others</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

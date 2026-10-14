@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Product Library 产品库 · 投影</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">+ New Proposal 新建方案</a>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div role="tablist" aria-label="Business line 业务线" style="display: flex; gap: 6px">
+<a href="Products.dc.html" style="padding: 7px 14px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #3B3A36; font-size: 12.5px; text-decoration: none">LED</a>
+<a href="ProductsPJ.dc.html" aria-current="page" style="padding: 7px 14px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none">Projection 投影 · 单面墙</a>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+<div style="flex: 1 1 300px"><h1 style="margin: 0; font-size: 24px; color: #15203A">Product Library · Projection <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">产品库 · 投影</span></h1><p style="margin: 2px 0 0; color: #6B6558">推荐只从这里的产品中选。镜头是独立产品类，按适配机型挑选。修改会生成新的产品库版本；已出的 Rev 保留原版本。</p></div>
+<span style="padding: 2px 10px; border-radius: 12px; background: #E8EFF9; color: #2C5AA0; font-weight: 600">Library 产品库 v1.0 · 13 products 个产品</span>
+<button type="button" style="height: 38px; padding: 0 14px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Import from Excel 从 Excel 导入</button>
+<button type="button" style="height: 38px; padding: 0 14px; border-radius: 8px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">+ Add product 新增产品</button>
+</div>
+
+<div style="padding: 10px 14px; border-radius: 10px; background: #FFFAF2; border: 1px dashed #D9A57A; color: #7C3A10">单价一律不在产品库维护，由 Cost 页人工录入。PT-BHZ611C 的亮度、功耗为示例值，待补规格书。</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center">
+<span style="padding: 6px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600">All 全部</span>
+<span style="padding: 6px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF">Projectors 投影机</span>
+<span style="padding: 6px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF">Lenses 镜头</span>
+<span style="padding: 6px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF">Blending 融合器 / 软件</span>
+<div style="width: 12px"></div>
+<span style="padding: 6px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF">Preferred only 仅优选</span>
+<span style="padding: 6px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF">Specs pending 参数待补</span>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 14px">
+<div><div style="display: flex; align-items: baseline; gap: 8px; margin: 4px 0 8px"><h2 style="margin: 0; font-size: 15px">Projectors <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">投影机</span></h2><span style="color: #6B6558; font-size: 12px">7</span></div>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 640px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Model 型号</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Key specs 关键参数</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Lens 镜头</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Status 状态</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Unit price 单价</th></tr></thead>
+<tbody>
+<tr style="background: #F3F5FA"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>PT-BHZ611C</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">WUXGA 1920×1200 · 16:10 · 6000 lm（示例值）</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">可换镜头 · 114 已用</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E6F2EC; color: #2F7A5B">Preferred 优选</span> <span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #FDF1E6; color: #9A4A12">Specs pending 参数待补</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>PU900</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">9000 lm</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">—</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E8EFF9; color: #2C5AA0">Approved 已批准</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>PU800</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">8000 lm</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">—</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E8EFF9; color: #2C5AA0">Approved 已批准</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>PT-BAZ722</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">7300 lm</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">—</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E8EFF9; color: #2C5AA0">Approved 已批准</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>CB-L695SE</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">6000 lm</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">—</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E8EFF9; color: #2C5AA0">Approved 已批准</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>CB-C15KU</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">10000 lm</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">—</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E8EFF9; color: #2C5AA0">Approved 已批准</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>PT-GMZ501CB</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">5000 lm · 超短焦 0.235</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">镜头固定</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E8EFF9; color: #2C5AA0">Approved 已批准</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+</tbody>
+</table>
+</div></div>
+<div><div style="display: flex; align-items: baseline; gap: 8px; margin: 4px 0 8px"><h2 style="margin: 0; font-size: 15px">Lenses <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">镜头</span></h2><span style="color: #6B6558; font-size: 12px">4 · 独立产品类</span></div>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 680px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Model 型号</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Throw ratio 投射比</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Shift 位移</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Fits 适配机型</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Status 状态</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Unit price 单价</th></tr></thead>
+<tbody>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>国产定焦 0.46</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">0.46</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">40 % / 15 %</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">PT-BHZ611C（待确认）</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E8EFF9; color: #2C5AA0">Approved 已批准</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+<tr style="background: #F3F5FA"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>国产定焦 0.5</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">0.5</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">40 % / 15 %</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">PT-BHZ611C</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E6F2EC; color: #2F7A5B">Preferred 优选</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>国产定焦 0.6</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">0.6</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">40 % / 15 %</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">PT-BHZ611C（待确认）</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E8EFF9; color: #2C5AA0">Approved 已批准</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>国产定焦 0.8</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">0.8</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">40 % / 15 %</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">PT-BHZ611C（待确认）</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E8EFF9; color: #2C5AA0">Approved 已批准</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+</tbody>
+</table>
+</div></div>
+<div><div style="display: flex; align-items: baseline; gap: 8px; margin: 4px 0 8px"><h2 style="margin: 0; font-size: 15px">Blending <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">融合器 / 软件</span></h2><span style="color: #6B6558; font-size: 12px">2</span></div>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 640px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Model 型号</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Type 类型</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Key specs 关键参数</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Status 状态</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Unit price 单价</th></tr></thead>
+<tbody>
+<tr style="background: #F3F5FA"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>ZWIN 16ch</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Hardware 硬件</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">16 路输出 · 114 已用</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E6F2EC; color: #2F7A5B">Preferred 优选</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>ImmersiveCalibrationPRO v4.3.0</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Software 软件</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">16ch</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; font-weight: 600; font-size: 11.5px; white-space: nowrap; background: #E8EFF9; color: #2C5AA0">Approved 已批准</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Cost 页录入</td></tr>
+</tbody>
+</table>
+</div></div>
+</section>
+
+<section style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center"><div style="width: 64px; height: 64px; border-radius: 8px; background: #EFEBE4; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #6B6558">Photo 照片</div><div><div style="font-size: 16px; font-weight: 700; color: #15203A">PT-BHZ611C</div><div style="color: #6B6558">Projector 投影机 · WUXGA</div></div></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<div><label for="q1" style="display: block; font-size: 12px; color: #6B6558">Brightness 亮度 lm</label><input id="q1" type="text" value="6000" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; border-color: #F0D2B4"></div>
+<div><label for="q2" style="display: block; font-size: 12px; color: #6B6558">Resolution 分辨率</label><input id="q2" type="text" value="1920 × 1200" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit"></div>
+<div><label for="q3" style="display: block; font-size: 12px; color: #6B6558">Aspect 长宽比</label><input id="q3" type="text" value="16:10" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit"></div>
+<div><label for="q4" style="display: block; font-size: 12px; color: #6B6558">Power 功耗 W</label><input id="q4" type="text" value="450" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; border-color: #F0D2B4"></div>
+<div><label for="q5" style="display: block; font-size: 12px; color: #6B6558">Lens 镜头</label><select id="q5" style="width: 100%; height: 34px; padding: 0 6px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; background: #FFFFFF"><option>Interchangeable 可换</option><option>Fixed 固定</option></select></div>
+<div><label for="q6" style="display: block; font-size: 12px; color: #6B6558">Status 状态</label><select id="q6" style="width: 100%; height: 34px; padding: 0 6px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; background: #FFFFFF"><option>Preferred 优选</option><option>Approved 已批准</option><option>Retired 停用</option></select></div>
+</div>
+<div style="font-size: 12px; color: #9A4A12">亮度 6000 lm、功耗 450 W 为示例值，待补规格书后替换。</div>
+<div><label for="q7" style="display: block; font-size: 12px; color: #6B6558">Compatible lenses 适配镜头</label><input id="q7" type="text" value="国产定焦 0.5（已验证）, 0.46, 0.6, 0.8（待确认）" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit"></div>
+<div><label for="q8" style="display: block; font-size: 12px; color: #6B6558">Unit price 单价</label><input id="q8" type="text" disabled placeholder="Cost 页录入" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; background: #F1EEE8"></div>
+<div style="font-size: 12px; color: #6B6558">规格书 Datasheet：待上传</div>
+<div><label for="qr" style="display: block; font-size: 12px; color: #6B6558">Reason for change 修改原因</label><input id="qr" type="text" placeholder="例如：供应商提供新规格书" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit"></div>
+<button type="button" style="height: 40px; border-radius: 8px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Save as library 保存为产品库 v1.1</button>
+</section>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

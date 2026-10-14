@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Review and Export</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+<div style="flex: 1 1 300px"><div style="font-size: 12px; color: #6B6558">143-Royal Plaza LED · LED-1 Lobby · Rev 1</div><h1 style="margin: 0; font-size: 24px; color: #15203A">Review &amp; Export <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">审核导出</span></h1></div>
+<span style="padding: 4px 12px; border-radius: 14px; font-weight: 700; {{statusStyle}}">{{statusLabel}}</span>
+</div>
+
+<nav aria-label="Proposal steps" style="display: flex; flex-wrap: wrap; gap: 6px">
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">1 Project &amp; Files 项目与文件</a>
+<a href="Confirm.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">2 Confirm Inputs 确认输入</a>
+<a href="Workspace.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">3 Recommendation 推荐</a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">4 Cost &amp; BOQ 成本与 BOQ</a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">5 Annotate 标注</a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none">6 Review &amp; Export 审核导出</a>
+</nav>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+
+<section aria-label="PDF preview 预览" style="flex: 999 1 520px; min-width: 0; background: #E9E5DD; border: 1px solid #E6E0D6; border-radius: 12px; padding: 18px">
+<div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px; color: #6B6558"><span>Page 页 1 / 9</span><div style="flex: 1"></div><span>A4 · English 英文</span></div>
+<div style="max-width: 620px; margin: 0 auto; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.12); padding: 30px 34px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; align-items: flex-start; gap: 12px; padding-bottom: 12px; border-bottom: 2px solid #15203A">
+<div><div style="font-size: 17px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 9.5px; color: #6B6558">[Company full name] · [UEN]</div></div>
+<div style="flex: 1"></div>
+<div style="text-align: right; font-size: 11px; color: #3B3A36">Proposal for Royal Plaza<br>AVP-2026-143-Rev1 · 11 Oct 2026</div>
+</div>
+<div><div style="font-size: 12px; color: #C2410C; font-weight: 700; letter-spacing: 0.05em">LED-1 LOBBY</div><div style="font-size: 22px; font-weight: 700; color: #15203A; line-height: 1.25">P2.5 Indoor LED Wall, 4480 × 2560 mm</div></div>
+<div style="height: 120px; border-radius: 6px; background: #D9D3C8; display: flex; align-items: center; justify-content: center; color: #6B6558; font-size: 11.5px">Annotated site photo (from step 5)</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<div><div style="font-weight: 700; color: #15203A; font-size: 12.5px">1. Concept</div><div style="font-size: 11px; color: #3B3A36">A fine-pitch indoor wall for the lobby, sized to 14 × 16 modules with front maintenance and a clean frame.</div></div>
+<div><div style="font-weight: 700; color: #15203A; font-size: 12.5px">2. Configuration</div><div style="font-size: 11px; color: #3B3A36">1792 × 1024 px · 35 cabinets · 5.73 kW · 3 power circuits · 1 controller</div></div>
+<div><div style="font-weight: 700; color: #15203A; font-size: 12.5px">3. Quantities</div><div style="font-size: 11px; color: #3B3A36">Modules 224 + 12 spare · data cables 4 + 1 · power cables 3 + 1</div></div>
+<div><div style="font-weight: 700; color: #15203A; font-size: 12.5px">4. Risks &amp; assumptions</div><div style="font-size: 11px; color: #3B3A36">Power point within 25 m · wall load by others · to confirm after site survey</div></div>
+</div>
+<div style="font-size: 9.5px; color: #6B6558; border-top: 1px solid #EFEBE4; padding-top: 8px">Calculated with rules v1.3 and product library v1.0. Quantities are for proposal purposes.</div>
+</div>
+</section>
+
+<div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<div style="display: flex; align-items: baseline; margin-bottom: 8px"><h2 style="margin: 0; font-size: 15px">Versions <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">版本</span></h2><div style="flex: 1"></div><a href="Versions.dc.html" style="font-size: 12.5px">Compare 对比 →</a></div>
+<div style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px">
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; font-weight: 700">Rev 1</span><span style="flex: 1; color: #3B3A36">11 Oct 09:40 · Jimmy · 更换控制器，备品率 5%</span></div>
+<div style="display: flex; gap: 8px; color: #6B6558"><span style="flex: 0 0 auto; font-weight: 700">Rev 0</span><span style="flex: 1">9 Oct 16:20 · Jimmy · 已阻断：控制器超容量</span></div>
+</div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 8px; font-size: 15px">Before approval <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">审批前检查</span></h2>
+<div style="display: flex; flex-direction: column; gap: 6px; font-size: 12.5px">
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px">OK 通过</span>没有阻断项</div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px">OK 通过</span>所有输入已确认</div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 11px">NOTE 提示</span>BOQ 第 6 行没有成本（本 PDF 不显示价格）</div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 11px">NOTE 提示</span>控制器成本已过有效期</div>
+</div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 15px">Approval <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">审批</span></h2>
+<sc-if value="{{isCalc}}" hint-placeholder-val="{{ true }}">
+<div style="color: #6B6558; font-size: 12.5px">任何人都可以审批，包括作者本人。审批人姓名会记录在该 Rev 上。</div>
+<button type="button" onClick="{{submit}}" style="height: 42px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 700; cursor: pointer">Submit for review 提交审核</button>
+</sc-if>
+<sc-if value="{{isReview}}" hint-placeholder-val="{{ false }}">
+<div style="color: #6B6558; font-size: 12.5px">Jimmy 已提交。可批准，或填写原因退回第 4 步。</div>
+<div style="display: flex; gap: 8px; flex-wrap: wrap">
+<button type="button" onClick="{{back}}" style="flex: 1 1 120px; height: 42px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Send back 退回</button>
+<button type="button" onClick="{{approve}}" style="flex: 1 1 120px; height: 42px; border-radius: 8px; border: 0; background: #2F7A5B; color: #FFFFFF; font: inherit; font-weight: 700; cursor: pointer">Approve 批准</button>
+</div>
+</sc-if>
+<sc-if value="{{isApproved}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 10px 12px; border-radius: 8px; background: #E6F2EC; color: #2F7A5B; font-weight: 600">Approved 已批准 · Jimmy · Rev 1 已锁定</div>
+</sc-if>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 15px">Export <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">导出</span></h2>
+<sc-if value="{{notApproved}}" hint-placeholder-val="{{ true }}">
+<div style="font-size: 12.5px; color: #6B6558">批准后才能正式导出。草稿副本带 DRAFT 水印。</div>
+<button type="button" style="height: 40px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">Download draft PDF 下载草稿 PDF</button>
+</sc-if>
+<sc-if value="{{isApproved}}" hint-placeholder-val="{{ false }}">
+<button type="button" style="height: 42px; border-radius: 8px; border: 0; background: #C2410C; color: #FFFFFF; font: inherit; font-weight: 700; cursor: pointer">Download PDF 下载 PDF</button>
+<button type="button" style="height: 40px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Download Word 下载 Word（可编辑）</button>
+<button type="button" style="height: 40px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Export JPG boards 导出 JPG 展板</button>
+<button type="button" onClick="{{newRev}}" style="height: 40px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">Create Rev 2 基于此创建 Rev 2</button>
+</sc-if>
+</section>
+</div>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const st = (this.state && this.state.st) || 0;
+    const styles = [
+      'background: #E8EFF9; color: #2C5AA0',
+      'background: #FDF1E6; color: #9A4A12',
+      'background: #E6F2EC; color: #2F7A5B'
+    ];
+    const labels = ['Calculated 已计算', 'In review 审核中', 'Approved 已批准'];
+    return {
+      statusStyle: styles[st],
+      statusLabel: labels[st],
+      isCalc: st === 0,
+      isReview: st === 1,
+      isApproved: st === 2,
+      notApproved: st !== 2,
+      submit: () => this.setState({ st: 1 }),
+      back: () => this.setState({ st: 0 }),
+      approve: () => this.setState({ st: 2 }),
+      newRev: () => this.setState({ st: 0 })
+    };
+  }
+}
+</script>
+</body>
+</html>

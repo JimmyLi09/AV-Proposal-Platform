@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">+ New Proposal 新建方案</a>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div><h1 style="margin: 0; font-size: 24px; color: #15203A">Settings <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">设置</span></h1><p style="margin: 2px 0 0; color: #6B6558">仅限内部使用。V1 不设密码和权限；记录姓名，让每个 Rev 都能看到谁制作、谁批准。</p></div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section style="flex: 1 1 360px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<div style="display: flex; align-items: baseline; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px">People <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">人员</span></h2><div style="flex: 1"></div><button type="button" style="height: 34px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">+ Add name 添加姓名</button></div>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 320px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Name 姓名</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Role 角色</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Proposals 方案数</th></tr></thead>
+<tbody>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Jimmy</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">PM</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">3</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Skye</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">PM</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">1</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Candy</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Sales 销售</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">1</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Kian Lim</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">PM</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">0</td></tr>
+<tr><td style="padding: 8px; font-weight: 600">Dylan</td><td style="padding: 8px">Engineer 工程师</td><td style="padding: 8px">0</td></tr>
+</tbody>
+</table>
+</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558">登录方式：从这个名单里选自己的名字。</div>
+</section>
+
+<section style="flex: 1 1 360px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px">Approval <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">审批</span></h2>
+<label style="display: flex; gap: 10px; align-items: flex-start"><input type="checkbox" checked style="margin-top: 3px; accent-color: #15203A"><span><b>Anyone can approve 任何人可批准（包括自己的 Rev）</b><br><span style="font-size: 12px; color: #6B6558">批准人姓名和时间会记录在 Rev 上。</span></span></label>
+<h2 style="margin: 6px 0 0; font-size: 15px">Money <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">金额</span></h2>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<div><label for="cur" style="display: block; font-weight: 600; margin-bottom: 4px">Currency 币种</label><select id="cur" style="width: 100%; height: 36px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit; background: #FFFFFF"><option>SGD</option></select></div>
+<div><label for="gst" style="display: block; font-weight: 600; margin-bottom: 4px">GST 消费税 %</label><input id="gst" type="text" value="9" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+<div><label for="vd" style="display: block; font-weight: 600; margin-bottom: 4px">Cost valid for 报价有效期 (days 天)</label><input id="vd" type="text" value="90" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+</div>
+</section>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px">Server &amp; storage <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">服务器与存储</span></h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px">
+<div><label for="sv" style="display: block; font-weight: 600; margin-bottom: 4px">Platform server 平台服务器</label><input id="sv" type="text" value="http://192.168.1.241:8081" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"><div style="font-size: 12px; color: #6B6558; margin-top: 3px">仅限办公室内网，无公网链接。</div></div>
+<div><label for="ppl" style="display: block; font-weight: 600; margin-bottom: 4px">Project Platform 项目平台</label><input id="ppl" type="text" value="http://192.168.1.241:3000" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"><div style="font-size: 12px; color: #6B6558; margin-top: 3px">仅用于查询项目编号。</div></div>
+<div><label for="df" style="display: block; font-weight: 600; margin-bottom: 4px">Data folder on server 服务器数据文件夹</label><input id="df" type="text" placeholder="[清单 A9]" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+<div><label for="bk" style="display: block; font-weight: 600; margin-bottom: 4px">Backup 备份</label><input id="bk" type="text" placeholder="[清单 A10]" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+</div>
+</section>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

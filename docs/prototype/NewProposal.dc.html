@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · New Proposal</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div><h1 style="margin: 0; font-size: 24px; color: #15203A">New Proposal <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">新建方案</span></h1><p style="margin: 2px 0 0; color: #6B6558">填写项目基本信息并上传客户文件。确认输入之前不做任何计算。</p></div>
+
+<nav aria-label="Proposal steps" style="display: flex; flex-wrap: wrap; gap: 6px">
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none">1 Project &amp; Files 项目与文件</a>
+<a href="Confirm.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">2 Confirm Inputs 确认输入</a>
+<a href="Workspace.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">3 Recommendation 推荐</a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">4 Cost &amp; BOQ 成本与 BOQ</a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">5 Annotate 标注</a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">6 Review &amp; Export 审核导出</a>
+</nav>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+
+<section style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px">Project information <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">项目信息</span></h2>
+<fieldset style="border: 0; margin: 0; padding: 0"><legend style="font-weight: 600; margin-bottom: 6px; padding: 0">Business line 业务线 *</legend>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button type="button" onClick="{{pickLed}}" aria-pressed="{{ledOn}}" style="{{sLed}}"><b>LED Screen LED 屏</b><br><span style="font-size: 12px; color: #6B6558">室内、户外、租赁</span></button>
+<button type="button" onClick="{{pickPj}}" aria-pressed="{{pjOn}}" style="{{sPj}}"><b>Projection 投影</b><br><span style="font-size: 12px; color: #6B6558">单面融合墙</span></button>
+</div>
+<div style="font-size: 12px; color: #6B6558; margin-top: 6px">下一版：互动投影、BYOD 会议室、PA、CCTV、General AV。</div>
+</fieldset>
+<div><label for="pn" style="display: block; font-weight: 600; margin-bottom: 4px">Project name 项目名称 *</label><input id="pn" type="text" value="{{pnVal}}" style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+<div><label for="cl" style="display: block; font-weight: 600; margin-bottom: 4px">Client 客户 *</label><input id="cl" type="text" value="{{clVal}}" style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+<div><label for="pp" style="display: block; font-weight: 600; margin-bottom: 4px">Project Platform no. 项目平台编号 <span style="font-weight: 400; color: #6B6558">(optional 选填)</span></label><input id="pp" type="text" value="{{ppVal}}" style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"><div style="font-size: 12px; color: #6B6558; margin-top: 3px">项目还没建档可以先留空，之后在 Projects 里关联。</div></div>
+<fieldset style="border: 0; margin: 0; padding: 0"><legend style="font-weight: 600; margin-bottom: 6px; padding: 0">Proposal mode 方案模式 *</legend>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<label style="flex: 1 1 140px; display: flex; gap: 8px; align-items: flex-start; border: 2px solid #C2410C; background: #FDF1E6; border-radius: 10px; padding: 10px 12px"><input type="radio" name="mode" checked style="margin-top: 3px; accent-color: #C2410C"><span><b>A Light 轻量</b><br><span style="font-size: 12px; color: #6B6558">售前方案，数量给区间</span></span></label>
+<label style="flex: 1 1 140px; display: flex; gap: 8px; align-items: flex-start; border: 1px solid #EFEBE4; background: #FAF8F4; border-radius: 10px; padding: 10px 12px; color: #6B6558"><input type="radio" name="mode" disabled style="margin-top: 3px"><span><b>B Technical 技术</b><br><span style="font-size: 12px">Next version 下一版</span></span></label>
+</div></fieldset>
+<div><label for="sl" style="display: block; font-weight: 600; margin-bottom: 4px">Site location 项目地点</label><input id="sl" type="text" value="Singapore" style="width: 100%; box-sizing: border-box; height: 38px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+<div><label for="nt" style="display: block; font-weight: 600; margin-bottom: 4px">Notes 备注</label><textarea id="nt" rows="3" style="width: 100%; box-sizing: border-box; padding: 8px 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit">{{ntVal}}</textarea></div>
+</section>
+
+<section style="flex: 2 1 420px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px">
+<h2 style="margin: 0; font-size: 15px">Customer files <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">客户文件</span></h2>
+<div style="border: 2px dashed #D9CFBF; border-radius: 10px; padding: 22px; text-align: center; background: #FAF8F4"><div style="font-weight: 600">拖入文件，或 <button type="button" style="border: 0; background: none; color: #2C5AA0; font: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; padding: 0">从本机选择 Choose from this PC</button></div><div style="font-size: 12px; color: #6B6558; margin-top: 4px">PDF · Excel · JPG · PNG。DWG 经本地 Agent 读取。原文件只读保存，不会被覆盖。</div></div>
+<div style="overflow-x: auto">
+<sc-if value="{{ledOn}}" hint-placeholder-val="{{ true }}">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 520px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">File 文件</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Grade 等级</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">How it is read 读取方式</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Status 状态</th></tr></thead>
+<tbody>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Lobby_Elevation_RevB.pdf</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11.5px">A</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">文本层，直接读取</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #2F7A5B; font-weight: 600">Read 已读取</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">LED_Requirement.xlsx</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11.5px">A</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">按列名匹配</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #2F7A5B; font-weight: 600">Read 已读取</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Lobby_site_photo.jpg</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 11.5px">B</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">先文字识别，再读尺寸</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #2F7A5B; font-weight: 600">Read 已读取</td></tr>
+<tr><td style="padding: 8px; font-weight: 600">Concept_render.png</td><td style="padding: 8px"><span style="padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-weight: 700; font-size: 11.5px">C</span></td><td style="padding: 8px">未找到尺寸，仅作参考</td><td style="padding: 8px; color: #6B6558">Attached 已附加</td></tr>
+</tbody>
+</table>
+</sc-if>
+<sc-if value="{{pjOn}}" hint-placeholder-val="{{ false }}">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 520px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">File 文件</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Grade 等级</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">How it is read 读取方式</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Status 状态</th></tr></thead>
+<tbody>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">114_Elevation.dwg</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11.5px">A</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">经本地 Agent 读取 DWG</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #2F7A5B; font-weight: 600">Read 已读取</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">114_Plan.pdf</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11.5px">A</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">文本层，直接读取（p2 进深）</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #2F7A5B; font-weight: 600">Read 已读取</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">114_site_photo.jpg</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 11.5px">B</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">先文字识别，再读幕面与尺寸</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #2F7A5B; font-weight: 600">Read 已读取</td></tr>
+<tr><td style="padding: 8px; font-weight: 600">剖面图 / 天花图 RCP</td><td style="padding: 8px"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 700; font-size: 11.5px">—</span></td><td style="padding: 8px">未提供，资料齐全度 B 级，风险条款自动加一条</td><td style="padding: 8px; color: #B91C1C; font-weight: 600">Missing 缺失</td></tr>
+</tbody>
+</table>
+</sc-if>
+</div>
+<div style="font-size: 12px; color: #6B6558">A：数值直接读取 · B：数值靠文字识别，必须逐项确认 · C：随项目保存，不用于计算数量。</div>
+</section>
+
+<section style="flex: 1 1 240px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px">This proposal will include <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">方案包含</span></h2>
+<div style="display: flex; flex-direction: column; gap: 7px">
+<label style="display: flex; gap: 8px"><input type="checkbox" checked style="accent-color: #15203A">Concept 概念</label>
+<label style="display: flex; gap: 8px"><input type="checkbox" checked style="accent-color: #15203A">Recommended configuration 推荐配置</label>
+<label style="display: flex; gap: 8px"><input type="checkbox" checked style="accent-color: #15203A">Quantity range 数量区间</label>
+<label style="display: flex; gap: 8px"><input type="checkbox" checked style="accent-color: #15203A">BOQ (cost optional 成本可选)</label>
+<label style="display: flex; gap: 8px"><input type="checkbox" checked style="accent-color: #15203A">System diagram (Level 1) 系统图 L1</label>
+<label style="display: flex; gap: 8px"><input type="checkbox" checked style="accent-color: #15203A">Schematic (Level 2) 原理图 L2</label>
+<sc-if value="{{pjOn}}" hint-placeholder-val="{{ false }}"><label style="display: flex; gap: 8px"><input type="checkbox" checked style="accent-color: #15203A">Projection drawings 投影专属图（立面融合区、平面机位、剖面遮挡）</label></sc-if>
+<label style="display: flex; gap: 8px"><input type="checkbox" checked style="accent-color: #15203A">Annotated drawings 标注图</label>
+<label style="display: flex; gap: 8px"><input type="checkbox" checked style="accent-color: #15203A">Risks &amp; assumptions 风险与假设</label>
+<label style="display: flex; gap: 8px"><input type="checkbox" checked style="accent-color: #15203A">JPG boards JPG 展板</label>
+</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558">导出 PDF 和可编辑 Word。</div>
+</section>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px">
+<button type="button" style="height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Save draft 保存草稿</button>
+<a href="{{nextHref}}" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">Read files &amp; continue 读取文件并继续 →</a>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const pj = s.line === 'pj';
+    const on = 'flex: 1 1 160px; text-align: left; padding: 10px 12px; border-radius: 10px; border: 2px solid #15203A; background: #F1EEE8; color: #1F2430; font: inherit; cursor: pointer';
+    const off = 'flex: 1 1 160px; text-align: left; padding: 10px 12px; border-radius: 10px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #1F2430; font: inherit; cursor: pointer';
+    return {
+      pickLed: () => this.setState({ line: 'led' }),
+      pickPj: () => this.setState({ line: 'pj' }),
+      ledOn: !pj,
+      pjOn: pj,
+      sLed: pj ? off : on,
+      sPj: pj ? on : off,
+      pnVal: pj ? '114-Showroom · PJ-1 展厅投影墙' : '143-Royal Plaza LED · LED-1 Lobby',
+      clVal: pj ? '114 Showroom' : 'Royal Plaza',
+      ppVal: pj ? '114' : '143',
+      ntVal: pj ? '展厅投影墙，墙宽 18325 mm，暗场展厅，吊顶安装。缺剖面图和天花图，需现场确认天花高度。' : '大堂主题墙。客户要求边框简洁、前维护。',
+      nextHref: pj ? 'ConfirmPJ.dc.html' : 'Confirm.dc.html'
+    };
+  }
+}
+</script>
+</body>
+</html>

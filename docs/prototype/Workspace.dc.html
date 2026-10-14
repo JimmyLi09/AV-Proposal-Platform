@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · LED Recommendation</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div><div style="font-size: 12px; color: #6B6558">143-Royal Plaza LED · LED-1 Lobby · Rev 1 · 按规则 v1.3、产品库 v1.0 计算</div><h1 style="margin: 0; font-size: 24px; color: #15203A">LED Recommendation <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">LED 推荐方案</span></h1></div>
+
+<nav aria-label="Proposal steps" style="display: flex; flex-wrap: wrap; gap: 6px">
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">1 Project &amp; Files 项目与文件</a>
+<a href="Confirm.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">2 Confirm Inputs 确认输入</a>
+<a href="Workspace.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none">3 Recommendation 推荐</a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">4 Cost &amp; BOQ 成本与 BOQ</a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">5 Annotate 标注</a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">6 Review &amp; Export 审核导出</a>
+</nav>
+
+<div style="display: flex; flex-wrap: wrap; gap: 22px; border-bottom: 1px solid #E6E0D6">
+<a href="Workspace.dc.html" style="padding: 10px 2px; border-bottom: 3px solid #15203A; color: #15203A; font-weight: 700; text-decoration: none">Recommendation 推荐</a>
+<a href="Calculations.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none">Calculations 计算依据</a>
+<a href="Diagram.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none">Diagram 示意图</a>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+
+<section style="flex: 1 1 240px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<div style="display: flex; align-items: baseline; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px">Confirmed inputs <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">已确认输入</span></h2><div style="flex: 1"></div><a href="Confirm.dc.html" style="font-size: 12.5px">Edit 编辑</a></div>
+<div style="display: grid; grid-template-columns: auto 1fr; gap: 7px 12px; font-size: 12.5px">
+<span style="color: #6B6558">Environment 环境</span><span>Indoor 室内</span>
+<span style="color: #6B6558">Pixel pitch 像素间距</span><span>P2.5</span>
+<span style="color: #6B6558">Size 尺寸</span><span>4480 × 2560 mm</span>
+<span style="color: #6B6558">Viewing 观看距离</span><span>4 – 6 m</span>
+<span style="color: #6B6558">Installation 安装方式</span><span>Wall mount 壁挂</span>
+<span style="color: #6B6558">Maintenance 维护方式</span><span>Front 前维护</span>
+<span style="color: #6B6558">Brightness 亮度</span><span>≥ 600 nits</span>
+<span style="color: #6B6558">Power distance 电源距离</span><span>25 m（假设）</span>
+</div>
+<div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #EFEBE4; font-size: 12px; color: #6B6558">Jimmy 确认 · 今天 09:31</div>
+</section>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><h2 style="margin: 0; font-size: 17px; color: #15203A">P2.5 Indoor LED Wall 室内 LED 屏 · 4480 × 2560 mm</h2><div style="flex: 1"></div><span style="padding: 2px 10px; border-radius: 12px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 12px">Rules engine 规则引擎 · 数值不经 AI</span></div>
+<div style="margin-top: 4px; color: #6B6558">Cabinet 箱体: Sample IC-25 (Preferred 首选) · Controller 控制器: Sample SC-4 · Processor 处理器: Sample SP-1 <span style="padding: 0 6px; border-radius: 8px; background: #F1EEE8; font-size: 11px">示例值 sample</span></div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(178px, 1fr)); gap: 10px; margin-top: 14px">
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Resolution 分辨率</div><div style="font-size: 21px; font-weight: 700; color: #15203A">1792 × 1024</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">4480÷2.5 × 2560÷2.5 = 1.84 MP</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">F4 · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Modules 模组</div><div style="font-size: 21px; font-weight: 700; color: #15203A">224</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">14 × 16 · 320 × 160</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">F2 · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Cabinets 箱体</div><div style="font-size: 21px; font-weight: 700; color: #15203A">35</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">28 × 640×480 + 7 × 640×640</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">Layout 排布 · 主尺寸 80%</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Spare modules 备用模组</div><div style="font-size: 21px; font-weight: 700; color: #15203A">12</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">224 × 5% = 11.2 → 12</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">F10 · 向上取整</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Power 功率</div><div style="font-size: 21px; font-weight: 700; color: #15203A">5.73 kW</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">11.47 ㎡ × 500 W/㎡</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">F5 · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Power circuits 电源回路</div><div style="font-size: 21px; font-weight: 700; color: #15203A">3</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">5.73 ÷ 2.5 = 2.29 → 3</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">F6 · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Power cables 电源线</div><div style="font-size: 21px; font-weight: 700; color: #15203A">4</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">3 回路 + 1 备用</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">F7 · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Data cables 数据线</div><div style="font-size: 21px; font-weight: 700; color: #15203A">5</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">1.84 ÷ 0.56 MP = 3.28 → 4, +1</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">F9 · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Controller 控制器</div><div style="font-size: 21px; font-weight: 700; color: #15203A">1</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">1.84 / 2.3 MP · 4 / 4 端口</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">F11 · 负载 80%</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">DB box 配电箱</div><div style="font-size: 21px; font-weight: 700; color: #15203A">1</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">3 回路 ≤ 每箱 4 路</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">F12 · v1.3</div></div>
+</div>
+<div style="margin-top: 10px"><a href="Calculations.dc.html" style="font-weight: 600">查看所有公式和每个数字的来源 →</a></div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px">
+<section style="flex: 1 1 300px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px">Checks <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">校验</span></h2>
+<div style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px">
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px">PASS 通过</span><span>尺寸刚好整除模组：14 × 16</span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px">PASS 通过</span><span>观看距离 4 m ≥ 最小 2.5 m</span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px">PASS 通过</span><span>控制器负载 1.84 / 2.3 MP</span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px">PASS 通过</span><span>亮度 800 ≥ 600 nits</span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 11px">NOTE 提示</span><span>控制器 4 个端口已全部占用，备用数据线没有空余端口。</span></div>
+</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558">出现阻断项时，修正之前不能导出。</div>
+</section>
+<section style="flex: 1 1 300px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px">Risks &amp; assumptions <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">风险与假设</span></h2>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px; font-size: 12.5px">
+<li>电源接驳点距屏幕 25 m 以内（文件中未提供）。</li>
+<li>墙体可承受屏幕荷载，结构核算由他方负责。</li>
+<li>前维护，不需要后方检修通道。</li>
+<li>数量待现场勘测后确认。</li>
+<li>不含土建、市电引入和网络布线。</li>
+</ul>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558">标准条款来自 Templates；第一条是因字段缺失而自动加入的。</div>
+</section>
+</div>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px">
+<a href="Diagram.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #1F2430; font-weight: 600; text-decoration: none">View diagram 查看示意图</a>
+<a href="Cost.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">Next: Cost &amp; BOQ 下一步：成本与 BOQ →</a>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

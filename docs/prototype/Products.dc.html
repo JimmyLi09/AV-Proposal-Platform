@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Product Library 产品库</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">+ New Proposal 新建方案</a>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+<div style="flex: 1 1 300px"><h1 style="margin: 0; font-size: 24px; color: #15203A">Product Library <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">产品库</span></h1><p style="margin: 2px 0 0; color: #6B6558">推荐只使用这里列出的产品。编辑会生成新的产品库版本；已发出的 Rev 保留当时使用的版本。</p></div>
+<span style="padding: 2px 10px; border-radius: 12px; background: #E8EFF9; color: #2C5AA0; font-weight: 600">Library 产品库 v1.0 · 6 products 个产品</span>
+<button type="button" style="height: 38px; padding: 0 14px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Import from Excel 从 Excel 导入</button>
+<button type="button" style="height: 38px; padding: 0 14px; border-radius: 8px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">+ Add product 添加产品</button>
+</div>
+<div role="tablist" aria-label="Business line 业务线" style="display: flex; gap: 6px">
+<a href="Products.dc.html" style="padding: 7px 14px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none">LED</a>
+<a href="ProductsPJ.dc.html" style="padding: 7px 14px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #3B3A36; font-size: 12.5px; text-decoration: none">Projection 投影 · 单面墙</a>
+</div>
+
+<div style="padding: 10px 14px; border-radius: 10px; background: #FFFAF2; border: 1px dashed #D9A57A; color: #7C3A10">以下 6 个产品都是示例数据，用于测试流程；清单 D 组填好后替换。</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center">
+<span style="padding: 6px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600">All 全部</span>
+<span style="padding: 6px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF">Cabinets 箱体</span>
+<span style="padding: 6px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF">Controllers 控制器</span>
+<span style="padding: 6px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF">Processors 视频处理器</span>
+<div style="width: 12px"></div>
+<span style="padding: 6px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF">Indoor 室内</span>
+<span style="padding: 6px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF">Outdoor 户外</span>
+<span style="padding: 6px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF">Preferred only 仅首选</span>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 640px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Model 型号</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Category 类别</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Key specs 关键参数</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Use 用途</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Status 状态</th></tr></thead>
+<tbody>
+<tr style="background: #F3F5FA"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 700">IC-25</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Cabinet 箱体</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">P2.5 · module 模组 320 × 160 · 800 nits</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Indoor fixed 室内固装</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px">Preferred 首选</span></td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 700">IC-19</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Cabinet 箱体</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">P1.9 · module 模组 320 × 160 · 700 nits</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Indoor fixed 室内固装</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11.5px">Approved 已批准</span></td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 700">OF-40</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Cabinet 箱体</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">P4 · module 模组 320 × 320 · IP65</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Outdoor fixed 户外固装</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11.5px">Approved 已批准</span></td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 700">SC-4</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Controller 控制器</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">2.3 MP · 4 ports 网口</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">All 通用</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px">Preferred 首选</span></td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 700">SC-2</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Controller 控制器</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">1.3 MP · 2 ports 网口</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Small screens 小屏</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11.5px">Approved 已批准</span></td></tr>
+<tr><td style="padding: 9px 8px; font-weight: 700">SP-1</td><td style="padding: 9px 8px">Processor 视频处理器</td><td style="padding: 9px 8px">2 inputs 输入 · up to 最高 2.3 MP</td><td style="padding: 9px 8px">All 通用</td><td style="padding: 9px 8px"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px">Preferred 首选</span></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; gap: 12px; align-items: center"><div style="width: 64px; height: 64px; border-radius: 8px; background: #EFEBE4; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #6B6558">Photo 照片</div><div><div style="font-size: 16px; font-weight: 700; color: #15203A">IC-25</div><div style="color: #6B6558">Indoor cabinet 室内箱体 · P2.5</div></div></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<div><label for="p1" style="display: block; font-size: 12px; color: #6B6558">Module size 模组尺寸 mm</label><input id="p1" type="text" value="320 × 160" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit"></div>
+<div><label for="p2" style="display: block; font-size: 12px; color: #6B6558">Brightness 亮度 nits</label><input id="p2" type="text" value="800" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit"></div>
+<div><label for="p3" style="display: block; font-size: 12px; color: #6B6558">Max power 最大功耗 W/㎡</label><input id="p3" type="text" placeholder="[见规格书]" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit"></div>
+<div><label for="p4" style="display: block; font-size: 12px; color: #6B6558">Weight 重量 kg / cabinet 箱体</label><input id="p4" type="text" placeholder="[见规格书]" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit"></div>
+<div><label for="p5" style="display: block; font-size: 12px; color: #6B6558">Maintenance 维护方式</label><select id="p5" style="width: 100%; height: 34px; padding: 0 6px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; background: #FFFFFF"><option>Front 前维护</option><option>Rear 后维护</option><option>Both 前后均可</option></select></div>
+<div><label for="p6" style="display: block; font-size: 12px; color: #6B6558">Status 状态</label><select id="p6" style="width: 100%; height: 34px; padding: 0 6px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; background: #FFFFFF"><option>Preferred 首选</option><option>Approved 已批准</option><option>Retired 已停用</option></select></div>
+</div>
+<div><label for="p7" style="display: block; font-size: 12px; color: #6B6558">Cabinet sizes 箱体尺寸 mm（第一个为主尺寸）</label><input id="p7" type="text" value="640×480, 640×640, 320×480, 320×320, 640×320" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit"></div>
+<div style="font-size: 12px; color: #6B6558">Datasheet 规格书：<a href="Products.dc.html">IC-25_datasheet.pdf</a> · 每个箱体：1 个电源、1 张接收卡</div>
+<div><label for="rs" style="display: block; font-size: 12px; color: #6B6558">Reason for change 修改原因</label><input id="rs" type="text" placeholder="例如：供应商提供了新规格书" style="width: 100%; box-sizing: border-box; height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit"></div>
+<button type="button" style="height: 40px; border-radius: 8px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Save as library v1.1 另存为产品库 v1.1</button>
+</section>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

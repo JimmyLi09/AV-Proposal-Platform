@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Projects</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">+ New Proposal 新建方案</a>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div><h1 style="margin: 0; font-size: 24px; color: #15203A">Projects <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">项目</span></h1><p style="margin: 2px 0 0; color: #6B6558">项目可以先建，之后再关联 Project Platform 编号。两个系统只共用这个编号，不共用数据库。</p></div>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 760px">
+<thead><tr style="text-align: left; color: #6B6558">
+<th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Project 项目</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Client 客户</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Project Platform no. 项目平台编号</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Proposals 方案</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Latest 最新状态</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Owner 负责人</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">143-Royal Plaza LED</td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">Royal Plaza</td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">143</td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4"><a href="Workspace.dc.html">LED-1 Lobby</a> · LED-2 Showflat</td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11.5px">Calculated 已计算 · Rev 1</span></td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">Jimmy</td></tr>
+<tr><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">148-Dairy Farm LED</td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">Roxy</td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">148</td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4"><a href="Confirm.dc.html">Main LED</a></td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px">Awaiting confirmation 待确认</span></td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">Skye</td></tr>
+<tr><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">114-Showroom</td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">Showroom</td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">114</td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 6px; border-radius: 8px; background: #F1EEE8; color: #6B6558; font-size: 11px; font-weight: 600; margin-right: 4px">Projection 投影</span><a href="WorkspacePJ.dc.html">PJ-1 展厅投影墙</a></td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11.5px">Calculated 已计算 · Rev 0</span></td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">Jimmy</td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Riverside Showflat LED</td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">Riverside Group</td>
+<td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">
+<sc-if value="{{notLinked}}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center"><span style="padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-weight: 600; font-size: 11.5px">Not linked 未关联</span><input type="text" aria-label="Project Platform number 项目平台编号" value="176" style="width: 70px; height: 30px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit"><button type="button" onClick="{{link}}" style="height: 30px; padding: 0 10px; border-radius: 6px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer">Link 关联</button></div></sc-if>
+<sc-if value="{{linked}}" hint-placeholder-val="{{ false }}"><span style="font-weight: 600">176</span> <span style="color: #2F7A5B; font-size: 12px">刚刚已关联</span> <button type="button" onClick="{{unlink}}" style="border: 0; background: none; color: #2C5AA0; font: inherit; font-size: 12px; text-decoration: underline; cursor: pointer">Undo 撤销</button></sc-if>
+</td>
+<td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">Showflat feature wall 样板房主题墙</td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-weight: 600; font-size: 11.5px">Draft 草稿</span></td><td style="padding: 10px 8px; border-bottom: 1px solid #EFEBE4">Candy</td></tr>
+<tr><td style="padding: 10px 8px; font-weight: 600">082-Chuan Grove</td><td style="padding: 10px 8px">SingHoldings</td><td style="padding: 10px 8px">082</td><td style="padding: 10px 8px"><a href="Preview.dc.html">Main LED</a></td><td style="padding: 10px 8px"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px">Approved 已批准 · Rev 2</span></td><td style="padding: 10px 8px">Jimmy</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px">143-Royal Plaza LED · Files <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">文件</span></h2><span style="color: #6B6558">原件只读。标注副本保存在原件旁边。</span></div>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 560px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">File 文件</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Type 类型</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Added 添加</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Used in 用于</th></tr></thead>
+<tbody>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Lobby_Elevation_RevB.pdf</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Original 原件 · read-only 只读</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">9 Oct · Jimmy</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Rev 0, Rev 1</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">LED_Requirement.xlsx</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Original 原件 · read-only 只读</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">9 Oct · Jimmy</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Rev 0, Rev 1</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Lobby_site_photo.jpg</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Original 原件 · read-only 只读</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">9 Oct · Jimmy</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Rev 0, Rev 1</td></tr>
+<tr><td style="padding: 8px">Lobby_site_photo_annotated_Rev1.jpg</td><td style="padding: 8px">Marked copy 标注副本</td><td style="padding: 8px">11 Oct · Jimmy</td><td style="padding: 8px">Rev 1</td></tr>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const linked = !!(this.state && this.state.linked);
+    return {
+      linked: linked,
+      notLinked: !linked,
+      link: () => this.setState({ linked: true }),
+      unlink: () => this.setState({ linked: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

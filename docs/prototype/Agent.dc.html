@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Local Agent</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; {{pillStyle}}">{{pillText}}</span>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+<sc-if value="{{offline}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 10px 28px; background: #FDF1E6; border-bottom: 1px solid #F0D2B4; color: #7C3A10; font-weight: 600">Offline 离线 · 规则 v1.3 已于 11 Oct 09:12 缓存 · 可以计算、标注和保存草稿；批准和正式导出需等服务器恢复。</div>
+</sc-if>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+<div style="flex: 1 1 300px"><h1 style="margin: 0; font-size: 24px; color: #15203A">Local Agent <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">本地 Agent</span></h1><p style="margin: 2px 0 0; color: #6B6558">安装在本机的小程序：读取本地文件夹、做文字识别、调用 AutoCAD、标注文件。它自带一份界面副本，服务器连不上时也能继续工作。</p></div>
+<div role="group" aria-label="Demo connection state 演示连接状态" style="display: flex; border: 1px solid #E6E0D6; border-radius: 8px; overflow: hidden">
+<button type="button" onClick="{{goOnline}}" style="{{onBtn}}">Online 在线</button>
+<button type="button" onClick="{{goOffline}}" style="{{offBtn}}">Offline 离线</button>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px">This PC <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">本机</span></h2>
+<div style="display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; font-size: 12.5px">
+<span>Agent version 版本</span><span>v0.3.0 · up to date 已是最新</span>
+<span>Server 服务器</span><span style="font-weight: 600; {{serverColor}}">{{serverText}}</span>
+<span>AutoCAD</span><span style="color: #2F7A5B; font-weight: 600">2024 · DWG → DXF 可用</span>
+<span>ODA File Converter</span><span style="color: #6B6558">本机不需要</span>
+<span>Text recognition 文字识别</span><span style="color: #2F7A5B; font-weight: 600">Running 运行中 · 本机运行，不联网</span>
+<span>Project folder 项目文件夹</span><span style="font-family: ui-monospace, Consolas, monospace; font-size: 12px">D:\Projects</span>
+<span>Rules cache 规则缓存</span><span>v1.3 · 11 Oct 09:12</span>
+<span>Product library cache 产品库缓存</span><span>v1.0 · 11 Oct 09:12</span>
+<span>Drafts waiting to upload 待上传草稿</span><span style="font-weight: 600">{{drafts}}</span>
+</div>
+</section>
+
+<section style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px">What works right now <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">当前可用功能</span></h2>
+<div style="display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; font-size: 12.5px">
+<span>Read local files 读取本机文件和文件夹</span><span style="color: #2F7A5B; font-weight: 700">Yes 可用</span>
+<span>Text &amp; dimension recognition 文字与尺寸识别</span><span style="color: #2F7A5B; font-weight: 700">Yes 可用</span>
+<span>Calculate &amp; recommend 计算与推荐</span><span style="color: #2F7A5B; font-weight: 700">Yes 可用</span>
+<span>Annotate 标注 PDF / JPG</span><span style="color: #2F7A5B; font-weight: 700">Yes 可用</span>
+<span>Save drafts 保存草稿</span><span style="color: #2F7A5B; font-weight: 700">Yes 可用</span>
+<span>Approve a Rev 批准 Rev</span><span style="font-weight: 700; {{gateColor}}">{{gateText}}</span>
+<span>Official export 正式导出 PDF / Word</span><span style="font-weight: 700; {{gateColor}}">{{gateText}}</span>
+<span>Edit rules / library 编辑规则或产品库</span><span style="font-weight: 700; {{gateColor}}">{{gateText}}</span>
+</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558">离线时使用缓存的规则；服务器恢复后草稿自动上传。</div>
+</section>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px">Recent activity <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">最近活动</span></h2>
+<div style="font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: #3B3A36; line-height: 1.9; background: #FAF8F4; border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px 12px">
+09:52  已保存 Lobby_site_photo_annotated_Rev1.jpg（原图未改动）<br>
+09:31  读取 143-Royal Plaza LED 的 4 个文件 · 识别出 9 个字段<br>
+09:30  对 Lobby_site_photo.jpg 做文字识别 · 2 处尺寸文字<br>
+09:12  从 192.168.1.241 同步规则 v1.3 和产品库 v1.0
+</div>
+</section>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const off = !!(this.state && this.state.off);
+    const on = 'height: 38px; padding: 0 16px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer';
+    const idle = 'height: 38px; padding: 0 16px; border: 0; background: #FFFFFF; color: #3B3A36; font: inherit; cursor: pointer';
+    return {
+      offline: off,
+      goOnline: () => this.setState({ off: false }),
+      goOffline: () => this.setState({ off: true }),
+      onBtn: off ? idle : on,
+      offBtn: off ? on : idle,
+      pillStyle: off ? 'background: #FDF1E6; color: #9A4A12' : 'background: #E6F2EC; color: #2F7A5B',
+      pillText: off ? 'Offline 离线 · 缓存规则 v1.3' : 'Agent online 在线 · Rules 规则 v1.3',
+      serverColor: off ? 'color: #9A4A12' : 'color: #2F7A5B',
+      serverText: off ? 'Not reachable 无法连接 · since 自 10:05' : '192.168.1.241:8081 · connected 已连接',
+      gateColor: off ? 'color: #9A4A12' : 'color: #2F7A5B',
+      gateText: off ? 'Waits for server 等服务器恢复' : 'Yes 可用',
+      drafts: off ? '1（143-Royal Plaza，Rev 1 修改）' : '0'
+    };
+  }
+}
+</script>
+</body>
+</html>

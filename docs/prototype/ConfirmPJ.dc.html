@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Confirm Inputs · Projection</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div><div style="font-size: 12px; color: #6B6558">114-Showroom · PJ-1 展厅投影墙 · Rev 0</div><h1 style="margin: 0; font-size: 24px; color: #15203A">Confirm Inputs · Projection <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">确认输入（投影）</span></h1></div>
+
+<nav aria-label="Proposal steps 方案步骤" style="display: flex; flex-wrap: wrap; gap: 6px">
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">1 Project &amp; Files 项目与文件</a>
+<a href="ConfirmPJ.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none">2 Confirm Inputs 确认输入</a>
+<a href="WorkspacePJ.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">3 Recommendation 推荐</a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">4 Cost &amp; BOQ 成本与 BOQ</a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">5 Annotate 标注</a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">6 Review &amp; Export 审核导出</a>
+</nav>
+
+<div style="padding: 11px 14px; border-radius: 10px; background: #FDF1E6; border: 1px solid #F0D2B4; color: #7C3A10">
+<b>Local Agent 读取了 4 个文件，找到 9 个字段。</b>置信度为 Medium / Low 的字段需要逐个确认，全部确认后才能运行计算。
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+
+<section style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px">Extracted information <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">提取信息</span></h2>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 680px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Field 字段</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Value 值</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Source 来源</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Confidence 置信度</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Status 状态</th></tr></thead>
+<tbody>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Wall width 墙宽</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>18325 mm</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">立面图 DWG · 114_Showroom_Elev.dwg</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px; white-space: nowrap">High 高</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="color: #2F7A5B">Confirmed 已确认</span></td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Wall height 墙高</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>2700 mm</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">立面图 DWG · 114_Showroom_Elev.dwg</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px; white-space: nowrap">High 高</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="color: #2F7A5B">Confirmed 已确认</span></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Available depth 可用进深</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">3200 mm</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">平面图 PDF · p.2</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px; white-space: nowrap">Medium 中</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{dpDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{dpNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_dp}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Ceiling height 天花高度</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">3000 mm</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">剖面图缺失 · 手填</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11.5px; white-space: nowrap">Low 低</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{clDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{clNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_cl}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Mounting 安装方式</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Ceiling 吊顶</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">手填</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px; white-space: nowrap">Medium 中</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{mtDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{mtNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_mt}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Ambient light 环境光</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">≤ 150 lux（暗场展厅）</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">手填</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11.5px; white-space: nowrap">Low 低</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{amDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{amNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_am}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Surface 幕面</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">白色涂料墙，增益 1.0</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">现场照片 · 114_site_03.jpg</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px; white-space: nowrap">Medium 中</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{sfDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{sfNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_sf}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Nearest viewing 最近观看距离</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">1.5 m</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">手填</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11.5px; white-space: nowrap">Low 低</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{vwDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{vwNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_vw}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; font-weight: 600">Signal run 信号距离</td><td style="padding: 9px 8px">35 m（机柜到投影机）</td><td style="padding: 9px 8px; color: #6B6558">平面图 PDF · p.2</td><td style="padding: 9px 8px"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px; white-space: nowrap">Medium 中</span></td><td style="padding: 9px 8px"><sc-if value="{{sgDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{sgNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_sg}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
+</tbody>
+</table>
+</div>
+</section>
+
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px">Drawing completeness <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">资料齐全度</span></h2><div style="flex: 1"></div><span style="padding: 2px 10px; border-radius: 12px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 12.5px">Grade B 级</span></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; font-size: 12.5px">
+<div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #EFEBE4; border-radius: 8px; background: #FFFFFF"><span style="color: #2F7A5B; font-weight: 700">✓</span><span>Plan 平面图</span></div>
+<div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #EFEBE4; border-radius: 8px; background: #FFFFFF"><span style="color: #2F7A5B; font-weight: 700">✓</span><span>Elevation 立面图</span></div>
+<div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #EFEBE4; border-radius: 8px; background: #FDF6F6"><span style="color: #B91C1C; font-weight: 700">✗</span><span>Section 剖面图</span></div>
+<div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #EFEBE4; border-radius: 8px; background: #FDF6F6"><span style="color: #B91C1C; font-weight: 700">✗</span><span>RCP 天花图</span></div>
+</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558; line-height: 1.6">缺剖面图，天花高度只能手填。风险与假设里会自动加一条资料齐全度条款，计算结果照常出。补齐剖面和 RCP 后可升到 A 级。</div>
+</section>
+<section style="background: #E8EFF9; border: 1px solid #C9D8EE; border-radius: 12px; padding: 14px 16px; color: #1F3A66">
+<div style="font-weight: 700; margin-bottom: 4px">Throw distance 投射距离</div>
+<div style="font-size: 12.5px; line-height: 1.6">投射距离从<b>镜头前端</b>量到墙面，不是从机身中心或吊架量起。核对可用进深时，机身长度和走线余量要另外留出。</div>
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 8px; font-size: 15px">Source preview <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">来源预览</span></h2>
+<div style="font-size: 12px; color: #6B6558; margin-bottom: 8px">114_Showroom_Elev.dwg · 立面 B</div>
+<div style="border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; padding: 16px; font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: #3B3A36; line-height: 1.9">
+SHOWROOM ELEVATION B<br>
+<span style="background: #FDE7C8; outline: 2px solid #C2410C; padding: 1px 3px">PROJECTION WALL 18325 (W) x 2700 (H)</span><br>
+FFL +0.000 · FCL +3.000 (TBC)<br>
+FINISH: WHITE PAINT
+</div>
+<div style="font-size: 12px; color: #6B6558; margin-top: 8px">原文件只读，这里是用于核对的截取。</div>
+</section>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px">
+<sc-if value="{{notReady}}" hint-placeholder-val="{{ true }}"><span style="color: #9A4A12; font-weight: 600">还有 {{left}} 个字段待确认</span></sc-if>
+<button type="button" onClick="{{reset}}" style="height: 42px; padding: 0 16px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">Reset demo 重置演示</button>
+<button type="button" style="height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Save draft 保存草稿</button>
+<sc-if value="{{notReady}}" hint-placeholder-val="{{ true }}"><button type="button" disabled style="height: 42px; padding: 0 20px; border-radius: 8px; border: 0; background: #D8D2C8; color: #6B6558; font: inherit; font-weight: 600; cursor: not-allowed">Run calculation 运行计算</button></sc-if>
+<sc-if value="{{ready}}" hint-placeholder-val="{{ false }}"><a href="WorkspacePJ.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">Run calculation 运行计算 →</a></sc-if>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const keys = ['dp', 'cl', 'mt', 'am', 'sf', 'vw', 'sg'];
+    const left = keys.filter(k => !s[k]).length;
+    const vals = {
+      confirm_dp: () => this.setState({ dp: true }),
+      dpDone: !!s.dp,
+      dpNot: !s.dp,
+      confirm_cl: () => this.setState({ cl: true }),
+      clDone: !!s.cl,
+      clNot: !s.cl,
+      confirm_mt: () => this.setState({ mt: true }),
+      mtDone: !!s.mt,
+      mtNot: !s.mt,
+      confirm_am: () => this.setState({ am: true }),
+      amDone: !!s.am,
+      amNot: !s.am,
+      confirm_sf: () => this.setState({ sf: true }),
+      sfDone: !!s.sf,
+      sfNot: !s.sf,
+      confirm_vw: () => this.setState({ vw: true }),
+      vwDone: !!s.vw,
+      vwNot: !s.vw,
+      confirm_sg: () => this.setState({ sg: true }),
+      sgDone: !!s.sg,
+      sgNot: !s.sg,
+      ready: left === 0,
+      notReady: left > 0,
+      left: left,
+      reset: () => this.setState({ dp: false, cl: false, mt: false, am: false, sf: false, vw: false, sg: false })
+    };
+    return vals;
+  }
+}
+</script>
+</body>
+</html>
