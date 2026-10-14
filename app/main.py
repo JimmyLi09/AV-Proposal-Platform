@@ -7,6 +7,8 @@ from sqlalchemy.orm import sessionmaker
 
 from . import api
 from .db import make_engine, migrate
+from .rules.api import ensure_seed
+from .rules.api import router as rules_router
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB_DIST = ROOT / "web" / "dist"
@@ -25,7 +27,10 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
     app = FastAPI(title="AV Proposal Platform")
     app.state.data_dir = data_dir
     app.state.Session = sessionmaker(engine, expire_on_commit=False)
+    with app.state.Session() as db:
+        ensure_seed(db)
     app.include_router(api.router, prefix="/api")
+    app.include_router(rules_router, prefix="/api")
     if WEB_DIST.is_dir():
         app.mount("/", StaticFiles(directory=WEB_DIST, html=True), name="web")
     return app

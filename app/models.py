@@ -90,3 +90,19 @@ class Revision(Base):
     locked: Mapped[dict | None] = mapped_column(JSON)
 
     author: Mapped[User] = relationship(foreign_keys=[author_id])
+
+
+class RuleSetVersion(Base):
+    """规则集版本：每次保存整套另存一个新版本，旧版本永不修改；Rev 锁定的就是这个版本。"""
+    __tablename__ = "rule_set_versions"
+    __table_args__ = (UniqueConstraint("business_line", "version"),)
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    business_line: Mapped[str] = mapped_column(String(10))
+    version: Mapped[str] = mapped_column(String(20))  # v1.3、v1.4 …
+    content: Mapped[dict] = mapped_column(JSON)  # 输入定义、参数、规则算式
+    reason: Mapped[str] = mapped_column(Text, default="")  # 修改原因
+    created_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"))  # 初始版本为空
+    created_at: Mapped[datetime] = mapped_column(default=utcnow)
+
+    author: Mapped[User | None] = relationship()
