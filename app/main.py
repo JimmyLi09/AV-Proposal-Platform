@@ -15,7 +15,13 @@ WEB_DIST = ROOT / "web" / "dist"
 
 
 def load_config() -> dict:
-    return yaml.safe_load((Path(__file__).parent / "config" / "deploy.yaml").read_text(encoding="utf-8"))
+    """deploy.yaml 是默认值；服务器自己的设置写在 deploy.local.yaml（不进 git，更新代码时不会被覆盖）。"""
+    folder = Path(__file__).parent / "config"
+    cfg = yaml.safe_load((folder / "deploy.yaml").read_text(encoding="utf-8"))
+    local = folder / "deploy.local.yaml"
+    if local.exists():
+        cfg |= yaml.safe_load(local.read_text(encoding="utf-8")) or {}
+    return cfg
 
 
 def create_app(data_dir: Path | None = None) -> FastAPI:

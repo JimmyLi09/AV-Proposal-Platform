@@ -131,3 +131,15 @@ def test_new_proposal_starts_at_rev0_draft(client):
     }
     bad = client.post(f"/api/projects/{p['id']}/proposals", json={"name": "X", "business_line": "CCTV"})
     assert bad.status_code == 422
+
+
+def test_local_config_overrides_defaults(monkeypatch, tmp_path):
+    import app.main as main
+
+    folder = tmp_path / "config"
+    folder.mkdir()
+    (folder / "deploy.yaml").write_text("port: 8081\ndata_dir: ./data\noda_converter: ''\n", encoding="utf-8")
+    monkeypatch.setattr(main, "__file__", str(tmp_path / "main.py"))
+    assert main.load_config()["data_dir"] == "./data"
+    (folder / "deploy.local.yaml").write_text("data_dir: 'D:\\avp-data'\n", encoding="utf-8")
+    assert main.load_config() == {"port": 8081, "data_dir": "D:\\avp-data", "oda_converter": ""}
