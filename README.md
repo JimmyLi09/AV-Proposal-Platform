@@ -32,4 +32,8 @@ python3.12 -m venv .venv
 - [x] 第 5 步 Diagram L1/L2 与 PDF / JPG 标注：示意图由 BOQ 生成，每台设备、每条线缆都标出对应的 BOQ 行（业主提供 / 随设备附带的单独标出）；在 PDF 页面或照片上标点、区域、设备、文字，可设比例，保存时另存标注副本（JPG），原件不动
 - [ ] 第 6 步 Proposal 输出、审核、Rev 对比
 
-服务器（192.168.1.241）安装步骤在 LED V1 上线前（第 6 步）写成给 IT 的指引。
+## 上线与试用
+
+- 服务器安装（给 IT）：`docs/服务器装机流程.md`；更新：双击 `scripts\update.bat`。
+- 服务器自己的设置（资料目录、ODA 路径）写在 `app/config/deploy.local.yaml`，不进 git。
+- 试用整套流程：`docs/试用清单.md`。
