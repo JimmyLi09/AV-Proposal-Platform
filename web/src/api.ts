@@ -93,7 +93,34 @@ export type RunResult = {
   rules: RuleResult[];
   recommendation: Recommendation;
   boq: BoqLine[];
+  diagram: Diagram | null;
   library_version?: string;
+};
+
+export type DiagramNode = { title: string; model: string; qty: number | string; detail: string; boq: string[]; supply: string };
+export type DiagramLink = { from: string; to: string; cable: string; qty: string; boq: string | null; supply: string };
+export type Diagram = {
+  chain: string[];
+  power: string | null;
+  nodes: Record<string, DiagramNode>;
+  links: DiagramLink[];
+  unmatched: string[];
+  svg: string;
+};
+
+export type Mark = { type: "point" | "area" | "device" | "text"; x: number; y: number; w: number; h: number; label: string; note: string; boq_key: string | null; size_mm?: number[] | null };
+export type Scale = { a: { x: number; y: number }; b: { x: number; y: number }; mm: number };
+export type AnnotationDoc = {
+  file_id: number;
+  filename: string;
+  page: number;
+  width: number;
+  height: number;
+  scale: Scale | null;
+  marks: Mark[];
+  copy_name: string;
+  updated_by: string;
+  updated_at: string;
 };
 
 // ---- 产品库、推荐、BOQ ----
@@ -158,6 +185,7 @@ export type WorkspaceView = {
     inputs: Record<string, unknown>;
     cabinet_id: string | null;
     input_meta: Record<string, InputMeta>;
+    annotations: Record<string, AnnotationDoc>;
     manual_lines: ManualLine[];
     sell_price_cents: number | null;
     price_display: string;

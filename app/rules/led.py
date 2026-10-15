@@ -184,7 +184,7 @@ def diagram(values: dict, boq_lines: list[dict], inputs: dict, cabinet: dict | N
         return None
     products = {p["id"]: p for p in library["products"]}
     nodes = {"source": {"title": "Content source 信号源", "model": "播放器或电脑", "qty": inputs.get("signal_sources") or 1,
-                        "detail": "业主提供", "boq": [], "supply": "owner"}}
+                        "detail": "", "boq": [], "supply": "owner"}}
     # 处理器 / 控制器选不出来（F13 / F11）时保留位置并标出，不能悄悄从图上消失
     missing = {"model": "—", "qty": "", "boq": [], "supply": "missing"}
     nodes["processor"] = {"title": "Video processor 视频处理器", "model": products[values["processor_id"]]["model"],

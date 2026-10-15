@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { api, Boq, ManualLine, RuleResult, send, WorkspaceView } from "./api";
 import { CheckChip, Choices, money, Outcome, ResultsTable, StatusChip } from "./Calc";
+import AnnotateTab from "./Annotate";
 import ConfirmInputs from "./Confirm";
+import DiagramTab from "./Diagram";
 import { LINE_LABEL, StatusTag } from "./labels";
 import { PRODUCT_STATUS } from "./Products";
 
@@ -56,7 +58,8 @@ export default function Workspace({ id }: { id: number }) {
       {result && (
         <>
           <div className="row">
-            {[["rec", "Recommendation 推荐"], ["calc", "Calculations 计算依据"], ["cost", "Cost & BOQ 成本与 BOQ"]].map(([k, v]) => (
+            {[["rec", "Recommendation 推荐"], ["calc", "Calculations 计算依据"], ["diagram", "Diagram 示意图"],
+              ["cost", "Cost & BOQ 成本与 BOQ"], ["annotate", "Annotate 标注"]].map(([k, v]) => (
               <button key={k} className={`pill ${tab === k ? "active" : ""}`} onClick={() => setTab(k)}>
                 {v}
               </button>
@@ -72,7 +75,10 @@ export default function Workspace({ id }: { id: number }) {
               <ResultsTable base={result} label={view.rules_version} />
             </section>
           )}
+          {tab === "diagram" && (result.diagram ? <DiagramTab view={view} diagram={result.diagram} />
+            : <section className="card"><p className="muted">先选定箱体并算出箱体数，才能生成示意图。</p></section>)}
           {tab === "cost" && view.boq && <CostBoq view={view} boq={view.boq} onSaved={apply} />}
+          {tab === "annotate" && <AnnotateTab view={view} onSaved={() => apply(api<WorkspaceView>(`/proposals/${id}`))} />}
         </>
       )}
     </>
