@@ -1,13 +1,12 @@
-import re
-
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from ..api import get_db, iso, require_user
-from ..models import RuleSetVersion, User
-from .engine import LINES, load_seed, run, validate
+from ..api import get_db, require_user
+from ..models import ProductLibraryVersion, RuleSetVersion, User
+from ..versions import check_base, history, latest, next_label, version_out
+from .engine import LINES, calculate, load_seed, validate
 from .expr import ExprError
 
 router = APIRouter(prefix="/rules")
@@ -21,19 +20,6 @@ def ensure_seed(db: Session) -> None:
             db.add(RuleSetVersion(business_line=line, version="v1.3", content=content,
                                   reason="初始版本（平台方案 V1，2026-10-14）"))
     db.commit()
-
-
-def latest(db: Session, line: str) -> RuleSetVersion:
-    if line not in LINES:
-        raise HTTPException(404, "没有这条业务线")
-    return db.scalars(select(RuleSetVersion).where(RuleSetVersion.business_line == line)
-                      .order_by(RuleSetVersion.id.desc())).first()
-
-
-def version_out(v: RuleSetVersion, content: bool = True) -> dict:
-    out = {"id": v.id, "business_line": v.business_line, "version": v.version, "reason": v.reason,
-           "created_by": v.author.name if v.author else None, "created_at": iso(v.created_at)}
-    return out | {"content": v.content} if content else out
 
 
 def checked(content: dict, base: RuleSetVersion) -> dict:
@@ -50,15 +36,13 @@ def checked(content: dict, base: RuleSetVersion) -> dict:
 
 @router.get("/{line}")
 def get_latest(line: str, db: Session = Depends(get_db)):
-    return version_out(latest(db, line))
+    return version_out(latest(db, RuleSetVersion, line)) | {"product_fed": LINES[line]["product_fed"]}
 
 
 @router.get("/{line}/versions")
 def list_versions(line: str, db: Session = Depends(get_db)):
-    latest(db, line)
-    rows = db.scalars(select(RuleSetVersion).where(RuleSetVersion.business_line == line)
-                      .order_by(RuleSetVersion.id.desc()))
-    return [version_out(v, content=False) for v in rows]
+    latest(db, RuleSetVersion, line)
+    return [version_out(v, content=False) for v in history(db, RuleSetVersion, line)]
 
 
 @router.get("/{line}/versions/{version_id}")
@@ -71,7 +55,7 @@ def get_version(line: str, version_id: int, db: Session = Depends(get_db)):
 
 @router.get("/{line}/sample")
 def get_sample(line: str, db: Session = Depends(get_db)):
-    latest(db, line)
+    latest(db, RuleSetVersion, line)
     return load_seed(line)[1]
 
 
@@ -83,13 +67,9 @@ class SaveIn(BaseModel):
 
 @router.post("/{line}", status_code=201)
 def save_version(line: str, body: SaveIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
-    base = latest(db, line)
-    if body.base_id != base.id:
-        raise HTTPException(409, f"规则已经更新到 {base.version}，请刷新后再改")
-    if body.content == base.content:
-        raise HTTPException(422, "没有修改")
-    major, minor = map(int, re.fullmatch(r"v(\d+)\.(\d+)", base.version).groups())
-    v = RuleSetVersion(business_line=line, version=f"v{major}.{minor + 1}", content=checked(body.content, base),
+    base = latest(db, RuleSetVersion, line)
+    check_base(base, body.base_id, body.content)
+    v = RuleSetVersion(business_line=line, version=next_label(base.version), content=checked(body.content, base),
                        reason=body.reason.strip(), created_by=user.id)
     db.add(v)
     db.commit()
@@ -104,11 +84,12 @@ class RunIn(BaseModel):
 
 @router.post("/{line}/run")
 def run_rules(line: str, body: RunIn, db: Session = Depends(get_db)):
-    base = latest(db, line)
+    base = latest(db, RuleSetVersion, line)
     if body.content is not None:
         content = checked(body.content, base)
     elif body.version_id is not None:
         content = get_version(line, body.version_id, db)["content"]
     else:
         content = base.content
-    return run(content, body.inputs, load_seed(line)[1]["catalog"])
+    library = latest(db, ProductLibraryVersion, line)
+    return calculate(content, library.content, body.inputs) | {"library_version": library.version}

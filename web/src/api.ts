@@ -9,6 +9,10 @@ export type SourceFile = {
   sha256: string;
   uploaded_by: string;
   uploaded_at: string;
+  read_status: string | null;
+  read_method: string;
+  read_note: string;
+  fields_found: number;
 };
 
 export type Proposal = {
@@ -60,14 +64,15 @@ export type Param = { name: string; group: string; label: string; unit: string; 
 export type InputDef = { name: string; label: string; unit?: string; type: "number" | "choice" | "range" | "sizes"; options?: string[] };
 export type RuleContent = { business_line: string; inputs: InputDef[]; params: Param[]; rules: Rule[] };
 
-export type RuleVersion = {
+export type Version<T> = {
   id: number;
   version: string;
   reason: string;
   created_by: string | null;
   created_at: string;
-  content: RuleContent;
+  content: T;
 };
+export type RuleVersion = Version<RuleContent> & { product_fed: string[] };
 
 export type ResultLine = { name: string; value: unknown; display: string; unit?: string; expr?: string; when?: string | null; substituted?: string };
 export type RuleResult = {
@@ -83,4 +88,117 @@ export type RuleResult = {
   missing: string[];
   error: string | null;
 };
-export type RunResult = { choices: Record<string, number[]>; rules: RuleResult[] };
+export type RunResult = {
+  choices: Record<string, number[]>;
+  rules: RuleResult[];
+  recommendation: Recommendation;
+  boq: BoqLine[];
+  diagram: Diagram | null;
+  library_version?: string;
+};
+
+export type DiagramNode = { title: string; model: string; qty: number | string; detail: string; boq: string[]; supply: string };
+export type DiagramLink = { from: string; to: string; cable: string; qty: string; boq: string | null; supply: string };
+export type Diagram = {
+  chain: string[];
+  power: string | null;
+  nodes: Record<string, DiagramNode>;
+  links: DiagramLink[];
+  unmatched: string[];
+  svg: string;
+};
+
+export type Mark = { type: "point" | "area" | "device" | "text"; x: number; y: number; w: number; h: number; label: string; note: string; boq_key: string | null; size_mm?: number[] | null };
+export type Scale = { a: { x: number; y: number }; b: { x: number; y: number }; mm: number };
+export type AnnotationDoc = {
+  file_id: number;
+  filename: string;
+  page: number;
+  width: number;
+  height: number;
+  scale: Scale | null;
+  marks: Mark[];
+  copy_name: string;
+  updated_by: string;
+  updated_at: string;
+};
+
+// ---- 产品库、推荐、BOQ ----
+
+export type Product = { id: string; category: string; brand: string; model: string; status: string; scenes: string[]; sample: boolean } & Record<string, unknown>;
+export type LibraryContent = { business_line: string; products: Product[] };
+export type FieldDef = { name: string; label: string; type: string };
+export type LibraryVersion = Version<LibraryContent> & {
+  fields: Record<string, FieldDef[]>;
+  categories: Record<string, string>;
+  statuses: string[];
+  scenes: string[];
+};
+export type Recommendation = { cabinet: Product | null; candidates: Product[]; block: string | null; missing: string[] };
+
+export type BoqLine = {
+  key: string;
+  item: string;
+  model: string;
+  qty: number | null;
+  unit: string;
+  why: string;
+  rule?: string | null;
+  included: boolean;
+  manual: boolean;
+  unit_cost?: number | null;
+  cost_valid_until?: string | null;
+  cost_sample?: boolean;
+  cost_expired?: boolean;
+  subtotal?: number | null;
+};
+export type Boq = { lines: BoqLine[]; subtotal: number; priced: number; count: number; missing: number; expired: number };
+export type ManualLine = { item: string; model: string; qty: number | null; unit: string; unit_cost: number | null; why: string };
+
+export type InputMeta = {
+  source: "manual" | "file";
+  confidence: string;
+  filename?: string;
+  location?: string;
+  snippet?: string;
+  extracted_id?: number;
+  confirmed_by: string | null;
+  confirmed_at?: string;
+};
+export type Candidate = {
+  id: number;
+  value: unknown;
+  confidence: string;
+  file_id: number;
+  filename: string;
+  location: string;
+  snippet: string;
+  crop: boolean;
+};
+
+export type WorkspaceView = {
+  proposal: Proposal;
+  project: { id: number };
+  rev: {
+    rev_no: number;
+    status: string;
+    inputs: Record<string, unknown>;
+    cabinet_id: string | null;
+    input_meta: Record<string, InputMeta>;
+    annotations: Record<string, AnnotationDoc>;
+    manual_lines: ManualLine[];
+    sell_price_cents: number | null;
+    price_display: string;
+  };
+  pending: string[];
+  files: SourceFile[];
+  candidates: Record<string, Candidate[]>;
+  rules_version: string;
+  library_version: string;
+  input_defs: InputDef[];
+  product_fed: string[];
+  gst_rate: number | null;
+  gst_status: string | null;
+  result: RunResult | null;
+  boq: Boq | null;
+};

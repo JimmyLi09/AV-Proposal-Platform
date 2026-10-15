@@ -2,14 +2,16 @@ import uuid
 from datetime import datetime, timezone
 from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException, Request, Response, UploadFile
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Request, Response, UploadFile
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field, field_validator
 from sqlalchemy import func, select
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
-from .models import Project, Proposal, Revision, SourceFile, User
+from .extract.jobs import read_files
+from .extract.run import METHOD_LABEL
+from .models import ExtractedField, Project, Proposal, Revision, SourceFile, User
 from .storage import original_name, safe_name, save_original
 
 router = APIRouter()
@@ -44,6 +46,8 @@ def file_out(f: SourceFile) -> dict:
     return {
         "id": f.id, "filename": f.filename, "file_type": f.file_type, "grade": f.grade,
         "size": f.size, "sha256": f.sha256, "uploaded_by": f.uploader.name, "uploaded_at": iso(f.uploaded_at),
+        "read_status": f.read_status, "read_method": METHOD_LABEL.get(f.read_method or "", ""),
+        "read_note": f.read_note or "", "fields_found": len(f.extracted),
     }
 
 
@@ -193,7 +197,7 @@ def update_project(project_id: int, body: ProjectPatch, _: User = Depends(requir
 # ---- 原件 ----
 
 @router.post("/projects/{project_id}/files", status_code=201)
-def upload_files(project_id: int, files: list[UploadFile], request: Request,
+def upload_files(project_id: int, files: list[UploadFile], request: Request, background: BackgroundTasks,
                  user: User = Depends(require_user), db: Session = Depends(get_db)):
     p = get_project(db, project_id)
     root = request.app.state.data_dir
@@ -205,11 +209,32 @@ def upload_files(project_id: int, files: list[UploadFile], request: Request,
         sha, size = save_original(root, rel, up.file)
         ext = name.rpartition(".")[2].lower() if "." in name else ""
         f = SourceFile(project_id=p.id, filename=name, file_type=ext[:20], stored_path=rel,
-                       sha256=sha, size=size, uploaded_by=user.id)
+                       sha256=sha, size=size, uploaded_by=user.id, read_status="reading")
         db.add(f)
         created.append(f)
     db.commit()
+    background.add_task(read_files, request.app.state, [f.id for f in created])  # 上传完成 → 提取中
     return [file_out(f) for f in created]
+
+
+@router.post("/projects/{project_id}/read")
+def reread_files(project_id: int, request: Request, background: BackgroundTasks,
+                 _: User = Depends(require_user), db: Session = Depends(get_db)):
+    """重新读取项目里的全部文件（例如装好 ODA 转换器之后）。原件不动，只替换读取结果和截图副本。"""
+    p = get_project(db, project_id)
+    for f in p.files:
+        f.read_status = "reading"
+    db.commit()
+    background.add_task(read_files, request.app.state, [f.id for f in p.files])
+    return [file_out(f) for f in p.files]
+
+
+@router.get("/extracted/{field_id}/crop")
+def extracted_crop(field_id: int, request: Request, db: Session = Depends(get_db)):
+    x = db.get(ExtractedField, field_id)
+    if x is None or not x.crop_path:
+        raise HTTPException(404, "没有原文截图")
+    return FileResponse(request.app.state.data_dir / x.crop_path)
 
 
 @router.get("/files/{file_id}")

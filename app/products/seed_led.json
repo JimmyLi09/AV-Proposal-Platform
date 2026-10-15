@@ -1,0 +1,23 @@
+{
+  "business_line": "LED",
+  "products": [
+    {"id": "IC-25", "category": "cabinet", "brand": "Sample", "model": "IC-25", "status": "preferred", "scenes": ["indoor"], "sample": true,
+     "pixel_pitch_mm": 2.5, "module_w_mm": 320, "module_h_mm": 160, "cabinet_sizes_mm": [[640, 480], [640, 640]],
+     "brightness_nits": 800, "max_power_w_m2": 500, "ip": "IP30", "weight_kg": 7.5, "maintenance": "front",
+     "psu_per_cabinet": 1, "rx_per_cabinet": 1, "datasheet": "IC-25_datasheet.pdf"},
+    {"id": "IC-19", "category": "cabinet", "brand": "Sample", "model": "IC-19", "status": "approved", "scenes": ["indoor"], "sample": true,
+     "pixel_pitch_mm": 1.9, "module_w_mm": 320, "module_h_mm": 160, "cabinet_sizes_mm": [[640, 480], [640, 640]],
+     "brightness_nits": 700, "max_power_w_m2": 550, "ip": "IP30", "weight_kg": 7.5, "maintenance": "front",
+     "psu_per_cabinet": 1, "rx_per_cabinet": 1, "datasheet": ""},
+    {"id": "OF-40", "category": "cabinet", "brand": "Sample", "model": "OF-40", "status": "approved", "scenes": ["outdoor"], "sample": true,
+     "pixel_pitch_mm": 4, "module_w_mm": 320, "module_h_mm": 320, "cabinet_sizes_mm": [[960, 960]],
+     "brightness_nits": 5500, "max_power_w_m2": 800, "ip": "IP65", "weight_kg": 30, "maintenance": "rear",
+     "psu_per_cabinet": 1, "rx_per_cabinet": 1, "datasheet": ""},
+    {"id": "SC-4", "category": "controller", "brand": "Sample", "model": "SC-4", "status": "preferred", "scenes": ["indoor", "outdoor", "rental"], "sample": true,
+     "capacity_px": 2300000, "ports": 4, "datasheet": ""},
+    {"id": "SC-2", "category": "controller", "brand": "Sample", "model": "SC-2", "status": "approved", "scenes": ["indoor", "outdoor", "rental"], "sample": true,
+     "capacity_px": 1300000, "ports": 2, "datasheet": ""},
+    {"id": "SP-1", "category": "processor", "brand": "Sample", "model": "SP-1", "status": "preferred", "scenes": ["indoor", "outdoor", "rental"], "sample": true,
+     "inputs": 2, "max_px": 2300000, "datasheet": ""}
+  ]
+}
