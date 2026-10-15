@@ -175,3 +175,53 @@ def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict) -> list
     if values.get("installation_items"):
         add(f"install:{inputs.get('installation')}", values["installation_items"], "—", 1, "套", "F16", "F16")
     return lines
+
+
+def diagram(values: dict, boq_lines: list[dict], inputs: dict, cabinet: dict | None, library: dict) -> dict | None:
+    """Level 1 / Level 2 示意图由 BOQ 生成：每台设备、每条线缆都对应 BOQ 行。
+    业主提供（supply=owner）或随设备附带（supply=included）的不进 BOQ，会在图上标出来（示例假设，清单 H4）。"""
+    if not cabinet or values.get("cabinets") is None:
+        return None
+    products = {p["id"]: p for p in library["products"]}
+    nodes = {"source": {"title": "Content source 信号源", "model": "播放器或电脑", "qty": inputs.get("signal_sources") or 1,
+                        "detail": "业主提供", "boq": [], "supply": "owner"}}
+    # 处理器 / 控制器选不出来（F13 / F11）时保留位置并标出，不能悄悄从图上消失
+    missing = {"model": "—", "qty": "", "boq": [], "supply": "missing"}
+    nodes["processor"] = {"title": "Video processor 视频处理器", "model": products[values["processor_id"]]["model"],
+                          "qty": values["processor_qty"], "detail": "", "boq": [values["processor_id"]], "supply": "boq"
+                          } if values.get("processor_id") in products else missing | {
+        "title": "Video processor 视频处理器", "detail": "F13 未选出（缺输入或产品库没有合适的）"}
+    nodes["controller"] = {"title": "Controller 控制器", "model": products[values["controller_id"]]["model"],
+                           "qty": values["controller_qty"], "detail": f"{values['ports']} 口 · {values['capacity_mp']:.1f} MP",
+                           "boq": [values["controller_id"]], "supply": "boq"
+                           } if values.get("controller_id") in products else missing | {
+        "title": "Controller 控制器", "detail": "F11 阻断：产品库里没有合适的"}
+    w, h = inputs.get("width_mm"), inputs.get("height_mm")
+    nodes["screen"] = {"title": "LED wall LED 屏", "model": cabinet["model"], "qty": f"{values['cabinets']} 个箱体",
+                       "detail": f"{w} × {h} · P{inputs.get('pixel_pitch_mm')}",
+                       "boq": [f"{cabinet['id']}:{cw}x{ch}" for cw, ch, _ in values.get("cabinet_counts") or []],
+                       "supply": "boq"}
+    if values.get("db_boxes") is not None:
+        nodes["db_box"] = {"title": "DB box 配电箱", "model": "定制", "qty": values["db_boxes"],
+                           "detail": f"每回路一个 MCB · {values.get('power_kw', 0):.2f} kW", "boq": ["db_box"], "supply": "boq"}
+    chain = [n for n in ("source", "processor", "controller", "screen") if n in nodes]
+    links = []
+    for a, b in zip(chain, chain[1:]):
+        if b == "screen":
+            if values.get("data_runs") is not None:
+                links.append({"from": a, "to": b, "cable": "Cat6", "qty": f"{values['data_runs']} + {values['data_cables'] - values['data_runs']} 备用",
+                              "boq": "data_cable", "supply": "boq"})
+        elif a == "source":
+            links.append({"from": a, "to": b, "cable": "HDMI", "qty": str(nodes["source"]["qty"]), "boq": None, "supply": "owner"})
+        else:
+            links.append({"from": a, "to": b, "cable": "HDMI", "qty": "1", "boq": None, "supply": "included"})
+    if "db_box" in nodes and values.get("power_cables") is not None:
+        links.append({"from": "db_box", "to": "screen", "cable": "Power cable 电源线",
+                      "qty": f"{values['circuits']} + {values['power_cables'] - values['circuits']} 备用",
+                      "boq": "power_cable", "supply": "boq"})
+    keys = {line["key"] for line in boq_lines if line["key"]}
+    unmatched = [f"{n['title']}（{k}）" for n in nodes.values() if n["supply"] == "boq" for k in n["boq"] if k not in keys]
+    unmatched += [f"{n['title']}（{n['detail']}）" for n in nodes.values() if n["supply"] == "missing"]
+    unmatched += [f"{x['cable']}（{x['boq']}）" for x in links if x["supply"] == "boq" and x["boq"] not in keys]
+    return {"chain": chain, "power": "db_box" if "db_box" in nodes else None, "nodes": nodes, "links": links,
+            "unmatched": unmatched}

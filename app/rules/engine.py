@@ -4,13 +4,14 @@ import re
 from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 
+from ..diagram import concept_svg
 from . import led
 from .expr import ExprError, evaluate, fmt, names, num, parse, substitute
 
 SEED = Path(__file__).parent / "seed"
 LINES = {"LED": {"steps": led.STEPS, "precheck": led.size_choices, "recommend": led.recommend,
                  "product_inputs": led.product_inputs, "catalog": led.catalog, "boq": led.boq,
-                 "product_fed": led.PRODUCT_INPUTS}}
+                 "product_fed": led.PRODUCT_INPUTS, "diagram": led.diagram}}
 STATUSES = ["set", "review", "sample", "empty"]  # 越往后越不确定
 
 
@@ -181,4 +182,7 @@ def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None
     values = {ln["name"]: ln["value"] for r in out["rules"] for ln in r["lines"]}
     out["recommendation"] = rec
     out["boq"] = line["boq"](values, rec["cabinet"], inputs, library)
+    out["diagram"] = line["diagram"](values, out["boq"], inputs, rec["cabinet"], library)
+    if out["diagram"]:
+        out["diagram"]["svg"] = concept_svg(out["diagram"])
     return out

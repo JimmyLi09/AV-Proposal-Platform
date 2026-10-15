@@ -120,6 +120,8 @@ class Revision(Base):
     # 每个输入的来源与确认：{字段: {source: manual|file, confidence, filename, location, snippet,
     #                              extracted_id, confirmed_by, confirmed_at}}
     input_meta: Mapped[dict | None] = mapped_column(JSON)
+    # 第 5 步：PDF / JPG 标注，{"文件id:页码": {marks, scale, 标注副本路径…}}（见 app/annotate.py）
+    annotations: Mapped[dict | None] = mapped_column(JSON)
 
     author: Mapped[User] = relationship(foreign_keys=[author_id])
 

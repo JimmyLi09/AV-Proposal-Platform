@@ -75,6 +75,7 @@ def view(db: Session, prop: Proposal) -> dict:
         "project": {"id": prop.project_id},
         "rev": {"rev_no": rev.rev_no, "status": rev.status, "inputs": rev.inputs or {}, "cabinet_id": rev.cabinet_id,
                 "input_meta": rev.input_meta or {}, "manual_lines": rev.manual_lines or [],
+                "annotations": rev.annotations or {},
                 "sell_price_cents": rev.sell_price_cents, "price_display": rev.price_display or "none"},
         "pending": pending(rev),
         "files": [file_out(f) for f in db.get(Project, prop.project_id).files],
