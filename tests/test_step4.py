@@ -1,5 +1,6 @@
 """第 4 步验收：样本文件逐个记录识别结果；未确认字段无法进入计算。"""
 import hashlib
+import os
 import shutil
 import stat
 from pathlib import Path
@@ -103,9 +104,14 @@ def test_dwg_needs_oda_then_reads_converted_copy(tmp_path):
     r = extract(dwg, "dwg", tmp_path, "derived/1", None)
     assert (r["grade"], r["status"]) == ("C", "attached") and "ODA" in r["note"]
 
-    oda = tmp_path / "fake_oda.sh"  # 测试用：假装 ODA 把 DWG 转成了 DXF
-    oda.write_text(f'#!/bin/sh\ncp "{SAMPLES / "Elevation.dxf"}" "$2/source.dxf"\n')
-    oda.chmod(oda.stat().st_mode | stat.S_IEXEC)
+    # 测试用：假装 ODA 把 DWG 转成了 DXF
+    if os.name == "nt":
+        oda = tmp_path / "fake_oda.cmd"
+        oda.write_text(f'@copy "{SAMPLES / "Elevation.dxf"}" "%~2\\source.dxf" >nul\n')
+    else:
+        oda = tmp_path / "fake_oda.sh"
+        oda.write_text(f'#!/bin/sh\ncp "{SAMPLES / "Elevation.dxf"}" "$2/source.dxf"\n')
+        oda.chmod(oda.stat().st_mode | stat.S_IEXEC)
     r = extract(dwg, "dwg", tmp_path, "derived/1", str(oda))
     assert (r["grade"], r["method"]) == ("A", "dwg")
     assert {f["field"] for f in r["fields"]} == {"width_mm", "height_mm", "pixel_pitch_mm", "environment"}

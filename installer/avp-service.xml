@@ -1,0 +1,19 @@
+<!-- WinSW 配置：把 AV Proposal Platform 注册成 Windows 服务（服务名 avp），开机自动启动，出错 10 秒后自动重启。
+     %BASE% 是程序目录。日志在程序目录的 logs\ 里。 -->
+<service>
+  <id>avp</id>
+  <name>AV Proposal Platform</name>
+  <description>Audax AV Proposal Platform (port 8081, company network only)</description>
+  <executable>%BASE%\python\python.exe</executable>
+  <arguments>-m app</arguments>
+  <workingdirectory>%BASE%</workingdirectory>
+  <env name="PYTHONUNBUFFERED" value="1"/>
+  <startmode>Automatic</startmode>
+  <onfailure action="restart" delay="10 sec"/>
+  <resetfailure>1 hour</resetfailure>
+  <logpath>%BASE%\logs</logpath>
+  <log mode="roll-by-size">
+    <sizeThreshold>10240</sizeThreshold>
+    <keepFiles>8</keepFiles>
+  </log>
+</service>
