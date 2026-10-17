@@ -1,0 +1,111 @@
+# Windows 安装包：在 Windows 上跑全部测试 → 生成安装包 → 实际安装、更新、卸载一遍。
+# 推送 v* 标签（例 v0.5.0）时，把安装包发布到 Releases。装法见 docs/服务器装机流程.md。
+name: Windows installer
+
+on:
+  push:
+    branches: [main, "claude/**"]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Tests on Windows
+        run: |
+          python -m pip install --disable-pip-version-check -r requirements-dev.txt
+          python -m pytest -q
+
+      - name: Build web UI
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+
+      - name: Assemble
+        run: ./installer/build.ps1
+
+      - name: Compile installer
+        run: |
+          $version = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}".TrimStart("v") } else { "0.0.${{ github.run_number }}" }
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress }
+          & $iscc /Qp "/DAppVersion=$version" installer\avp.iss
+          if ($LASTEXITCODE) { throw "ISCC failed" }
+          Get-ChildItem dist | Format-Table Name, @{ n = "MB"; e = { [math]::Round($_.Length / 1MB) } }
+
+      - name: Install, upgrade, uninstall
+        run: |
+          $setup = (Get-ChildItem dist\AVProposalPlatform-Setup-*.exe).FullName
+          $app = "${env:ProgramFiles}\AV Proposal Platform"
+          $data = "C:\avp-ci-data"
+          $rule = "AV Proposal Platform 8081"
+
+          # 首次安装
+          Start-Process $setup -Wait -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART", "/DATADIR=$data"
+          if ((Get-Service avp).Status -ne "Running") { throw "service not running" }
+          if ((Get-Service avp).StartType -ne "Automatic") { throw "service does not start with Windows" }
+          $profiles = (Get-NetFirewallRule -DisplayName $rule).Profile.ToString()
+          if ($profiles -ne "Domain, Private") { throw "firewall profiles: $profiles" }
+          Get-Content "$app\app\config\deploy.local.yaml"
+          python installer/smoke_test.py fresh $data
+          if ($LASTEXITCODE) { throw "smoke test failed" }
+
+          # 更新：再装一次，数据和设置都要还在
+          Start-Process $setup -Wait -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"
+          if ((Get-Service avp).Status -ne "Running") { throw "service not running after upgrade" }
+          python installer/smoke_test.py upgraded $data
+          if ($LASTEXITCODE) { throw "upgrade check failed" }
+
+          # 卸载：服务、程序、防火墙规则删掉，资料目录保留
+          Start-Process "$app\unins000.exe" -Wait -ArgumentList "/VERYSILENT", "/SUPPRESSMSGBOXES", "/NORESTART"
+          for ($i = 0; $i -lt 60 -and (Test-Path $app); $i++) { Start-Sleep 2 }
+          if (Test-Path $app) { throw "program folder still there" }
+          if (Get-Service avp -ErrorAction SilentlyContinue) { throw "service still installed" }
+          if (Get-NetFirewallRule -DisplayName $rule -ErrorAction SilentlyContinue) { throw "firewall rule still there" }
+          if (-not (Test-Path "$data\avp.db")) { throw "data folder was removed" }
+          "install / upgrade / uninstall OK"
+
+      - name: Service logs
+        if: failure()
+        run: |
+          Get-ChildItem "${env:ProgramFiles}\AV Proposal Platform\logs" -File -ErrorAction SilentlyContinue |
+            ForEach-Object { "==== $($_.Name)"; Get-Content $_.FullName -Tail 100 }
+
+      - uses: actions/upload-artifact@v4
+        if: github.ref_type == 'tag'
+        with:
+          name: installer
+          path: dist/*.exe
+          retention-days: 1
+
+  release:
+    needs: build
+    if: github.ref_type == 'tag'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: installer
+      - name: Publish to Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" *.exe --repo "${{ github.repository }}" \
+            --title "AV Proposal Platform ${{ github.ref_name }}" \
+            --notes "服务器安装包（Windows）。装法见 docs/服务器装机流程.md。安装包没有数字签名，第一次运行时 Windows 会提示，点「更多信息 → 仍要运行」。"
