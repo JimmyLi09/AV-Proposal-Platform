@@ -25,7 +25,7 @@ Audax 内部的**售前 Proposal 生成平台**（不是报价工具）。V1 覆
 - V1 不做：DWG 自动出图 / DXF 输出、RCP、施工接线图（Level 3）、自动报价 / Markup、多人同时编辑、完整 B 模式、修改原 CAD、互动投影、多面 / 弧幕 / 地面 / 模型投影。
 
 ## 技术选型（2026-10-14 与 Jimmy 确认）
-- 服务器：Python 3.12 + FastAPI，和 Project Platform 同一台服务器（192.168.1.241，按 Project Platform 装机文档是 Windows，待 IT 在清单 A2 确认），端口 8081，用 pm2 常驻。
+- 服务器：Python 3.12 + FastAPI，和 Project Platform 同一台服务器（192.168.1.241，按 Project Platform 装机文档是 Windows，待 IT 在清单 A2 确认），端口 8081。2026-10-17 Jimmy 确认：用 Windows 安装包（Inno Setup，`installer/`，由 GitHub Actions 生成并实际安装测试）装成 Windows 服务（WinSW）常驻，取代 pm2；服务器上不用装 Python / Node / Git。同一个安装包也可装在个人电脑上试用。
 - 数据库：SQLite（WAL 模式），通过 SQLAlchemy 2 + Alembic 访问；以后要换 PostgreSQL，只改连接配置再迁移一次数据。原件和生成文件存服务器资料目录（路径写在 `app/config/deploy.yaml`）。
 - 前端：React + Vite + TypeScript，由服务器提供。
 - 规则引擎：独立的 Python 模块，只在服务器上跑。**公式类规则**（如 F1、F5、F9、P2）的算式和参数都可在界面编辑，可按条件（点间距、室内外等）分档，用白名单表达式求值，**不用 `eval`**；**步骤类规则**（F3、F11、F13、P3、P10、P11）步骤写在代码里，只改参数（2026-10-14 确认）。长度用整数 mm 或 Decimal 计算，避免向上取整时的浮点误差。

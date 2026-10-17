@@ -34,6 +34,7 @@ python3.12 -m venv .venv
 
 ## 上线与试用
 
-- 服务器安装（给 IT）：`docs/服务器装机流程.md`；更新：双击 `scripts\update.bat`。
-- 服务器自己的设置（资料目录、ODA 路径）写在 `app/config/deploy.local.yaml`，不进 git。
+- 服务器安装（给 IT）：Windows 安装包，从 [Releases](https://github.com/JimmyLi09/AV-Proposal-Platform/releases/latest) 下载，步骤见 `docs/服务器装机流程.md`。更新 = 运行新版安装包。
+- 安装包由 GitHub Actions 生成（`.github/workflows/windows-installer.yml`、`installer/`）：每次推送都在 Windows 上跑全部测试，并实际安装、更新、卸载一遍；推送 `v*` 标签时发布到 Releases。
+- 服务器自己的设置（资料目录、ODA 路径）写在 `app/config/deploy.local.yaml`，由安装程序写入，不进 git。
 - 试用整套流程：`docs/试用清单.md`。
