@@ -71,6 +71,7 @@ def upgraded(c: httpx.Client, data: Path):
 
 
 if __name__ == "__main__":
+    sys.stdout.reconfigure(encoding="utf-8")  # Windows 控制台默认编码打不出中文
     step, data = sys.argv[1], Path(sys.argv[2])
     with httpx.Client(base_url="http://localhost:8081", timeout=60) as client:
         wait_until_up(client)
