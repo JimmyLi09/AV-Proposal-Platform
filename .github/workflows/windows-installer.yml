@@ -1,11 +1,13 @@
 # Windows 安装包：在 Windows 上跑全部测试 → 生成安装包 → 实际安装、更新、卸载一遍。
-# 推送 v* 标签（例 v0.5.0）时，把安装包发布到 Releases。装法见 docs/服务器装机流程.md。
+# 发布：在 GitHub 网页 Releases → Draft a new release，新建标签（例 v0.5.0，目标 main）→ Publish；
+# 这里会生成、测试安装包，并自动附到这个 Release 上。装法见 docs/服务器装机流程.md。
 name: Windows installer
 
 on:
   push:
     branches: [main, "claude/**"]
-    tags: ["v*"]
+  release:
+    types: [published]
   workflow_dispatch:
 
 permissions:
@@ -41,6 +43,7 @@ jobs:
       - name: Compile installer
         run: |
           $version = if ("${{ github.ref_type }}" -eq "tag") { "${{ github.ref_name }}".TrimStart("v") } else { "0.0.${{ github.run_number }}" }
+          if ($version -notmatch '^\d+(\.\d+){0,3}$') { throw "Release tag must look like v0.5.0 (got ${{ github.ref_name }})" }
           $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
           if (-not (Test-Path $iscc)) { choco install innosetup -y --no-progress }
           & $iscc /Qp "/DAppVersion=$version" installer\avp.iss
@@ -86,7 +89,7 @@ jobs:
             ForEach-Object { "==== $($_.Name)"; Get-Content $_.FullName -Tail 100 }
 
       - uses: actions/upload-artifact@v4
-        if: github.ref_type == 'tag'
+        if: github.event_name == 'release'
         with:
           name: installer
           path: dist/*.exe
@@ -94,7 +97,7 @@ jobs:
 
   release:
     needs: build
-    if: github.ref_type == 'tag'
+    if: github.event_name == 'release'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -102,10 +105,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: installer
-      - name: Publish to Releases
+      - name: Attach installer to the release
         env:
           GH_TOKEN: ${{ github.token }}
-        run: |
-          gh release create "${{ github.ref_name }}" *.exe --repo "${{ github.repository }}" \
-            --title "AV Proposal Platform ${{ github.ref_name }}" \
-            --notes "服务器安装包（Windows）。装法见 docs/服务器装机流程.md。安装包没有数字签名，第一次运行时 Windows 会提示，点「更多信息 → 仍要运行」。"
+        run: gh release upload "${{ github.event.release.tag_name }}" *.exe --clobber --repo "${{ github.repository }}"
