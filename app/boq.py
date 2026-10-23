@@ -33,8 +33,9 @@ def _qty(spec, ctx: dict, unit: str):
     return int(v) if v.is_integer() and unit != "sqm" else v
 
 
-def build(template: dict, ctx: dict, edits: dict | None) -> dict:
-    """ctx：规则结果、输入和方案名；edits：这个 Rev 里人改过的内容（rev.boq_edits）。"""
+def build(template: dict, ctx: dict, edits: dict | None, manual: set = frozenset()) -> dict:
+    """ctx：规则结果、输入和方案名；edits：这个 Rev 里人改过的内容（rev.boq_edits）；
+    manual：推荐页手动覆盖过的结果名（CR-5），数量取自这些结果的行标 rule_manual。"""
     edits = edits or {}
     over = edits.get("rows") or {}
     rows = []
@@ -49,11 +50,12 @@ def build(template: dict, ctx: dict, edits: dict | None) -> dict:
                      "qty": o.get("qty", rule_qty), "rule_qty": rule_qty, "unit": r["unit"],
                      "note": fill(r.get("note", ""), ctx), "source": r.get("source", ""),
                      "manual": "qty" in o, "reason": o.get("reason"), "by": o.get("by"), "at": o.get("at"),
-                     "added": False})
+                     "added": False, "rule_manual": r["qty"] in manual})
     for a in edits.get("added") or []:
         rows.append({"key": a["key"], "title": a["title"], "title_default": None, "specs": a["specs"],
                      "specs_default": None, "qty": a["qty"], "rule_qty": None, "unit": a["unit"], "note": "",
-                     "source": "", "manual": True, "reason": None, "by": a["by"], "at": a["at"], "added": True})
+                     "source": "", "manual": True, "reason": None, "by": a["by"], "at": a["at"], "added": True,
+                     "rule_manual": False})
     for n, row in enumerate(rows, 1):
         row["no"] = n
     group_default = fill(template["boq"]["group"], ctx)

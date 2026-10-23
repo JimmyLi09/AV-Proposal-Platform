@@ -86,6 +86,11 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
                     <td>
                       <input type="number" step="any" min="0" className={`num ${qtyChanged ? "manual" : ""}`} aria-label={t("boq.rowField", { no: r.no, field: t("diagram.qty") })}
                         value={d.qty} onChange={(e) => setRow(r.key, { qty: e.target.value })} />
+                      {r.rule_manual && !qtyChanged && (
+                        <div className="small">
+                          <span className="tag st-sample" title={t("manual.fromRec")}>{t("manual.tag")}</span>
+                        </div>
+                      )}
                       {qtyChanged && (
                         <div className="small">
                           <span className="tag st-sample">{t("boq.manual")}</span> {t("boq.ruleValue")} <s>{r.rule_qty ?? "—"}</s>{" "}
@@ -177,7 +182,7 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
                     <td>{l.item}</td>
                     <td>{l.model}</td>
                     <td>
-                      {l.qty} {l.unit}
+                      {l.qty} {l.unit} {l.manual && <span className="tag st-sample">{t("manual.tag")}</span>}
                     </td>
                     <td>{l.why}</td>
                   </tr>

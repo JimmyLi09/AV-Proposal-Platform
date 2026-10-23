@@ -29,7 +29,8 @@ export default function DiagramTab({ view, diagram }: { view: WorkspaceView; dia
               <div className="photo">{t("diagram.photo")}</div>
               <b>{n.title}</b>
               <div>
-                {n.model} {typeof n.qty === "number" ? `× ${n.qty}` : n.qty}
+                {n.model} {typeof n.qty === "number" ? `× ${n.qty}` : n.qty}{" "}
+                {n.manual && <span className="tag st-sample">{t("manual.tag")}</span>}
               </div>
               <div className="muted small">{n.detail}</div>
               <div className="small">{n.supply === "boq" ? rowText(n.boq) : <span className="warn">{supply(n.supply)}</span>}</div>
@@ -53,7 +54,9 @@ export default function DiagramTab({ view, diagram }: { view: WorkspaceView; dia
                   <td>{name(l.from)}</td>
                   <td>{name(l.to)}</td>
                   <td>{l.cable}</td>
-                  <td>{l.qty}</td>
+                  <td>
+                    {l.qty} {l.manual && <span className="tag st-sample">{t("manual.tag")}</span>}
+                  </td>
                   <td>{l.boq ? rowText([l.boq]) : supply(l.supply)}</td>
                 </tr>
               ))}

@@ -119,6 +119,8 @@ class Revision(Base):
     boq_edits: Mapped[dict | None] = mapped_column(JSON)
     # 拼接与线路图里手动调整的分组：{power: {箱体编号: 回路}, data: {箱体编号: 网线}}（CR-3）
     drawing_edits: Mapped[dict | None] = mapped_column(JSON)
+    # 推荐结果的手动覆盖（CR-5）：{结果名: {value, reason, by, at}}；规则结果本身不改，下游规则按手动值算
+    overrides: Mapped[dict | None] = mapped_column(JSON)
     # 每个输入的来源与确认：{字段: {source: manual|file, confidence, filename, location, snippet,
     #                              extracted_id, confirmed_by, confirmed_at}}
     input_meta: Mapped[dict | None] = mapped_column(JSON)

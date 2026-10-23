@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api, RuleResult, send, Suggestion, WorkspaceView } from "./api";
+import { api, ManualOverride, RuleResult, send, Suggestion, WorkspaceView } from "./api";
 import { CheckChip, Choices, Outcome, ResultsTable, StatusChip } from "./Calc";
 import AnnotateTab from "./Annotate";
 import BoqTab from "./Boq";
@@ -7,7 +7,7 @@ import ConfirmInputs from "./Confirm";
 import DiagramTab from "./Diagram";
 import DrawingTab from "./Drawing";
 import { t } from "./i18n";
-import { lineLabel, StatusTag } from "./labels";
+import { fmtDate, lineLabel, StatusTag } from "./labels";
 import { productStatus } from "./Products";
 
 const TILES = ["F4", "F2", "F3", "F10", "F5", "F6", "F7", "F9", "F11", "F12"];
@@ -18,12 +18,14 @@ export default function Workspace({ id }: { id: number }) {
   const [tab, setTab] = useState("rec");
   const [error, setError] = useState("");
 
+  function show(v: WorkspaceView) {
+    setView(v);
+    setInputs(v.rev.inputs);
+  }
   async function apply(p: Promise<WorkspaceView>) {
     setError("");
     try {
-      const v = await p;
-      setView(v);
-      setInputs(v.rev.inputs);
+      show(await p);
     } catch (err) {
       setError((err as Error).message);
     }
@@ -69,7 +71,7 @@ export default function Workspace({ id }: { id: number }) {
             ))}
           </div>
           {tab === "rec" && <Recommendation view={view} onCabinet={(cid) => saveInputs(cid)}
-            onLibrary={() => apply(api<WorkspaceView>(`/proposals/${id}`))} />}
+            onLibrary={() => apply(api<WorkspaceView>(`/proposals/${id}`))} onView={show} />}
           {tab === "calc" && (
             <section className="card">
               <h2>{t("ws.tabs.calc")}</h2>
@@ -89,7 +91,12 @@ export default function Workspace({ id }: { id: number }) {
   );
 }
 
-function Recommendation({ view, onCabinet, onLibrary }: { view: WorkspaceView; onCabinet: (id: string) => void; onLibrary: () => void }) {
+function Recommendation({ view, onCabinet, onLibrary, onView }: {
+  view: WorkspaceView;
+  onCabinet: (id: string) => void;
+  onLibrary: () => void;
+  onView: (v: WorkspaceView) => void;
+}) {
   const result = view.result!;
   const rec = result.recommendation;
   const byId = Object.fromEntries(result.rules.map((r) => [r.id, r])) as Record<string, RuleResult>;
@@ -102,6 +109,7 @@ function Recommendation({ view, onCabinet, onLibrary }: { view: WorkspaceView; o
     <>
       <section className="card">
         <h2>{t("ws.tabs.rec")}</h2>
+        {view.overrides.length > 0 && <ManualList items={view.overrides} />}
         {rec.missing.length > 0 && <p className="warn">{t("ws.missing", { names: rec.missing.join(", ") })}</p>}
         {rec.block && (
           <p className="error">
@@ -134,16 +142,7 @@ function Recommendation({ view, onCabinet, onLibrary }: { view: WorkspaceView; o
         <p className="muted">{t("ws.fromLibrary", { version: view.library_version })}</p>
         <div className="tiles">
           {TILES.filter((rid) => byId[rid]).map((rid) => (
-            <div key={rid} className="tile">
-              <div className="muted small">{byId[rid].title}</div>
-              <div className="tile-value">
-                <Outcome r={byId[rid]} />
-              </div>
-              <div className="mono small muted">{byId[rid].trace}</div>
-              <div className="small">
-                {rid} · {view.rules_version} <StatusChip status={byId[rid].status} />
-              </div>
-            </div>
+            <Tile key={rid} view={view} r={byId[rid]} names={view.overridable[rid] ?? []} onView={onView} />
           ))}
         </div>
       </section>
@@ -173,6 +172,97 @@ function Recommendation({ view, onCabinet, onLibrary }: { view: WorkspaceView; o
         {blocked && <p className="error">{t("ws.blocked")}</p>}
       </section>
     </>
+  );
+}
+
+/** 推荐页顶部：已有几项手动修改，逐项列出规则值 → 手动值 · 原因 · 修改人 · 时间（审核时同样列出）。 */
+function ManualList({ items }: { items: ManualOverride[] }) {
+  return (
+    <details className="warn manual-list">
+      <summary>{t("manual.count", { n: items.length })}</summary>
+      <ul className="plain">
+        {items.map((m) => (
+          <li key={m.name}>
+            {m.rule} {m.title} · <s>{m.rule_display}</s> → <b>{m.display}</b> {m.unit} · {m.reason} · {m.by} · {fmtDate(m.at)}
+          </li>
+        ))}
+      </ul>
+    </details>
+  );
+}
+
+/** 推荐卡片：显示规则结果；可以手动改（新值 + 原因，原因必填），改过的标「手动」、规则值划掉，可恢复。 */
+function Tile({ view, r, names, onView }: { view: WorkspaceView; r: RuleResult; names: string[]; onView: (v: WorkspaceView) => void }) {
+  const lines = names.map((n) => r.lines.find((l) => l.name === n)).filter((l) => l !== undefined);
+  const [draft, setDraft] = useState<Record<string, string> | null>(null);
+  const [reason, setReason] = useState("");
+  const [error, setError] = useState("");
+  const manual = lines.filter((l) => l.manual);
+  const why = (name: string) => view.overrides.find((m) => m.name === name)?.reason;
+
+  async function save(values: Record<string, number | null>, text = "") {
+    setError("");
+    try {
+      onView(await send<WorkspaceView>("PUT", `/proposals/${view.proposal.id}/overrides`, { values, reason: text }));
+      setDraft(null);
+      setReason("");
+    } catch (err) {
+      setError((err as Error).message);
+    }
+  }
+  const edit = () => setDraft(Object.fromEntries(lines.map((l) => [l.name, String(l.value ?? "")])));
+  const values = () => Object.fromEntries(Object.entries(draft!).map(([k, v]) => [k, v === "" ? null : Number(v)]));
+
+  return (
+    <div className={`tile ${manual.length ? "manual" : ""}`}>
+      <div className="muted small">{r.title}</div>
+      <div className="tile-value">
+        <Outcome r={r} />
+      </div>
+      {manual.map((l) => (
+        <div key={l.name} className="small">
+          {t("manual.rule")} <s>{l.rule_display}</s> · {why(l.name)}
+        </div>
+      ))}
+      <div className="mono small muted">{r.trace}</div>
+      <div className="small">
+        {r.id} · {view.rules_version} <StatusChip status={r.status} />
+      </div>
+      {draft ? (
+        <div className="tile-edit">
+          {lines.map((l) => (
+            <label key={l.name} className="row tight">
+              <span className="mono small">{l.name}</span>
+              <input type="number" step="any" min="0" className="num" aria-label={`${r.id} ${l.name}`} value={draft[l.name]}
+                onChange={(e) => setDraft({ ...draft, [l.name]: e.target.value })} />
+            </label>
+          ))}
+          <input aria-label={t("manual.reason")} placeholder={t("manual.reasonHint")} value={reason} onChange={(e) => setReason(e.target.value)} />
+          <div className="row tight">
+            <button className="btn-primary small" disabled={!reason.trim()} onClick={() => save(values(), reason)}>
+              {t("common.save")}
+            </button>
+            <button className="btn-link" onClick={() => setDraft(null)}>
+              {t("common.cancel")}
+            </button>
+          </div>
+        </div>
+      ) : (
+        names.length > 0 && lines.length > 0 && (
+          <div className="row tight">
+            <button className="btn-link" onClick={edit}>
+              {t("manual.edit")}
+            </button>
+            {manual.length > 0 && (
+              <button className="btn-link" onClick={() => save(Object.fromEntries(manual.map((l) => [l.name, null])))}>
+                {t("boq.restore")}
+              </button>
+            )}
+          </div>
+        )
+      )}
+      {error && <p className="error small">{error}</p>}
+    </div>
   );
 }
 

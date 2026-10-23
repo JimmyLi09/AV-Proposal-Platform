@@ -99,6 +99,7 @@
     "confirmed": "Confirmed",
     "crop": "Crop of the source",
     "differs": "Differs from file",
+    "edited": "Edited · {by} · {at}",
     "field": "Field",
     "fill": "Fill from files",
     "fillHint": "Fills only empty fields; values already filled in are kept.",
@@ -191,6 +192,15 @@
       "工程": "Engineering"
     },
     "title": "Choose your name"
+  },
+  "manual": {
+    "count": "{n} manual changes",
+    "edit": "Edit",
+    "fromRec": "Quantity comes from a manual value on the Recommendation tab",
+    "reason": "Reason",
+    "reasonHint": "Reason (required)",
+    "rule": "Rule value",
+    "tag": "Manual"
   },
   "nav": {
     "langLabel": "Switch to Chinese",

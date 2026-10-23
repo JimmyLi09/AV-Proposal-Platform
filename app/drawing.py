@@ -49,8 +49,9 @@ def _auto_circuits(columns: list[list[dict]], order: list[str], cap: Decimal) ->
     return out
 
 
-def build(values: dict, inputs: dict, params: dict, edits: dict | None = None) -> dict | None:
-    """values：规则结果（含 F3 的 cabinet_counts）；params：规则参数 {名字: 值}；edits：{power: {箱体: 回路}, data: {箱体: 网线}}。"""
+def build(values: dict, inputs: dict, params: dict, edits: dict | None = None, manual: set = frozenset()) -> dict | None:
+    """values：规则结果（含 F3 的 cabinet_counts，手动覆盖过的用手动值）；params：规则参数 {名字: 值}；
+    edits：{power: {箱体: 回路}, data: {箱体: 网线}}；manual：手动覆盖过的结果名（CR-5）。"""
     counts = values.get("cabinet_counts")
     if not counts or values.get("power_kw") is None or values.get("data_runs") is None or not values.get("area_m2"):
         return None
@@ -107,8 +108,15 @@ def build(values: dict, inputs: dict, params: dict, edits: dict | None = None) -
                                                      f"Data cable {x['no']} overloaded: {x['px']:,} px > {int(cap_px):,} px")})
     if n_circuits != values.get("circuits"):
         checks.append({"check": "NOTE", "text": tr(
+            f"图上整列分组是 {n_circuits} 路，F6 手动值是 {values.get('circuits')} 路",
+            f"Grouping whole columns gives {n_circuits} circuits; the manual F6 value is {values.get('circuits')}")
+            if "circuits" in manual else tr(
             f"图上整列分组是 {n_circuits} 路，F6 按总功率算是 {values.get('circuits')} 路",
             f"Grouping whole columns gives {n_circuits} circuits; F6 on total power gives {values.get('circuits')}")})
+    if "cabinets" in manual and len(cabs) != values.get("cabinets"):
+        checks.append({"check": "NOTE", "text": tr(
+            f"图上按 F3 排布是 {len(cabs)} 个箱体，F3 手动值是 {values.get('cabinets')} 个",
+            f"The F3 layout has {len(cabs)} cabinets; the manual F3 value is {values.get('cabinets')}")})
     if n_cables != values.get("data_runs"):
         checks.append({"check": "NOTE", "text": tr(
             f"图上蛇形分组是 {n_cables} 根，F9 按总像素算是 {values.get('data_runs')} 根",

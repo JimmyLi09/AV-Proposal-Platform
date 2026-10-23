@@ -43,7 +43,8 @@ def compute(db: Session, prop: Proposal) -> tuple[dict, dict | None]:
     library = latest(db, ProductLibraryVersion, prop.business_line)
     template = latest(db, TemplateVersion, prop.business_line)
     ready = rev.inputs and not pending(rev)  # 未确认的字段不能进入计算
-    result = calculate(rules.content, library.content, rev.inputs, rev.cabinet_id) if ready else None
+    overrides = {k: o["value"] for k, o in (rev.overrides or {}).items()}  # 手动覆盖（CR-5）
+    result = calculate(rules.content, library.content, rev.inputs, rev.cabinet_id, overrides) if ready else None
     return {"rules": rules, "library": library, "template": template}, result
 
 
@@ -51,7 +52,7 @@ def client_boq(db: Session, prop: Proposal, used: dict, result: dict | None, edi
     if not result or not result["rules"]:
         return None
     ctx = result["values"] | {"proposal_name": prop.name, "project_name": db.get(Project, prop.project_id).name}
-    return build(used["template"].content, ctx, edits)
+    return build(used["template"].content, ctx, edits, set(result["manual"]))
 
 
 def candidates(db: Session, prop: Proposal) -> dict[str, list]:
@@ -85,9 +86,10 @@ def drawing_of(used: dict, result: dict | None, edits: dict | None) -> dict | No
     if not result or not result["rules"]:
         return None
     params = {p["name"]: p["value"] for p in used["rules"].content["params"]}
-    d = build_drawing(result["values"], result["values"], params, edits)
+    d = build_drawing(result["values"], result["values"], params, edits, set(result["manual"]))
     if d:
-        d["basis"] = [{"item": r["title"], "formula": r["trace"], "result": r["display"], "rule": r["id"]}
+        d["basis"] = [{"item": r["title"], "formula": r["trace"], "rule": r["id"],
+                       "result": r["display"] + (tr("（手动）", " (manual)") if r["manual"] else "")}
                       for r in result["rules"] if r["id"] in BASIS_RULES]
     return d
 
@@ -113,7 +115,25 @@ def view(db: Session, prop: Proposal) -> dict:
         "result": result,
         "boq": client_boq(db, prop, used, result, rev.boq_edits),
         "drawing": drawing_of(used, result, rev.drawing_edits),
+        "overridable": LINES[prop.business_line]["overridable"],
+        "overrides": manual_list(rev, result),
     }
+
+
+def manual_list(rev, result: dict | None) -> list[dict]:
+    """手动覆盖清单（审核时逐项列出）：规则值 → 手动值 · 原因 · 修改人 · 时间。"""
+    if not result:
+        return []
+    out = []
+    for r in result["rules"]:
+        for ln in r["lines"]:
+            if ln.get("manual"):
+                o = rev.overrides[ln["name"]]
+                out.append({"rule": r["id"], "title": r["title"], "name": ln["name"], "unit": ln.get("unit", ""),
+                            "rule_value": ln["rule_value"], "rule_display": ln["rule_display"],
+                            "value": ln["value"], "display": ln["display"],
+                            "reason": o["reason"], "by": o["by"], "at": o["at"]})
+    return out
 
 
 @router.get("/{proposal_id}")
@@ -234,6 +254,39 @@ class BoqIn(BaseModel):
 
 def _num(v: float):
     return int(v) if float(v).is_integer() else v
+
+
+class OverridesIn(BaseModel):
+    values: dict[str, float | None]  # 结果名 → 手动值；空 = 恢复规则值
+    reason: str = Field("", max_length=500)
+
+
+@router.put("/{proposal_id}/overrides")
+def save_overrides(proposal_id: int, body: OverridesIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
+    """推荐结果手动覆盖（CR-5）：填新值 + 原因（必填）；空值或改回规则值 = 恢复。规则结果本身不改，手动值随 Rev 保存。"""
+    prop = get_proposal(db, proposal_id)
+    rev = prop.revisions[-1]
+    _, result = compute(db, prop)
+    if not result or not result["rules"]:
+        raise HTTPException(409, tr("还没有计算结果，算完才能手动修改", "No results yet; calculate before overriding"))
+    allowed = {n for names in LINES[prop.business_line]["overridable"].values() for n in names}
+    if unknown := set(body.values) - allowed:
+        raise HTTPException(422, tr("这些结果不能手动修改：", "These results cannot be overridden: ") + ", ".join(sorted(unknown)))
+    if any(v is not None and v < 0 for v in body.values.values()):
+        raise HTTPException(422, tr("手动值不能小于 0", "A manual value cannot be below 0"))
+    rule_value = {ln["name"]: ln.get("rule_value", ln["value"]) for r in result["rules"] for ln in r["lines"]}
+    overrides = dict(rev.overrides or {})
+    for name, value in body.values.items():
+        if value is None or value == rule_value.get(name):
+            overrides.pop(name, None)
+            continue
+        if not body.reason.strip():
+            raise HTTPException(422, tr("手动修改要写原因", "A manual change needs a reason"))
+        overrides[name] = {"value": _num(value), "reason": body.reason.strip(), "by": user.name, "at": iso(utcnow())}
+    rev.overrides = overrides or None
+    refresh_status(db, prop)
+    db.commit()
+    return view(db, prop)
 
 
 @router.put("/{proposal_id}/boq")

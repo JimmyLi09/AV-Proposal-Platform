@@ -2,6 +2,7 @@ import { useState } from "react";
 import { send, WorkspaceView } from "./api";
 import { InputField, optionLabel } from "./Calc";
 import { t } from "./i18n";
+import { fmtDate } from "./labels";
 
 export const conf = (c: string) => t(`confirm.conf.${c}`);
 
@@ -74,12 +75,15 @@ export default function ConfirmInputs({ view, inputs, setInputs, onApply, error 
                         {meta.filename} · {meta.location}
                       </button>
                     ) : meta?.source === "manual" ? (
-                      t("confirm.manual")
+                      t("confirm.edited", { by: meta.confirmed_by ?? "", at: meta.confirmed_at ? fmtDate(meta.confirmed_at) : "" })
                     ) : (
                       <span className="muted">{cands.length ? "—" : t("confirm.notFound")}</span>
                     )}
                   </td>
-                  <td>{meta && <span className={`tag conf-${meta.confidence}`}>{conf(meta.confidence)}</span>}</td>
+                  <td>
+                    {meta?.source === "manual" ? <span className="tag st-sample">{t("confirm.manual")}</span>
+                      : meta && <span className={`tag conf-${meta.confidence}`}>{conf(meta.confidence)}</span>}
+                  </td>
                   <td>
                     {needs ? (
                       <button className="btn-primary small" onClick={() => post("confirm", { field: d.name })}>

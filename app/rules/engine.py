@@ -13,7 +13,8 @@ SEED = Path(__file__).parent / "seed"
 LINES = {"LED": {"steps": led.STEPS, "precheck": led.size_choices, "recommend": led.recommend,
                  "product_inputs": led.product_inputs, "catalog": led.catalog, "boq": led.boq,
                  "product_fed": led.PRODUCT_INPUTS, "diagram": led.diagram,
-                 "boq_context": led.boq_context, "boq_extra": led.BOQ_EXTRA, "suggest": led.suggest}}
+                 "boq_context": led.boq_context, "boq_extra": led.BOQ_EXTRA, "suggest": led.suggest,
+                 "overridable": led.OVERRIDABLE}}
 STATUSES = ["set", "review", "sample", "empty"]  # 越往后越不确定
 
 
@@ -103,7 +104,8 @@ def validate(content: dict, base: dict) -> None:
             known.add(out["name"])
 
 
-def run(content: dict, inputs: dict, catalog: dict) -> dict:
+def run(content: dict, inputs: dict, catalog: dict, overrides: dict | None = None) -> dict:
+    """overrides：手动覆盖的结果 {名字: 值}（CR-5）。规则照常算出规则值，再换成手动值，下游规则用手动值。"""
     line = LINES[content["business_line"]]
     ctx, status, params = {}, {}, {}
     for p in content["params"]:
@@ -120,13 +122,26 @@ def run(content: dict, inputs: dict, catalog: dict) -> dict:
     choices = line["precheck"](ctx)
     if choices:
         return {"choices": {k: _plain(v) for k, v in choices.items()}, "rules": []}
-    return {"choices": {}, "rules": [_run_rule(r, ctx, status, params, catalog, line["steps"]) for r in content["rules"]]}
+    return {"choices": {}, "rules": [_run_rule(r, ctx, status, params, catalog, line["steps"], overrides or {})
+                                     for r in content["rules"]]}
 
 
-def _run_rule(rule, ctx, status, params, catalog, steps) -> dict:
+def _manual(line: dict, manual, decimals=None):
+    """把规则值换成手动值：规则值留在 rule_value / rule_display 里，方便对比和回算。"""
+    value = num(manual)
+    line |= {"manual": True, "rule_value": line["value"], "rule_display": line["display"],
+             "value": _plain(value), "display": _show(value, decimals)}
+    return value
+
+
+def _manual_trace(line: dict) -> str:
+    return tr(f" → 手动 {line['display']}", f" → manual {line['display']}") if line.get("manual") else ""
+
+
+def _run_rule(rule, ctx, status, params, catalog, steps, overrides) -> dict:
     result = {"id": rule["id"], "title": text(rule["title"]), "note": text(rule.get("note", "")), "lines": [],
               "display": "", "trace": "", "check": None, "status": rule.get("status", "set"),
-              "params": [], "missing": [], "error": None}
+              "params": [], "missing": [], "error": None, "manual": []}
     used: set[str] = set()
     try:
         if "step" in rule:
@@ -137,15 +152,21 @@ def _run_rule(rule, ctx, status, params, catalog, steps) -> dict:
                 result["missing"] = missing
                 return result
             out = fn(ctx, catalog)
-            for k, v in out.get("outputs", {}).items():
-                ctx[k] = v
-                result["lines"].append({"name": k, "value": _plain(v), "display": text(_show(v))})
-            result["trace"] = out.get("trace", "")
+            outputs = dict(out.get("outputs", {}))
+            for k, v in outputs.items():
+                line = {"name": k, "value": _plain(v), "display": text(_show(v))}
+                if k in overrides:
+                    outputs[k] = _manual(line, overrides[k])
+                ctx[k] = outputs[k]
+                result["lines"].append(line)
+            result["trace"] = out.get("trace", "") + "".join(
+                tr(f"；手动 {ln['name']} = {ln['display']}", f"; manual {ln['name']} = {ln['display']}")
+                for ln in result["lines"] if ln.get("manual"))
             result["check"] = out.get("check")
             result["note"] = out.get("note") or result["note"]
             if out.get("sample"):
                 result["status"] = _worst([result["status"], "sample"])
-            result["display"] = _step_display(rule["step"], out.get("outputs", {}))
+            result["display"] = _step_display(rule["step"], outputs)
         else:
             for spec in rule["outputs"]:
                 case = None
@@ -169,11 +190,14 @@ def _run_rule(rule, ctx, status, params, catalog, steps) -> dict:
                     return result
                 value = evaluate(tree, ctx)
                 shown = text(_show(value, spec.get("decimals")))
-                result["lines"].append({
+                line = {
                     "name": spec["name"], "value": _plain(value), "display": shown, "unit": unit(spec.get("unit", "")),
                     "expr": _quoted_text(case["expr"]), "when": case.get("when"),
                     "substituted": _quoted_text(substitute(tree, ctx)),
-                })
+                }
+                if spec["name"] in overrides:
+                    value = _manual(line, overrides[spec["name"]], spec.get("decimals"))
+                result["lines"].append(line)
                 ctx[spec["name"]] = value
             last = result["lines"][-1]
             if rule.get("check"):
@@ -182,11 +206,13 @@ def _run_rule(rule, ctx, status, params, catalog, steps) -> dict:
             byname = {line["name"]: line["display"] for line in result["lines"]}
             result["display"] = (re.sub(r"\{(\w+)\}", lambda m: byname.get(m[1], m[0]), template) if template
                                  else f"{last['display']} {last.get('unit', '')}".strip())
-            result["trace"] = tr("；", "; ").join(f"{line['substituted']} = {line['display']}" for line in result["lines"])
+            result["trace"] = tr("；", "; ").join(f"{ln['substituted']} = {ln.get('rule_display', ln['display'])}{_manual_trace(ln)}"
+                                                  for ln in result["lines"])
     except (ExprError, ArithmeticError, TypeError) as e:
         result["error"] = str(e) if isinstance(e, ExprError) else tr("计算出错：", "Calculation error: ") + str(e)
         return result
 
+    result["manual"] = [ln["name"] for ln in result["lines"] if ln.get("manual")]
     result["status"] = _worst([result["status"], *(status[n] for n in used if n in status)])
     for line in result["lines"]:
         status[line["name"]] = result["status"]  # 下游规则继承不确定程度
@@ -206,17 +232,22 @@ def _step_display(step: str, outputs: dict) -> str:
     return ""
 
 
-def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None = None) -> dict:
-    """完整流程：从产品库推荐 → 带出产品参数 → 跑规则 → 内部明细，以及客户版 BOQ 模板要用的值。"""
+def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None = None,
+              overrides: dict | None = None) -> dict:
+    """完整流程：从产品库推荐 → 带出产品参数 → 跑规则 → 内部明细，以及客户版 BOQ 模板要用的值。
+    overrides：这个 Rev 的手动覆盖（CR-5），BOQ、示意图、图纸都用手动值。"""
     line = LINES[content["business_line"]]
     rec = line["recommend"](inputs, library, cabinet_id)
-    out = run(content, {**inputs, **line["product_inputs"](rec["cabinet"])}, line["catalog"](library, rec["cabinet"]))
+    out = run(content, {**inputs, **line["product_inputs"](rec["cabinet"])}, line["catalog"](library, rec["cabinet"]),
+              overrides)
     values = {ln["name"]: ln["value"] for r in out["rules"] for ln in r["lines"]}
+    manual = {n for r in out["rules"] for n in r["manual"]}
+    out["manual"] = sorted(manual)
     out["recommendation"] = rec
-    out["boq"] = line["boq"](values, rec["cabinet"], inputs, library)
+    out["boq"] = line["boq"](values, rec["cabinet"], inputs, library, manual)
     out["values"] = line["boq_context"](values, rec["cabinet"], inputs)
     out["suggestions"] = line["suggest"](values, inputs, library)
-    out["diagram"] = line["diagram"](values, out["boq"], inputs, rec["cabinet"], library, out["suggestions"])
+    out["diagram"] = line["diagram"](values, out["boq"], inputs, rec["cabinet"], library, out["suggestions"], manual)
     if out["diagram"]:
         out["diagram"]["svg"] = concept_svg(out["diagram"])
     return out
