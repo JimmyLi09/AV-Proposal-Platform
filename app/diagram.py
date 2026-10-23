@@ -1,6 +1,8 @@
 """Level 1 概念图：信号从左到右，电源从下方的配电箱接入。生成 SVG，界面和 Proposal（第 6 步）共用同一张。"""
 from html import escape
 
+from .i18n import tr
+
 BOX_W, BOX_H, GAP, V_GAP, PAD = 200, 84, 150, 80, 24
 NAVY, MUTED, ORANGE = "#15203A", "#6B6558", "#C2410C"
 FONT = "-apple-system, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif"
@@ -34,7 +36,7 @@ def concept_svg(d: dict) -> str:
     for link in d["links"]:
         owner = link["supply"] != "boq"
         text = f"{link['cable']} × {link['qty']}"
-        note = {"owner": "业主提供", "included": "随设备附带"}.get(link["supply"], "")
+        note = {"owner": tr("业主提供", "By owner"), "included": tr("随设备附带", "Included")}.get(link["supply"], "")
         if link["from"] in x_of:  # 信号：横向箭头
             x1, x2, y = x_of[link["from"]] + BOX_W, x_of[link["to"]], PAD + BOX_H / 2
             parts.append(f'<line x1="{x1}" y1="{y}" x2="{x2 - 2}" y2="{y}" stroke="{NAVY}" stroke-width="1.5"'

@@ -1,21 +1,20 @@
 import { Fragment, useState } from "react";
 import { InputDef, RuleResult, RunResult } from "./api";
+import { t, tOr } from "./i18n";
 
-export const STATUS: Record<string, string> = {
-  set: "Set 已定",
-  review: "Under review 审核中",
-  sample: "Sample value 示例值 · 待填",
-  empty: "Empty 未填",
-};
+export const STATUSES = ["set", "review", "sample", "empty"];
 
 export function StatusChip({ status }: { status: string }) {
-  return <span className={`tag st-${status}`}>{STATUS[status] ?? status}</span>;
+  return <span className={`tag st-${status}`}>{tOr(`calc.status.${status}`, status)}</span>;
 }
 
 export function CheckChip({ check }: { check: string | null }) {
   if (!check) return null;
-  const label: Record<string, string> = { PASS: "PASS 通过", NOTE: "NOTE 提示", BLOCK: "BLOCK 阻断" };
-  return <span className={`tag ck-${check}`}>{label[check] ?? check}</span>;
+  return <span className={`tag ck-${check}`}>{tOr(`calc.check.${check}`, check)}</span>;
+}
+
+export function optionLabel(o: string) {
+  return tOr(`options.${o}`, o);
 }
 
 export function nextVersion(v: string) {
@@ -30,7 +29,9 @@ export function InputField({ def, value, onChange }: { def: InputDef; value: unk
       <select aria-label={def.label} value={String(value ?? "")} onChange={(e) => onChange(e.target.value)}>
         <option value="">—</option>
         {def.options!.map((o) => (
-          <option key={o}>{o}</option>
+          <option key={o} value={o}>
+            {optionLabel(o)}
+          </option>
         ))}
       </select>
     );
@@ -88,7 +89,7 @@ export function Choices({ result, onPick }: { result: RunResult; onPick: (name: 
   if (!entries.length) return null;
   return (
     <p className="warn">
-      尺寸不是模组的整数倍，请先选一个有效尺寸：
+      {t("calc.choices")}
       {entries.map(([k, opts]) => (
         <span key={k}>
           {" "}
@@ -114,11 +115,13 @@ export function ResultsTable({ base, after, label }: { base: RunResult; after?: 
       <table className="calc">
         <thead>
           <tr>
-            <th>Rule 规则</th>
-            <th>Result 结果 · {label}</th>
-            {after && <th>After change 修改后</th>}
-            <th>As calculated 计算式</th>
-            <th>Status 状态</th>
+            <th>{t("calc.rule")}</th>
+            <th>
+              {t("calc.result")} · {label}
+            </th>
+            {after && <th>{t("calc.after")}</th>}
+            <th>{t("calc.asCalculated")}</th>
+            <th>{t("common.status")}</th>
           </tr>
         </thead>
         <tbody>
@@ -158,7 +161,7 @@ export function ResultsTable({ base, after, label }: { base: RunResult; after?: 
 
 export function Outcome({ r }: { r: RuleResult }) {
   if (r.error) return <span className="error">{r.error}</span>;
-  if (r.missing.length) return <span className="warn">缺少：{r.missing.join(", ")}</span>;
+  if (r.missing.length) return <span className="warn">{t("calc.missing", { names: r.missing.join(", ") })}</span>;
   return (
     <span>
       {r.display} <CheckChip check={r.check} />
@@ -170,19 +173,25 @@ function Detail({ r }: { r: RuleResult }) {
   return (
     <div className="detail">
       <p>
-        <b>Why this number 数字由来：</b>
+        <b>
+          {t("calc.why")}
+          {t("common.colon")}
+        </b>
         {r.note}
       </p>
       {r.lines.map((l) => (
         <div key={l.name} className="mono small">
-          {l.when && <span className="muted">当 {l.when}：</span>}
+          {l.when && <span className="muted">{t("calc.when", { when: l.when })}</span>}
           {l.expr ? `${l.name} = ${l.expr} → ${l.substituted} = ` : `${l.name} = `}
           <b>{l.display}</b> {l.unit}
         </div>
       ))}
       {r.params.length > 0 && (
         <p>
-          <b>Parameters 参数：</b>
+          <b>
+            {t("calc.params")}
+            {t("common.colon")}
+          </b>
           {r.params.map((p) => (
             <span key={p.name} className="param">
               {p.label} {p.value ?? "—"} {p.unit} <StatusChip status={p.status} />

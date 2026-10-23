@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api, send, TemplateContent, TemplateRow, TemplateVersion, Version } from "./api";
 import { nextVersion } from "./Calc";
+import { t } from "./i18n";
 import { fmtDate } from "./labels";
 
 const LINE = "LED";
@@ -20,9 +21,9 @@ export default function Templates() {
   const [error, setError] = useState("");
 
   async function load() {
-    const t = await api<TemplateVersion>(`/templates/${LINE}`);
-    setSaved(t);
-    setDraft(structuredClone(t.content));
+    const v = await api<TemplateVersion>(`/templates/${LINE}`);
+    setSaved(v);
+    setDraft(structuredClone(v.content));
     setVersions(await api<Version<unknown>[]>(`/templates/${LINE}/versions`));
   }
   useEffect(() => {
@@ -55,22 +56,16 @@ export default function Templates() {
   return (
     <>
       <div className="page-head">
-        <h1>
-          Templates <span className="zh">模板</span>
-        </h1>
-        <span className="tag">LED · 模板 {saved.version}</span>
+        <h1>{t("nav.templates")}</h1>
+        <span className="tag">LED · {t("templates.tag", { version: saved.version })}</span>
       </div>
 
       <section className="card">
-        <h2>
-          BOQ default lines <span className="zh">BOQ 默认行</span>
-        </h2>
-        <p className="muted">
-          客户版 BOQ 每个方案都从这里的行开始。文字里写 {"{名字}"} 会换成规则结果或输入；数量填一个固定数（例如 1 lot），或选一个规则结果。模板不自己算数量。
-        </p>
+        <h2>{t("templates.boq")}</h2>
+        <p className="muted">{t("templates.intro")}</p>
         <label className="row tight">
-          Group title 组标题
-          <input className="wide" aria-label="Group title 组标题" value={draft.boq.group}
+          {t("boq.group")}
+          <input className="wide" aria-label={t("boq.group")} value={draft.boq.group}
             onChange={(e) => setDraft({ ...draft, boq: { ...draft.boq, group: e.target.value } })} />
         </label>
         <datalist id="value-names">
@@ -83,10 +78,10 @@ export default function Templates() {
             <thead>
               <tr>
                 <th>No.</th>
-                <th>Description and spec lines 描述与规格</th>
-                <th>Qty 数量</th>
-                <th>Unit 单位</th>
-                <th>Note / source 备注 / 来源</th>
+                <th>{t("templates.description")}</th>
+                <th>{t("diagram.qty")}</th>
+                <th>{t("boq.unit")}</th>
+                <th>{t("templates.noteSource")}</th>
                 <th />
               </tr>
             </thead>
@@ -98,29 +93,29 @@ export default function Templates() {
                     <div className="mono small muted">{r.key}</div>
                   </td>
                   <td>
-                    <input className="wide strong" aria-label={`第 ${i + 1} 行描述`} value={r.title} onChange={(e) => setRow(i, { title: e.target.value })} />
-                    <textarea aria-label={`第 ${i + 1} 行规格`} rows={Math.max(1, r.specs.length)} placeholder="规格，每行一条"
+                    <input className="wide strong" aria-label={t("boq.rowField", { no: i + 1, field: t("boq.description") })} value={r.title} onChange={(e) => setRow(i, { title: e.target.value })} />
+                    <textarea aria-label={t("boq.rowField", { no: i + 1, field: t("boq.specs") })} rows={Math.max(1, r.specs.length)} placeholder={t("boq.specsHint")}
                       value={r.specs.join("\n")} onChange={(e) => setRow(i, { specs: e.target.value.split("\n") })} />
                   </td>
                   <td>
-                    <input list="value-names" className="num" aria-label={`第 ${i + 1} 行数量`} value={String(r.qty)}
+                    <input list="value-names" className="num" aria-label={t("boq.rowField", { no: i + 1, field: t("diagram.qty") })} value={String(r.qty)}
                       onChange={(e) => setRow(i, { qty: isNumber(e.target.value) ? Number(e.target.value) : e.target.value })} />
                   </td>
                   <td>
-                    <select aria-label={`第 ${i + 1} 行单位`} value={r.unit} onChange={(e) => setRow(i, { unit: e.target.value })}>
+                    <select aria-label={t("boq.rowField", { no: i + 1, field: t("boq.unit") })} value={r.unit} onChange={(e) => setRow(i, { unit: e.target.value })}>
                       {saved.units.map((u) => (
                         <option key={u}>{u}</option>
                       ))}
                     </select>
                   </td>
                   <td>
-                    <input aria-label={`第 ${i + 1} 行备注`} placeholder="Note 备注（斜体）" value={r.note ?? ""} onChange={(e) => setRow(i, { note: e.target.value })} />
-                    <input aria-label={`第 ${i + 1} 行来源`} placeholder="Source 来源（内部）" value={r.source ?? ""} onChange={(e) => setRow(i, { source: e.target.value })} />
+                    <input aria-label={t("boq.rowField", { no: i + 1, field: t("templates.note") })} placeholder={t("templates.noteHint")} value={r.note ?? ""} onChange={(e) => setRow(i, { note: e.target.value })} />
+                    <input aria-label={t("boq.rowField", { no: i + 1, field: t("confirm.source") })} placeholder={t("templates.sourceHint")} value={r.source ?? ""} onChange={(e) => setRow(i, { source: e.target.value })} />
                   </td>
                   <td className="nowrap">
-                    <button className="btn-link" disabled={i === 0} onClick={() => move(i, -1)} aria-label={`第 ${i + 1} 行上移`}>↑</button>
-                    <button className="btn-link" disabled={i === rows.length - 1} onClick={() => move(i, 1)} aria-label={`第 ${i + 1} 行下移`}>↓</button>
-                    <button className="btn-link" onClick={() => setRows(rows.filter((_, j) => j !== i))}>Remove 删除</button>
+                    <button className="btn-link" disabled={i === 0} onClick={() => move(i, -1)} aria-label={t("templates.up", { no: i + 1 })}>↑</button>
+                    <button className="btn-link" disabled={i === rows.length - 1} onClick={() => move(i, 1)} aria-label={t("templates.down", { no: i + 1 })}>↓</button>
+                    <button className="btn-link" onClick={() => setRows(rows.filter((_, j) => j !== i))}>{t("common.remove")}</button>
                   </td>
                 </tr>
               ))}
@@ -129,27 +124,25 @@ export default function Templates() {
         </div>
         <div className="row">
           <button className="btn-outline" onClick={() => setRows([...rows, { key: newKey(rows), title: "", specs: [], qty: 1, unit: "lot", note: "", source: "" }])}>
-            + Add line 添加行
+            {t("boq.addLine")}
           </button>
         </div>
         <details>
-          <summary className="small">可以用的名字（{saved.names.length} 个）</summary>
+          <summary className="small">{t("templates.names", { n: saved.names.length })}</summary>
           <p className="mono small">{saved.names.map((n) => `{${n}}`).join("  ")}</p>
         </details>
       </section>
 
       <section className="card">
-        <h2>
-          Versions <span className="zh">版本</span>
-        </h2>
+        <h2>{t("versions.title")}</h2>
         <div className="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>Version 版本</th>
-                <th>Date 日期</th>
-                <th>By 修改人</th>
-                <th>Reason 修改原因</th>
+                <th>{t("versions.version")}</th>
+                <th>{t("versions.date")}</th>
+                <th>{t("versions.by")}</th>
+                <th>{t("versions.reason")}</th>
               </tr>
             </thead>
             <tbody>
@@ -167,17 +160,17 @@ export default function Templates() {
       </section>
 
       <div className={`savebar ${dirty ? "on" : ""}`}>
-        <b>{dirty ? "Unsaved changes 未保存修改" : "修改模板后才能保存"}</b>
+        <b>{dirty ? t("versions.unsaved") : t("templates.nothingToSave")}</b>
         {dirty && (
           <>
-            <input aria-label="Reason 修改原因" placeholder="Reason 修改原因（必填）" value={reason} onChange={(e) => setReason(e.target.value)} />
+            <input aria-label={t("versions.reason")} placeholder={t("versions.reasonHint")} value={reason} onChange={(e) => setReason(e.target.value)} />
             <button className="btn-outline" onClick={() => setDraft(structuredClone(saved.content))}>
-              Discard 放弃修改
+              {t("versions.discard")}
             </button>
           </>
         )}
         <button className="btn-primary" disabled={!dirty || !reason.trim()} onClick={save}>
-          Save as template {nextVersion(saved.version)} 另存为模板 {nextVersion(saved.version)}
+          {t("templates.saveAs", { version: nextVersion(saved.version) })}
         </button>
         {error && <span className="error">{error}</span>}
       </div>

@@ -21,6 +21,7 @@ class User(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(80), unique=True)
     role: Mapped[str] = mapped_column(String(40), default="")  # Sales / PM / 工程，只是标签
+    lang: Mapped[str] = mapped_column(String(2), default="zh", server_default="zh")  # 界面语言（CR-4），zh / en
     created_at: Mapped[datetime] = mapped_column(default=utcnow)
 
 

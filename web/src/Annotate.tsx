@@ -1,9 +1,10 @@
 import { MouseEvent, useEffect, useRef, useState } from "react";
 import { AnnotationDoc, api, Mark, Scale, send, WorkspaceView } from "./api";
+import { t } from "./i18n";
 
 type Tool = "point" | "area" | "device" | "text" | "scale";
-const TOOLS: [Tool, string][] = [["point", "Point 点"], ["area", "Area 区域"], ["device", "Device 设备"], ["text", "Text 文字"], ["scale", "Set scale 设置比例"]];
-const DEFAULT_LABEL: Record<string, string> = { point: "点", area: "区域", device: "设备", text: "文字" };
+const TOOLS: Tool[] = ["point", "area", "device", "text", "scale"];
+const toolLabel = (tool: string) => t(`annotate.tools.${tool}`); // 也是新标记的默认名称
 
 /** 在客户的 PDF 或照片上标出位置。保存时服务器另存一份标注副本，原文件不会被修改。 */
 export default function AnnotateTab({ view, onSaved }: { view: WorkspaceView; onSaved: () => void }) {
@@ -35,7 +36,7 @@ export default function AnnotateTab({ view, onSaved }: { view: WorkspaceView; on
     setScalePts([]);
   }, [fileId, page]);
 
-  if (fileId === null) return <section className="card"><p className="muted">项目里还没有 PDF 或照片可以标注。</p></section>;
+  if (fileId === null) return <section className="card"><p className="muted">{t("annotate.none")}</p></section>;
 
   const at = (e: MouseEvent) => {
     const r = box.current!.getBoundingClientRect();
@@ -51,12 +52,12 @@ export default function AnnotateTab({ view, onSaved }: { view: WorkspaceView; on
     if (tool === "scale") {
       const pts = [...scalePts, p];
       if (pts.length < 2) return setScalePts(pts);
-      const mm = Number(window.prompt("这两点之间的实际距离（mm）", "4480"));
+      const mm = Number(window.prompt(t("annotate.scalePrompt"), "4480"));
       setScalePts([]);
       if (mm > 0) setScale({ a: pts[0], b: pts[1], mm });
       return;
     }
-    setMarks([...marks, { type: tool, x: p.x, y: p.y, w: 0, h: 0, label: DEFAULT_LABEL[tool], note: "", boq_key: null }]);
+    setMarks([...marks, { type: tool, x: p.x, y: p.y, w: 0, h: 0, label: toolLabel(tool), note: "", boq_key: null }]);
   }
   function move(e: MouseEvent) {
     if (drag) setDrag({ ...drag, ...((p) => ({ x2: p.x, y2: p.y }))(at(e)) });
@@ -64,7 +65,7 @@ export default function AnnotateTab({ view, onSaved }: { view: WorkspaceView; on
   function up() {
     if (!drag) return;
     const x = Math.min(drag.x, drag.x2), y = Math.min(drag.y, drag.y2), w = Math.abs(drag.x2 - drag.x), h = Math.abs(drag.y2 - drag.y);
-    if (w > 0.01 && h > 0.01) setMarks([...marks, { type: "area", x, y, w, h, label: DEFAULT_LABEL.area, note: "", boq_key: null }]);
+    if (w > 0.01 && h > 0.01) setMarks([...marks, { type: "area", x, y, w, h, label: toolLabel("area"), note: "", boq_key: null }]);
     setDrag(null);
   }
   const edit = (i: number, patch: Partial<Mark>) => setMarks(marks.map((m, j) => (j === i ? { ...m, ...patch } : m)));
@@ -85,12 +86,10 @@ export default function AnnotateTab({ view, onSaved }: { view: WorkspaceView; on
   const pct = (v: number) => `${v * 100}%`;
   return (
     <section className="card">
-      <h2>
-        Annotate <span className="zh">标注</span>
-      </h2>
-      <p className="muted">在客户的 PDF 或照片上标出位置。保存时另存一份标注副本，原文件不会被修改。区域：按住拖动；比例：在已知长度的两端各点一下。</p>
+      <h2>{t("ws.tabs.annotate")}</h2>
+      <p className="muted">{t("annotate.intro")}</p>
       <div className="row">
-        <select aria-label="File 文件" value={fileId} onChange={(e) => { setFileId(Number(e.target.value)); setPage(1); }}>
+        <select aria-label={t("project.file")} value={fileId} onChange={(e) => { setFileId(Number(e.target.value)); setPage(1); }}>
           {files.map((f) => (
             <option key={f.id} value={f.id}>
               {f.filename}
@@ -98,7 +97,7 @@ export default function AnnotateTab({ view, onSaved }: { view: WorkspaceView; on
           ))}
         </select>
         {pages > 1 && (
-          <select aria-label="Page 页" value={page} onChange={(e) => setPage(Number(e.target.value))}>
+          <select aria-label={t("annotate.page")} value={page} onChange={(e) => setPage(Number(e.target.value))}>
             {Array.from({ length: pages }, (_, i) => (
               <option key={i} value={i + 1}>
                 p.{i + 1}
@@ -106,12 +105,12 @@ export default function AnnotateTab({ view, onSaved }: { view: WorkspaceView; on
             ))}
           </select>
         )}
-        {TOOLS.map(([k, v]) => (
+        {TOOLS.map((k) => (
           <button key={k} className={`pill ${tool === k ? "active" : ""}`} onClick={() => setTool(k)}>
-            {v}
+            {toolLabel(k)}
           </button>
         ))}
-        {scale && <span className="tag">Scale 比例: {scale.mm} mm</span>}
+        {scale && <span className="tag">{t("annotate.scale", { mm: scale.mm })}</span>}
       </div>
 
       <div className="annotate">
@@ -136,21 +135,21 @@ export default function AnnotateTab({ view, onSaved }: { view: WorkspaceView; on
         </div>
 
         <div className="marks">
-          <b>Marks 标记</b>
-          {marks.length === 0 && <p className="muted small">选一个工具，在图上点一下（区域按住拖动）。</p>}
+          <b>{t("annotate.marks")}</b>
+          {marks.length === 0 && <p className="muted small">{t("annotate.marksHint")}</p>}
           {marks.map((m, i) => (
             <div key={i} className="mark">
               <span className="pin static">{i + 1}</span>
               <div className="grow">
-                <input aria-label={`标记 ${i + 1} 名称`} value={m.label} onChange={(e) => edit(i, { label: e.target.value })} />
-                <input aria-label={`标记 ${i + 1} 说明`} placeholder="Note 说明" value={m.note} onChange={(e) => edit(i, { note: e.target.value })} />
+                <input aria-label={t("annotate.markField", { no: i + 1, field: t("annotate.name") })} value={m.label} onChange={(e) => edit(i, { label: e.target.value })} />
+                <input aria-label={t("annotate.markField", { no: i + 1, field: t("annotate.note") })} placeholder={t("annotate.note")} value={m.note} onChange={(e) => edit(i, { note: e.target.value })} />
                 {m.type === "device" && (
-                  <select aria-label={`标记 ${i + 1} 对应明细行`} value={m.boq_key ?? ""}
+                  <select aria-label={t("annotate.markField", { no: i + 1, field: t("diagram.line") })} value={m.boq_key ?? ""}
                     onChange={(e) => {
                       const line = deviceLines.find((l) => l.key === e.target.value);
                       edit(i, { boq_key: e.target.value || null, label: line ? line.item : m.label });
                     }}>
-                    <option value="">对应 BOQ 明细行（可选）</option>
+                    <option value="">{t("annotate.boqLine")}</option>
                     {deviceLines.map((l) => (
                       <option key={l.key} value={l.key}>
                         {l.item} · {l.model}
@@ -161,27 +160,29 @@ export default function AnnotateTab({ view, onSaved }: { view: WorkspaceView; on
                 {areaMm(m) && <span className="small muted">{areaMm(m)}</span>}
               </div>
               <button className="btn-link" onClick={() => setMarks(marks.filter((_, j) => j !== i))}>
-                Remove 删除
+                {t("common.remove")}
               </button>
             </div>
           ))}
           <div className="row">
             <button className="btn-primary" disabled={!marks.length} onClick={() => save()}>
-              Save marked copy 保存标注副本
+              {t("annotate.save")}
             </button>
             {saved && (
               <button className="btn-link" onClick={() => { setMarks([]); setScale(null); save([]); }}>
-                Clear 清空
+                {t("annotate.clear")}
               </button>
             )}
           </div>
           {error && <p className="error">{error}</p>}
           {saved && (
             <p className="small">
-              Saved as a copy 已另存副本：
+              {t("annotate.saved")}
               <a href={`/api/proposals/${view.proposal.id}/annotations/${fileId}/${page}/copy`}>{saved.copy_name}</a>
               <br />
-              <span className="muted">{file.filename} 未改动 · {saved.updated_by}</span>
+              <span className="muted">
+                {t("annotate.untouched", { file: file.filename })} · {saved.updated_by}
+              </span>
             </p>
           )}
         </div>

@@ -1,5 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 import { api, Project, ProjectRow, send } from "./api";
+import { t } from "./i18n";
 import { StatusTag } from "./labels";
 
 export default function Projects() {
@@ -14,14 +15,12 @@ export default function Projects() {
     <>
       <div className="page-head">
         <div>
-          <h1>
-            Projects <span className="zh">项目</span>
-          </h1>
-          <p className="muted">项目可以先建，之后再关联 Project Platform 编号。两个系统只共用这个编号，不共用数据库。</p>
+          <h1>{t("projects.title")}</h1>
+          <p className="muted">{t("projects.intro")}</p>
         </div>
         {!adding && (
           <button className="btn-primary" onClick={() => setAdding(true)}>
-            + New project 新建项目
+            {t("projects.new")}
           </button>
         )}
       </div>
@@ -33,12 +32,12 @@ export default function Projects() {
           <table>
             <thead>
               <tr>
-                <th>Project 项目</th>
-                <th>Client 客户</th>
-                <th>Project Platform no. 项目平台编号</th>
-                <th>Proposals 方案</th>
-                <th>Files 文件</th>
-                <th>Owner 负责人</th>
+                <th>{t("projects.project")}</th>
+                <th>{t("projects.client")}</th>
+                <th>{t("projects.projectNo")}</th>
+                <th>{t("projects.proposals")}</th>
+                <th>{t("projects.files")}</th>
+                <th>{t("projects.owner")}</th>
               </tr>
             </thead>
             <tbody>
@@ -48,7 +47,7 @@ export default function Projects() {
                     <a href={`#/projects/${p.id}`}>{p.name}</a>
                   </td>
                   <td>{p.client}</td>
-                  <td>{p.project_no ?? <span className="tag">Not linked 未关联</span>}</td>
+                  <td>{p.project_no ?? <span className="tag">{t("projects.notLinked")}</span>}</td>
                   <td>
                     {p.proposals.map((x) => (
                       <div key={x.id}>
@@ -63,7 +62,7 @@ export default function Projects() {
               {rows.length === 0 && (
                 <tr>
                   <td colSpan={6} className="muted">
-                    还没有项目。
+                    {t("projects.empty")}
                   </td>
                 </tr>
               )}
@@ -92,35 +91,33 @@ function NewProject({ onCancel }: { onCancel: () => void }) {
 
   return (
     <form className="card form" onSubmit={submit}>
-      <h2>
-        Project information <span className="zh">项目信息</span>
-      </h2>
+      <h2>{t("projects.info")}</h2>
       <label>
-        Project name 项目名称 *
+        {t("projects.name")} *
         <input value={form.name} onChange={set("name")} required />
       </label>
       <label>
-        Client 客户 *
+        {t("projects.client")} *
         <input value={form.client} onChange={set("client")} required />
       </label>
       <label>
-        Project Platform no. 项目平台编号 <span className="muted">(optional 选填)</span>
+        {t("projects.projectNo")} <span className="muted">{t("common.optional")}</span>
         <input value={form.project_no} onChange={set("project_no")} />
-        <span className="hint">项目还没建档可以先留空，之后在项目页关联。</span>
+        <span className="hint">{t("projects.projectNoHint")}</span>
       </label>
       <label>
-        Site location 项目地点
+        {t("projects.location")}
         <input value={form.location} onChange={set("location")} />
       </label>
       <label className="wide">
-        Notes 备注
+        {t("projects.notes")}
         <textarea value={form.notes} onChange={set("notes")} rows={2} />
       </label>
       {error && <p className="error wide">{error}</p>}
       <div className="row wide">
-        <button className="btn-primary">Create 创建</button>
+        <button className="btn-primary">{t("common.create")}</button>
         <button type="button" className="btn-outline" onClick={onCancel}>
-          Cancel 取消
+          {t("common.cancel")}
         </button>
       </div>
     </form>

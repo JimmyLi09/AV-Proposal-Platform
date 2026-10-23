@@ -1,4 +1,6 @@
-export type User = { id: number; name: string; role: string };
+import { Lang, lang, t } from "./i18n";
+
+export type User = { id: number; name: string; role: string; lang: Lang };
 
 export type SourceFile = {
   id: number;
@@ -42,11 +44,11 @@ export type Project = {
 export type ProjectRow = Omit<Project, "files"> & { file_count: number };
 
 export async function api<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`/api${path}`, init);
+  const res = await fetch(`/api${path}`, { ...init, headers: { ...init?.headers, "X-Lang": lang() } });
   if (!res.ok) {
     const body = await res.json().catch(() => null);
     const detail = body?.detail;
-    throw new Error(typeof detail === "string" ? detail : `请求失败（${res.status}）`);
+    throw new Error(typeof detail === "string" ? detail : t("common.requestFailed", { status: res.status }));
   }
   return res.status === 204 ? (undefined as T) : res.json();
 }
@@ -72,7 +74,7 @@ export type Version<T> = {
   created_at: string;
   content: T;
 };
-export type RuleVersion = Version<RuleContent> & { product_fed: string[] };
+export type RuleVersion = Version<RuleContent> & { product_fed: string[]; text: Record<string, string> };
 
 export type ResultLine = { name: string; value: unknown; display: string; unit?: string; expr?: string; when?: string | null; substituted?: string };
 export type RuleResult = {

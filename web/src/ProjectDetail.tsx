@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 import { api, Project, send } from "./api";
-import { fmtDate, fmtSize, LINE_LABEL, StatusTag } from "./labels";
+import { t } from "./i18n";
+import { fmtDate, fmtSize, LINES, lineLabel, StatusTag } from "./labels";
 
 export default function ProjectDetail({ id }: { id: number }) {
   const [project, setProject] = useState<Project | null>(null);
@@ -17,11 +18,11 @@ export default function ProjectDetail({ id }: { id: number }) {
   return (
     <>
       <div>
-        <a href="#/">← Projects 项目</a>
+        <a href="#/">← {t("projects.title")}</a>
         <h1>{project.name}</h1>
         <p className="muted">
           {project.client}
-          {project.location && ` · ${project.location}`} · Owner 负责人 {project.owner.name}
+          {project.location && ` · ${project.location}`} · {t("projects.owner")} {project.owner.name}
         </p>
       </div>
       <ProjectNo project={project} onSaved={setProject} />
@@ -49,20 +50,18 @@ function ProjectNo({ project, onSaved }: { project: Project; onSaved: (p: Projec
 
   return (
     <section className="card">
-      <h2>
-        Project Platform no. <span className="zh">项目平台编号</span>
-      </h2>
+      <h2>{t("projects.projectNo")}</h2>
       {editing ? (
         <form className="row" onSubmit={save}>
-          {project.project_no === null && <span className="tag">Not linked 未关联</span>}
-          <input aria-label="Project Platform no. 项目平台编号" value={value} onChange={(e) => setValue(e.target.value)} />
-          <button className="btn-outline">Link 关联</button>
+          {project.project_no === null && <span className="tag">{t("projects.notLinked")}</span>}
+          <input aria-label={t("projects.projectNo")} value={value} onChange={(e) => setValue(e.target.value)} />
+          <button className="btn-outline">{t("project.link")}</button>
         </form>
       ) : (
         <div className="row">
           <b>{project.project_no}</b>
           <button className="btn-link" onClick={() => setEditing(true)}>
-            Change 修改
+            {t("common.change")}
           </button>
         </div>
       )}
@@ -71,21 +70,14 @@ function ProjectNo({ project, onSaved }: { project: Project; onSaved: (p: Projec
   );
 }
 
-const READ: Record<string, string> = {
-  reading: "Reading 读取中…",
-  read: "Read 已读取",
-  attached: "Attached 已附加",
-  failed: "Failed 读取失败",
-};
-
 function Files({ project, onUploaded }: { project: Project; onUploaded: () => void }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const reading = project.files.some((f) => f.read_status === "reading");
   useEffect(() => {  // 读取在后台进行，读完前每 1.5 秒刷新
     if (!reading) return;
-    const t = setTimeout(onUploaded, 1500);
-    return () => clearTimeout(t);
+    const timer = setTimeout(onUploaded, 1500);
+    return () => clearTimeout(timer);
   }, [reading, project]);
 
   async function reread() {
@@ -113,19 +105,17 @@ function Files({ project, onUploaded }: { project: Project; onUploaded: () => vo
     <section className="card">
       <div className="page-head">
         <div>
-          <h2>
-            Customer files <span className="zh">客户文件</span>
-          </h2>
-          <p className="muted">原件只读保存，不会被覆盖。同名文件再传会另存一份。上传后服务器自动读取文字和尺寸。</p>
-          <p className="muted small">A：数值直接读取 · B：数值靠文字识别，必须逐项确认 · C：随项目保存，不用于计算数量。</p>
+          <h2>{t("project.files")}</h2>
+          <p className="muted">{t("project.filesIntro")}</p>
+          <p className="muted small">{t("project.grades")}</p>
         </div>
         {project.files.length > 0 && (
           <button className="btn-outline" disabled={reading} onClick={reread}>
-            Re-read 重新读取
+            {t("project.reread")}
           </button>
         )}
         <label className="btn-primary">
-          {busy ? "Uploading 上传中…" : "Choose files 选择文件"}
+          {busy ? t("project.uploading") : t("project.choose")}
           <input type="file" multiple hidden disabled={busy} onChange={(e) => {
               const list = Array.from(e.target.files ?? []);
               e.target.value = ""; // 允许再次选择同名文件
@@ -138,13 +128,13 @@ function Files({ project, onUploaded }: { project: Project; onUploaded: () => vo
         <table>
           <thead>
             <tr>
-              <th>File 文件</th>
-              <th>Grade 等级</th>
-              <th>How it is read 读取方式</th>
-              <th>Status 状态</th>
-              <th>Size 大小</th>
-              <th>Fingerprint 指纹</th>
-              <th>Added 添加</th>
+              <th>{t("project.file")}</th>
+              <th>{t("project.grade")}</th>
+              <th>{t("project.method")}</th>
+              <th>{t("common.status")}</th>
+              <th>{t("project.size")}</th>
+              <th>{t("project.fingerprint")}</th>
+              <th>{t("project.added")}</th>
             </tr>
           </thead>
           <tbody>
@@ -153,7 +143,7 @@ function Files({ project, onUploaded }: { project: Project; onUploaded: () => vo
                 <td className="strong">
                   <a href={`/api/files/${f.id}`}>{f.filename}</a>
                   <div>
-                    <span className="tag">Original 原件 · read-only 只读</span>
+                    <span className="tag">{t("project.original")}</span>
                   </div>
                 </td>
                 <td>{f.grade ?? "—"}</td>
@@ -162,8 +152,8 @@ function Files({ project, onUploaded }: { project: Project; onUploaded: () => vo
                   {f.read_note && <div className="muted small">{f.read_note}</div>}
                 </td>
                 <td>
-                  {f.read_status ? READ[f.read_status] : "—"}
-                  {f.read_status === "read" && <div className="muted small">{f.fields_found} 个候选值</div>}
+                  {f.read_status ? t(`project.read.${f.read_status}`) : "—"}
+                  {f.read_status === "read" && <div className="muted small">{t("project.candidates", { n: f.fields_found })}</div>}
                 </td>
                 <td>{fmtSize(f.size)}</td>
                 <td>
@@ -177,7 +167,7 @@ function Files({ project, onUploaded }: { project: Project; onUploaded: () => vo
             {project.files.length === 0 && (
               <tr>
                 <td colSpan={7} className="muted">
-                  还没有文件。PDF、Excel、JPG、PNG、DWG 都可以上传。
+                  {t("project.noFiles")}
                 </td>
               </tr>
             )}
@@ -206,18 +196,16 @@ function Proposals({ project, onCreated }: { project: Project; onCreated: () => 
 
   return (
     <section className="card">
-      <h2>
-        Proposals <span className="zh">方案</span>
-      </h2>
+      <h2>{t("projects.proposals")}</h2>
       <div className="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>Proposal 方案</th>
-              <th>Business line 业务线</th>
-              <th>Mode 模式</th>
-              <th>Status 状态</th>
-              <th>Author 作者</th>
+              <th>{t("project.proposal")}</th>
+              <th>{t("project.line")}</th>
+              <th>{t("project.mode")}</th>
+              <th>{t("common.status")}</th>
+              <th>{t("project.author")}</th>
             </tr>
           </thead>
           <tbody>
@@ -226,8 +214,8 @@ function Proposals({ project, onCreated }: { project: Project; onCreated: () => 
                 <td className="strong">
                   <a href={`#/proposals/${x.id}`}>{x.name}</a>
                 </td>
-                <td>{LINE_LABEL[x.business_line]}</td>
-                <td>A Light 轻量</td>
+                <td>{lineLabel(x.business_line)}</td>
+                <td>{t("project.modeA")}</td>
                 <td>
                   <StatusTag status={x.status} rev={x.rev_no} />
                 </td>
@@ -238,16 +226,16 @@ function Proposals({ project, onCreated }: { project: Project; onCreated: () => 
         </table>
       </div>
       <form className="row" onSubmit={create}>
-        <select aria-label="Business line 业务线" value={line} onChange={(e) => setLine(e.target.value)}>
-          {Object.entries(LINE_LABEL).map(([k, v]) => (
+        <select aria-label={t("project.line")} value={line} onChange={(e) => setLine(e.target.value)}>
+          {LINES.map((k) => (
             <option key={k} value={k}>
-              {v}
+              {lineLabel(k)}
             </option>
           ))}
         </select>
-        <input aria-label="Proposal name 方案名称" placeholder="Proposal name 方案名称，如 LED-1 Lobby" value={name}
+        <input aria-label={t("project.proposalName")} placeholder={t("project.proposalNameHint")} value={name}
           onChange={(e) => setName(e.target.value)} required />
-        <button className="btn-outline">+ New proposal 新建方案</button>
+        <button className="btn-outline">{t("project.newProposal")}</button>
       </form>
       {error && <p className="error">{error}</p>}
     </section>

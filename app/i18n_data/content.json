@@ -1,0 +1,349 @@
+{
+  "_comment": "规则集、产品库里种子内容的两种语言（CR-4）。键是内容里的原文；用户在界面上改过的文字不在这里，按原样显示。",
+  "Environment 使用环境": {
+    "zh": "使用环境",
+    "en": "Environment"
+  },
+  "Pixel pitch 点间距": {
+    "zh": "点间距",
+    "en": "Pixel pitch"
+  },
+  "Screen width 屏宽": {
+    "zh": "屏宽",
+    "en": "Screen width"
+  },
+  "Screen height 屏高": {
+    "zh": "屏高",
+    "en": "Screen height"
+  },
+  "Module width 模组宽": {
+    "zh": "模组宽",
+    "en": "Module width"
+  },
+  "Module height 模组高": {
+    "zh": "模组高",
+    "en": "Module height"
+  },
+  "Cabinet sizes 箱体尺寸（第一个为主尺寸）": {
+    "zh": "箱体尺寸（第一个为主尺寸）",
+    "en": "Cabinet sizes (first is the main size)"
+  },
+  "Viewing distance 观看距离": {
+    "zh": "观看距离",
+    "en": "Viewing distance"
+  },
+  "Installation 安装方式": {
+    "zh": "安装方式",
+    "en": "Installation"
+  },
+  "Maintenance 维护方式": {
+    "zh": "维护方式",
+    "en": "Maintenance"
+  },
+  "Required brightness 亮度要求": {
+    "zh": "亮度要求",
+    "en": "Required brightness"
+  },
+  "Signal sources 信号源数量": {
+    "zh": "信号源数量",
+    "en": "Signal sources"
+  },
+  "Power & cables 电源与线缆": {
+    "zh": "电源与线缆",
+    "en": "Power & cables"
+  },
+  "Power density 功率密度": {
+    "zh": "功率密度",
+    "en": "Power density"
+  },
+  "Spares 备品": {
+    "zh": "备品",
+    "en": "Spares"
+  },
+  "Checks 校核": {
+    "zh": "校核",
+    "en": "Checks"
+  },
+  "Power per circuit 每回路功率": {
+    "zh": "每回路功率",
+    "en": "Power per circuit"
+  },
+  "Spare power cables 备用电源线": {
+    "zh": "备用电源线",
+    "en": "Spare power cables"
+  },
+  "Pixels per data cable 每路信号线像素": {
+    "zh": "每路信号线像素",
+    "en": "Pixels per data cable"
+  },
+  "Spare data cables 备用信号线": {
+    "zh": "备用信号线",
+    "en": "Spare data cables"
+  },
+  "Circuits per DB box 每配电箱回路数": {
+    "zh": "每配电箱回路数",
+    "en": "Circuits per DB box"
+  },
+  "Indoor fixed 室内固装": {
+    "zh": "室内固装",
+    "en": "Indoor fixed"
+  },
+  "Outdoor fixed 户外固装": {
+    "zh": "户外固装",
+    "en": "Outdoor fixed"
+  },
+  "Rental 租赁": {
+    "zh": "租赁",
+    "en": "Rental"
+  },
+  "Module spare rate 模组备品比例": {
+    "zh": "模组备品比例",
+    "en": "Module spare rate"
+  },
+  "Module spare minimum 模组备品最少": {
+    "zh": "模组备品最少",
+    "en": "Module spare minimum"
+  },
+  "PSU / receiving card spare rate 电源 / 接收卡备品比例": {
+    "zh": "电源 / 接收卡备品比例",
+    "en": "PSU / receiving card spare rate"
+  },
+  "PSU / receiving card spare minimum 电源 / 接收卡备品最少": {
+    "zh": "电源 / 接收卡备品最少",
+    "en": "PSU / receiving card spare minimum"
+  },
+  "Min. viewing distance 最近观看距离（每 mm 点间距）": {
+    "zh": "最近观看距离（每 mm 点间距）",
+    "en": "Min. viewing distance (per mm of pitch)"
+  },
+  "Area 面积": {
+    "zh": "面积",
+    "en": "Area"
+  },
+  "Modules 模组": {
+    "zh": "模组",
+    "en": "Modules"
+  },
+  "Cabinet layout 箱体排布": {
+    "zh": "箱体排布",
+    "en": "Cabinet layout"
+  },
+  "Resolution 分辨率": {
+    "zh": "分辨率",
+    "en": "Resolution"
+  },
+  "Power 功率": {
+    "zh": "功率",
+    "en": "Power"
+  },
+  "Power circuits 电源回路": {
+    "zh": "电源回路",
+    "en": "Power circuits"
+  },
+  "Power cables 电源线": {
+    "zh": "电源线",
+    "en": "Power cables"
+  },
+  "Spare PSU / receiving card 备用电源 / 接收卡": {
+    "zh": "备用电源 / 接收卡",
+    "en": "Spare PSU / receiving card"
+  },
+  "Data cables 数据线": {
+    "zh": "数据线",
+    "en": "Data cables"
+  },
+  "Spare modules 备用模组": {
+    "zh": "备用模组",
+    "en": "Spare modules"
+  },
+  "Controller 控制器": {
+    "zh": "控制器",
+    "en": "Controller"
+  },
+  "DB box 配电箱": {
+    "zh": "配电箱",
+    "en": "DB box"
+  },
+  "Video processor 视频处理器": {
+    "zh": "视频处理器",
+    "en": "Video processor"
+  },
+  "Brightness 亮度": {
+    "zh": "亮度",
+    "en": "Brightness"
+  },
+  "Installation 安装": {
+    "zh": "安装",
+    "en": "Installation"
+  },
+  "屏宽 × 屏高。": {
+    "en": "Width × height."
+  },
+  "宽、高各除以模组尺寸取整后相乘。": {
+    "en": "Width and height each divided by the module size, rounded down, then multiplied."
+  },
+  "每列先尽量用主尺寸（第一个箱体尺寸），余下用其它尺寸补齐。": {
+    "en": "Each column uses the main size (first cabinet size) as much as possible; other sizes fill the rest."
+  },
+  "模组数 × 每块模组的像素。": {
+    "en": "Modules × pixels per module."
+  },
+  "面积 × 每平米功耗（按屏幕类型分档）。": {
+    "en": "Area × power per ㎡ (by screen type)."
+  },
+  "功率 ÷ 每回路功率，向上取整。": {
+    "en": "Power ÷ power per circuit, rounded up."
+  },
+  "回路数 + 备用。": {
+    "en": "Circuits + spares."
+  },
+  "按箱体数取比例向上取整，不低于最少数（按每箱 1 个电源、1 张接收卡估算）。": {
+    "en": "A share of the cabinet count, rounded up, not below the minimum (assumes 1 PSU and 1 receiving card per cabinet)."
+  },
+  "总像素除以每根线的带载量，向上取整，再加备用。": {
+    "en": "Total pixels ÷ load per cable, rounded up, plus spares."
+  },
+  "模组数取比例向上取整，不低于最少数。": {
+    "en": "A share of the module count, rounded up, not below the minimum."
+  },
+  "带载像素和网口数都要够，否则阻断。": {
+    "en": "Both pixel load and port count must be enough; otherwise blocked."
+  },
+  "回路数 ÷ 每配电箱回路数，向上取整。": {
+    "en": "Circuits ÷ circuits per DB box, rounded up."
+  },
+  "按信号源数量和分辨率选型。": {
+    "en": "Chosen by number of signal sources and resolution."
+  },
+  "点间距 × 每 mm 对应的米数 ≤ 最近观看距离。": {
+    "en": "Pixel pitch × metres per mm ≤ nearest viewing distance."
+  },
+  "产品亮度 ≥ 环境要求的亮度。": {
+    "en": "Product brightness ≥ required brightness."
+  },
+  "按安装方式带出配件。": {
+    "en": "Accessories by installation type."
+  },
+  "墙面支架 1 套（不含钢结构）": {
+    "en": "Wall bracket, 1 set (steel structure excluded)"
+  },
+  "落地支架 1 套（不含钢结构）": {
+    "en": "Floor stand, 1 set (steel structure excluded)"
+  },
+  "吊装支架 1 套（不含钢结构）": {
+    "en": "Hanging bracket, 1 set (steel structure excluded)"
+  },
+  "嵌入式边框 1 套（不含钢结构）": {
+    "en": "Embedded frame, 1 set (steel structure excluded)"
+  },
+  "小屏": {
+    "en": "Small screens"
+  },
+  "大屏 / 多面屏": {
+    "en": "Large / multi-face screens"
+  },
+  "Brand 品牌": {
+    "zh": "品牌",
+    "en": "Brand"
+  },
+  "Model 型号": {
+    "zh": "型号",
+    "en": "Model"
+  },
+  "Status 状态": {
+    "zh": "状态",
+    "en": "Status"
+  },
+  "Use 适用场景": {
+    "zh": "适用场景",
+    "en": "Use"
+  },
+  "Datasheet 规格书文件名": {
+    "zh": "规格书文件名",
+    "en": "Datasheet"
+  },
+  "Sample data 示例数据": {
+    "zh": "示例数据",
+    "en": "Sample data"
+  },
+  "Pixel pitch 点间距 mm": {
+    "zh": "点间距 mm",
+    "en": "Pixel pitch mm"
+  },
+  "Module width 模组宽 mm": {
+    "zh": "模组宽 mm",
+    "en": "Module width mm"
+  },
+  "Module height 模组高 mm": {
+    "zh": "模组高 mm",
+    "en": "Module height mm"
+  },
+  "Cabinet sizes 箱体尺寸 mm（第一个为主尺寸）": {
+    "zh": "箱体尺寸 mm（第一个为主尺寸）",
+    "en": "Cabinet sizes mm (first is the main size)"
+  },
+  "Brightness 亮度 nits": {
+    "zh": "亮度 nits",
+    "en": "Brightness nits"
+  },
+  "Max power 最大功耗 W/㎡": {
+    "zh": "最大功耗 W/㎡",
+    "en": "Max power W/㎡"
+  },
+  "IP rating 防护等级": {
+    "zh": "防护等级",
+    "en": "IP rating"
+  },
+  "Weight 重量 kg / cabinet 箱体": {
+    "zh": "重量 kg / 箱体",
+    "en": "Weight kg / cabinet"
+  },
+  "PSU per cabinet 每箱电源数": {
+    "zh": "每箱电源数",
+    "en": "PSU per cabinet"
+  },
+  "Receiving cards per cabinet 每箱接收卡数": {
+    "zh": "每箱接收卡数",
+    "en": "Receiving cards per cabinet"
+  },
+  "Load 带载像素 px": {
+    "zh": "带载像素 px",
+    "en": "Load px"
+  },
+  "Ports 网口数": {
+    "zh": "网口数",
+    "en": "Ports"
+  },
+  "Inputs 输入数": {
+    "zh": "输入数",
+    "en": "Inputs"
+  },
+  "Max resolution 最大分辨率 px": {
+    "zh": "最大分辨率 px",
+    "en": "Max resolution px"
+  },
+  "With sending 含发送": {
+    "zh": "含发送",
+    "en": "With sending"
+  },
+  "Load 带载像素 px（含发送时）": {
+    "zh": "带载像素 px（含发送时）",
+    "en": "Load px (with sending)"
+  },
+  "Ports 网口数（含发送时）": {
+    "zh": "网口数（含发送时）",
+    "en": "Ports (with sending)"
+  },
+  "Max input 最大输入分辨率 px": {
+    "zh": "最大输入分辨率 px",
+    "en": "Max input px"
+  },
+  "Cabinet 箱体": {
+    "zh": "箱体",
+    "en": "Cabinet"
+  },
+  "Processor 视频处理器": {
+    "zh": "视频处理器",
+    "en": "Processor"
+  }
+}

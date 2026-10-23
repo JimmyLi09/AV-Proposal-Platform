@@ -9,6 +9,8 @@
 """
 from decimal import ROUND_HALF_UP, Decimal
 
+from .i18n import tr
+
 VOLTAGE = 230  # 单相 230 V，只用来在图上标回路电流
 LETTERS = "ABCDEF"
 
@@ -97,14 +99,20 @@ def build(values: dict, inputs: dict, params: dict, edits: dict | None = None) -
     checks = []
     for x in circuits:
         if x["over"]:
-            checks.append({"check": "BLOCK", "text": f"回路 {x['no']} 超载：{x['watts']} W > {int(cap_w)} W"})
+            checks.append({"check": "BLOCK", "text": tr(f"回路 {x['no']} 超载：{x['watts']} W > {int(cap_w)} W",
+                                                     f"Circuit {x['no']} overloaded: {x['watts']} W > {int(cap_w)} W")})
     for x in cables:
         if x["over"]:
-            checks.append({"check": "BLOCK", "text": f"网线 {x['no']} 超载：{x['px']:,} px > {int(cap_px):,} px"})
+            checks.append({"check": "BLOCK", "text": tr(f"网线 {x['no']} 超载：{x['px']:,} px > {int(cap_px):,} px",
+                                                     f"Data cable {x['no']} overloaded: {x['px']:,} px > {int(cap_px):,} px")})
     if n_circuits != values.get("circuits"):
-        checks.append({"check": "NOTE", "text": f"图上整列分组是 {n_circuits} 路，F6 按总功率算是 {values.get('circuits')} 路"})
+        checks.append({"check": "NOTE", "text": tr(
+            f"图上整列分组是 {n_circuits} 路，F6 按总功率算是 {values.get('circuits')} 路",
+            f"Grouping whole columns gives {n_circuits} circuits; F6 on total power gives {values.get('circuits')}")})
     if n_cables != values.get("data_runs"):
-        checks.append({"check": "NOTE", "text": f"图上蛇形分组是 {n_cables} 根，F9 按总像素算是 {values.get('data_runs')} 根"})
+        checks.append({"check": "NOTE", "text": tr(
+            f"图上蛇形分组是 {n_cables} 根，F9 按总像素算是 {values.get('data_runs')} 根",
+            f"Snake grouping gives {n_cables} cables; F9 on total pixels gives {values.get('data_runs')}")})
     return {
         "width": int(_d(inputs["width_mm"])), "height": sum(rows), "cols": cols, "col_w": col_w, "rows": rows,
         "sizes": {letter[int(h)]: {"w": int(w), "h": int(h), "count": int(n)} for w, h, n in counts},

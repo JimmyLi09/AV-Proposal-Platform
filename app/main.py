@@ -1,11 +1,11 @@
 from pathlib import Path
 
 import yaml
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import sessionmaker
 
-from . import annotate, api, workspace
+from . import annotate, api, i18n, workspace
 from .db import make_engine, migrate
 from .products import api as products_api
 from .rules import api as rules_api
@@ -33,6 +33,13 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
     migrate(engine)
 
     app = FastAPI(title="AV Proposal Platform")
+
+    @app.middleware("http")
+    async def language(request: Request, call_next):
+        """界面语言（CR-4）：浏览器每个请求都带 X-Lang。"""
+        with i18n.use(request.headers.get("x-lang")):
+            return await call_next(request)
+
     app.state.data_dir = data_dir
     app.state.oda = cfg.get("oda_converter") or None
     app.state.Session = sessionmaker(engine, expire_on_commit=False)
