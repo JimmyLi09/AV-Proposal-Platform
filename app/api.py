@@ -93,6 +93,13 @@ class SessionIn(BaseModel):
     user_id: int
 
 
+@router.get("/capabilities")
+def capabilities(request: Request):
+    """服务器上装了哪些可选组件（界面据此决定按钮能不能点）。"""
+    from .drawing_export import oda_available
+    return {"dwg": oda_available(request.app.state.oda)}
+
+
 @router.get("/users")
 def list_users(db: Session = Depends(get_db)):
     return [user_out(u) for u in db.scalars(select(User).order_by(User.name))]

@@ -35,6 +35,13 @@ python -m pip install --disable-pip-version-check --no-warn-script-location --on
     --target (Join-Path $Out "python\Lib\site-packages") -r (Join-Path $Root "requirements.txt")
 if ($LASTEXITCODE) { throw "pip install 失败" }
 
+# 2b. 打印 PDF 用的无头 Chromium（Playwright 的 chromium-headless-shell），放进程序目录的 browsers\，
+#     服务启动时用 PLAYWRIGHT_BROWSERS_PATH 指过去（见 avp-service.xml）
+$env:PLAYWRIGHT_BROWSERS_PATH = Join-Path $Out "browsers"
+& (Join-Path $Out "python\python.exe") -m playwright install --only-shell chromium
+if ($LASTEXITCODE) { throw "Chromium 下载失败" }
+Remove-Item Env:PLAYWRIGHT_BROWSERS_PATH
+
 # 3. 程序和界面（服务器自己的 deploy.local.yaml 由安装程序写，不打包）
 Copy-Item (Join-Path $Root "app") $Out -Recurse
 Get-ChildItem (Join-Path $Out "app") -Recurse -Directory -Filter "__pycache__" | Remove-Item -Recurse -Force

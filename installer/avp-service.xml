@@ -8,6 +8,7 @@
   <arguments>-m app</arguments>
   <workingdirectory>%BASE%</workingdirectory>
   <env name="PYTHONUNBUFFERED" value="1"/>
+  <env name="PLAYWRIGHT_BROWSERS_PATH" value="%BASE%\browsers"/>
   <startmode>Automatic</startmode>
   <onfailure action="restart" delay="10 sec"/>
   <resetfailure>1 hour</resetfailure>

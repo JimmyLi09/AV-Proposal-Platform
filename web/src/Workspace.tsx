@@ -5,6 +5,7 @@ import AnnotateTab from "./Annotate";
 import BoqTab from "./Boq";
 import ConfirmInputs from "./Confirm";
 import DiagramTab from "./Diagram";
+import DrawingTab from "./Drawing";
 import { LINE_LABEL, StatusTag } from "./labels";
 import { PRODUCT_STATUS } from "./Products";
 
@@ -60,7 +61,7 @@ export default function Workspace({ id }: { id: number }) {
         <>
           <div className="row">
             {[["rec", "Recommendation 推荐"], ["calc", "Calculations 计算依据"], ["diagram", "Diagram 示意图"],
-              ["boq", "BOQ 工程量清单"], ["annotate", "Annotate 标注"]].map(([k, v]) => (
+              ["boq", "BOQ 工程量清单"], ["annotate", "Annotate 标注"], ["drawing", "Drawing 图纸"]].map(([k, v]) => (
               <button key={k} className={`pill ${tab === k ? "active" : ""}`} onClick={() => setTab(k)}>
                 {v}
               </button>
@@ -81,6 +82,8 @@ export default function Workspace({ id }: { id: number }) {
             : <section className="card"><p className="muted">先选定箱体并算出箱体数，才能生成示意图。</p></section>)}
           {tab === "boq" && view.boq && <BoqTab view={view} boq={view.boq} onApply={apply} />}
           {tab === "annotate" && <AnnotateTab view={view} onSaved={() => apply(api<WorkspaceView>(`/proposals/${id}`))} />}
+          {tab === "drawing" && (view.drawing ? <DrawingTab view={view} drawing={view.drawing} onApply={apply} />
+            : <section className="card"><p className="muted">先选定箱体并算出箱体数、回路和网线，才能出图。</p></section>)}
         </>
       )}
     </>

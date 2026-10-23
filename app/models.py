@@ -116,6 +116,8 @@ class Revision(Base):
     cabinet_id: Mapped[str | None] = mapped_column(String(40))  # 换型号：选了推荐以外的箱体
     # 客户版 BOQ 里人改过的内容：{group, rows: {行: {title, specs, qty, reason, by, at}}, added: [手动添加的行]}
     boq_edits: Mapped[dict | None] = mapped_column(JSON)
+    # 拼接与线路图里手动调整的分组：{power: {箱体编号: 回路}, data: {箱体编号: 网线}}（CR-3）
+    drawing_edits: Mapped[dict | None] = mapped_column(JSON)
     # 每个输入的来源与确认：{字段: {source: manual|file, confidence, filename, location, snippet,
     #                              extracted_id, confirmed_by, confirmed_at}}
     input_meta: Mapped[dict | None] = mapped_column(JSON)

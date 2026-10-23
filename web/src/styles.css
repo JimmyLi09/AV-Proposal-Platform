@@ -175,3 +175,16 @@ input.manual { background: #FFFBEA; border-color: #E8C96A; }
 .note { font-style: italic; margin-top: 4px; }
 .nowrap { white-space: nowrap; }
 input.wide { min-width: 320px; }
+
+/* 拼接与线路图（CR-3） */
+.drawing-wrap { overflow-x: auto; border: 1px solid #E6E0D6; border-radius: 8px; background: #FFFFFF; }
+.drawing-wrap svg { max-width: 100%; height: auto; display: block; }
+.drawing-wrap.adjusting .cab { cursor: pointer; }
+.drawing-wrap.adjusting .cab:hover rect { stroke: #15203A; stroke-width: 2; }
+.drawing-wrap.hide-id .layer-id, .drawing-wrap.hide-size .layer-size, .drawing-wrap.hide-power .layer-power,
+.drawing-wrap.hide-data .layer-data, .drawing-wrap.hide-dim .layer-dim, .drawing-wrap.hide-note .layer-note { display: none; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+ul.plain { list-style: none; padding: 0; margin: 0; }
+ul.plain li { padding: 5px 0; border-bottom: 1px solid #EFEBE4; font-size: 13px; }
+.ok-banner { background: #E6F2EC; color: #2F7A5B; padding: 8px 10px; border-radius: 6px; }
+.error-banner { background: #FBE4E0; color: #A23A2A; padding: 8px 10px; border-radius: 6px; font-weight: 600; }

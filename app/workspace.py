@@ -2,12 +2,14 @@
 from typing import Literal
 from urllib.parse import quote
 
-from fastapi import APIRouter, Depends, HTTPException, Response
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from .api import file_out, get_db, iso, proposal_out, require_user
+from . import drawing_export
 from .boq import build, to_xlsx
+from .drawing import build as build_drawing
 from .models import (ExtractedField, ProductLibraryVersion, Project, Proposal, RuleSetVersion, TemplateVersion, User,
                      utcnow)
 from .rules.engine import LINES, calculate
@@ -74,6 +76,21 @@ def refresh_status(db: Session, prop: Proposal) -> None:
     rev.status = "calculated" if complete else "draft"
 
 
+BASIS_RULES = ["F3", "F4", "F5", "F6", "F7", "F9"]
+
+
+def drawing_of(used: dict, result: dict | None, edits: dict | None) -> dict | None:
+    """拼接与线路图（CR-3），带计算依据表；和技术方案、DXF 说明栏用同一份数据。"""
+    if not result or not result["rules"]:
+        return None
+    params = {p["name"]: p["value"] for p in used["rules"].content["params"]}
+    d = build_drawing(result["values"], result["values"], params, edits)
+    if d:
+        d["basis"] = [{"item": r["title"], "formula": r["trace"], "result": r["display"], "rule": r["id"]}
+                      for r in result["rules"] if r["id"] in BASIS_RULES]
+    return d
+
+
 def view(db: Session, prop: Proposal) -> dict:
     rev = prop.revisions[-1]
     used, result = compute(db, prop)
@@ -92,6 +109,7 @@ def view(db: Session, prop: Proposal) -> dict:
         "product_fed": LINES[prop.business_line]["product_fed"],
         "result": result,
         "boq": client_boq(db, prop, used, result, rev.boq_edits),
+        "drawing": drawing_of(used, result, rev.drawing_edits),
     }
 
 
@@ -280,6 +298,96 @@ def export_boq(proposal_id: int, db: Session = Depends(get_db)):
     meta = {"title": f"Bill of Quantities · {prop.name}",
             "subtitle": " · ".join(x for x in (project.name, project.client, project.project_no) if x), "stamp": stamp}
     name = f"{safe_name(project.name)}_{safe_name(prop.name)}_BOQ_Rev{rev.rev_no}.xlsx"
-    return Response(to_xlsx(boq, meta),
-                    media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    headers={"Content-Disposition": f"attachment; filename*=UTF-8''{quote(name)}"})
+    return _file(to_xlsx(boq, meta), name, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+
+# ---- 拼接与线路图（CR-3） ----
+
+class DrawingIn(BaseModel):
+    power: dict[str, int] = {}
+    data: dict[str, int] = {}
+
+
+@router.put("/{proposal_id}/drawing")
+def save_drawing(proposal_id: int, body: DrawingIn, _: User = Depends(require_user), db: Session = Depends(get_db)):
+    """手动调整回路 / 网线分组（随 Rev 保存）；空的 = 恢复自动。改完立即重新校验，超载的标红、不能批准。"""
+    prop = get_proposal(db, proposal_id)
+    rev = prop.revisions[-1]
+    used, result = compute(db, prop)
+    auto = drawing_of(used, result, None)
+    if auto is None:
+        raise HTTPException(409, "还没有计算结果，算完才能调整图纸")
+    ids = {c["id"]: c for c in auto["cabinets"]}
+    for kind, n in (("power", len(auto["circuits"])), ("data", len(auto["cables"]))):
+        for cid, no in getattr(body, kind).items():
+            if cid not in ids or not 1 <= no <= n:
+                raise HTTPException(422, f"没有箱体 {cid}，或编号超出 1–{n}")
+    rev.drawing_edits = {  # 和自动结果一样的不存
+        "power": {k: v for k, v in body.power.items() if v != ids[k]["circuit"]},
+        "data": {k: v for k, v in body.data.items() if v != ids[k]["cable"]},
+    }
+    db.commit()
+    return view(db, prop)
+
+
+def _drawing_export(db: Session, proposal_id: int):
+    prop = get_proposal(db, proposal_id)
+    rev = prop.revisions[-1]
+    used, result = compute(db, prop)
+    d = drawing_of(used, result, rev.drawing_edits)
+    if d is None:
+        raise HTTPException(409, "还没有计算结果，算完才能导出图纸")
+    project = db.get(Project, prop.project_id)
+    draft = rev.status != "approved"
+    stamp = " · ".join([f"Rev {rev.rev_no}", f"Rules {used['rules'].version}",
+                        f"Product library {used['library'].version}"] + (["DRAFT"] if draft else []))
+    meta = {"project": f"{project.name} · {prop.name}", "stamp": stamp, "draft": draft, "values": result["values"]}
+    base = f"{safe_name(prop.name)}_{{kind}}_Rev{rev.rev_no}{'_DRAFT' if draft else ''}"
+    return d, meta, base
+
+
+def _file(data: bytes | str, name: str, media: str) -> Response:
+    """下载文件名：filename* 带中文，filename 给不认 filename* 的浏览器一个纯 ASCII 的名字。"""
+    ascii_name = name.encode("ascii", "ignore").decode().replace('"', "") or "download"
+    return Response(data, media_type=media, headers={
+        "Content-Disposition": f"attachment; filename=\"{ascii_name}\"; filename*=UTF-8''{quote(name)}"})
+
+
+Lang = Literal["zh", "en"]
+
+
+@router.get("/{proposal_id}/drawing.svg")
+def export_drawing_svg(proposal_id: int, lang: Lang = "zh", layers: str | None = None, db: Session = Depends(get_db)):
+    d, meta, base = _drawing_export(db, proposal_id)
+    shown = None if layers is None else [x for x in layers.split(",") if x in drawing_export.LAYERS]
+    return _file(drawing_export.svg(d, meta, lang, shown), base.format(kind="Drawing") + ".svg", "image/svg+xml")
+
+
+@router.get("/{proposal_id}/drawing.dxf")
+def export_drawing_dxf(proposal_id: int, lang: Lang = "zh", db: Session = Depends(get_db)):
+    d, meta, base = _drawing_export(db, proposal_id)
+    return _file(drawing_export.dxf(d, meta, lang), base.format(kind="Drawing") + ".dxf", "application/dxf")
+
+
+@router.get("/{proposal_id}/drawing.dwg")
+def export_drawing_dwg(proposal_id: int, request: Request, lang: Lang = "zh", db: Session = Depends(get_db)):
+    oda = request.app.state.oda
+    if not drawing_export.oda_available(oda):
+        raise HTTPException(409, "服务器没有装 ODA File Converter，只能导出 DXF；装 ODA 后可导出 DWG")
+    d, meta, base = _drawing_export(db, proposal_id)
+    return _file(drawing_export.dwg(drawing_export.dxf(d, meta, lang), oda), base.format(kind="Drawing") + ".dwg",
+                 "application/acad")
+
+
+@router.get("/{proposal_id}/cabinets.xlsx")
+def export_cabinets(proposal_id: int, lang: Lang = "zh", db: Session = Depends(get_db)):
+    d, meta, base = _drawing_export(db, proposal_id)
+    return _file(drawing_export.cabinets_xlsx(d, meta, lang), base.format(kind="Cabinets").replace("_DRAFT", "") + ".xlsx",
+                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+
+@router.get("/{proposal_id}/drawing.pdf")
+def export_drawing_pdf(proposal_id: int, lang: Lang = "zh", db: Session = Depends(get_db)):
+    d, meta, base = _drawing_export(db, proposal_id)
+    kind = "技术方案" if lang == "zh" else "Technical"
+    return _file(drawing_export.pdf(d, meta, d["basis"], lang), base.format(kind=kind) + ".pdf", "application/pdf")
