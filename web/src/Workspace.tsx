@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api, RuleResult, send, WorkspaceView } from "./api";
+import { api, RuleResult, send, Suggestion, WorkspaceView } from "./api";
 import { CheckChip, Choices, Outcome, ResultsTable, StatusChip } from "./Calc";
 import AnnotateTab from "./Annotate";
 import BoqTab from "./Boq";
@@ -66,7 +66,8 @@ export default function Workspace({ id }: { id: number }) {
               </button>
             ))}
           </div>
-          {tab === "rec" && <Recommendation view={view} onCabinet={(cid) => saveInputs(cid)} />}
+          {tab === "rec" && <Recommendation view={view} onCabinet={(cid) => saveInputs(cid)}
+            onLibrary={() => apply(api<WorkspaceView>(`/proposals/${id}`))} />}
           {tab === "calc" && (
             <section className="card">
               <h2>
@@ -86,7 +87,7 @@ export default function Workspace({ id }: { id: number }) {
   );
 }
 
-function Recommendation({ view, onCabinet }: { view: WorkspaceView; onCabinet: (id: string) => void }) {
+function Recommendation({ view, onCabinet, onLibrary }: { view: WorkspaceView; onCabinet: (id: string) => void; onLibrary: () => void }) {
   const result = view.result!;
   const rec = result.recommendation;
   const byId = Object.fromEntries(result.rules.map((r) => [r.id, r])) as Record<string, RuleResult>;
@@ -142,6 +143,8 @@ function Recommendation({ view, onCabinet }: { view: WorkspaceView; onCabinet: (
         </div>
       </section>
 
+      {(result.suggestions ?? []).length > 0 && <Suggestions items={result.suggestions!} onAdded={onLibrary} />}
+
       <section className="card">
         <h2>
           Checks <span className="zh">校验</span>
@@ -167,5 +170,67 @@ function Recommendation({ view, onCabinet }: { view: WorkspaceView; onCabinet: (
         {blocked && <p className="error">有阻断项，修正之前不能导出。</p>}
       </section>
     </>
+  );
+}
+
+function Suggestions({ items, onAdded }: { items: Suggestion[]; onAdded: () => void }) {
+  const [error, setError] = useState("");
+  async function add(id: string) {
+    setError("");
+    try {
+      await send("POST", "/products/LED/reference", { id });
+      onAdded();
+    } catch (err) {
+      setError((err as Error).message);
+    }
+  }
+  return (
+    <section className="card">
+      <h2>
+        Suggested models <span className="zh">建议型号 · 未入库</span>
+      </h2>
+      <p className="muted">产品库里没有带载、网口都够的处理器 / 控制器。下面是参考型号表里的处理器（含发送），数值待核对规格书；选一款加进产品库后自动重算。</p>
+      <div className="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Model 型号</th>
+              <th>Load 带载</th>
+              <th>Ports 网口</th>
+              <th>Status 结论</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>
+            {items.map((s) => (
+              <tr key={s.id}>
+                <td className="strong">
+                  {s.model} <span className="tag st-sample">待核对规格书</span> {s.remark && <span className="muted small">{s.remark}</span>}
+                </td>
+                <td>
+                  {s.capacity_px / 1e6} MP · 负载 {s.load_pct} %
+                </td>
+                <td>
+                  {s.ports_used} / {s.ports}
+                </td>
+                <td>
+                  {s.status === "no" ? <span className="error">不推荐：{s.reason}</span>
+                    : <span className={`tag ${s.status === "recommended" ? "ck-PASS" : ""}`}>{s.label}</span>}
+                  {s.note && <span className="tag ck-NOTE">{s.note}</span>}
+                </td>
+                <td>
+                  {s.status !== "no" && (
+                    <button className="btn-outline small" onClick={() => add(s.id)}>
+                      Add to library 加入产品库
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      {error && <p className="error">{error}</p>}
+    </section>
   );
 }

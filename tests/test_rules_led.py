@@ -82,8 +82,8 @@ def test_royal_plaza_golden(r):
     assert r["F14"]["check"] == e["F14_viewing_check"]
     assert r["F15"]["check"] == e["F15_brightness_check"]["result"]
     assert (r["F15"]["status"] == "sample") == e["F15_brightness_check"]["sample"]
-    # F13 要信号源数，金标准没有给，单独测
-    assert [x["id"] for x in r.values() if x["error"] or x["missing"]] == ["F13"]
+    # 金标准没有给信号源数：CR-2 起按 1 路算（F13 带一条提示，单独测）
+    assert [x["id"] for x in r.values() if x["error"] or x["missing"]] == []
 
 
 def test_size_snapping_offers_two_sizes_without_error():
@@ -164,9 +164,11 @@ def test_f12_db_box(r):
     assert value(r["F12"], "db_boxes") == 1 and r["F12"]["status"] == "sample"
 
 
-def test_f13_processor_needs_signal_sources(r):
-    assert r["F13"]["missing"] == ["signal_sources"]  # 金标准没有信号源数，缺失要标出来
-    assert calc(signal_sources=1)["F13"]["display"] == "1 × Sample SP-1"
+def test_f13_empty_signal_sources_count_as_one(r):
+    # CR-2：信号源数量没填按 1 路算，并提示；填了就不提示
+    assert r["F13"]["missing"] == [] and r["F13"]["display"] == "1 × Sample SP-1"
+    assert (r["F13"]["check"], r["F13"]["note"]) == ("NOTE", "信号源数量没填，按 1 路计算")
+    assert calc(signal_sources=1)["F13"]["check"] is None
 
 
 def test_f14_viewing_distance_note_when_too_close():

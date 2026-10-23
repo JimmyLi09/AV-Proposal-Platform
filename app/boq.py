@@ -39,6 +39,8 @@ def build(template: dict, ctx: dict, edits: dict | None) -> dict:
     over = edits.get("rows") or {}
     rows = []
     for r in template["boq"]["rows"]:
+        if "when" in r and ctx.get(r["when"]) in (0, False):
+            continue
         title, specs = fill(r["title"], ctx), [fill(s, ctx) for s in r["specs"]]
         rule_qty = _qty(r["qty"], ctx, r["unit"])
         o = over.get(r["key"], {})

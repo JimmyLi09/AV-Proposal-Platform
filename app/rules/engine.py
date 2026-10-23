@@ -12,7 +12,7 @@ SEED = Path(__file__).parent / "seed"
 LINES = {"LED": {"steps": led.STEPS, "precheck": led.size_choices, "recommend": led.recommend,
                  "product_inputs": led.product_inputs, "catalog": led.catalog, "boq": led.boq,
                  "product_fed": led.PRODUCT_INPUTS, "diagram": led.diagram,
-                 "boq_context": led.boq_context, "boq_extra": led.BOQ_EXTRA}}
+                 "boq_context": led.boq_context, "boq_extra": led.BOQ_EXTRA, "suggest": led.suggest}}
 STATUSES = ["set", "review", "sample", "empty"]  # 越往后越不确定
 
 
@@ -178,7 +178,7 @@ def _step_display(step: str, outputs: dict) -> str:
     if step == "cabinet_layout" and outputs:
         return f"{_show(outputs['cabinets'])} 个（{outputs['layout']}）"
     if step == "controller_pick" and outputs:
-        return f"{_show(outputs['controller_qty'])} × {outputs['controller']}"
+        return outputs["controller"] if not outputs["controller_qty"] else f"{_show(outputs['controller_qty'])} × {outputs['controller']}"
     if step == "processor_pick" and outputs:
         return f"{_show(outputs['processor_qty'])} × {outputs['processor']}"
     return ""
@@ -193,7 +193,8 @@ def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None
     out["recommendation"] = rec
     out["boq"] = line["boq"](values, rec["cabinet"], inputs, library)
     out["values"] = line["boq_context"](values, rec["cabinet"], inputs)
-    out["diagram"] = line["diagram"](values, out["boq"], inputs, rec["cabinet"], library)
+    out["suggestions"] = line["suggest"](values, inputs, library)
+    out["diagram"] = line["diagram"](values, out["boq"], inputs, rec["cabinet"], library, out["suggestions"])
     if out["diagram"]:
         out["diagram"]["svg"] = concept_svg(out["diagram"])
     return out

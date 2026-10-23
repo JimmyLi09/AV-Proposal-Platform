@@ -17,6 +17,8 @@ export function keySpecs(p: Product) {
   if (p.category === "cabinet")
     return `P${n("pixel_pitch_mm") ?? "?"} · module 模组 ${n("module_w_mm") ?? "?"} × ${n("module_h_mm") ?? "?"} · ${n("brightness_nits") ?? "?"} nits${p.ip ? ` · ${p.ip}` : ""}`;
   if (p.category === "controller") return `${(n("capacity_px") ?? 0) / 1e6} MP · ${n("ports") ?? "?"} ports 网口`;
+  if (p.category === "processor" && p.sending)
+    return `With sending 含发送 · ${(n("capacity_px") ?? 0) / 1e6} MP · ${n("ports") ?? "?"} ports 网口 · ${n("inputs") ?? "?"} inputs 输入`;
   if (p.category === "processor") return `${n("inputs") ?? "?"} inputs 输入 · up to 最高 ${(n("max_px") ?? 0) / 1e6} MP`;
   return "";
 }
@@ -284,6 +286,7 @@ function Field({ def, value, onChange }: { def: FieldDef; value: unknown; onChan
       );
     }
     case "bool":
+    case "flag":
       return <input type="checkbox" aria-label={def.label} checked={!!value} onChange={(e) => onChange(e.target.checked)} />;
     case "number":
       return <input type="number" step="any" aria-label={def.label} value={(value as number | null) ?? ""}

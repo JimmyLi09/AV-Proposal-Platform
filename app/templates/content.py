@@ -1,6 +1,7 @@
 """模板：客户版 BOQ 的默认行（第 6 步再加章节、信头、条款）。每次保存整份另存新版本。
 
 行里的 {名字} 换成规则结果或输入；数量要么是固定数（例如 1 lot），要么直接取某个规则结果，模板不自己算数量。
+when（可选）：写一个规则结果的名字，它为 0 时这一行不出现（例如用了处理器含发送，就没有单独的控制器行）。
 """
 import json
 import re
@@ -52,6 +53,8 @@ def validate(content: dict, line: str, known: set[str]) -> None:
         for k in ("note", "source"):
             if k in r:
                 _text(f"{where} {'备注' if k == 'note' else '来源'}", r[k], known)
+        if "when" in r and r["when"] not in known:
+            raise TemplateError(f"{where}：「出现条件」要填某个规则结果的名字")
         if r["unit"] not in UNITS:
             raise TemplateError(f"{where}：单位只能是 {' / '.join(UNITS)}")
         qty = r["qty"]
