@@ -27,8 +27,7 @@
     {"name": "spare_module_min", "group": "Spares 备品", "label": "Module spare minimum 模组备品最少", "unit": "块", "value": 2, "status": "sample"},
     {"name": "spare_psu_ratio", "group": "Spares 备品", "label": "PSU / receiving card spare rate 电源 / 接收卡备品比例", "unit": "", "value": 0.02, "status": "sample"},
     {"name": "spare_psu_min", "group": "Spares 备品", "label": "PSU / receiving card spare minimum 电源 / 接收卡备品最少", "unit": "个", "value": 1, "status": "sample"},
-    {"name": "viewing_m_per_mm", "group": "Checks 校核", "label": "Min. viewing distance 最近观看距离（每 mm 点间距）", "unit": "m", "value": 1.0, "status": "review"},
-    {"name": "gst_rate", "group": "Commercial 商务", "label": "GST 消费税率（按售价）", "unit": "", "value": 0.09, "status": "sample"}
+    {"name": "viewing_m_per_mm", "group": "Checks 校核", "label": "Min. viewing distance 最近观看距离（每 mm 点间距）", "unit": "m", "value": 1.0, "status": "review"}
   ],
   "rules": [
     {"id": "F1", "title": "Area 面积", "note": "屏宽 × 屏高。",

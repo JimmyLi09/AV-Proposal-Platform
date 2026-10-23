@@ -1,11 +1,9 @@
-"""第 3 步验收：推荐全部来自产品库；控制器带载不够时阻断。外加 BOQ 数量来源、单价加总、过期标红。"""
+"""第 3 步验收：推荐全部来自产品库；控制器带载不够时阻断。外加内部明细的数量来源（客户版 BOQ 见 test_cr6_boq.py）。"""
 import copy
-from datetime import date
 
 import pytest
 from fastapi.testclient import TestClient
 
-from app.boq import price
 from app.main import create_app
 from app.products.library import LibraryError, load_seed as load_library, validate
 from app.rules import led
@@ -89,12 +87,7 @@ def test_library_validation(change):
         validate(content, "LED")
 
 
-# ---- BOQ 与单价 ----
-
-SAMPLE_COSTS = {k: {"amount_cents": v * 100, "valid_until": "2027-01-01", "sample": True}
-                for k, v in [("IC-25:640x480", 1200), ("IC-25:640x640", 1500), ("IC-25:module", 90), ("SP-1", 3500),
-                             ("power_cable", 120), ("data_cable", 60), ("db_box", 900), ("install:wall", 2200)]}
-SAMPLE_COSTS["SC-4"] = {"amount_cents": 280000, "valid_until": "2026-09-30", "sample": True}
+# ---- 内部明细 ----
 
 
 def test_boq_quantities_come_from_rules():
@@ -114,20 +107,6 @@ def test_boq_quantities_come_from_rules():
         ("Data cable 数据线", "Cat6"): (5, "4 路 + 备用，F9"),
         ("墙面支架 1 套（不含钢结构）", "—"): (1, "F16"),
     }
-
-
-def test_pricing_matches_prototype_totals():
-    boq = calculate(RULES, LIBRARY, INPUT)["boq"]
-    manual = [{"item": "Installation labour 安装人工", "model": "", "qty": 1, "unit": "项", "unit_cost": 400000, "why": ""},
-              {"item": "Transport 运输", "model": "", "qty": 1, "unit": "项", "unit_cost": 60000, "why": ""}]
-    p = price(boq, [], SAMPLE_COSTS, date(2026, 10, 14))
-    assert p["subtotal"] == 5_536_000  # S$ 55,360
-    assert (p["missing"], p["expired"]) == (2, 1)  # 备用电源、备用接收卡没有单价；SC-4 单价已过期
-    with_manual = price(boq, manual, SAMPLE_COSTS, date(2026, 10, 14))
-    assert with_manual["subtotal"] == 5_996_000  # S$ 59,960，与原型 Cost & BOQ 页一致
-    assert [x["manual"] for x in with_manual["lines"][-2:]] == [True, True]
-    included = [x for x in with_manual["lines"] if x["included"]]
-    assert len(included) == 2 and all(x["subtotal"] is None for x in included)
 
 
 # ---- API 流程 ----
@@ -155,32 +134,11 @@ def test_workspace_flow(client):
     v = put_inputs(client, INPUT)
     assert v["rev"]["status"] == "calculated"
     assert v["result"]["recommendation"]["cabinet"]["id"] == "IC-25"
-    assert v["boq"]["subtotal"] == 5_536_000 and v["boq"]["expired"] == 1
-    assert v["gst_rate"] == 0.09
+    assert len(v["boq"]["rows"]) == 7 and v["template_version"] == "v1.0"
 
     assert put_inputs(client, {k: x for k, x in INPUT.items() if k != "signal_sources"})["rev"]["status"] == "draft"
     bad = client.put(f"/api/proposals/{client.proposal}/inputs", json={"inputs": INPUT | {"module_w_mm": 300}})
     assert bad.status_code == 422  # 模组尺寸由产品库带出，不能手填
-
-
-def test_new_unit_cost_replaces_expired_one(client):
-    put_inputs(client, INPUT)
-    assert client.post("/api/costs", json={"key": "SC-4", "amount": 2900}).status_code == 201
-    boq = client.get(f"/api/proposals/{client.proposal}").json()["boq"]
-    sc4 = next(x for x in boq["lines"] if x["key"] == "SC-4")
-    assert sc4["unit_cost"] == 290000 and not sc4["cost_expired"] and boq["expired"] == 0
-
-
-def test_manual_lines_and_sell_price(client):
-    put_inputs(client, INPUT)
-    r = client.put(f"/api/proposals/{client.proposal}/commercial", json={
-        "manual_lines": [{"item": "Installation labour 安装人工", "qty": 1, "unit": "项", "unit_cost": 4000},
-                         {"item": "Transport 运输", "qty": 1, "unit": "项", "unit_cost": 600}],
-        "sell_price": 80000, "price_display": "total"})
-    v = r.json()
-    assert v["boq"]["subtotal"] == 5_996_000
-    assert v["rev"]["sell_price_cents"] == 8_000_000 and v["rev"]["price_display"] == "total"
-    assert v["boq"]["lines"][-1]["why"] == "Jimmy 添加"
 
 
 def test_library_edit_makes_new_version_and_controller_block(client):

@@ -11,7 +11,8 @@ from .expr import ExprError, evaluate, fmt, names, num, parse, substitute
 SEED = Path(__file__).parent / "seed"
 LINES = {"LED": {"steps": led.STEPS, "precheck": led.size_choices, "recommend": led.recommend,
                  "product_inputs": led.product_inputs, "catalog": led.catalog, "boq": led.boq,
-                 "product_fed": led.PRODUCT_INPUTS, "diagram": led.diagram}}
+                 "product_fed": led.PRODUCT_INPUTS, "diagram": led.diagram,
+                 "boq_context": led.boq_context, "boq_extra": led.BOQ_EXTRA}}
 STATUSES = ["set", "review", "sample", "empty"]  # 越往后越不确定
 
 
@@ -20,6 +21,15 @@ def load_seed(line: str) -> tuple[dict, dict]:
     name = line.lower()
     return (json.loads((SEED / f"{name}.json").read_text(encoding="utf-8")),
             json.loads((SEED / f"{name}_sample.json").read_text(encoding="utf-8")))
+
+
+def value_names(content: dict) -> set[str]:
+    """规则集里所有输入和规则结果的名字（客户版 BOQ 模板只能引用这些）。"""
+    line = LINES[content["business_line"]]
+    out = {i["name"] for i in content["inputs"]}
+    for rule in content["rules"]:
+        out |= set(line["steps"][rule["step"]][2]) if "step" in rule else {o["name"] for o in rule["outputs"]}
+    return out | set(line["boq_extra"])
 
 
 def _worst(statuses) -> str:
@@ -175,13 +185,14 @@ def _step_display(step: str, outputs: dict) -> str:
 
 
 def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None = None) -> dict:
-    """完整流程：从产品库推荐 → 带出产品参数 → 跑规则 → 出 BOQ 行（未加价）。"""
+    """完整流程：从产品库推荐 → 带出产品参数 → 跑规则 → 内部明细，以及客户版 BOQ 模板要用的值。"""
     line = LINES[content["business_line"]]
     rec = line["recommend"](inputs, library, cabinet_id)
     out = run(content, {**inputs, **line["product_inputs"](rec["cabinet"])}, line["catalog"](library, rec["cabinet"]))
     values = {ln["name"]: ln["value"] for r in out["rules"] for ln in r["lines"]}
     out["recommendation"] = rec
     out["boq"] = line["boq"](values, rec["cabinet"], inputs, library)
+    out["values"] = line["boq_context"](values, rec["cabinet"], inputs)
     out["diagram"] = line["diagram"](values, out["boq"], inputs, rec["cabinet"], library)
     if out["diagram"]:
         out["diagram"]["svg"] = concept_svg(out["diagram"])

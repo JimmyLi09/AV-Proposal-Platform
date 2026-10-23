@@ -20,7 +20,7 @@ export default function AnnotateTab({ view, onSaved }: { view: WorkspaceView; on
   const [error, setError] = useState("");
   const [saved, setSaved] = useState<AnnotationDoc | null>(null);
   const box = useRef<HTMLDivElement>(null);
-  const deviceLines = (view.boq?.lines ?? []).filter((l) => l.key && !l.included);
+  const deviceLines = (view.result?.boq ?? []).filter((l) => l.key && !l.included);
 
   useEffect(() => {
     if (fileId === null) return;
@@ -145,12 +145,12 @@ export default function AnnotateTab({ view, onSaved }: { view: WorkspaceView; on
                 <input aria-label={`标记 ${i + 1} 名称`} value={m.label} onChange={(e) => edit(i, { label: e.target.value })} />
                 <input aria-label={`标记 ${i + 1} 说明`} placeholder="Note 说明" value={m.note} onChange={(e) => edit(i, { note: e.target.value })} />
                 {m.type === "device" && (
-                  <select aria-label={`标记 ${i + 1} 对应 BOQ 行`} value={m.boq_key ?? ""}
+                  <select aria-label={`标记 ${i + 1} 对应明细行`} value={m.boq_key ?? ""}
                     onChange={(e) => {
                       const line = deviceLines.find((l) => l.key === e.target.value);
                       edit(i, { boq_key: e.target.value || null, label: line ? line.item : m.label });
                     }}>
-                    <option value="">对应 BOQ 行（可选）</option>
+                    <option value="">对应 BOQ 明细行（可选）</option>
                     {deviceLines.map((l) => (
                       <option key={l.key} value={l.key}>
                         {l.item} · {l.model}

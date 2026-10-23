@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { api, Boq, ManualLine, RuleResult, send, WorkspaceView } from "./api";
-import { CheckChip, Choices, money, Outcome, ResultsTable, StatusChip } from "./Calc";
+import { api, RuleResult, send, WorkspaceView } from "./api";
+import { CheckChip, Choices, Outcome, ResultsTable, StatusChip } from "./Calc";
 import AnnotateTab from "./Annotate";
+import BoqTab from "./Boq";
 import ConfirmInputs from "./Confirm";
 import DiagramTab from "./Diagram";
 import { LINE_LABEL, StatusTag } from "./labels";
@@ -48,7 +49,7 @@ export default function Workspace({ id }: { id: number }) {
           {proposal.name} <span className="zh">{LINE_LABEL[proposal.business_line]}</span>
         </h1>
         <p className="muted">
-          <StatusTag status={rev.status} rev={rev.rev_no} /> · 按规则 {view.rules_version}、产品库 {view.library_version} 计算
+          <StatusTag status={rev.status} rev={rev.rev_no} /> · 按规则 {view.rules_version}、产品库 {view.library_version}、模板 {view.template_version} 计算
         </p>
       </div>
 
@@ -59,7 +60,7 @@ export default function Workspace({ id }: { id: number }) {
         <>
           <div className="row">
             {[["rec", "Recommendation 推荐"], ["calc", "Calculations 计算依据"], ["diagram", "Diagram 示意图"],
-              ["cost", "Cost & BOQ 成本与 BOQ"], ["annotate", "Annotate 标注"]].map(([k, v]) => (
+              ["boq", "BOQ 工程量清单"], ["annotate", "Annotate 标注"]].map(([k, v]) => (
               <button key={k} className={`pill ${tab === k ? "active" : ""}`} onClick={() => setTab(k)}>
                 {v}
               </button>
@@ -77,7 +78,7 @@ export default function Workspace({ id }: { id: number }) {
           )}
           {tab === "diagram" && (result.diagram ? <DiagramTab view={view} diagram={result.diagram} />
             : <section className="card"><p className="muted">先选定箱体并算出箱体数，才能生成示意图。</p></section>)}
-          {tab === "cost" && view.boq && <CostBoq view={view} boq={view.boq} onSaved={apply} />}
+          {tab === "boq" && view.boq && <BoqTab view={view} boq={view.boq} onApply={apply} />}
           {tab === "annotate" && <AnnotateTab view={view} onSaved={() => apply(api<WorkspaceView>(`/proposals/${id}`))} />}
         </>
       )}
@@ -166,167 +167,5 @@ function Recommendation({ view, onCabinet }: { view: WorkspaceView; onCabinet: (
         {blocked && <p className="error">有阻断项，修正之前不能导出。</p>}
       </section>
     </>
-  );
-}
-
-function CostBoq({ view, boq, onSaved }: { view: WorkspaceView; boq: Boq; onSaved: (p: Promise<WorkspaceView>) => void }) {
-  const id = view.proposal.id;
-  const [manual, setManual] = useState<ManualLine[]>(view.rev.manual_lines);
-  const [sell, setSell] = useState<string>(view.rev.sell_price_cents === null ? "" : String(view.rev.sell_price_cents / 100));
-  const [display, setDisplay] = useState(view.rev.price_display);
-  const [prices, setPrices] = useState<Record<string, string>>({});
-  const [error, setError] = useState("");
-  const ruleLines = boq.lines.filter((l) => !l.manual);
-  const manualTotals = boq.lines.filter((l) => l.manual);
-  const sellNum = sell === "" ? null : Number(sell);
-
-  async function setPrice(key: string) {
-    setError("");
-    try {
-      await send("POST", "/costs", { key, amount: Number(prices[key]) });
-      setPrices({ ...prices, [key]: "" });
-      onSaved(api<WorkspaceView>(`/proposals/${id}`));
-    } catch (err) {
-      setError((err as Error).message);
-    }
-  }
-
-  function saveCommercial() {
-    onSaved(send<WorkspaceView>("PUT", `/proposals/${id}/commercial`, {
-      manual_lines: manual.map((m) => ({ ...m, unit_cost: m.unit_cost === null ? null : m.unit_cost / 100 })),
-      sell_price: sellNum,
-      price_display: display,
-    }));
-  }
-
-  const editManual = (i: number, patch: Partial<ManualLine>) => setManual(manual.map((m, j) => (j === i ? { ...m, ...patch } : m)));
-
-  return (
-    <section className="card">
-      <h2>
-        Cost &amp; BOQ <span className="zh">成本与 BOQ</span>
-      </h2>
-      <p className="muted">数量来自规则；单价人工填写，系统只做加总。单价是共用的价格表，改了会影响所有用到这个产品的方案。</p>
-      {(boq.missing > 0 || boq.expired > 0) && (
-        <p className="warn">
-          {boq.missing} 行没有成本，{boq.expired} 个成本已过有效期。Proposal 仍可导出；这些行会列在审核页中。
-        </p>
-      )}
-      {error && <p className="error">{error}</p>}
-      <div className="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Item 项目</th>
-              <th>Model 型号</th>
-              <th>Qty 数量</th>
-              <th>Why this qty 数量依据</th>
-              <th>Unit cost 单价 S$</th>
-              <th>Subtotal 小计 S$</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ruleLines.map((l, i) => (
-              <tr key={`r${i}`}>
-                <td>{i + 1}</td>
-                <td>{l.item}</td>
-                <td>{l.model}</td>
-                <td>
-                  {l.qty} {l.unit}
-                </td>
-                <td>{l.why}</td>
-                <td>
-                  {l.included ? (
-                    <span className="tag">Included 已含</span>
-                  ) : (
-                    <div className="row tight">
-                      {l.unit_cost !== null && l.unit_cost !== undefined ? (
-                        <span className={l.cost_expired ? "error" : ""}>{money(l.unit_cost)}</span>
-                      ) : (
-                        <span className="tag st-empty">No cost 无成本</span>
-                      )}
-                      {l.cost_valid_until && (
-                        <span className={`small ${l.cost_expired ? "error" : "muted"}`}>
-                          {l.cost_expired ? "已过有效期" : "有效期至"} {l.cost_valid_until}
-                        </span>
-                      )}
-                      {l.cost_sample && <span className="tag st-sample">示例价格</span>}
-                      <input type="number" step="any" className="num" aria-label={`${l.item} 新单价`} placeholder="新单价" value={prices[l.key] ?? ""}
-                        onChange={(e) => setPrices({ ...prices, [l.key]: e.target.value })} />
-                      <button className="btn-outline small" disabled={!prices[l.key]} onClick={() => setPrice(l.key)}>
-                        Set 填写
-                      </button>
-                    </div>
-                  )}
-                </td>
-                <td>{l.included ? "—" : money(l.subtotal)}</td>
-              </tr>
-            ))}
-            {manual.map((m, i) => (
-              <tr key={`m${i}`}>
-                <td>{ruleLines.length + i + 1}</td>
-                <td>
-                  <input aria-label={`手动行 ${i + 1} 项目`} value={m.item} onChange={(e) => editManual(i, { item: e.target.value })} />{" "}
-                  <span className="tag">manual 手工</span>
-                </td>
-                <td>
-                  <input className="num" aria-label={`手动行 ${i + 1} 型号`} value={m.model} onChange={(e) => editManual(i, { model: e.target.value })} />
-                </td>
-                <td>
-                  <input type="number" step="any" className="num" aria-label={`手动行 ${i + 1} 数量`} value={m.qty ?? ""}
-                    onChange={(e) => editManual(i, { qty: e.target.value === "" ? null : Number(e.target.value) })} />
-                </td>
-                <td>{m.why || "—"}</td>
-                <td>
-                  <input type="number" step="any" className="num" aria-label={`手动行 ${i + 1} 单价`}
-                    value={m.unit_cost === null ? "" : m.unit_cost / 100}
-                    onChange={(e) => editManual(i, { unit_cost: e.target.value === "" ? null : Math.round(Number(e.target.value) * 100) })} />{" "}
-                  <button className="btn-link" onClick={() => setManual(manual.filter((_, j) => j !== i))}>
-                    Remove 删除
-                  </button>
-                </td>
-                <td>{money(manualTotals[i]?.subtotal)}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="row">
-        <button className="btn-outline" onClick={() => setManual([...manual, { item: "", model: "", qty: 1, unit: "项", unit_cost: null, why: "" }])}>
-          + Add manual line 添加手动行
-        </button>
-      </div>
-
-      <div className="totals">
-        <div>
-          Cost subtotal 成本小计（{boq.count} 行中 {boq.priced} 行）<b>S$ {money(boq.subtotal)}</b>
-        </div>
-        <label className="row tight">
-          Sell price 售价（人工填写，可选）S$
-          <input type="number" step="any" className="num" aria-label="Sell price 售价" value={sell} onChange={(e) => setSell(e.target.value)} />
-        </label>
-        <div>
-          GST 按售价 {view.gst_rate !== null ? `${view.gst_rate * 100}%` : "—"}
-          {view.gst_status && <StatusChip status={view.gst_status} />}
-          {sellNum !== null && view.gst_rate !== null && <b> S$ {money(Math.round(sellNum * view.gst_rate * 100))}</b>}
-          <span className="muted"> · V1 不计算加价。</span>
-        </div>
-        <div className="row tight">
-          Prices in the PDF PDF 中的价格：
-          {[["none", "Not shown 不显示（仅数量）"], ["total", "Sell price total only 仅售价总额"], ["itemised", "Itemised sell prices 分项售价"]].map(([k, v]) => (
-            <label key={k} className="row tight check">
-              <input type="radio" name="price_display" checked={display === k} onChange={() => setDisplay(k)} /> {v}
-            </label>
-          ))}
-        </div>
-        <p className="muted">成本仅供内部，不会打印。V1 中平台上所有人都能看到成本。</p>
-        <div>
-          <button className="btn-primary" onClick={saveCommercial}>
-            Save 保存
-          </button>
-        </div>
-      </div>
-    </section>
   );
 }

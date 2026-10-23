@@ -146,14 +146,36 @@ export type BoqLine = {
   rule?: string | null;
   included: boolean;
   manual: boolean;
-  unit_cost?: number | null;
-  cost_valid_until?: string | null;
-  cost_sample?: boolean;
-  cost_expired?: boolean;
-  subtotal?: number | null;
 };
-export type Boq = { lines: BoqLine[]; subtotal: number; priced: number; count: number; missing: number; expired: number };
-export type ManualLine = { item: string; model: string; qty: number | null; unit: string; unit_cost: number | null; why: string };
+
+// 客户版 BOQ（CR-6，不含价格）
+export type ClientBoqRow = {
+  no: number;
+  key: string;
+  title: string;
+  title_default: string | null;
+  specs: string[];
+  specs_default: string[] | null;
+  qty: number | null;
+  rule_qty: number | null;
+  unit: string;
+  note: string;
+  source: string;
+  manual: boolean;
+  reason: string | null;
+  by: string | null;
+  at: string | null;
+  added: boolean;
+};
+export type ClientBoq = {
+  group: string;
+  group_default: string;
+  rows: ClientBoqRow[];
+  manual: Pick<ClientBoqRow, "no" | "key" | "title" | "rule_qty" | "qty" | "unit" | "reason" | "by" | "at" | "added">[];
+};
+export type TemplateRow = { key: string; title: string; specs: string[]; qty: number | string; unit: string; note?: string; source?: string };
+export type TemplateContent = { business_line: string; boq: { group: string; rows: TemplateRow[] } };
+export type TemplateVersion = Version<TemplateContent> & { units: string[]; names: string[] };
 
 export type InputMeta = {
   source: "manual" | "file";
@@ -186,19 +208,15 @@ export type WorkspaceView = {
     cabinet_id: string | null;
     input_meta: Record<string, InputMeta>;
     annotations: Record<string, AnnotationDoc>;
-    manual_lines: ManualLine[];
-    sell_price_cents: number | null;
-    price_display: string;
   };
   pending: string[];
   files: SourceFile[];
   candidates: Record<string, Candidate[]>;
   rules_version: string;
   library_version: string;
+  template_version: string;
   input_defs: InputDef[];
   product_fed: string[];
-  gst_rate: number | null;
-  gst_status: string | null;
   result: RunResult | null;
-  boq: Boq | null;
+  boq: ClientBoq | null;
 };
