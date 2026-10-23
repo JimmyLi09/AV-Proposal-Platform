@@ -90,6 +90,24 @@ def render():
     img.save(OUT / "Concept_render.png")
 
 
+def dimension_image():
+    """CR-1：图纸常见写法，尺寸线旁边单独一个数字。框上方「4480mm」，右侧「2560mm」，框里是标题。"""
+    img = Image.new("RGB", (1400, 900), "white")
+    d = ImageDraw.Draw(img)
+    font = ImageFont.truetype(FONT, 40)
+    d.rectangle((250, 220, 1050, 660), outline="black", width=4)
+    d.text((650, 440), "P2.5 LED SCREEN", fill="black", font=font, anchor="mm")
+    d.line((250, 160, 1050, 160), fill="black", width=2)  # 上方尺寸线
+    for x in (250, 1050):
+        d.line((x, 140, x, 180), fill="black", width=2)
+    d.text((650, 110), "4480mm", fill="black", font=font, anchor="mm")
+    d.line((1110, 220, 1110, 660), fill="black", width=2)  # 右侧尺寸线
+    for y in (220, 660):
+        d.line((1090, y, 1130, y), fill="black", width=2)
+    d.text((1250, 440), "2560mm", fill="black", font=font, anchor="mm")
+    img.save(OUT / "Dimension_lines.png")
+
+
 def dxf():
     """CAD 立面（DXF）：标注写在文字里。"""
     doc = ezdxf.new()
@@ -101,6 +119,6 @@ def dxf():
 
 
 if __name__ == "__main__":
-    for make in (text_pdf, excel, photo, scanned_pdf, render, dxf):
+    for make in (text_pdf, excel, photo, scanned_pdf, render, dxf, dimension_image):
         make()
     print("samples written to", OUT)

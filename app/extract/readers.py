@@ -1,12 +1,15 @@
-"""在服务器上读客户文件：PDF 先读文字层，读不到再文字识别（OCR）；图片走 OCR；Excel 按栏名；DXF 读文字；
-DWG 先用免费的 ODA File Converter 转成 DXF 副本。原件只读，截图和转换结果都另存在 derived 目录。"""
+"""在服务器上读客户文件：PDF 先读文字层，读不到再文字识别（OCR）；图片走 OCR；Excel 按栏名；DXF 读文字和尺寸标注；
+DWG 先用免费的 ODA File Converter 转成 DXF 副本。原件只读，截图和转换结果都另存在 derived 目录。
+PDF 和图片每页读完后再做一次尺寸线配对（单独的「6400mm」按位置当作屏宽 / 屏高候选，见 dimensions.py）。"""
+import math
 import re
 import shutil
 import subprocess
 import tempfile
 from pathlib import Path
 
-from .fields import LABELS, find_in_text, parse_value
+from .dimensions import image_rects, pair
+from .fields import LABELS, find_in_text, parse_value, to_mm
 
 MAX_PAGES = 30  # 文字层最多读前 30 页
 MAX_OCR_PAGES = 5  # 扫描件最多识别前 5 页（CPU 上较慢）
@@ -46,6 +49,12 @@ class Collector:
         for field, value, conf, snippet in find_in_text(text, ocr):
             self.add(field, value, conf, page, location, snippet, crop)
 
+    def dimensions(self, lines, rects, ocr: bool, page, location: str, crop):
+        """尺寸线配对：OCR 读到的给 low，PDF 文字层读到的给 medium，都要在确认关逐项确认。"""
+        for field, value, text, box in pair(lines, rects):
+            self.add(field, value, "low" if ocr else "medium", page, f"{location} · 尺寸线", text,
+                     lambda b=box: crop(b))
+
     def add(self, field, value, conf, page, location, snippet, crop=None):
         if any(f["field"] == field and f["value"] == value for f in self.fields):
             return
@@ -65,11 +74,15 @@ def read_pdf(path: Path, c: Collector) -> str:
         pages = pdf.pages[:MAX_PAGES]
         if any((p.extract_text() or "").strip() for p in pages):
             for no, page in enumerate(pages, 1):
-                for line in page.extract_text_lines():
-                    box = (max(line["x0"] - 6, 0), max(line["top"] - 6, 0),
-                           min(line["x1"] + 6, page.width), min(line["bottom"] + 6, page.height))
-                    c.line(line["text"], ocr=False, page=no, location=f"p.{no}",
-                           crop=lambda p=page, b=box: p.crop(b).to_image(resolution=150).original)
+                def crop(b, p=page):
+                    b = (max(b[0] - 6, 0), max(b[1] - 6, 0), min(b[2] + 6, p.width), min(b[3] + 6, p.height))
+                    return p.crop(b).to_image(resolution=150).original
+                lines = [(line["text"], (line["x0"], line["top"], line["x1"], line["bottom"]))
+                         for line in page.extract_text_lines()]
+                for text, box in lines:
+                    c.line(text, ocr=False, page=no, location=f"p.{no}", crop=lambda b=box, f=crop: f(b))
+                rects = [(r["x0"], r["top"], r["x1"], r["bottom"]) for r in page.rects]
+                c.dimensions(lines, rects, ocr=False, page=no, location=f"p.{no}", crop=crop)
             return "text_layer"
         for no, page in enumerate(pdf.pages[:MAX_OCR_PAGES], 1):  # 扫描件：整页渲染后识别
             dpi = min(200, MAX_SIDE_PX / (max(page.width, page.height) / 72))
@@ -80,10 +93,15 @@ def read_pdf(path: Path, c: Collector) -> str:
 
 def _ocr_image(img, c: Collector, page=None):
     img = _shrink(img)
-    for text, (x0, y0, x1, y1) in ocr_lines(img):
-        box = (max(x0 - 8, 0), max(y0 - 8, 0), min(x1 + 8, img.width), min(y1 + 8, img.height))
-        c.line(text, ocr=True, page=page, location=f"p.{page} · 文字识别" if page else "文字识别",
-               crop=lambda b=box: img.crop(b))
+    location = f"p.{page} · 文字识别" if page else "文字识别"
+
+    def crop(b):
+        return img.crop((max(b[0] - 8, 0), max(b[1] - 8, 0), min(b[2] + 8, img.width), min(b[3] + 8, img.height)))
+
+    lines = ocr_lines(img)
+    for text, box in lines:
+        c.line(text, ocr=True, page=page, location=location, crop=lambda b=box: crop(b))
+    c.dimensions(lines, image_rects(img), ocr=True, page=page, location=location, crop=crop)
 
 
 def read_image(path: Path, c: Collector) -> str:
@@ -120,15 +138,44 @@ def read_excel(path: Path, c: Collector) -> str:
     return "excel"
 
 
+DXF_UNIT_MM = {0: 1, 1: 25.4, 4: 1, 5: 10, 6: 1000}  # $INSUNITS：未设定按 mm 算
+
+
 def read_dxf(path: Path, c: Collector) -> str:
     import ezdxf
 
     doc = ezdxf.readfile(path)
-    for e in doc.modelspace().query("TEXT MTEXT"):
+    msp = doc.modelspace()
+    for e in msp.query("TEXT MTEXT"):
         text = e.plain_text() if e.dxftype() == "MTEXT" else e.dxf.text
         x, y = e.dxf.insert.x, e.dxf.insert.y
         c.line(text, ocr=False, location=f"{e.dxf.layer} · ({x:.0f}, {y:.0f})")
+    # 尺寸标注（DIMENSION）：取实测值，横向的算屏宽候选、纵向的算屏高候选，各取最大的一个
+    scale = DXF_UNIT_MM.get(doc.header.get("$INSUNITS", 0))
+    found = {"width_mm": [], "height_mm": []}
+    for d in msp.query("DIMENSION") if scale else []:
+        side = _dim_side(d)
+        value = side and to_mm(str(round(d.get_measurement() * scale)), "mm")
+        if value:
+            found[side].append((value, d.dxf.layer))
+    for field, items in found.items():
+        if items:
+            value, layer = max(items)
+            c.add(field, value, "medium", None, f"{layer} · 尺寸标注", f"DIMENSION {value}")
     return "dxf"
+
+
+def _dim_side(d) -> str | None:
+    """线性标注看角度，对齐标注看两个定义点的方向；角度、半径等其它标注不要。"""
+    kind = d.dimtype & 7
+    if kind == 0:
+        angle = d.dxf.get("angle", 0) % 180
+    elif kind == 1:
+        p1, p2 = d.dxf.defpoint2, d.dxf.defpoint3
+        angle = abs(math.degrees(math.atan2(p2.y - p1.y, p2.x - p1.x))) % 180
+    else:
+        return None
+    return "width_mm" if min(angle, 180 - angle) < 10 else "height_mm" if abs(angle - 90) < 10 else None
 
 
 def convert_dwg(path: Path, out_dir: Path, oda: str) -> Path:
