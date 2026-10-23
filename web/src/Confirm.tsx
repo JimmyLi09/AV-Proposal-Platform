@@ -91,6 +91,9 @@ export default function ConfirmInputs({ view, inputs, setInputs, onApply, error 
                     ) : null}
                   </td>
                   <td>
+                    {meta?.source === "manual" && cands.some((c) => JSON.stringify(c.value) !== JSON.stringify(rev.inputs[d.name])) && (
+                      <span className="tag st-review">Differs from file 与文件读到的不同</span>
+                    )}
                     {cands.length > 0 && (
                       <select aria-label={`${d.label} 其它读到的值`} value={meta?.extracted_id ?? ""}
                         onChange={(e) => e.target.value && post("pick", { extracted_id: Number(e.target.value) })}>
