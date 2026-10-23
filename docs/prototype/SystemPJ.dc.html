@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · System &amp; Cabling</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
+</style>
+</helmet>
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+<div style="flex: 1 1 320px"><div style="font-size: 12px; color: #6B6558"><span class="zh">114-Showroom · PJ-1 展厅投影墙 · Rev 0 · 规则 v1.4</span><span class="en">114-Showroom · PJ-1 Showroom projection wall · Rev 0 · Rules v1.4</span></div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">System &amp; Cabling</span><span class="zh">系统与布线</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">按 P14–P17 算出每台投影要拉回机柜的线、要留的电源点和中控接口。备用线标黄。给电气和中控承包商用，不是施工接线图。</span><span class="en">Using P14–P17, calculates the cables each projector runs back to the rack, the power points to provide and the central control interfaces. Spare cables highlighted yellow. For electrical and central control contractors; not a construction wiring diagram.</span></p></div>
+<div role="group" aria-label="Video transport 视频传输" style="display: flex; border: 1px solid #E6E0D6; border-radius: 8px; overflow: hidden">
+<button type="button" onClick="{{toHdbt}}" style="{{hdbtBtn}}"><span class="zh">按距离（P14）</span><span class="en">By distance</span></button>
+<button type="button" onClick="{{toAvoip}}" style="{{avoipBtn}}"><span class="zh">网络传输</span><span class="en">AVoIP</span></button>
+</div>
+</div>
+
+<nav aria-label="Proposal steps 方案步骤" style="display: flex; flex-wrap: wrap; gap: 6px">
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">1 项目与文件</span><span class="en">1 Project &amp; Files</span></a>
+<a href="ConfirmPJ.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">2 确认输入</span><span class="en">2 Confirm Inputs</span></a>
+<a href="WorkspacePJ.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">3 推荐</span><span class="en">3 Recommendation</span></a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">4 工程量清单</span><span class="en">4 BOQ</span></a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">5 标注</span><span class="en">5 Annotate</span></a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">6 审核导出</span><span class="en">6 Review &amp; Export</span></a>
+</nav>
+
+<div role="tablist" style="display: flex; flex-wrap: wrap; gap: 22px; border-bottom: 1px solid #E6E0D6">
+<a href="WorkspacePJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">推荐</span><span class="en">Recommendation</span></a>
+<a href="CalcPJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">计算依据</span><span class="en">Calculations</span></a>
+<a href="DiagramPJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">示意图</span><span class="en">Diagram</span></a>
+<a href="SystemPJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid #15203A; color: #15203A; font-weight: 700; text-decoration: none"><span class="zh">系统与布线</span><span class="en">System &amp; Cabling</span></a>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px">
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">视频传输</span><span class="en">Video transport</span></div><div style="font-size: 20px; font-weight: 700; color: #15203A">{{tpName}}</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">{{tpWhy}}</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P14 · v1.4</div></div>
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">回机柜线缆</span><span class="en">Cables to rack</span></div><div style="font-size: 20px; font-weight: 700; color: #15203A">{{cableTotal}}</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">{{cableSplit}}</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px"><span class="zh">P15 · 备用 10 %，至少 1 根</span><span class="en">P15 · 10 % spare, at least 1 cable</span></div></div>
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">吊顶电源</span><span class="en">Ceiling power</span></div><div style="font-size: 20px; font-weight: 700; color: #15203A">13A × 5</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">{{ceilNote}}</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px"><span class="zh">P16 · 回路见 P12（2 路）</span><span class="en">P16 · circuits see P12 (2 ch)</span></div></div>
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">机房负载</span><span class="en">Server Room load</span></div><div style="font-size: 20px; font-weight: 700; color: #15203A">{{rackW}}</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">{{rackFormula}}</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px"><span class="zh">P16 · 余量 10 %</span><span class="en">P16 · 10 % margin</span> <span style="padding: 0 6px; border-radius: 8px; background: #F1EEE8; font-size: 11px"><span class="zh">示例值 sample</span><span class="en">Sample value</span></span></div></div>
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">中控点位</span><span class="en">Control points</span></div><div style="font-size: 20px; font-weight: 700; color: #15203A">7</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace"><span class="zh">PJLink × 5 + 融合器 + 播控电脑</span><span class="en">PJLink × 5 + blender + Media PC</span></div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P17 · v1.4</div></div>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px"><span class="en">Cable schedule</span><span class="zh">线缆清单（到 Server Room）</span></h2><div style="flex: 1"></div><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; color: #6B6558"><span style="width: 14px; height: 14px; border-radius: 3px; background: #FFF3B0; border: 1px solid #E8D27A"></span><span class="zh">备用线 Spare</span><span class="en">Spare</span></span></div>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 720px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">No. 编号</span><span class="en">No.</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">起点</span><span class="en">From</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">终点</span><span class="en">To</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">用途</span><span class="en">Purpose</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">线型</span><span class="en">Cable</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600; text-align: right"><span class="zh">长度</span><span class="en">Length</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">两端设备</span><span class="en">Ends</span></th></tr></thead>
+<tbody>
+<sc-for list="{{cables}}" as="c" hint-placeholder-count="12">
+<tr style="{{c.rowStyle}}"><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600; font-family: ui-monospace, Consolas, monospace">{{c.id}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">机柜</span><span class="en">Server Room</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{c.to}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{c.use}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{c.type}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; text-align: right">≈ 35 m</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">{{c.ends}}</td></tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div style="margin-top: 8px; font-size: 12px; color: #6B6558"><span class="zh">长度取确认关的信号距离 35 m，施工前按实际路由复核。只用在机柜内和投影旁的短跳线，不计入本表。</span><span class="en">Length uses the 35 m signal distance from the confirmation gate; verify against actual routing before construction. HDMI</span></div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section style="flex: 1 1 380px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Server Room equipment</span><span class="zh">机房设备与电源</span></h2>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 380px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 7px 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">设备</span><span class="en">Device</span></th><th style="padding: 7px 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600; text-align: right"><span class="zh">数量</span><span class="en">Qty</span></th><th style="padding: 7px 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600; text-align: right"><span class="zh">W 功率</span><span class="en">W power</span></th><th style="padding: 7px 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600; text-align: right"><span class="zh">插头</span><span class="en">Plugs</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rack}}" as="r" hint-placeholder-count="4">
+<tr><td style="padding: 7px 8px; border-bottom: 1px solid #EFEBE4">{{r.name}}</td><td style="padding: 7px 8px; border-bottom: 1px solid #EFEBE4; text-align: right">{{r.qty}}</td><td style="padding: 7px 8px; border-bottom: 1px solid #EFEBE4; text-align: right">{{r.w}}</td><td style="padding: 7px 8px; border-bottom: 1px solid #EFEBE4; text-align: right">{{r.plugs}}</td></tr>
+</sc-for>
+<tr style="font-weight: 700; background: #FAF8F4"><td style="padding: 7px 8px"><span class="zh">Total × 1.1 合计（含余量）</span><span class="en">Total × 1.1 (incl. margin)</span></td><td style="padding: 7px 8px"></td><td style="padding: 7px 8px; text-align: right">{{rackW}}</td><td style="padding: 7px 8px; text-align: right">{{plugTotal}}</td></tr>
+</tbody>
+</table>
+</div>
+<div role="group" aria-label="Power option 电源方案" style="display: flex; border: 1px solid #E6E0D6; border-radius: 8px; overflow: hidden; margin-top: 12px; width: fit-content">
+<button type="button" onClick="{{optA}}" style="{{optABtn}}"><span class="zh">Option A 预留插座</span><span class="en">Option A spare outlet</span></button>
+<button type="button" onClick="{{optB}}" style="{{optBBtn}}"><span class="zh">Option B UPS + 独立回路</span><span class="en">Option B UPS + dedicated circuit</span></button>
+</div>
+<div style="margin-top: 8px; padding: 10px 12px; border-radius: 8px; background: #FAF8F4; font-size: 12.5px; line-height: 1.6">{{optText}}</div>
+<div style="margin-top: 8px; font-size: 12px; color: #6B6558"><span class="zh">同一项目里有多面墙或其他系统时，机房负载要在项目层面合计（见右侧说明）。</span><span class="en">When a project has multiple walls or other systems, server room load is totaled at project level (see note on right).</span></div>
+</section>
+
+<section style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Central control</span><span class="zh">中控接口</span></h2>
+<div style="display: grid; grid-template-columns: auto 1fr; gap: 7px 12px; font-size: 12.5px">
+<span style="color: #6B6558"><span class="zh">投影机</span><span class="en">Projectors</span></span><span><span class="zh">（LAN）× 5：开机、待机、切输入、读灯/故障</span><span class="en">PJLink</span></span>
+<span style="color: #6B6558"><span class="zh">融合器</span><span class="en">Blender</span></span><span><span class="zh">ZWIN 16ch API：调几何校正预设</span><span class="en">ZWIN 16ch API: recall geometry correction preset</span></span>
+<span style="color: #6B6558"><span class="zh">播控电脑</span><span class="en">Media PC</span></span><span><span class="zh">网络唤醒 + 播放 API；先正常关机再断电</span><span class="en">WoL</span></span>
+<span style="color: #6B6558"><span class="zh">同步</span><span class="en">Sync</span></span><span>{{syncText}}</span>
+</div>
+<div style="margin-top: 12px; padding: 10px 12px; border-radius: 8px; background: #FDF1E6; color: #7C3A10; font-size: 12.5px; line-height: 1.6"><b><span class="zh">规则：</span><span class="en">Rule:</span></b><span class="zh">投影机只能用网络指令待机，不能直接断电（会伤光源）。开馆顺序：机柜常电 → 播控电脑 → 融合器 → 投影机 → 内容；闭馆反过来。</span><span class="en">Projectors can only be put on standby via network command, never powered off directly (damages the light source). Opening sequence: rack always-on → Media PC → blending processor → projectors → content; closing in reverse.</span></div>
+<h2 style="margin: 14px 0 8px; font-size: 15px"><span class="en">Checks</span><span class="zh">检查</span></h2>
+<div style="display: flex; flex-direction: column; gap: 7px; font-size: 12.5px">
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px"><span class="zh">通过</span><span class="en">PASS</span></span><span><span class="zh">视频线 5 = 控制线 5 = 投影 5 台</span><span class="en">Video cables 5 = control cables 5 = 5 projectors</span></span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px"><span class="zh">通过</span><span class="en">PASS</span></span><span><span class="zh">每类线都有备用（≥ 10 %，至少 1 根）</span><span class="en">Every cable type has spares (≥ 10 %, at least 1)</span></span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px"><span class="zh">通过</span><span class="en">PASS</span></span><span><span class="zh">融合器输出 16 ≥ 5</span><span class="en">Blender outputs 16 ≥ 5</span></span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; padding: 0 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 11px"><span class="zh">提示</span><span class="en">NOTE</span></span><span>{{tpNote}}</span></div>
+</div>
+</section>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 8px; font-size: 15px"><span class="en">From Phoenix Sea Office</span><span class="zh">参考案例：Blackfort · Phoenix Sea Office 投影部分</span></h2>
+<div style="font-size: 12.5px; color: #6B6558; margin-bottom: 10px"><span class="zh">这一页的规则来自 的系统集成核对。当时原方案里的问题，平台都要能自动查出来：</span><span class="en">Rules on this page come from Phoenix Sea</span></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px; font-size: 12.5px">
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A"><span class="zh">数量对不上 → 阻断</span><span class="en">Quantity mismatch → blocked</span></div><div><span class="zh">原方案正文 4 台、图注 6 台 SML-PU900，4 台配 5 根 HDMI。P17 要求台数 = 视频线 = 控制线；正文和图注冲突时，确认关列为待确认。</span><span class="en">Original design: body text 4 units, caption 6 units SML-PU900, 4 units with 5 HDMI. P17 requires units = video cables = control cables; when body text and caption conflict, the confirmation gate marks it as pending.</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A"><span class="zh">超过 15 m</span><span class="en">HDMI 15 m</span></div><div><span class="zh">从 到投影超过 15 m，改 或光纤 HDMI。现在 定为 15 m（P14）。</span><span class="en">From Server Room 15 m, switch to HDBaseT hdmiMax 15 m (P14).</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A"><span class="zh">每台另配控制网线</span><span class="en">Separate control data cable per unit</span></div><div><span class="zh">有中控时每台投影 1 根 CAT6 走 PJLink，加备用。备用线一律标黄（P15）。</span><span class="en">With central control, each projector gets 1 CAT6 for PJLink, plus spare. Spare cables are always marked yellow (P15).</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A"><span class="zh">播放源进机房、多屏同步</span><span class="en">Source to server room, multi-screen sync</span></div><div><span class="zh">投影 + 电视 + 全息柜一起同步，播放源都放 Server Room。确认关新增「播放源位置」「同步组」两项。</span><span class="en">Past Zone Server Room. Confirmation gate adds two items: "Source location" and "Sync group".</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A"><span class="zh">机房电源 A / B，余量 10 %</span><span class="en">Server room power A / B, 10 % margin</span></div><div><span class="zh">方案 A 预留插座、按需加；方案 B UPS + 独立回路（P16）。</span><span class="en">Option A spare outlets, add as needed; Option B UPS + dedicated circuit (P16).</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A"><span class="zh">方案</span><span class="en">AVoIP</span></div><div><span class="zh">改走 AVoIP 后，长距离 HDMI 取消，每台改 1 根 CAT6 到 AV 交换机，投影旁加解码器。上方可以切换看差别。</span><span class="en">System Concept</span></div></div>
+</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558"><span class="zh">的互动投影（Future Zone，雷达）和多区汇总仍按下一版处理；墙面尺寸补齐后可加为第二个回归样本。</span><span class="en">Phoenix SeaFuture Zone, radar) and multi-zone summary are deferred to the next version; once wall dimensions are filled in, it can be added as a second regression sample.</span></div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px">
+<a href="DiagramPJ.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #1F2430; font-weight: 600; text-decoration: none"><span class="zh">← 示意图</span><span class="en">← Diagram</span></a>
+<a href="Cost.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">下一步：工程量清单 →</span><span class="en">Next: BOQ →</span></a>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
+  renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {"投影":"Projection","AV → D 解码器（PoE）":"AV → D decoder (PoE)","融合器输出 → HDBaseT TX / RX":"Blender output → HDBaseT TX / RX","两端预留，贴标签":"Reserved at both ends, labeled","控制交换机 → 投影 LAN 口":"Control switch → projector LAN port","控制交换机":"Control switch","口":"ports","播控电脑 Media PC":"Media PC","AV10G 上联）":"AV10G uplink)","控制交换机 PoE":"Control switch PoE","项目有 AV 网络 → AVoIP":"Project has AV network → AVoIP","有":"Yes","AVoIP：投影旁解码器需要 PoE 13A 电源；AV 网络与办公网络分开":"AVoIP: decoders next to projectors need PoE 13A power; keep AV network separate from office network","AVoIP：投影旁解码器需要 PoE 13A":"AVoIP: decoder next to projector needs PoE 13A","与":" and ","信号 35 m 超过 HDMI 15 m，已改 HDBaseT；超过 50 m 要改光纤":"Signal 35 m exceeds HDMI 15 m, switched to HDBaseT; over 50 m use fiber","视频 5 + 1 · 控制 5 + 1":"Video 5 + 1 · control 5 + 1","视频":"Video","每台 1 个 · 解码器走 PoE":"1 per unit · decoder via PoE","台":" units","每台 1 个 · HDBaseT RX":"1 per unit · HDBaseT RX","kVA → 选 1.5 kVA 在线式，后备 15 分钟；Server Room":"kVA → choose 1.5 kVA online, 15 min backup; Server Room","机柜预留 13A 插座":"Spare 13A outlet in rack","机柜预留 13A":"Rack reserved 13A","个（":" (","个插头 × 1.1）。插座偏紧时按需增加，至少分 2 个回路。":" plugs × 1.1). Add more if outlets are tight; split into at least 2 circuits.","回路":"Circuit","无同步组（独立墙）。有同步组时，与其他屏共用播控主机或时间码同步，都放 Server Room。":"No sync group (standalone wall). With a sync group, it shares the media server or timecode sync with other screens, all in the Server Room."}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
+    const st = this.state || {};
+    const av = st.tp === 'av';
+    const b = st.opt === 'b';
+    const segOn = 'height: 36px; padding: 0 14px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer';
+    const segOff = 'height: 36px; padding: 0 14px; border: 0; background: #FFFFFF; color: #3B3A36; font: inherit; cursor: pointer';
+    const spare = 'background: #FFF3B0;';
+    const cables = [];
+    for (let i = 1; i <= 5; i++) {
+      cables.push({ id: 'V' + i, to: 'PJ' + i + ' 投影 ' + i, use: 'Video 视频', type: av ? 'CAT6 · AVoIP' : 'CAT6 · HDBaseT', ends: av ? 'AV 交换机 → D 解码器（PoE）' : '融合器输出 → HDBaseT TX / RX', rowStyle: '' });
+    }
+    cables.push({ id: 'V6', to: 'PJ 区（吊顶预留）', use: 'Video spare 视频备用', type: av ? 'CAT6 · AVoIP' : 'CAT6 · HDBaseT', ends: '两端预留，贴标签', rowStyle: spare });
+    for (let i = 1; i <= 5; i++) {
+      cables.push({ id: 'C' + i, to: 'PJ' + i + ' 投影 ' + i, use: 'Control 中控（PJLink）', type: 'CAT6', ends: '控制交换机 → 投影 LAN 口', rowStyle: '' });
+    }
+    cables.push({ id: 'C6', to: 'PJ 区（吊顶预留）', use: 'Control spare 控制备用', type: 'CAT6', ends: '两端预留，贴标签', rowStyle: spare });
+    const rack = av ? [
+      { name: '播控电脑 Media PC', qty: 1, w: 500, plugs: 1 },
+      { name: 'ZWIN 16ch 融合器', qty: 1, w: 150, plugs: 1 },
+      { name: 'AVoIP 编码器 Encoder', qty: 5, w: 75, plugs: 5 },
+      { name: 'AV 交换机（10G 上联）', qty: 1, w: 120, plugs: 1 },
+      { name: '控制交换机 PoE', qty: 1, w: 60, plugs: 1 }
+    ] : [
+      { name: '播控电脑 Media PC', qty: 1, w: 500, plugs: 1 },
+      { name: 'ZWIN 16ch 融合器', qty: 1, w: 150, plugs: 1 },
+      { name: 'HDBaseT 发送器 TX', qty: 5, w: 75, plugs: 5 },
+      { name: '控制交换机', qty: 1, w: 60, plugs: 1 }
+    ];
+    const sumW = rack.reduce((a, r) => a + r.w, 0);
+    const plugs = rack.reduce((a, r) => a + r.plugs, 0);
+    const wm = Math.round(sumW * 1.1);
+    const outlets = Math.ceil(plugs * 1.1);
+    const kva = wm / 0.8 / 1000;
+    return {
+      toHdbt: () => this.setState({ tp: 'hd' }),
+      toAvoip: () => this.setState({ tp: 'av' }),
+      hdbtBtn: av ? segOff : segOn,
+      avoipBtn: av ? segOn : segOff,
+      tpName: av ? 'AVoIP' : 'HDBaseT',
+      tpWhy: av ? '项目有 AV 网络 → AVoIP' : '15 < 35 m ≤ 50 → HDBaseT',
+      tpNote: av ? 'AVoIP：投影旁解码器需要 PoE 或 13A 电源；AV 网络与办公网络分开' : '信号 35 m 超过 HDMI 15 m，已改 HDBaseT；超过 50 m 要改光纤',
+      cables,
+      cableTotal: 'CAT6 × 12',
+      cableSplit: '视频 5 + 1 · 控制 5 + 1',
+      ceilNote: av ? '每台 1 个 · 解码器走 PoE' : '每台 1 个 · HDBaseT RX 由 TX 供电',
+      rack,
+      rackW: wm + ' W',
+      rackFormula: sumW + ' W × 1.1 = ' + wm + ' W',
+      plugTotal: outlets,
+      optA: () => this.setState({ opt: 'a' }),
+      optB: () => this.setState({ opt: 'b' }),
+      optABtn: b ? segOff : segOn,
+      optBBtn: b ? segOn : segOff,
+      optText: b
+        ? ('UPS ≥ ' + kva.toFixed(2) + ' kVA → 选 1.5 kVA 在线式，后备 15 分钟；Server Room 配独立回路和可远程开关的 PDU。只给机柜设备上 UPS，投影机不接 UPS。')
+        : ('机柜预留 13A 插座 ' + outlets + ' 个（' + plugs + ' 个插头 × 1.1）。插座偏紧时按需增加，至少分 2 个回路。'),
+      syncText: '无同步组（独立墙）。有同步组时，与其他屏共用播控主机或时间码同步，都放 Server Room。'
+    };
+  }
+}
+</script>
+</body>
+</html>

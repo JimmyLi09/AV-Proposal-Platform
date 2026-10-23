@@ -1,4 +1,5 @@
 """LED 业务线：尺寸吸附，以及步骤类规则（步骤写在代码里，只改参数）。"""
+import math
 from decimal import Decimal
 
 from ..products.library import active, name
@@ -140,7 +141,7 @@ def catalog(library: dict, cabinet: dict | None) -> dict:
 
 
 def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict) -> list[dict]:
-    """BOQ 行：数量全部来自规则结果，「数量依据」写规则编号。key 用来对应单价。"""
+    """内部明细：数量全部来自规则结果，「数量依据」写规则编号。key 用来对应示意图里的设备。"""
     lines = []
     products = {p["id"]: p for p in library["products"]}
 
@@ -175,6 +176,33 @@ def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict) -> list
     if values.get("installation_items"):
         add(f"install:{inputs.get('installation')}", values["installation_items"], "—", 1, "套", "F16", "F16")
     return lines
+
+
+# 客户版 BOQ 模板里能用的 {名字}：输入、规则结果，加上下面这些由它们换个写法得到的值（不另算数量）
+ENVIRONMENT_LABEL = {"indoor": "Indoor", "outdoor": "Outdoor", "rental": "Rental"}
+INSTALLATION_LABEL = {"wall": "on wall", "floor": "on floor stand", "hanging": "hanging", "embedded": "embedded"}
+BOQ_EXTRA = ["environment_label", "installation_label", "cabinet_model", "cabinet_sizes", "brightness_nits",
+             "aspect_ratio", "load_pct", "power_spares", "data_spares"]
+
+
+def boq_context(values: dict, cabinet: dict | None, inputs: dict) -> dict:
+    ctx = {**inputs, **product_inputs(cabinet), **values}
+    ctx["environment_label"] = ENVIRONMENT_LABEL.get(inputs.get("environment"))
+    ctx["installation_label"] = INSTALLATION_LABEL.get(inputs.get("installation"))
+    if cabinet:
+        ctx["cabinet_model"] = cabinet["model"]
+        ctx["brightness_nits"] = cabinet.get("brightness_nits")
+        ctx["cabinet_sizes"] = " / ".join(f"{w} × {h}" for w, h, _ in values.get("cabinet_counts") or [])
+    if values.get("res_x") and values.get("res_y"):
+        g = math.gcd(int(values["res_x"]), int(values["res_y"]))
+        ctx["aspect_ratio"] = f"{int(values['res_x']) // g}:{int(values['res_y']) // g}"
+    if values.get("capacity_mp"):
+        ctx["load_pct"] = round(values["load_mp"] / values["capacity_mp"] * 100)
+    if values.get("power_cables") is not None and values.get("circuits") is not None:
+        ctx["power_spares"] = values["power_cables"] - values["circuits"]
+    if values.get("data_cables") is not None and values.get("data_runs") is not None:
+        ctx["data_spares"] = values["data_cables"] - values["data_runs"]
+    return ctx
 
 
 def diagram(values: dict, boq_lines: list[dict], inputs: dict, cabinet: dict | None, library: dict) -> dict | None:

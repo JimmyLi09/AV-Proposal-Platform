@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Multi-face Projection 多面投影</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
+</style>
+</helmet>
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+<div style="flex: 1 1 320px"><div style="font-size: 12px; color: #6B6558"><span class="zh">演示数据 · 投影 · Rev 0 · 规则 v1.5</span><span class="en">Demo · Projection · Rev 0 · rules v1.5</span></div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Multi-face Recommendation</span><span class="zh">多面投影推荐</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">每面单独按 P1–P10 排投影，再合成一张展开画布；转角处检查机位冲突。</span><span class="en">Lay out projection on each wall by P1–P10, then combine into one unfolded canvas; check mount position conflicts at corners.</span></p></div>
+<div role="group" aria-label="Example 示例" style="display: flex; border: 1px solid #E6E0D6; border-radius: 8px; overflow: hidden">
+<button type="button" onClick="{{exL}}" style="{{exLBtn}}"><span class="zh">转角 L · 两面墙</span><span class="en">Corner L · two walls</span></button>
+<button type="button" onClick="{{exU}}" style="{{exUBtn}}"><span class="zh">U 形 · 三面墙</span><span class="en">U-shape · three walls</span></button>
+</div>
+</div>
+
+<nav aria-label="Proposal steps 方案步骤" style="display: flex; flex-wrap: wrap; gap: 6px">
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">1 项目与文件</span><span class="en">1 Project &amp; Files</span></a>
+<a href="ShapePJ.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">2 屏形与输入</span><span class="en">2 Shape &amp; Inputs</span></a>
+<a href="FacesPJ.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">3 推荐</span><span class="en">3 Recommendation</span></a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">4 工程量清单</span><span class="en">4 BOQ</span></a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">5 标注</span><span class="en">5 Annotate</span></a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">6 审核导出</span><span class="en">6 Review &amp; Export</span></a>
+</nav>
+
+<div style="padding: 10px 14px; border-radius: 10px; background: {{chkBg}}; color: {{chkFg}}; font-weight: 600">{{chkText}}</div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px">
+<sc-for list="{{kpis}}" as="k" hint-placeholder-count="6">
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">{{k.label}}</div><div style="font-size: 21px; font-weight: 700; color: #15203A">{{k.value}}</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">{{k.formula}}</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">{{k.rule}}</div></div>
+</sc-for>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Per face</span><span class="zh">每面结果（宽度可直接改）</span></h2>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 820px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">面</span><span class="en">Face</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">宽 mm</span><span class="en">Width mm</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">投影机</span><span class="en">Projectors</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">融合带</span><span class="en">Blend</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">像素</span><span class="en">Pixels</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">像素尺寸</span><span class="en">Pixel size</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">检查</span><span class="en">Check</span></th></tr></thead>
+<tbody>
+<sc-for list="{{faces}}" as="f" hint-placeholder-count="3">
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 700">{{f.name}}</td>
+<td style="padding: 6px 8px; border-bottom: 1px solid #EFEBE4"><input type="text" aria-label="Width 宽" value="{{f.w}}" onChange="{{f.onW}}" style="{{f.wStyle}}"></td>
+<td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{f.n}}</td>
+<td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{f.blend}}</td>
+<td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{f.px}}</td>
+<td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{f.pix}}</td>
+<td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span style="{{f.chkStyle}}">{{f.chk}}</span> <span style="color: #6B6558">{{f.chkNote}}</span></td></tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div style="margin-top: 8px; font-size: 12px; color: #6B6558"><span class="zh">画面宽 4.48 m（镜头前端离墙 2.24 m × 0.5 镜头），画面高 2.80 m；每面在两端角线内均匀排开，融合带须在 15–30 %。</span><span class="en">Image width 4.48 m (lens front 2.24 m from wall × 0.5 lens), image height 2.80 m; spaced evenly between the corner lines on each wall, blend zone must be 15–30 %.</span></div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section style="flex: 1 1 380px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 4px; font-size: 15px"><span class="en">Plan · mount positions</span><span class="zh">平面机位</span></h2>
+<p style="margin: 0 0 10px; color: #6B6558; font-size: 12.5px"><span class="zh">粗线是墙，圆点是投影机（镜头前端离墙 2.24 m）。红圈是转角两侧机位冲突。</span><span class="en">Thick lines are walls, dots are projectors (lens front 2.24 m from wall). Red circles are mount position conflicts on both sides of a corner.</span></p>
+<div style="position: relative; width: 100%; aspect-ratio: {{planAspect}}; background: #FAF8F4; border: 1px solid #E6E0D6; border-radius: 8px">
+<sc-for list="{{walls}}" as="w" hint-placeholder-count="3"><div style="{{w.style}}"></div></sc-for>
+<sc-for list="{{dots}}" as="d" hint-placeholder-count="6"><div style="{{d.style}}" title="{{d.tip}}"><span style="{{d.lblStyle}}">{{d.lbl}}</span></div></sc-for>
+</div>
+</section>
+<section style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 15px"><span class="en">Corners</span><span class="zh">转角检查 P20</span></h2>
+<sc-for list="{{corners}}" as="c" hint-placeholder-count="1">
+<div style="{{c.box}}">
+<div style="display: flex; align-items: center; gap: 8px"><b style="flex: 1">{{c.name}}</b><span style="{{c.tagStyle}}">{{c.tag}}</span></div>
+<div style="font-size: 12.5px; color: #3B3A36">{{c.text}}</div>
+<label style="display: flex; align-items: center; gap: 6px; font-size: 12.5px"><input type="checkbox" checked="{{c.fixed}}" onChange="{{c.toggle}}" style="accent-color: #15203A">{{c.fixLabel}}</label>
+</div>
+</sc-for>
+<div style="font-size: 12px; color: #6B6558"><span class="zh">距离阈值 0.6 m 为示例值。处理方式（错开挂高、镜头水平位移、改吊架）由人决定，平台只记录。</span><span class="en">The 0.6 m distance threshold is a sample value. How to resolve it (offset mount height, lens shift, change bracket) is decided by a person; the platform only records it.</span></div>
+</section>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 4px; font-size: 15px"><span class="en">Unfolded canvas</span><span class="zh">展开画布</span></h2>
+<p style="margin: 0 0 10px; color: #6B6558; font-size: 12.5px"><span class="zh">内容按一张展开画布制作，转角处是硬接缝。每面对应融合器的一组输出。</span><span class="en">Content is produced as one unfolded canvas, with hard edges at corners. Each wall maps to one output group on the blender.</span></p>
+<div style="display: flex; gap: 0; border: 2px solid #15203A; border-radius: 6px; overflow: hidden">
+<sc-for list="{{strip}}" as="p" hint-placeholder-count="3"><div style="{{p.style}}"><b>{{p.name}}</b><div style="font-size: 11.5px">{{p.text}}</div></div></sc-for>
+</div>
+<div style="margin-top: 6px; font-size: 12px; color: #6B6558">{{canvasNote}}</div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">New rules</span><span class="zh">多面投影规则 P18–P22（v1.5 新增）</span></h2>
+<div style="display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 12.5px">
+<b>P18</b><span><span class="zh">屏形与分面：AI 先猜屏形，人确认；每面单独输入宽、高、可用进深、挂高</span><span class="en">Screen shape and walls: AI guesses the shape first, a person confirms; enter width, height, usable depth and mount height for each wall</span></span>
+<b>P19</b><span><span class="zh">每面独立按 P1–P10 排投影，不跨角投射；投影机在两端角线内均匀排开</span><span class="en">Lay out projection on each wall independently by P1–P10, never across corners; projectors spaced evenly between the corner lines at both ends</span></span>
+<b>P20</b><span><span class="zh">转角机位冲突：内角两侧第 1 台的距离小于阈值（示例 0.6 m）→ 阻断，人工处理并记录后才能继续</span><span class="en">Corner mount position conflict: distance between unit 1 on both sides of an inside corner is below the threshold (sample 0.6 m) → blocked; continue only after it is handled manually and recorded</span></span>
+<b>P21</b><span><span class="zh">展开画布：宽 = 各面融合后像素之和，高取各面最大；融合器输出数 ≥ 投影机总数</span><span class="en">Unfolded canvas: width = sum of blended pixels of all walls, height = max of all walls; blender outputs ≥ total projectors</span></span>
+<b>P22</b><span><span class="zh">弧形幕 / 环幕：必须做几何校正，融合器不支持曲面校正时阻断</span><span class="en">Curved screen / 360 ring screen: geometric correction required; blocked if the blender does not support curved-surface correction</span></span>
+</div>
+<div style="margin-top: 8px; font-size: 12px; color: #6B6558"><span class="zh">系统与布线（P14–P17）、电源（P12）照旧按投影机总数算。</span><span class="en">System and cabling (P14–P17) and power (P12) are still calculated from the total projector count.</span></div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px">
+<a href="ShapePJ.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #1F2430; font-weight: 600; text-decoration: none"><span class="zh">← 返回</span><span class="en">← Back</span></a>
+<a href="Cost.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">下一步：工程量清单 →</span><span class="en">Next: BOQ →</span></a>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
+  renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {"Wall A 左墙":"Wall A left wall","台":" units","单台画面比墙宽，需要裁切":"Single image wider than the wall, needs cropping","融合带过宽，缩短机位距离或换镜头":"Blend zone too wide; reduce mount spacing or change lens","融合带偏窄，加大机位距离或换镜头":"Blend zone too narrow; increase mount spacing or change lens","两侧第 1 台机位相距":"Unit 1 mount positions on both sides are ","m），吊装位置重叠，":"m), mount positions overlap, ","面的光会打到":" wall's light will hit ","面投影机。":" walls of projectors.","投影":"Projection","两侧第 1 台相距":"Unit 1 on both sides are ","m，无冲突。":"m, no conflict.","面第 1 台挂高错开 0.6 m（人工确认）":" wall: offset unit 1 mount height by 0.6 m (manual confirmation)","P19 · 每面 P2":"P19 · P2 per wall","P12 · 示例值":"P12 · sample value","视频":"Video","，控制":", control","台 ·":" units ·","画布":"Canvas","× 1200 px · 内容制作按这张画布出片。":"× 1200 px · Produce content to this canvas.","有":"Yes","处转角机位冲突（P20），人工处理前不能继续。":" corner mount position conflict(s) (P20); cannot continue until handled manually.","转角":"Corner","可以继续；有":"Can continue; ","面需要留意（见每面检查）。":" walls need attention (see per-wall checks).","校验通过：每面融合带在 15–30 %，转角无未处理冲突。":"Check passed: blend zone on every wall is 15–30 %, no unhandled corner conflicts."}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
+    const s = this.state || {};
+    const ex = s.ex || 'L', wv = s.wv || {}, fx = s.fx || {};
+    const W = 4.48, D = 2.24, H = 2.8, PX = 1920, CLASH = 0.6;
+    const defs = ex === 'L' ? [['A', 'Wall A 左墙', 8000]] .concat([['B', 'Wall B 正墙', 7800]]) : [['A', 'Wall A 左墙', 8000], ['B', 'Wall B 正墙', 7800], ['C', 'Wall C 右墙', 8000]];
+    const pill = (bg, fg) => 'padding: 1px 8px; border-radius: 10px; background: ' + bg + '; color: ' + fg + '; font-weight: 700; font-size: 11px';
+    let total = 0, pxSum = 0, notes = 0;
+    const F = defs.map(([id, name, w0]) => {
+      const raw = wv[id] !== undefined ? wv[id] : String(w0);
+      const L = Math.max(1, parseFloat(raw) || 0) / 1000;
+      const n = Math.max(1, Math.ceil(L / W - 1e-9));
+      const r = n > 1 ? (n * W - L) / ((n - 1) * W) : 0;
+      const step = n > 1 ? (L - W) / (n - 1) : 0;
+      const px = Math.round(n * PX - (n - 1) * r * PX);
+      const ok = n === 1 ? Math.abs(W - L) < 0.05 : r >= 0.15 && r <= 0.30;
+      if (!ok) notes++;
+      total += n; pxSum += px;
+      return { id, name, raw, ed: raw !== String(w0), L, n, r, step, px, ok, centers: Array.from({ length: n }, (_, i) => W / 2 + i * step) };
+    });
+    const faces = F.map((f) => ({
+      name: f.name, w: f.raw, n: f.n + ' 台', blend: f.n > 1 ? (f.r * 100).toFixed(1) + ' % · ' + (f.r * W).toFixed(2) + ' m' : '—',
+      px: f.px + ' × 1200', pix: (f.L * 1000 / f.px).toFixed(2) + ' mm',
+      chk: f.ok ? 'PASS 通过' : 'NOTE 提示', chkNote: f.ok ? '' : f.n === 1 ? '单台画面比墙宽，需要裁切' : f.r > 0.30 ? '融合带过宽，缩短机位距离或换镜头' : '融合带偏窄，加大机位距离或换镜头',
+      chkStyle: f.ok ? pill('#E6F2EC', '#2F7A5B') : pill('#FDF1E6', '#9A4A12'),
+      onW: (e) => { const n = Object.assign({}, wv); n[f.id] = e.target.value; this.setState({ wv: n }); },
+      wStyle: 'width: 90px; height: 30px; padding: 0 6px; text-align: right; border-radius: 6px; font: inherit; font-weight: 600; background: #FFFFFF; border: 1px solid ' + (f.ed ? '#E8C96A' : '#E6E0D6')
+    }));
+    // plan coordinates (m): corner A/B at (0,0); A runs down the left (x=0), B along the top (y=0), C down the right
+    const fA = F[0], fB = F[1], fC = F[2];
+    const BW = fB.L, maxDown = Math.max(fA.L, fC ? fC.L : 0);
+    const pw = BW + 0.6, ph = maxDown + 0.6, ox = 0.3, oy = 0.3;
+    const P = (x, y) => ({ l: (ox + x) / pw * 100, t: (oy + y) / ph * 100 });
+    const pos = { A: fA.centers.map((c) => [D, c]), B: fB.centers.map((c) => [c, D]) };
+    if (fC) pos.C = fC.centers.map((c) => [BW - D, c]);
+    const cornerDefs = [['A', 'B', pos.A[0], pos.B[0]]];
+    if (fC) cornerDefs.push(['B', 'C', pos.B[pos.B.length - 1], pos.C[0]]);
+    let blocks = 0;
+    const clashAt = [];
+    const corners = cornerDefs.map(([a, b, p1, p2]) => {
+      const dist = Math.hypot(p1[0] - p2[0], p1[1] - p2[1]);
+      const clash = dist < CLASH, key = a + b, fixed = !!fx[key];
+      if (clash && !fixed) { blocks++; clashAt.push(p1); }
+      return {
+        name: 'Corner 转角 ' + a + ' / ' + b,
+        text: clash ? ('两侧第 1 台机位相距 ' + dist.toFixed(2) + ' m（< ' + CLASH + ' m），吊装位置重叠，' + a + ' 面的光会打到 ' + b + ' 面投影机。') : ('两侧第 1 台相距 ' + dist.toFixed(2) + ' m，无冲突。'),
+        tag: !clash ? 'PASS 通过' : fixed ? 'MANUAL 已人工处理' : 'BLOCK 阻断',
+        tagStyle: !clash ? pill('#E6F2EC', '#2F7A5B') : fixed ? pill('#FFF3B0', '#6B4E00') : pill('#FDE4E4', '#B91C1C'),
+        box: 'border-radius: 10px; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; border: 1px solid ' + (clash && !fixed ? '#F3B4B4; background: #FFF6F6' : '#E6E0D6'),
+        fixed, fixLabel: b + ' 面第 1 台挂高错开 0.6 m（人工确认）',
+        toggle: () => { const n = Object.assign({}, fx); n[key] = !fixed; this.setState({ fx: n }); }
+      };
+    });
+    const walls = [
+      { style: 'position: absolute; background: #1F2430; left: ' + P(0, 0).l + '%; top: ' + P(0, 0).t + '%; width: 4px; height: ' + (fA.L / ph * 100) + '%' },
+      { style: 'position: absolute; background: #1F2430; left: ' + P(0, 0).l + '%; top: ' + P(0, 0).t + '%; height: 4px; width: ' + (BW / pw * 100) + '%' }
+    ];
+    if (fC) walls.push({ style: 'position: absolute; background: #1F2430; left: ' + P(BW, 0).l + '%; top: ' + P(0, 0).t + '%; width: 4px; height: ' + (fC.L / ph * 100) + '%' });
+    const fcol = { A: '#2C5AA0', B: '#2F7A5B', C: '#7A4FA0' };
+    const dots = [];
+    Object.keys(pos).forEach((id) => pos[id].forEach(([x, y], i) => {
+      const p = P(x, y);
+      const bad = clashAt.some((c) => Math.hypot(c[0] - x, c[1] - y) < CLASH);
+      dots.push({ lbl: id + (i + 1), tip: id + (i + 1), lblStyle: 'position: absolute; left: 14px; top: -4px; font-size: 10.5px; font-weight: 700; color: ' + fcol[id],
+        style: 'position: absolute; width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%; left: ' + p.l + '%; top: ' + p.t + '%; background: ' + fcol[id] + '; box-shadow: ' + (bad ? '0 0 0 6px rgba(185, 28, 28, 0.35)' : 'none') });
+    }));
+    const kw = (total * 450 + 500) * 1.1 / 1000;
+    const spare = Math.max(1, Math.ceil(total * 0.1));
+    const kpis = [
+      { label: 'Projectors 投影机', value: String(total), formula: F.map((f) => f.id + ' ' + f.n).join(' + '), rule: 'P19 · 每面 P2' },
+      { label: 'Canvas 展开画布', value: pxSum + ' × 1200', formula: F.map((f) => f.px).join(' + '), rule: 'P21' },
+      { label: 'Blender outputs 融合器输出', value: total + ' / 16', formula: 'ZWIN 16ch × 1', rule: 'P11 / P21' },
+      { label: 'Power 功率', value: kw.toFixed(2) + ' kW', formula: '(' + total + ' × 450 + 500) × 1.1', rule: 'P12 · 示例值' },
+      { label: 'Circuits 回路', value: String(Math.ceil(kw / 2.5)), formula: '⌈' + kw.toFixed(2) + ' ÷ 2.5⌉', rule: 'P12' },
+      { label: 'CAT6', value: String((total + spare) * 2), formula: '视频 ' + total + ' + ' + spare + '，控制 ' + total + ' + ' + spare, rule: 'P15' }
+    ];
+    const strip = F.map((f) => ({ name: f.name, text: f.n + ' 台 · ' + f.px + ' px', style: 'flex: ' + f.px + ' 1 0; min-width: 0; padding: 10px; border-right: 2px dashed #15203A; background: ' + fcol[f.id] + '22' }));
+    const seg = (on) => 'height: 36px; padding: 0 14px; border: 0; font: inherit; cursor: pointer; ' + (on ? 'background: #15203A; color: #FFFFFF; font-weight: 600' : 'background: #FFFFFF; color: #3B3A36');
+    return {
+      exL: () => this.setState({ ex: 'L', wv: {}, fx: {} }), exU: () => this.setState({ ex: 'U', wv: {}, fx: {} }),
+      exLBtn: seg(ex === 'L'), exUBtn: seg(ex === 'U'),
+      faces, kpis, corners, walls, dots, strip, planAspect: pw + ' / ' + ph,
+      canvasNote: '画布 ' + pxSum + ' × 1200 px · 内容制作按这张画布出片。',
+      chkBg: blocks ? '#FDE4E4' : notes ? '#FDF1E6' : '#E6F2EC', chkFg: blocks ? '#8E1515' : notes ? '#7C3A10' : '#2F7A5B',
+      chkText: blocks ? '有 ' + blocks + ' 处转角机位冲突（P20），人工处理前不能继续。' : notes ? '可以继续；有 ' + notes + ' 面需要留意（见每面检查）。' : '校验通过：每面融合带在 15–30 %，转角无未处理冲突。'
+    };
+  }
+}
+</script>
+</body>
+</html>

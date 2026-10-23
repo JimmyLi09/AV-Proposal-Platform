@@ -2,10 +2,10 @@ import { Diagram as D, WorkspaceView } from "./api";
 
 const SUPPLY: Record<string, string> = { owner: "业主提供", included: "随设备附带", missing: "未选出" };
 
-/** 由 BOQ 生成的示意图。Level 1 用服务器生成的 SVG（文字已转义），Level 2 列出设备与连接，并对应 BOQ 行号。 */
+/** 由内部明细生成的示意图。Level 1 用服务器生成的 SVG（文字已转义），Level 2 列出设备与连接，并对应明细行号。 */
 export default function DiagramTab({ view, diagram }: { view: WorkspaceView; diagram: D }) {
-  const rows = Object.fromEntries((view.boq?.lines ?? []).map((l, i) => [l.key, i + 1]).filter(([k]) => k));
-  const rowText = (keys: string[]) => (keys.length ? `BOQ 第 ${keys.map((k) => rows[k] ?? "?").join("、")} 行` : "");
+  const rows = Object.fromEntries((view.result?.boq ?? []).map((l, i) => [l.key, i + 1]).filter(([k]) => k));
+  const rowText = (keys: string[]) => (keys.length ? `明细第 ${keys.map((k) => rows[k] ?? "?").join("、")} 行` : "");
   const name = (id: string) => diagram.nodes[id]?.title ?? id;
 
   return (
@@ -14,8 +14,8 @@ export default function DiagramTab({ view, diagram }: { view: WorkspaceView; dia
         <h2>
           Level 1 · Concept diagram <span className="zh">概念图</span>
         </h2>
-        <p className="muted">由 BOQ 生成：信号从左到右，电源来自下方的配电箱。虚线框是业主提供的设备，不进 BOQ。</p>
-        {diagram.unmatched.length > 0 && <p className="error">图上有设备在 BOQ 里找不到：{diagram.unmatched.join("；")}</p>}
+        <p className="muted">由 BOQ 内部明细生成：信号从左到右，电源来自下方的配电箱。虚线框是业主提供的设备，不进 BOQ。</p>
+        {diagram.unmatched.length > 0 && <p className="error">图上有设备在 BOQ 明细里找不到：{diagram.unmatched.join("；")}</p>}
         <div className="svg-wrap" dangerouslySetInnerHTML={{ __html: diagram.svg }} />
       </section>
 
@@ -23,7 +23,7 @@ export default function DiagramTab({ view, diagram }: { view: WorkspaceView; dia
         <h2>
           Level 2 · Schematic <span className="zh">原理图</span>
         </h2>
-        <p className="muted">型号和数量取自产品库和 BOQ，每条连接都标出线缆和对应的 BOQ 行。Level 3 施工图是下一版（B 模式）。</p>
+        <p className="muted">型号和数量取自产品库和 BOQ 内部明细，每条连接都标出线缆和对应的明细行。Level 3 施工图是下一版（B 模式）。</p>
         <div className="tiles">
           {Object.entries(diagram.nodes).map(([id, n]) => (
             <div key={id} className={`tile ${n.supply !== "boq" ? "dashed" : ""}`}>
@@ -45,7 +45,7 @@ export default function DiagramTab({ view, diagram }: { view: WorkspaceView; dia
                 <th>To 终点</th>
                 <th>Cable 线缆</th>
                 <th>Qty 数量</th>
-                <th>BOQ line BOQ 行</th>
+                <th>Breakdown line 明细行</th>
               </tr>
             </thead>
             <tbody>

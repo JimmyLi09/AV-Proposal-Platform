@@ -12,67 +12,74 @@
 body{margin:0;background:#F5F2EC}
 a{color:#2C5AA0}
 a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
 </style>
 </helmet>
-<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
 
 <nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
 <div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
-<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
-<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
-<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
-<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
-<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
-<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
-<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
 <div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
-<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
-<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
 <div style="flex: 1; min-height: 24px"></div>
-<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
 </nav>
 
 <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
 <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
-<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
 <div style="flex: 1"></div>
-<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
 <span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
 </header>
 
 <main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
-<div><div style="font-size: 12px; color: #6B6558">114-Showroom · PJ-1 展厅投影墙 · Rev 0</div><h1 style="margin: 0; font-size: 24px; color: #15203A">Confirm Inputs · Projection <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">确认输入（投影）</span></h1></div>
+<div><div style="font-size: 12px; color: #6B6558"><span class="zh">114-Showroom · PJ-1 展厅投影墙 · Rev 0</span><span class="en">114-Showroom · PJ-1 Showroom projection wall · Rev 0</span></div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Confirm Inputs · Projection</span><span class="zh">确认输入（投影）</span></h1></div>
 
 <nav aria-label="Proposal steps 方案步骤" style="display: flex; flex-wrap: wrap; gap: 6px">
-<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">1 Project &amp; Files 项目与文件</a>
-<a href="ConfirmPJ.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none">2 Confirm Inputs 确认输入</a>
-<a href="WorkspacePJ.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">3 Recommendation 推荐</a>
-<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">4 Cost &amp; BOQ 成本与 BOQ</a>
-<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">5 Annotate 标注</a>
-<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">6 Review &amp; Export 审核导出</a>
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">1 项目与文件</span><span class="en">1 Project &amp; Files</span></a>
+<a href="ConfirmPJ.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">2 确认输入</span><span class="en">2 Confirm Inputs</span></a>
+<a href="WorkspacePJ.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">3 推荐</span><span class="en">3 Recommendation</span></a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">4 工程量清单</span><span class="en">4 BOQ</span></a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">5 标注</span><span class="en">5 Annotate</span></a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">6 审核导出</span><span class="en">6 Review &amp; Export</span></a>
 </nav>
 
 <div style="padding: 11px 14px; border-radius: 10px; background: #FDF1E6; border: 1px solid #F0D2B4; color: #7C3A10">
-<b>Local Agent 读取了 4 个文件，找到 9 个字段。</b>置信度为 Medium / Low 的字段需要逐个确认，全部确认后才能运行计算。
+<b><span class="zh">读取了 4 个文件，找到 9 个字段。</span><span class="en">Local Agent</span></b><span class="zh">置信度为 的字段需要逐个确认，全部确认后才能运行计算。</span><span class="en">Confidence is Medium / Low</span>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
 
 <section style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">Extracted information <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">提取信息</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Extracted information</span><span class="zh">提取信息</span></h2>
 <div style="overflow-x: auto">
 <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 680px">
-<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Field 字段</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Value 值</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Source 来源</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Confidence 置信度</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Status 状态</th></tr></thead>
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">字段</span><span class="en">Field</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">值</span><span class="en">Value</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">来源</span><span class="en">Source</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">置信度</span><span class="en">Confidence</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">状态</span><span class="en">Status</span></th></tr></thead>
 <tbody>
-<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Wall width 墙宽</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>18325 mm</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">立面图 DWG · 114_Showroom_Elev.dwg</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px; white-space: nowrap">High 高</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="color: #2F7A5B">Confirmed 已确认</span></td></tr>
-<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Wall height 墙高</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>2700 mm</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">立面图 DWG · 114_Showroom_Elev.dwg</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px; white-space: nowrap">High 高</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="color: #2F7A5B">Confirmed 已确认</span></td></tr>
-<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Available depth 可用进深</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">3200 mm</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">平面图 PDF · p.2</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px; white-space: nowrap">Medium 中</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{dpDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{dpNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_dp}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
-<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Ceiling height 天花高度</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">3000 mm</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">剖面图缺失 · 手填</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11.5px; white-space: nowrap">Low 低</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{clDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{clNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_cl}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
-<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Mounting 安装方式</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">Ceiling 吊顶</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">手填</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px; white-space: nowrap">Medium 中</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{mtDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{mtNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_mt}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
-<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Ambient light 环境光</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">≤ 150 lux（暗场展厅）</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">手填</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11.5px; white-space: nowrap">Low 低</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{amDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{amNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_am}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
-<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Surface 幕面</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">白色涂料墙，增益 1.0</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">现场照片 · 114_site_03.jpg</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px; white-space: nowrap">Medium 中</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{sfDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{sfNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_sf}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
-<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Nearest viewing 最近观看距离</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">1.5 m</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">手填</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11.5px; white-space: nowrap">Low 低</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{vwDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{vwNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_vw}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
-<tr style="background: #FFFBF5"><td style="padding: 9px 8px; font-weight: 600">Signal run 信号距离</td><td style="padding: 9px 8px">35 m（机柜到投影机）</td><td style="padding: 9px 8px; color: #6B6558">平面图 PDF · p.2</td><td style="padding: 9px 8px"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px; white-space: nowrap">Medium 中</span></td><td style="padding: 9px 8px"><sc-if value="{{sgDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600">Confirmed 已确认</span></sc-if><sc-if value="{{sgNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_sg}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap">Confirm 确认</button></sc-if></td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600"><span class="zh">墙宽</span><span class="en">Wall width</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>18325 mm</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">立面图 DWG · 114_Showroom_Elev.dwg</span><span class="en">Elevation DWG · 114_Showroom_Elev.dwg</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px; white-space: nowrap"><span class="zh">高</span><span class="en">High</span></span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="color: #2F7A5B"><span class="zh">已确认</span><span class="en">Confirmed</span></span></td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600"><span class="zh">墙高</span><span class="en">Wall height</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><b>2700 mm</b></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">立面图 DWG · 114_Showroom_Elev.dwg</span><span class="en">Elevation DWG · 114_Showroom_Elev.dwg</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px; white-space: nowrap"><span class="zh">高</span><span class="en">High</span></span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="color: #2F7A5B"><span class="zh">已确认</span><span class="en">Confirmed</span></span></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600"><span class="zh">可用进深</span><span class="en">Available depth</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">3200 mm</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">平面图 PDF · p.2</span><span class="en">Floor plan PDF · p.2</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px; white-space: nowrap"><span class="zh">中</span><span class="en">Medium</span></span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{dpDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600"><span class="zh">已确认</span><span class="en">Confirmed</span></span></sc-if><sc-if value="{{dpNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_dp}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap"><span class="zh">确认</span><span class="en">Confirm</span></button></sc-if></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600"><span class="zh">天花高度</span><span class="en">Ceiling height</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">3000 mm</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">剖面图缺失 · 手填</span><span class="en">Section missing · manual</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11.5px; white-space: nowrap"><span class="zh">低</span><span class="en">Low</span></span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{clDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600"><span class="zh">已确认</span><span class="en">Confirmed</span></span></sc-if><sc-if value="{{clNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_cl}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap"><span class="zh">确认</span><span class="en">Confirm</span></button></sc-if></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600"><span class="zh">安装方式</span><span class="en">Mounting</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">吊顶</span><span class="en">Ceiling</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">手填</span><span class="en">Manual</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px; white-space: nowrap"><span class="zh">中</span><span class="en">Medium</span></span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{mtDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600"><span class="zh">已确认</span><span class="en">Confirmed</span></span></sc-if><sc-if value="{{mtNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_mt}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap"><span class="zh">确认</span><span class="en">Confirm</span></button></sc-if></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600"><span class="zh">环境光</span><span class="en">Ambient light</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">≤ 150 （暗场展厅）</span><span class="en">≤ 150 lux</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">手填</span><span class="en">Manual</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11.5px; white-space: nowrap"><span class="zh">低</span><span class="en">Low</span></span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{amDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600"><span class="zh">已确认</span><span class="en">Confirmed</span></span></sc-if><sc-if value="{{amNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_am}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap"><span class="zh">确认</span><span class="en">Confirm</span></button></sc-if></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600"><span class="zh">幕面</span><span class="en">Surface</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">白色涂料墙，增益 1.0</span><span class="en">White painted wall, gain 1.0</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">现场照片 · 114_site_03.jpg</span><span class="en">Site photo · 114_site_03.jpg</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px; white-space: nowrap"><span class="zh">中</span><span class="en">Medium</span></span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{sfDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600"><span class="zh">已确认</span><span class="en">Confirmed</span></span></sc-if><sc-if value="{{sfNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_sf}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap"><span class="zh">确认</span><span class="en">Confirm</span></button></sc-if></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600"><span class="zh">最近观看距离</span><span class="en">Nearest viewing</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">1.5 m</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">手填</span><span class="en">Manual</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11.5px; white-space: nowrap"><span class="zh">低</span><span class="en">Low</span></span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{vwDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600"><span class="zh">已确认</span><span class="en">Confirmed</span></span></sc-if><sc-if value="{{vwNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_vw}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap"><span class="zh">确认</span><span class="en">Confirm</span></button></sc-if></td></tr>
+<tr style="background: #FFFBF5"><td style="padding: 9px 8px; font-weight: 600"><span class="zh">信号距离</span><span class="en">Signal run</span></td><td style="padding: 9px 8px"><span class="zh">35 m（机柜到投影机）</span><span class="en">35 m (rack to projector)</span></td><td style="padding: 9px 8px; color: #6B6558"><span class="zh">平面图 PDF · p.2</span><span class="en">Floor plan PDF · p.2</span></td><td style="padding: 9px 8px"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px; white-space: nowrap"><span class="zh">中</span><span class="en">Medium</span></span></td><td style="padding: 9px 8px"><sc-if value="{{sgDone}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600"><span class="zh">已确认</span><span class="en">Confirmed</span></span></sc-if><sc-if value="{{sgNot}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{confirm_sg}}" style="height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap"><span class="zh">确认</span><span class="en">Confirm</span></button></sc-if></td></tr>
+<tr><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4; font-weight: 600"><span class="zh">播放源位置</span><span class="en">Source location</span></td><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4"><span class="zh">机柜</span><span class="en">Server Room</span></td><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4; color: #6B6558"><span class="zh">新增 · 默认值，可改</span><span class="en">New · default value, editable</span></td><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px; white-space: nowrap"><span class="zh">高</span><span class="en">High</span></span></td><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4; color: #6B6558"><span class="zh">无需确认</span><span class="en">No need</span></td></tr>
+<tr><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4; font-weight: 600"><span class="zh">中控</span><span class="en">Central control</span></td><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4"><span class="zh">有 · 投影走 PJLink（LAN）</span><span class="en">Yes · projectors via PJLink (LAN)</span></td><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4; color: #6B6558"><span class="zh">新增 · 手填</span><span class="en">New · manual</span></td><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px; white-space: nowrap"><span class="zh">高</span><span class="en">High</span></span></td><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4; color: #6B6558"><span class="zh">无需确认</span><span class="en">No need</span></td></tr>
+<tr><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4; font-weight: 600"><span class="zh">同步组</span><span class="en">Sync group</span></td><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4"><span class="zh">无（独立墙）</span><span class="en">None (standalone wall)</span></td><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4; color: #6B6558"><span class="zh">新增 · 有其他屏要同步时填</span><span class="en">New · fill in when other screens need sync</span></td><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px; white-space: nowrap"><span class="zh">高</span><span class="en">High</span></span></td><td style="padding: 9px 8px; border-top: 1px solid #EFEBE4; color: #6B6558"><span class="zh">无需确认</span><span class="en">No need</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -80,39 +87,39 @@ a:hover{color:#15203A}
 
 <div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px">Drawing completeness <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">资料齐全度</span></h2><div style="flex: 1"></div><span style="padding: 2px 10px; border-radius: 12px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 12.5px">Grade B 级</span></div>
+<div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px"><span class="en">Drawing completeness</span><span class="zh">资料齐全度</span></h2><div style="flex: 1"></div><span style="padding: 2px 10px; border-radius: 12px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 12.5px"><span class="zh">级</span><span class="en">Grade B</span></span></div>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(110px, 1fr)); gap: 6px; font-size: 12.5px">
-<div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #EFEBE4; border-radius: 8px; background: #FFFFFF"><span style="color: #2F7A5B; font-weight: 700">✓</span><span>Plan 平面图</span></div>
-<div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #EFEBE4; border-radius: 8px; background: #FFFFFF"><span style="color: #2F7A5B; font-weight: 700">✓</span><span>Elevation 立面图</span></div>
-<div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #EFEBE4; border-radius: 8px; background: #FDF6F6"><span style="color: #B91C1C; font-weight: 700">✗</span><span>Section 剖面图</span></div>
-<div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #EFEBE4; border-radius: 8px; background: #FDF6F6"><span style="color: #B91C1C; font-weight: 700">✗</span><span>RCP 天花图</span></div>
+<div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #EFEBE4; border-radius: 8px; background: #FFFFFF"><span style="color: #2F7A5B; font-weight: 700">✓</span><span><span class="zh">平面图</span><span class="en">Plan</span></span></div>
+<div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #EFEBE4; border-radius: 8px; background: #FFFFFF"><span style="color: #2F7A5B; font-weight: 700">✓</span><span><span class="zh">立面图</span><span class="en">Elevation</span></span></div>
+<div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #EFEBE4; border-radius: 8px; background: #FDF6F6"><span style="color: #B91C1C; font-weight: 700">✗</span><span><span class="zh">剖面图</span><span class="en">Section</span></span></div>
+<div style="display: flex; align-items: center; gap: 8px; padding: 6px 10px; border: 1px solid #EFEBE4; border-radius: 8px; background: #FDF6F6"><span style="color: #B91C1C; font-weight: 700">✗</span><span><span class="zh">天花图</span><span class="en">RCP</span></span></div>
 </div>
-<div style="margin-top: 10px; font-size: 12px; color: #6B6558; line-height: 1.6">缺剖面图，天花高度只能手填。风险与假设里会自动加一条资料齐全度条款，计算结果照常出。补齐剖面和 RCP 后可升到 A 级。</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558; line-height: 1.6"><span class="zh">缺剖面图，天花高度只能手填。风险与假设里会自动加一条资料齐全度条款，计算结果照常出。补齐剖面和 RCP 后可升到 A 级。</span><span class="en">Section drawing missing, ceiling height can only be entered manually. A documentation completeness clause is added automatically to Risks and Assumptions; results are still calculated. Upgrade to grade A after adding section and RCP.</span></div>
 </section>
 <section style="background: #E8EFF9; border: 1px solid #C9D8EE; border-radius: 12px; padding: 14px 16px; color: #1F3A66">
-<div style="font-weight: 700; margin-bottom: 4px">Throw distance 投射距离</div>
-<div style="font-size: 12.5px; line-height: 1.6">投射距离从<b>镜头前端</b>量到墙面，不是从机身中心或吊架量起。核对可用进深时，机身长度和走线余量要另外留出。</div>
+<div style="font-weight: 700; margin-bottom: 4px"><span class="zh">投射距离</span><span class="en">Throw distance</span></div>
+<div style="font-size: 12.5px; line-height: 1.6"><span class="zh">投射距离从</span><span class="en">Throw distance from</span><b><span class="zh">镜头前端</span><span class="en">Lens front</span></b><span class="zh">量到墙面，不是从机身中心或吊架量起。核对可用进深时，机身长度和走线余量要另外留出。</span><span class="en">Measured to the wall, not from the unit center or mount. When checking usable depth, leave extra room for unit length and cabling.</span></div>
 </section>
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 8px; font-size: 15px">Source preview <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">来源预览</span></h2>
-<div style="font-size: 12px; color: #6B6558; margin-bottom: 8px">114_Showroom_Elev.dwg · 立面 B</div>
+<h2 style="margin: 0 0 8px; font-size: 15px"><span class="en">Source preview</span><span class="zh">来源预览</span></h2>
+<div style="font-size: 12px; color: #6B6558; margin-bottom: 8px"><span class="zh">114_Showroom_Elev.dwg · 立面 B</span><span class="en">114_Showroom_Elev.dwg · Elevation B</span></div>
 <div style="border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; padding: 16px; font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: #3B3A36; line-height: 1.9">
 SHOWROOM ELEVATION B<br>
 <span style="background: #FDE7C8; outline: 2px solid #C2410C; padding: 1px 3px">PROJECTION WALL 18325 (W) x 2700 (H)</span><br>
 FFL +0.000 · FCL +3.000 (TBC)<br>
 FINISH: WHITE PAINT
 </div>
-<div style="font-size: 12px; color: #6B6558; margin-top: 8px">原文件只读，这里是用于核对的截取。</div>
+<div style="font-size: 12px; color: #6B6558; margin-top: 8px"><span class="zh">原文件只读，这里是用于核对的截取。</span><span class="en">Original file is read-only; this is a crop for verification.</span></div>
 </section>
 </div>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px">
-<sc-if value="{{notReady}}" hint-placeholder-val="{{ true }}"><span style="color: #9A4A12; font-weight: 600">还有 {{left}} 个字段待确认</span></sc-if>
-<button type="button" onClick="{{reset}}" style="height: 42px; padding: 0 16px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">Reset demo 重置演示</button>
-<button type="button" style="height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Save draft 保存草稿</button>
-<sc-if value="{{notReady}}" hint-placeholder-val="{{ true }}"><button type="button" disabled style="height: 42px; padding: 0 20px; border-radius: 8px; border: 0; background: #D8D2C8; color: #6B6558; font: inherit; font-weight: 600; cursor: not-allowed">Run calculation 运行计算</button></sc-if>
-<sc-if value="{{ready}}" hint-placeholder-val="{{ false }}"><a href="WorkspacePJ.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">Run calculation 运行计算 →</a></sc-if>
+<sc-if value="{{notReady}}" hint-placeholder-val="{{ true }}"><span style="color: #9A4A12; font-weight: 600"><span class="zh">还有 {{left}} 个字段待确认</span><span class="en">{{left}} fields left to confirm</span></span></sc-if>
+<button type="button" onClick="{{reset}}" style="height: 42px; padding: 0 16px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">重置演示</span><span class="en">Reset demo</span></button>
+<button type="button" style="height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer"><span class="zh">保存草稿</span><span class="en">Save draft</span></button>
+<sc-if value="{{notReady}}" hint-placeholder-val="{{ true }}"><button type="button" disabled="" style="height: 42px; padding: 0 20px; border-radius: 8px; border: 0; background: #D8D2C8; color: #6B6558; font: inherit; font-weight: 600; cursor: not-allowed"><span class="zh">运行计算</span><span class="en">Run calculation</span></button></sc-if>
+<sc-if value="{{ready}}" hint-placeholder-val="{{ false }}"><a href="WorkspacePJ.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">运行计算 →</span><span class="en">Run calculation →</span></a></sc-if>
 </div>
 </main>
 </div>
@@ -120,7 +127,103 @@ FINISH: WHITE PAINT
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
 class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
   renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
     const s = this.state || {};
     const keys = ['dp', 'cl', 'mt', 'am', 'sf', 'vw', 'sg'];
     const left = keys.filter(k => !s[k]).length;

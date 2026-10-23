@@ -5,6 +5,7 @@ import ProjectDetail from "./ProjectDetail";
 import Projects from "./Projects";
 import Products from "./Products";
 import Rules from "./Rules";
+import Templates from "./Templates";
 import Workspace from "./Workspace";
 
 function useHash() {
@@ -30,7 +31,8 @@ export default function App() {
 
   const projectId = hash.match(/^#\/projects\/(\d+)/)?.[1];
   const proposalId = hash.match(/^#\/proposals\/(\d+)/)?.[1];
-  const page = hash.startsWith("#/rules") ? "rules" : hash.startsWith("#/products") ? "products" : "projects";
+  const page = hash.startsWith("#/rules") ? "rules" : hash.startsWith("#/products") ? "products"
+    : hash.startsWith("#/templates") ? "templates" : "projects";
 
   async function switchName() {
     await api("/session", { method: "DELETE" });
@@ -53,6 +55,9 @@ export default function App() {
         <a href="#/rules" className={`nav-item ${page === "rules" ? "active" : ""}`}>
           Rules Engine<span className="zh">规则引擎</span>
         </a>
+        <a href="#/templates" className={`nav-item ${page === "templates" ? "active" : ""}`}>
+          Templates<span className="zh">模板</span>
+        </a>
       </nav>
       <div className="body">
         <header className="top">
@@ -65,7 +70,8 @@ export default function App() {
           </button>
         </header>
         <main className="main">
-          {page === "rules" ? <Rules /> : page === "products" ? <Products /> : proposalId ? <Workspace id={Number(proposalId)} />
+          {page === "rules" ? <Rules /> : page === "products" ? <Products /> : page === "templates" ? <Templates />
+            : proposalId ? <Workspace id={Number(proposalId)} />
             : projectId ? <ProjectDetail id={Number(projectId)} /> : <Projects />}
         </main>
       </div>

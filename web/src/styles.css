@@ -164,3 +164,14 @@ img.crop { max-width: 100%; border: 1px solid var(--line); border-radius: 6px; b
 .marks { flex: 1 1 260px; display: flex; flex-direction: column; gap: 8px; }
 .mark { display: flex; gap: 8px; align-items: flex-start; border-top: 1px solid var(--line-soft); padding-top: 8px; }
 .mark .grow { display: flex; flex-direction: column; gap: 4px; }
+
+/* 客户版 BOQ 与模板（CR-6） */
+table.boq td { vertical-align: top; }
+table.boq td:nth-child(2) { width: 62%; }
+table.boq input.wide, table.boq textarea { width: 100%; min-width: 320px; }
+table.boq textarea { display: block; margin-top: 4px; resize: vertical; }
+table.boq .group-row td { background: #F4EFE6; }
+input.manual { background: #FFFBEA; border-color: #E8C96A; }
+.note { font-style: italic; margin-top: 4px; }
+.nowrap { white-space: nowrap; }
+input.wide { min-width: 320px; }

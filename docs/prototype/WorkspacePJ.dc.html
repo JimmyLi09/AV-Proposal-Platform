@@ -12,122 +12,127 @@
 body{margin:0;background:#F5F2EC}
 a{color:#2C5AA0}
 a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
 </style>
 </helmet>
-<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
 
 <nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
 <div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
-<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
-<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
-<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
-<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
-<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
-<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
-<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
 <div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
-<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
-<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
 <div style="flex: 1; min-height: 24px"></div>
-<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
 </nav>
 
 <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
 <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
-<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
 <div style="flex: 1"></div>
-<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
 <span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
 </header>
 
 <main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
-<div><div style="font-size: 12px; color: #6B6558">114-Showroom · PJ-1 展厅投影墙 · Rev 0 · 规则 v1.3、产品库 v1.0 计算</div><h1 style="margin: 0; font-size: 24px; color: #15203A">Projection Recommendation <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">投影推荐方案</span></h1></div>
+<div><div style="font-size: 12px; color: #6B6558"><span class="zh">114-Showroom · PJ-1 展厅投影墙 · Rev 0 · 规则 v1.3、产品库 v1.0 计算</span><span class="en">114-Showroom · PJ-1 Showroom projection wall · Rev 0 · Calculated with rules v1.3, product library v1.0</span></div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Projection Recommendation</span><span class="zh">投影推荐方案</span></h1></div>
 
 <nav aria-label="Proposal steps 方案步骤" style="display: flex; flex-wrap: wrap; gap: 6px">
-<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">1 Project &amp; Files 项目与文件</a>
-<a href="ConfirmPJ.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">2 Confirm Inputs 确认输入</a>
-<a href="WorkspacePJ.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none">3 Recommendation 推荐</a>
-<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">4 Cost &amp; BOQ 成本与 BOQ</a>
-<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">5 Annotate 标注</a>
-<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">6 Review &amp; Export 审核导出</a>
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">1 项目与文件</span><span class="en">1 Project &amp; Files</span></a>
+<a href="ConfirmPJ.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">2 确认输入</span><span class="en">2 Confirm Inputs</span></a>
+<a href="WorkspacePJ.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">3 推荐</span><span class="en">3 Recommendation</span></a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">4 工程量清单</span><span class="en">4 BOQ</span></a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">5 标注</span><span class="en">5 Annotate</span></a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">6 审核导出</span><span class="en">6 Review &amp; Export</span></a>
 </nav>
 
 <div role="tablist" style="display: flex; flex-wrap: wrap; gap: 22px; border-bottom: 1px solid #E6E0D6">
-<a href="WorkspacePJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid #15203A; color: #15203A; font-weight: 700; text-decoration: none">Recommendation 推荐</a>
-<a href="CalcPJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none">Calculations 计算依据</a>
-<a href="DiagramPJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none">Diagram 示意图</a>
+<a href="WorkspacePJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid #15203A; color: #15203A; font-weight: 700; text-decoration: none"><span class="zh">推荐</span><span class="en">Recommendation</span></a>
+<a href="CalcPJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">计算依据</span><span class="en">Calculations</span></a>
+<a href="DiagramPJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">示意图</span><span class="en">Diagram</span></a>
+<a href="SystemPJ.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">系统与布线</span><span class="en">System &amp; Cabling</span></a>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
 
 <section style="flex: 1 1 240px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<div style="display: flex; align-items: baseline; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px">Confirmed inputs <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">已确认输入</span></h2><div style="flex: 1"></div><a href="ConfirmPJ.dc.html" style="font-size: 12.5px">Edit 编辑</a></div>
+<div style="display: flex; align-items: baseline; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px"><span class="en">Confirmed inputs</span><span class="zh">已确认输入</span></h2><div style="flex: 1"></div><a href="ConfirmPJ.dc.html" style="font-size: 12.5px"><span class="zh">编辑</span><span class="en">Edit</span></a></div>
 <div style="display: grid; grid-template-columns: auto 1fr; gap: 7px 12px; font-size: 12.5px">
-<span style="color: #6B6558">Wall 墙面</span><span>18325 × 2700 mm</span>
-<span style="color: #6B6558">Depth 进深</span><span>3200 mm</span>
-<span style="color: #6B6558">Ceiling 天花</span><span>3000 mm（手填）</span>
-<span style="color: #6B6558">Mounting 安装</span><span>Ceiling 吊顶</span>
-<span style="color: #6B6558">Ambient 环境光</span><span>≤ 150 lux</span>
-<span style="color: #6B6558">Surface 幕面</span><span>白色涂料墙 · 增益 1.0</span>
-<span style="color: #6B6558">Nearest viewing 最近观看</span><span>1.5 m</span>
-<span style="color: #6B6558">Signal run 信号距离</span><span>35 m</span>
-<span style="color: #6B6558">Drawings 资料</span><span>B 级 · 缺剖面 / RCP</span>
+<span style="color: #6B6558"><span class="zh">墙面</span><span class="en">Wall</span></span><span>18325 × 2700 mm</span>
+<span style="color: #6B6558"><span class="zh">进深</span><span class="en">Depth</span></span><span>3200 mm</span>
+<span style="color: #6B6558"><span class="zh">天花</span><span class="en">Ceiling</span></span><span><span class="zh">3000 mm（手填）</span><span class="en">3000 mm (entered manually)</span></span>
+<span style="color: #6B6558"><span class="zh">安装</span><span class="en">Mounting</span></span><span><span class="zh">吊顶</span><span class="en">Ceiling</span></span>
+<span style="color: #6B6558"><span class="zh">环境光</span><span class="en">Ambient</span></span><span>≤ 150 lux</span>
+<span style="color: #6B6558"><span class="zh">幕面</span><span class="en">Surface</span></span><span><span class="zh">白色涂料墙 · 增益 1.0</span><span class="en">White painted wall · gain 1.0</span></span>
+<span style="color: #6B6558"><span class="zh">最近观看</span><span class="en">Nearest viewing</span></span><span>1.5 m</span>
+<span style="color: #6B6558"><span class="zh">信号距离</span><span class="en">Signal run</span></span><span>35 m</span>
+<span style="color: #6B6558"><span class="zh">资料</span><span class="en">Drawings</span></span><span><span class="zh">B 级 · 缺剖面 / RCP</span><span class="en">Grade B · missing section / RCP</span></span>
 </div>
-<div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #EFEBE4; font-size: 12px; color: #6B6558">Jimmy 确认 · 今天 09:31</div>
+<div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #EFEBE4; font-size: 12px; color: #6B6558"><span class="zh">Jimmy 确认 · 今天 09:31</span><span class="en">Confirmed by Jimmy · Today 09:31</span></div>
 </section>
 
 <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><h2 style="margin: 0; font-size: 17px; color: #15203A">5 × PT-BHZ611C · 0.5 定焦 · 单面融合墙 18325 × 2700 mm</h2><div style="flex: 1"></div><span style="padding: 2px 10px; border-radius: 12px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 12px">Rules engine 规则引擎 · 数字不经 AI</span></div>
-<div style="margin-top: 4px; color: #6B6558">Projector 投影机: PT-BHZ611C（WUXGA 1920 × 1200，参数待补）· Lens 镜头: 国产定焦 0.5 · Blender 融合器: ZWIN 16ch <span style="padding: 0 6px; border-radius: 8px; background: #F1EEE8; color: #6B6558; font-size: 11px">示例值 sample</span></div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px"><h2 style="margin: 0; font-size: 17px; color: #15203A"><span class="zh">5 × PT-BHZ611C · 0.5 定焦 · 单面融合墙 18325 × 2700 mm</span><span class="en">5 × PT-BHZ611C · 0.5 fixed lens · single-face blended wall 18325 × 2700 mm</span></h2><div style="flex: 1"></div><span style="padding: 2px 10px; border-radius: 12px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 12px"><span class="zh">规则引擎 · 数字不经 AI</span><span class="en">Rules engine · numbers not via AI</span></span></div>
+<div style="margin-top: 4px; color: #6B6558"><span class="zh">投影机: PT-BHZ611C（WUXGA 1920 × 1200，参数待补）· 镜头: 国产定焦 0.5 · 融合器: ZWIN 16ch</span><span class="en">Projector: PT-BHZ611C (WUXGA 1920 × 1200, specs pending) · Lens: domestic fixed 0.5 · Blender: ZWIN 16ch</span> <span style="padding: 0 6px; border-radius: 8px; background: #F1EEE8; color: #6B6558; font-size: 11px"><span class="zh">示例值 sample</span><span class="en">Sample value</span></span></div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(178px, 1fr)); gap: 10px; margin-top: 14px">
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Projectors 台数</div><div style="font-size: 21px; font-weight: 700; color: #15203A">5</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">ceil((18.325 − 4.32) ÷ (4.32 × 0.85)) + 1</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P2 · v1.3</div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Lens 镜头</div><div style="font-size: 21px; font-weight: 700; color: #15203A">0.5</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">0.5 × 4.32 = 2.16 m ≤ 3.2 m</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P3 · 国产定焦 · v1.3</div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Throw distance 机位距离</div><div style="font-size: 21px; font-weight: 700; color: #15203A">2.24 m</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">镜头前端 → 墙面</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P3 · v1.3</div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Image width 实际画面宽</div><div style="font-size: 21px; font-weight: 700; color: #15203A">4.48 m</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">2.24 ÷ 0.5 · 高 4.48 ÷ 1.6 = 2.80 m</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P4 · v1.3</div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Blend zone 融合带</div><div style="font-size: 21px; font-weight: 700; color: #15203A">22.7 % ≈ 1.02 m</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">1 − (18.325 − 4.48) ÷ (4 × 4.48)</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P5 · 15–30 % · v1.3</div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Canvas 拼接分辨率</div><div style="font-size: 21px; font-weight: 700; color: #15203A">7854 × 1200</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">5 × 1920 − 4 × 0.227 × 1920</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P7 · WUXGA · v1.3</div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Pixel size 像素尺寸</div><div style="font-size: 21px; font-weight: 700; color: #15203A">2.3 mm</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">18325 ÷ 7854 = 2.33</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P8 · 1 m/mm · v1.3</div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Lumens per unit 单台流明需求</div><div style="font-size: 21px; font-weight: 700; color: #15203A">4926 lm</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">100 × π × (4.48 × 2.80) ÷ 1.0 ÷ 0.8</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P9 · v1.3 <span style="padding: 0 6px; border-radius: 8px; background: #F1EEE8; color: #6B6558; font-size: 11px">示例值 sample</span></div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Blender 融合器</div><div style="font-size: 21px; font-weight: 700; color: #15203A">ZWIN 16ch × 1</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">输出 16 ≥ 5 台</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P11 · v1.3</div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">Power circuits 电源</div><div style="font-size: 21px; font-weight: 700; color: #15203A">2 路</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">5 × 450 + 500 = 2.75 kW ÷ 2.5</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P12 · v1.3 <span style="padding: 0 6px; border-radius: 8px; background: #F1EEE8; color: #6B6558; font-size: 11px">示例值 sample</span></div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">台数</span><span class="en">Projectors</span></div><div style="font-size: 21px; font-weight: 700; color: #15203A">5</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">ceil((18.325 − 4.32) ÷ (4.32 × 0.85)) + 1</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P2 · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">镜头</span><span class="en">Lens</span></div><div style="font-size: 21px; font-weight: 700; color: #15203A">0.5</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">0.5 × 4.32 = 2.16 m ≤ 3.2 m</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px"><span class="zh">P3 · 国产定焦 · v1.3</span><span class="en">P3 · domestic fixed lens · v1.3</span></div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">机位距离</span><span class="en">Throw distance</span></div><div style="font-size: 21px; font-weight: 700; color: #15203A">2.24 m</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace"><span class="zh">镜头前端 → 墙面</span><span class="en">Lens front → wall</span></div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P3 · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">实际画面宽</span><span class="en">Image width</span></div><div style="font-size: 21px; font-weight: 700; color: #15203A">4.48 m</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace"><span class="zh">2.24 ÷ 0.5 · 高 4.48 ÷ 1.6 = 2.80 m</span><span class="en">2.24 ÷ 0.5 · height 4.48 ÷ 1.6 = 2.80 m</span></div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P4 · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">融合带</span><span class="en">Blend zone</span></div><div style="font-size: 21px; font-weight: 700; color: #15203A">22.7 % ≈ 1.02 m</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">1 − (18.325 − 4.48) ÷ (4 × 4.48)</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P5 · 15–30 % · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">拼接分辨率</span><span class="en">Canvas</span></div><div style="font-size: 21px; font-weight: 700; color: #15203A">7854 × 1200</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">5 × 1920 − 4 × 0.227 × 1920</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P7 · WUXGA · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">像素尺寸</span><span class="en">Pixel size</span></div><div style="font-size: 21px; font-weight: 700; color: #15203A">2.3 mm</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">18325 ÷ 7854 = 2.33</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P8 · 1 m/mm · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">单台流明需求</span><span class="en">Lumens per unit</span></div><div style="font-size: 21px; font-weight: 700; color: #15203A">4926 lm</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">100 × π × (4.48 × 2.80) ÷ 1.0 ÷ 0.8</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P9 · v1.3 <span style="padding: 0 6px; border-radius: 8px; background: #F1EEE8; color: #6B6558; font-size: 11px"><span class="zh">示例值 sample</span><span class="en">Sample value</span></span></div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">融合器</span><span class="en">Blender</span></div><div style="font-size: 21px; font-weight: 700; color: #15203A">ZWIN 16ch × 1</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace"><span class="zh">输出 16 ≥ 5 台</span><span class="en">Outputs 16 ≥ 5 units</span></div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P11 · v1.3</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px"><span class="zh">电源</span><span class="en">Power circuits</span></div><div style="font-size: 21px; font-weight: 700; color: #15203A"><span class="zh">2 路</span><span class="en">2 ch</span></div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">(2.25 + 0.79) × 1.1 = 3.34 kW ÷ 2.5</div><div style="font-size: 11px; color: #6B6558; margin-top: 3px">P12 · v1.3 <span style="padding: 0 6px; border-radius: 8px; background: #F1EEE8; color: #6B6558; font-size: 11px"><span class="zh">示例值 sample</span><span class="en">Sample value</span></span></div></div>
 </div>
-<div style="margin-top: 10px"><a href="CalcPJ.dc.html" style="font-weight: 600">查看每条公式和参数来源（P1–P13）→</a></div>
+<div style="margin-top: 10px"><a href="CalcPJ.dc.html" style="font-weight: 600"><span class="zh">查看每条公式和参数来源（P1–P13）→</span><span class="en">View each formula and parameter source (P1–P13) →</span></a></div>
 </section>
 
 <div style="display: flex; flex-wrap: wrap; gap: 16px">
 <section style="flex: 1 1 300px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">Checks <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">检查</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Checks</span><span class="zh">检查</span></h2>
 <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12.5px">
-<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px; white-space: nowrap">PASS 通过</span><span>融合带 22.7 % 在 15–30 % 范围内（P5）</span></div>
-<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px; white-space: nowrap">PASS 通过</span><span>高度覆盖：画面高 2.80 m ≥ 墙高 2.70 m，上下各余 50 mm（P6）</span></div>
-<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px; white-space: nowrap">PASS 通过</span><span>亮度：需求 4926 lm ≤ PT-BHZ611C 6000 lm（P9，示例值）</span></div>
-<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px; white-space: nowrap">PASS 通过</span><span>融合器输出 16 ≥ 5 台（P11）</span></div>
-<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 11px; white-space: nowrap">NOTE 提示</span><span>最近观看 1.5 m &lt; 2.3 m，近看会觉得不够清晰（P8）</span></div>
-<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 11px; white-space: nowrap">NOTE 提示</span><span>离墙 1.44 m 以内站人（身高 1.8 m）会挡光（P10）</span></div>
-<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 11px; white-space: nowrap">NOTE 提示</span><span>PT-BHZ611C 参数待补，目前按示例值 6000 lm 计算</span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px; white-space: nowrap"><span class="zh">通过</span><span class="en">PASS</span></span><span><span class="zh">融合带 22.7 % 在 15–30 % 范围内（P5）</span><span class="en">Blend zone 22.7 % within 15–30 % range (P5)</span></span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px; white-space: nowrap"><span class="zh">通过</span><span class="en">PASS</span></span><span><span class="zh">高度覆盖：画面高 2.80 m ≥ 墙高 2.70 m，上下各余 50 mm（P6）</span><span class="en">Height coverage: image height 2.80 m ≥ wall height 2.70 m, 50 mm margin top and bottom (P6)</span></span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px; white-space: nowrap"><span class="zh">通过</span><span class="en">PASS</span></span><span><span class="zh">亮度：需求 4926 lm ≤ PT-BHZ611C 6000 （P9，示例值）</span><span class="en">Brightness: required 4926 lm ≤ PT-BHZ611C 6000 lm</span></span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 700; font-size: 11px; white-space: nowrap"><span class="zh">通过</span><span class="en">PASS</span></span><span><span class="zh">融合器输出 16 ≥ 5 台（P11）</span><span class="en">Blender outputs 16 ≥ 5 units (P11)</span></span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 11px; white-space: nowrap"><span class="zh">提示</span><span class="en">NOTE</span></span><span><span class="zh">最近观看 1.5 m &lt; 2.3 m，近看会觉得不够清晰（P8）</span><span class="en">Nearest viewing 1.5 m &lt; 2.3 m, may look not sharp enough up close (P8)</span></span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 11px; white-space: nowrap"><span class="zh">提示</span><span class="en">NOTE</span></span><span><span class="zh">离墙 1.44 m 以内站人（身高 1.8 m）会挡光（P10）</span><span class="en">Person (1.8 m tall) standing within 1.44 m of the wall causes shadowing (P10)</span></span></div>
+<div style="display: flex; gap: 8px"><span style="flex: 0 0 auto; align-self: flex-start; padding: 0 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 700; font-size: 11px; white-space: nowrap"><span class="zh">提示</span><span class="en">NOTE</span></span><span><span class="zh">PT-BHZ611C 参数待补，目前按示例值 6000 计算</span><span class="en">PT-BHZ611C specs pending, currently using sample value 6000 lm</span></span></div>
 </div>
-<div style="margin-top: 10px; font-size: 12px; color: #6B6558">出现 BLOCK 阻断时，修正前不能导出。</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558"><span class="zh">出现 BLOCK 阻断时，修正前不能导出。</span><span class="en">When a BLOCK occurs, export is disabled until fixed.</span></div>
 </section>
 <section style="flex: 1 1 300px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">Risks &amp; assumptions <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">风险与假设</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Risks &amp; assumptions</span><span class="zh">风险与假设</span></h2>
 <ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px; font-size: 12.5px">
-<li>融合带区域可能偏亮，需现场调试几何与黑电平。</li>
-<li>清晰度受像素尺寸 2.3 mm 限制，近距离观看会看到像素颗粒。</li>
-<li>天花过矮会影响吊装和机位高度，需现场复核。</li>
-<li>天花或建筑抖动可能导致融合错位，吊架需做稳固处理。</li>
-<li><span style="padding: 0 6px; border-radius: 8px; background: #FDF1E6; color: #9A4A12; font-size: 11px; font-weight: 600">Auto 自动</span> 资料缺剖面图和 RCP（B 级），天花高度 3000 mm 为手填；机位高度和遮挡计算以现场复核为准。</li>
+<li><span class="zh">融合带区域可能偏亮，需现场调试几何与黑电平。</span><span class="en">Blend zone may look brighter; geometry and black level need on-site tuning.</span></li>
+<li><span class="zh">清晰度受像素尺寸 2.3 mm 限制，近距离观看会看到像素颗粒。</span><span class="en">Sharpness limited by 2.3 mm pixel pitch; pixels are visible at close range.</span></li>
+<li><span class="zh">天花过矮会影响吊装和机位高度，需现场复核。</span><span class="en">A low ceiling affects rigging and mount position height; verify on site.</span></li>
+<li><span class="zh">天花或建筑抖动可能导致融合错位，吊架需做稳固处理。</span><span class="en">Ceiling or building vibration may misalign the blend; mounts must be stabilized.</span></li>
+<li><span style="padding: 0 6px; border-radius: 8px; background: #FDF1E6; color: #9A4A12; font-size: 11px; font-weight: 600"><span class="zh">自动</span><span class="en">Auto</span></span> <span class="zh">资料缺剖面图和 RCP（B 级），天花高度 3000 mm 为手填；机位高度和遮挡计算以现场复核为准。</span><span class="en">Section drawing and RCP missing (grade B); ceiling height 3000 mm entered manually; mount height and shadowing to be verified on site.</span></li>
 </ul>
-<div style="margin-top: 10px; font-size: 12px; color: #6B6558">前 4 条是 Templates 投影模板的固定条款；最后一条因资料齐全度为 B 级自动加入。</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558"><span class="zh">前 4 条是 投影模板的固定条款；最后一条因资料齐全度为 B 级自动加入。</span><span class="en">The first 4 are standard Templates clauses; the grade B clause was added automatically.</span></div>
 </section>
 </div>
 </div>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px">
-<a href="DiagramPJ.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #1F2430; font-weight: 600; text-decoration: none">View diagram 查看示意图</a>
-<a href="Cost.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">Next: Cost &amp; BOQ 下一步：成本与 BOQ →</a>
+<a href="DiagramPJ.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #1F2430; font-weight: 600; text-decoration: none"><span class="zh">查看示意图</span><span class="en">View diagram</span></a>
+<a href="Cost.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">下一步：工程量清单 →</span><span class="en">Next: BOQ →</span></a>
 </div>
 </main>
 </div>
@@ -135,7 +140,103 @@ a:hover{color:#15203A}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
 class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
   renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
     return {};
   }
 }

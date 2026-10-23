@@ -12,57 +12,61 @@
 body{margin:0;background:#F5F2EC}
 a{color:#2C5AA0}
 a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
 </style>
 </helmet>
-<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
 
 <nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
 <div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
-<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
-<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
-<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
-<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
-<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
-<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
-<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
 <div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
-<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
-<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
 <div style="flex: 1; min-height: 24px"></div>
-<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
 </nav>
 
 <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
 <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
-<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
 <div style="flex: 1"></div>
-<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
 <span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
 </header>
 
 <main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
-<div><div style="font-size: 12px; color: #6B6558">143-Royal Plaza LED · LED-1 Lobby · Rev 1</div><h1 style="margin: 0; font-size: 24px; color: #15203A">Annotate <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">标注</span></h1><p style="margin: 2px 0 0; color: #6B6558">在客户的 PDF 或照片上标出位置。Local Agent 保存一份标注副本，原文件不会被修改。</p></div>
+<div><div style="font-size: 12px; color: #6B6558">143-Royal Plaza LED · LED-1 Lobby · Rev 1</div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Annotate</span><span class="zh">标注</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">在客户的 PDF 或照片上标出位置。保存一份标注副本，原文件不会被修改。</span><span class="en">Mark positions on the client's PDF or photo. Local Agent</span></p></div>
 
 <nav aria-label="Proposal steps" style="display: flex; flex-wrap: wrap; gap: 6px">
-<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">1 Project &amp; Files 项目与文件</a>
-<a href="Confirm.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">2 Confirm Inputs 确认输入</a>
-<a href="Workspace.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">3 Recommendation 推荐</a>
-<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none">4 Cost &amp; BOQ 成本与 BOQ</a>
-<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none">5 Annotate 标注</a>
-<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none">6 Review &amp; Export 审核导出</a>
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">1 项目与文件</span><span class="en">1 Project &amp; Files</span></a>
+<a href="Confirm.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">2 确认输入</span><span class="en">2 Confirm Inputs</span></a>
+<a href="Workspace.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">3 推荐</span><span class="en">3 Recommendation</span></a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">4 工程量清单</span><span class="en">4 BOQ</span></a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">5 标注</span><span class="en">5 Annotate</span></a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">6 审核导出</span><span class="en">6 Review &amp; Export</span></a>
 </nav>
 
 <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
 <section style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 14px">
 <div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 12px">
-<label for="file" style="color: #6B6558">File 文件</label>
+<label for="file" style="color: #6B6558"><span class="zh">文件</span><span class="en">File</span></label>
 <select id="file" style="height: 36px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit; background: #FFFFFF"><option>Lobby_site_photo.jpg</option><option>Lobby_Elevation_RevB.pdf · p.2</option></select>
 <div style="width: 12px"></div>
-<button type="button" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 2px solid #15203A; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Point 点</button>
-<button type="button" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">Area 区域</button>
-<button type="button" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">Device 设备</button>
-<button type="button" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">Text 文字</button>
-<button type="button" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">Set scale 设置比例</button>
+<button type="button" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 2px solid #15203A; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer"><span class="zh">点</span><span class="en">Point</span></button>
+<button type="button" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">区域</span><span class="en">Area</span></button>
+<button type="button" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">设备</span><span class="en">Device</span></button>
+<button type="button" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">文字</span><span class="en">Text</span></button>
+<button type="button" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">设置比例</span><span class="en">Set scale</span></button>
 </div>
 
 <div role="img" aria-label="大堂现场照片，含 4 个编号标记：LED 区域、配电箱、AV 机柜和电源点" style="position: relative; height: 440px; border-radius: 8px; overflow: hidden; background: #D9D3C8">
@@ -75,31 +79,31 @@ a:hover{color:#15203A}
 <div style="position: absolute; left: 30%; width: 40%; top: 18%; height: 2px; background: #C2410C"></div>
 <div style="position: absolute; left: 30%; top: 15.5%; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: #C2410C"></div>
 <div style="position: absolute; left: 70%; top: 15.5%; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%; background: #C2410C"></div>
-<div style="position: absolute; left: 41%; top: 13%; font-size: 11.5px; font-weight: 700; color: #9A3412">Scale 比例: 4480 mm</div>
+<div style="position: absolute; left: 41%; top: 13%; font-size: 11.5px; font-weight: 700; color: #9A3412"><span class="zh">比例: 4480 mm</span><span class="en">Scale: 4480 mm</span></div>
 <div style="position: absolute; left: calc(50% - 14px); top: 36%; width: 28px; height: 28px; border-radius: 50%; background: #C2410C; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF">1</div>
 <div style="position: absolute; left: calc(9% - 14px); top: 48%; width: 28px; height: 28px; border-radius: 50%; background: #2C5AA0; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF">2</div>
 <div style="position: absolute; left: calc(91% - 14px); top: 48%; width: 28px; height: 28px; border-radius: 50%; background: #2C5AA0; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF">3</div>
 <div style="position: absolute; left: calc(22% - 14px); top: 82%; width: 28px; height: 28px; border-radius: 50%; background: #2F7A5B; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #FFFFFF">4</div>
 </div>
-<div style="margin-top: 10px; font-size: 12px; color: #6B6558">比例由屏幕两侧边缘上的两点设定，间距 4480 mm。灰色图形代表客户照片。</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558"><span class="zh">比例由屏幕两侧边缘上的两点设定，间距 4480 mm。灰色图形代表客户照片。</span><span class="en">Scale is set by two points on the screen's side edges, 4480 mm apart. Gray shapes represent the client's photo.</span></div>
 </section>
 
 <section style="flex: 1 1 300px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">Marks 标记</h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="zh">标记</span><span class="en">Marks</span></h2>
 <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px">
-<li style="display: flex; gap: 10px"><span style="flex: 0 0 24px; height: 24px; border-radius: 50%; background: #C2410C; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center">1</span><div><b>LED-1 area 区域</b><div style="font-size: 12px; color: #6B6558">4480 × 2560 mm，底边在 +0.900 FFL</div></div></li>
-<li style="display: flex; gap: 10px"><span style="flex: 0 0 24px; height: 24px; border-radius: 50%; background: #2C5AA0; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span><div><b>DB box 配电箱</b><div style="font-size: 12px; color: #6B6558">BOQ 第 11 行的设备，位于左墙后</div></div></li>
-<li style="display: flex; gap: 10px"><span style="flex: 0 0 24px; height: 24px; border-radius: 50%; background: #2C5AA0; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center">3</span><div><b>AV rack AV 机柜</b><div style="font-size: 12px; color: #6B6558">控制器和处理器，BOQ 第 7、8 行</div></div></li>
-<li style="display: flex; gap: 10px"><span style="flex: 0 0 24px; height: 24px; border-radius: 50%; background: #2F7A5B; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center">4</span><div><b>Power point 电源点</b><div style="font-size: 12px; color: #6B6558">假设在 25 m 以内，待现场确认</div></div></li>
+<li style="display: flex; gap: 10px"><span style="flex: 0 0 24px; height: 24px; border-radius: 50%; background: #C2410C; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center">1</span><div><b><span class="zh">LED-1 区域</span><span class="en">LED-1 area</span></b><div style="font-size: 12px; color: #6B6558"><span class="zh">4480 × 2560 mm，底边在 +0.900 FFL</span><span class="en">4480 × 2560 mm, bottom edge at +0.900 FFL</span></div></div></li>
+<li style="display: flex; gap: 10px"><span style="flex: 0 0 24px; height: 24px; border-radius: 50%; background: #2C5AA0; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center">2</span><div><b><span class="zh">配电箱</span><span class="en">DB box</span></b><div style="font-size: 12px; color: #6B6558"><span class="zh">第 11 行的设备，位于左墙后</span><span class="en">BOQ</span></div></div></li>
+<li style="display: flex; gap: 10px"><span style="flex: 0 0 24px; height: 24px; border-radius: 50%; background: #2C5AA0; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center">3</span><div><b><span class="zh">AV 机柜</span><span class="en">AV rack</span></b><div style="font-size: 12px; color: #6B6558"><span class="zh">控制器和处理器，BOQ 第 7、8 行</span><span class="en">Sending controller and processor, BOQ rows 7 and 8</span></div></div></li>
+<li style="display: flex; gap: 10px"><span style="flex: 0 0 24px; height: 24px; border-radius: 50%; background: #2F7A5B; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center">4</span><div><b><span class="zh">电源点</span><span class="en">Power point</span></b><div style="font-size: 12px; color: #6B6558"><span class="zh">假设在 25 m 以内，待现场确认</span><span class="en">Assumed within 25 m, to be confirmed on site</span></div></div></li>
 </ol>
-<div style="margin-top: 14px; padding: 10px 12px; border-radius: 8px; background: #E6F2EC; color: #2F7A5B; font-size: 12.5px"><b>Saved as a copy 已另存副本</b><br>Lobby_site_photo_annotated_Rev1.jpg</div>
-<div style="margin-top: 8px; font-size: 12px; color: #6B6558">Lobby_site_photo.jpg 未改动。</div>
+<div style="margin-top: 14px; padding: 10px 12px; border-radius: 8px; background: #E6F2EC; color: #2F7A5B; font-size: 12.5px"><b><span class="zh">已另存副本</span><span class="en">Saved as a copy</span></b><br>Lobby_site_photo_annotated_Rev1.jpg</div>
+<div style="margin-top: 8px; font-size: 12px; color: #6B6558"><span class="zh">Lobby_site_photo.jpg 未改动。</span><span class="en">Lobby_site_photo.jpg unchanged.</span></div>
 </section>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px">
-<a href="Cost.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #1F2430; font-weight: 600; text-decoration: none">← Back 返回</a>
-<a href="Preview.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">Next: Review &amp; Export 下一步：审核导出 →</a>
+<a href="Cost.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #1F2430; font-weight: 600; text-decoration: none"><span class="zh">← 返回</span><span class="en">← Back</span></a>
+<a href="Preview.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">下一步：审核导出 →</span><span class="en">Next: Review &amp; Export →</span></a>
 </div>
 </main>
 </div>
@@ -107,7 +111,103 @@ a:hover{color:#15203A}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
 class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
   renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
     return {};
   }
 }

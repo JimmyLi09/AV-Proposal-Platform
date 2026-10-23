@@ -1,0 +1,31 @@
+{
+  "business_line": "LED",
+  "boq": {
+    "group": "{proposal_name}",
+    "rows": [
+      {"key": "led_screen", "title": "P{pixel_pitch_mm} {environment_label} LED screen {installation_label} {width_mm} × {height_mm} mm",
+       "specs": ["Overall dimension: {width_mm} × {height_mm} mm",
+                 "Cabinet size: {cabinet_sizes} (module {module_w_mm} × {module_h_mm})",
+                 "Brightness: {brightness_nits} cd/㎡ (≥ {brightness_required_nits} required), adjustable",
+                 "Overall screen resolution: {res_x} × {res_y}",
+                 "Aspect ratio: {aspect_ratio}",
+                 "Spares: {spare_modules} modules, {spare_psu} power supply, {spare_rx_cards} receiving card"],
+       "qty": "area_m2", "unit": "sqm", "source": "F1 · F2 / F3 / F4 / F10 / F15"},
+      {"key": "processor", "title": "Video processor", "specs": ["{processor} · {signal_sources} input"],
+       "qty": "processor_qty", "unit": "set", "source": "F13"},
+      {"key": "controller", "title": "Sending controller",
+       "specs": ["{controller} · {capacity_mp} MP · {ports} ports (load {load_pct} %)"],
+       "qty": "controller_qty", "unit": "set", "source": "F11"},
+      {"key": "server_pc", "title": "Server PC set (includes monitor, wireless mouse and keyboard)", "specs": [],
+       "qty": 1, "unit": "set", "note": "Client may provide", "source": ""},
+      {"key": "power_cabling", "title": "Power distribution and cabling",
+       "specs": ["DB box with MCB × {circuits} circuits",
+                 "Power cables {circuits} + {power_spares} spare, data cables CAT6 {data_runs} + {data_spares} spare"],
+       "qty": 1, "unit": "lot", "source": "F6 / F7 / F9 / F12"},
+      {"key": "structure", "title": "Supply and install metal frame structure ({width_mm} × {height_mm} mm)", "specs": [],
+       "qty": "area_m2", "unit": "sqm", "source": "F1"},
+      {"key": "install", "title": "Shipping, delivery and onsite system testing and installation", "specs": [],
+       "qty": "area_m2", "unit": "sqm", "source": "F1"}
+    ]
+  }
+}

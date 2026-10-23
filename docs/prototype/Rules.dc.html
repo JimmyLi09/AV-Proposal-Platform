@@ -12,116 +12,120 @@
 body{margin:0;background:#F5F2EC}
 a{color:#2C5AA0}
 a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
 </style>
 </helmet>
-<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
 
 <nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
 <div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
-<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
-<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
-<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
-<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
-<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
-<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
-<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
 <div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
-<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
-<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
 <div style="flex: 1; min-height: 24px"></div>
-<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
 </nav>
 
 <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
 <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
-<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
 <div style="flex: 1"></div>
-<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
 <span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
-<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">+ New Proposal 新建方案</a>
+<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">+ 新建方案</span><span class="en">+ New Proposal</span></a>
 </header>
 
 <main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
 <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
-<div style="flex: 1 1 300px"><h1 style="margin: 0; font-size: 24px; color: #15203A">Rules Engine <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">规则引擎</span></h1><p style="margin: 2px 0 0; color: #6B6558">所有系数都在这里录入。保存会生成新的规则版本；已发出的 Rev 保留计算时使用的版本。</p></div>
-<span style="padding: 2px 10px; border-radius: 12px; background: #E8EFF9; color: #2C5AA0; font-weight: 600">Rules 规则 v1.3 · 10 Oct · Jimmy</span>
+<div style="flex: 1 1 300px"><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">所有系数都在这里录入。保存会生成新的规则版本；已发出的 Rev 保留计算时使用的版本。</span><span class="en">Enter all coefficients here. Saving creates a new rules version; issued Revs keep the version used at calculation.</span></p></div>
+<span style="padding: 2px 10px; border-radius: 12px; background: #E8EFF9; color: #2C5AA0; font-weight: 600"><span class="zh">规则 v1.3 · 10 Oct · Jimmy</span><span class="en">Rules v1.3 · 10 Oct · Jimmy</span></span>
 </div>
 <div role="tablist" aria-label="Business line 业务线" style="display: flex; gap: 6px">
 <a href="Rules.dc.html" style="padding: 7px 14px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none">LED</a>
-<a href="RulesPJ.dc.html" style="padding: 7px 14px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #3B3A36; font-size: 12.5px; text-decoration: none">Projection 投影 · 单面墙</a>
+<a href="RulesPJ.dc.html" style="padding: 7px 14px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #3B3A36; font-size: 12.5px; text-decoration: none"><span class="zh">投影 · 单面墙</span><span class="en">Projection · single-face wall</span></a>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 12px">
-<span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600">Set 已定</span>
-<span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600">Under review 审核中</span>
-<span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600">Sample value 示例值 · 待填</span>
+<span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600"><span class="zh">已定</span><span class="en">Set</span></span>
+<span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600"><span class="zh">审核中</span><span class="en">Under review</span></span>
+<span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600"><span class="zh">示例值 · 待填</span><span class="en">Sample value · to be filled</span></span>
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px">
 
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">Power &amp; cables <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">电源与线缆</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Power &amp; cables</span><span class="zh">电源与线缆</span></h2>
 <div style="display: grid; grid-template-columns: 1fr 110px auto; gap: 10px; align-items: center">
-<label for="r1">Power per circuit 每回路功率 (kW)</label><input id="r1" type="text" value="2.5" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11px">Set 已定</span>
-<label for="r2">Spare power cables 备用电源线</label><input id="r2" type="text" value="1" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11px">Review 审核中</span>
-<label for="r3">Pixels per data cable 每路信号线像素</label><input id="r3" type="text" value="560,000" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11px">Review 审核中</span>
-<label for="r4">Spare data cables 备用信号线</label><input id="r4" type="text" value="1" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11px">Set 已定</span>
-<label for="r5">Circuits per DB box 每配电箱回路数</label><input id="r5" type="text" value="4" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11px">Sample 示例值</span>
+<label for="r1"><span class="zh">每回路功率 (kW)</span><span class="en">Power per circuit (kW)</span></label><input id="r1" type="text" value="2.5" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11px"><span class="zh">已定</span><span class="en">Set</span></span>
+<label for="r2"><span class="zh">备用电源线</span><span class="en">Spare power cables</span></label><input id="r2" type="text" value="1" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11px"><span class="zh">审核中</span><span class="en">Review</span></span>
+<label for="r3"><span class="zh">每路信号线像素</span><span class="en">Pixels per data cable</span></label><input id="r3" type="text" value="560,000" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11px"><span class="zh">审核中</span><span class="en">Review</span></span>
+<label for="r4"><span class="zh">备用信号线</span><span class="en">Spare data cables</span></label><input id="r4" type="text" value="1" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11px"><span class="zh">已定</span><span class="en">Set</span></span>
+<label for="r5"><span class="zh">每配电箱回路数</span><span class="en">Circuits per DB box</span></label><input id="r5" type="text" value="4" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11px"><span class="zh">示例值</span><span class="en">Sample</span></span>
 </div>
 </section>
 
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">Power density by screen type <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">按屏幕类型的功率密度 (W/㎡)</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Power density by screen type</span><span class="zh">按屏幕类型的功率密度 (W/㎡)</span></h2>
 <div style="display: grid; grid-template-columns: 1fr 110px auto; gap: 10px; align-items: center">
-<label for="w1">Indoor fixed 室内固装</label><input id="w1" type="text" value="500" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11px">Set 已定</span>
-<label for="w2">Outdoor fixed 户外固装</label><input id="w2" type="text" value="800" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11px">Sample 示例值</span>
-<label for="w3">Rental 租赁</label><input id="w3" type="text" value="600" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11px">Sample 示例值</span>
+<label for="w1"><span class="zh">室内固装</span><span class="en">Indoor fixed</span></label><input id="w1" type="text" value="500" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11px"><span class="zh">已定</span><span class="en">Set</span></span>
+<label for="w2"><span class="zh">户外固装</span><span class="en">Outdoor fixed</span></label><input id="w2" type="text" value="800" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11px"><span class="zh">示例值</span><span class="en">Sample</span></span>
+<label for="w3"><span class="zh">租赁</span><span class="en">Rental</span></label><input id="w3" type="text" value="600" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11px"><span class="zh">示例值</span><span class="en">Sample</span></span>
 </div>
-<div style="margin-top: 10px; font-size: 12px; color: #6B6558">依据是最大功耗还是平均功耗？待工程部确认。</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558"><span class="zh">依据是最大功耗还是平均功耗？待工程部确认。</span><span class="en">Based on max or average power? To be confirmed by engineering.</span></div>
 </section>
 
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">Spares <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">备品</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Spares</span><span class="zh">备品</span></h2>
 <div style="display: grid; grid-template-columns: 1fr 80px 80px auto; gap: 10px; align-items: center">
-<span style="color: #6B6558; font-size: 12px"></span><span style="color: #6B6558; font-size: 12px">Rate 比例 %</span><span style="color: #6B6558; font-size: 12px">Minimum 最少</span><span></span>
-<span>Modules 模组</span><input type="text" aria-label="Module spare rate 模组备品比例" value="5" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><input type="text" aria-label="Module spare minimum 模组备品最少" value="2" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11px">Sample 示例值</span>
-<span>Power supply / receiving card 电源 / 接收卡</span><input type="text" aria-label="PSU spare rate 电源备品比例" value="2" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><input type="text" aria-label="PSU spare minimum 电源备品最少" value="1" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11px">Sample 示例值</span>
+<span style="color: #6B6558; font-size: 12px"></span><span style="color: #6B6558; font-size: 12px"><span class="zh">比例 %</span><span class="en">Rate %</span></span><span style="color: #6B6558; font-size: 12px"><span class="zh">最少</span><span class="en">Minimum</span></span><span></span>
+<span><span class="zh">模组</span><span class="en">Modules</span></span><input type="text" aria-label="Module spare rate 模组备品比例" value="5" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><input type="text" aria-label="Module spare minimum 模组备品最少" value="2" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11px"><span class="zh">示例值</span><span class="en">Sample</span></span>
+<span><span class="zh">电源 / 接收卡</span><span class="en">Power supply / receiving card</span></span><input type="text" aria-label="PSU spare rate 电源备品比例" value="2" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><input type="text" aria-label="PSU spare minimum 电源备品最少" value="1" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11px"><span class="zh">示例值</span><span class="en">Sample</span></span>
 </div>
-<div style="margin-top: 10px; font-size: 12px; color: #6B6558">一律向上取整。</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558"><span class="zh">一律向上取整。</span><span class="en">Always round up.</span></div>
 </section>
 
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">Checks <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">校核</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Checks</span><span class="zh">校核</span></h2>
 <div style="display: grid; grid-template-columns: 1fr 110px auto; gap: 10px; align-items: center">
-<label for="c1">Min. viewing distance 最近观看距离 (m per mm pitch)</label><input id="c1" type="text" value="1.0" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11px">Review 审核中</span>
-<label for="c2">Brightness indoor 室内亮度 (nits)</label><input id="c2" type="text" value="600" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11px">Sample 示例值</span>
-<label for="c3">Brightness semi-outdoor 半户外亮度 (nits)</label><input id="c3" type="text" placeholder="待填" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11px">Empty 未填</span>
-<label for="c4">Brightness outdoor 户外亮度 (nits)</label><input id="c4" type="text" placeholder="待填" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11px">Empty 未填</span>
+<label for="c1"><span class="zh">Min. 最近观看距离 (m per mm pitch)</span><span class="en">Min. viewing distance (m per mm pitch)</span></label><input id="c1" type="text" value="1.0" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11px"><span class="zh">审核中</span><span class="en">Review</span></span>
+<label for="c2"><span class="zh">室内亮度 (nits)</span><span class="en">Brightness indoor (nits)</span></label><input id="c2" type="text" value="600" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11px"><span class="zh">示例值</span><span class="en">Sample</span></span>
+<label for="c3"><span class="zh">半户外亮度 (nits)</span><span class="en">Brightness semi-outdoor (nits)</span></label><input id="c3" type="text" placeholder="待填" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11px"><span class="zh">未填</span><span class="en">Empty</span></span>
+<label for="c4"><span class="zh">户外亮度 (nits)</span><span class="en">Brightness outdoor (nits)</span></label><input id="c4" type="text" placeholder="待填" onChange="{{dirty}}" style="height: 34px; padding: 0 8px; border: 1px solid #F0D2B4; border-radius: 6px; font: inherit; text-align: right"><span style="padding: 1px 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-weight: 600; font-size: 11px"><span class="zh">未填</span><span class="en">Empty</span></span>
 </div>
 </section>
 </div>
 
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 4px; font-size: 15px">Formula F9 · data cables <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">公式 F9 · 信号线</span></h2>
-<p style="margin: 0 0 10px; color: #6B6558">公式也可以编辑。保存前会用历史项目回算，让你看到修改后的结果。</p>
+<h2 style="margin: 0 0 4px; font-size: 15px"><span class="en">Formula F9 · data cables</span><span class="zh">公式 F9 · 信号线</span></h2>
+<p style="margin: 0 0 10px; color: #6B6558"><span class="zh">公式也可以编辑。保存前会用历史项目回算，让你看到修改后的结果。</span><span class="en">Formulas are editable too. Before saving, past projects are recalculated so you can see the effect.</span></p>
 <div style="font-family: ui-monospace, Consolas, monospace; background: #FAF8F4; border: 1px solid #E6E0D6; border-radius: 8px; padding: 10px 12px">ceil(total_pixels / pixels_per_data_cable) + spare_data_cables</div>
 <div style="overflow-x: auto; margin-top: 10px">
 <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 520px">
-<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Past project 历史项目</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Pixels 像素</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Rule gives 规则结果</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Drawing shows 图纸数量</th></tr></thead>
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">历史项目</span><span class="en">Past project</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">像素</span><span class="en">Pixels</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">规则结果</span><span class="en">Rule gives</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">图纸数量</span><span class="en">Drawing shows</span></th></tr></thead>
 <tbody>
-<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">082-Chuan Grove</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">2,867,200</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">6 runs 路</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #B91C1C; font-weight: 600">5 runs 路</td></tr>
-<tr><td style="padding: 8px">143-Royal Plaza LED-1</td><td style="padding: 8px">1,835,008</td><td style="padding: 8px">4 runs 路</td><td style="padding: 8px; color: #6B6558">暂无图纸</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">082-Chuan Grove</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">2,867,200</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">6 路</span><span class="en">6 runs</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #B91C1C; font-weight: 600"><span class="zh">5 路</span><span class="en">5 runs</span></td></tr>
+<tr><td style="padding: 8px">143-Royal Plaza LED-1</td><td style="padding: 8px">1,835,008</td><td style="padding: 8px"><span class="zh">4 路</span><span class="en">4 runs</span></td><td style="padding: 8px; color: #6B6558"><span class="zh">暂无图纸</span><span class="en">No drawings yet</span></td></tr>
 </tbody>
 </table>
 </div>
 </section>
 
 <div style="position: sticky; bottom: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 12px 16px; border-radius: 12px; border: 1px solid #E6E0D6; background: #FFFFFF">
-<sc-if value="{{isDirty}}" hint-placeholder-val="{{ false }}"><span style="color: #9A4A12; font-weight: 600">Unsaved changes 未保存修改</span></sc-if>
-<sc-if value="{{clean}}" hint-placeholder-val="{{ true }}"><span style="color: #6B6558">修改任一数值后才能保存</span></sc-if>
+<sc-if value="{{isDirty}}" hint-placeholder-val="{{ false }}"><span style="color: #9A4A12; font-weight: 600"><span class="zh">未保存修改</span><span class="en">Unsaved changes</span></span></sc-if>
+<sc-if value="{{clean}}" hint-placeholder-val="{{ true }}"><span style="color: #6B6558"><span class="zh">修改任一数值后才能保存</span><span class="en">Can only save after changing a value</span></span></sc-if>
 <input type="text" aria-label="Reason for change 修改原因" placeholder="修改原因（必填）" style="flex: 1 1 260px; height: 38px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit">
-<sc-if value="{{isDirty}}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{save}}" style="height: 40px; padding: 0 18px; border-radius: 8px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Save as v1.4 另存为 v1.4</button></sc-if>
-<sc-if value="{{clean}}" hint-placeholder-val="{{ true }}"><button type="button" disabled style="height: 40px; padding: 0 18px; border-radius: 8px; border: 0; background: #D8D2C8; color: #6B6558; font: inherit; font-weight: 600">Save as v1.4 另存为 v1.4</button></sc-if>
+<sc-if value="{{isDirty}}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{save}}" style="height: 40px; padding: 0 18px; border-radius: 8px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer"><span class="zh">Save as v1.4 另存为 v1.4</span><span class="en">Save as v1.4</span></button></sc-if>
+<sc-if value="{{clean}}" hint-placeholder-val="{{ true }}"><button type="button" disabled="" style="height: 40px; padding: 0 18px; border-radius: 8px; border: 0; background: #D8D2C8; color: #6B6558; font: inherit; font-weight: 600"><span class="zh">Save as v1.4 另存为 v1.4</span><span class="en">Save as v1.4</span></button></sc-if>
 </div>
 </main>
 </div>
@@ -129,7 +133,103 @@ a:hover{color:#15203A}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
 class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
   renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
     const d = !!(this.state && this.state.d);
     return {
       isDirty: d,

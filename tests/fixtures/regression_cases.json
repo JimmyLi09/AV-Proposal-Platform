@@ -8,9 +8,24 @@
       "pixel_pitch_mm": 2.5,
       "width_mm": 4480,
       "height_mm": 2560,
-      "module_mm": [320, 160],
-      "cabinet_sizes_mm": [[640, 480], [640, 640]],
-      "viewing_distance_m": [4, 6],
+      "module_mm": [
+        320,
+        160
+      ],
+      "cabinet_sizes_mm": [
+        [
+          640,
+          480
+        ],
+        [
+          640,
+          640
+        ]
+      ],
+      "viewing_distance_m": [
+        4,
+        6
+      ],
       "installation": "wall",
       "maintenance": "front",
       "brightness_required_nits": 600,
@@ -28,25 +43,50 @@
     "expect": {
       "F1_area_m2": 11.47,
       "F2_modules": 224,
-      "F2_grid": [14, 16],
+      "F2_grid": [
+        14,
+        16
+      ],
       "F3_cabinets": 35,
       "F3_layout": "28 x 640x480 + 7 x 640x640",
-      "F4_resolution": [1792, 1024],
+      "F4_resolution": [
+        1792,
+        1024
+      ],
       "F5_power_kw": 5.73,
       "F6_circuits": 3,
       "F7_power_cables": 4,
       "F9_data_cables": 5,
       "F10_spare_modules": 12,
-      "F11_controller": {"model": "Sample SC-4", "qty": 1, "load_mp": 1.84, "capacity_mp": 2.3, "ports_used": 4, "ports": 4, "check": "PASS", "note": "all ports used, spare cable has no spare port"},
+      "F11_controller": {
+        "model": "Sample SC-4",
+        "qty": 1,
+        "load_mp": 1.84,
+        "capacity_mp": 2.3,
+        "ports_used": 4,
+        "ports": 4,
+        "check": "PASS",
+        "note": "all ports used, spare cable has no spare port"
+      },
       "F12_db_box": 1,
       "F14_viewing_check": "PASS",
-      "F15_brightness_check": {"result": "PASS", "sample": true}
+      "F15_brightness_check": {
+        "result": "PASS",
+        "sample": true
+      }
     },
-    "size_snapping_case": {"input_width_mm": 4500, "expect_options_mm": [4480, 4800], "expect_error": false}
+    "size_snapping_case": {
+      "input_width_mm": 4500,
+      "expect_options_mm": [
+        4480,
+        4800
+      ],
+      "expect_error": false
+    }
   },
   "projection_114": {
     "source": "114 Showroom, completed project. 5 x PT-BHZ611C with domestic 0.5 fixed lens, confirmed by Jimmy 2026-10-14",
-    "rules_version": "v1.3",
+    "rules_version": "v1.4",
     "conventions": [
       "Throw distance is measured from the LENS FRONT to the surface (114 drawing shows 2340 mm to the projector body; lens front is ~2.24 m).",
       "Fixed lens: choose the lens first, back-calculate the mount distance, then check blend is within 15-30 %.",
@@ -66,21 +106,51 @@
       "projector": "PT-BHZ611C",
       "lens_throw_ratio": 0.5,
       "mount_distance_m": 2.24,
-      "native_px": [1920, 1200]
+      "native_px": [
+        1920,
+        1200
+      ],
+      "source_location": "server_room",
+      "central_control": "pjlink",
+      "sync_group": null,
+      "transport_mode": "by_distance"
     },
     "constants": {
       "aspect": 1.6,
       "overlap_min": 0.15,
-      "overlap_max": 0.30,
-      "derate": {"value": 0.8, "sample": true},
-      "target_nits": {"value": 100, "sample": true},
+      "overlap_max": 0.3,
+      "derate": {
+        "value": 0.8,
+        "sample": true
+      },
+      "target_nits": {
+        "value": 100,
+        "sample": true
+      },
       "pixel_rule_m_per_mm": 1.0,
       "person_height_m": 1.8,
       "circuit_kw": 2.5,
       "fiber_over_m": 50,
-      "projector_w": {"value": 450, "sample": true},
-      "media_pc_w": {"value": 500, "sample": true},
-      "canvas_height_px": 1200
+      "projector_w": {
+        "value": 450,
+        "sample": true
+      },
+      "media_pc_w": {
+        "value": 500,
+        "sample": true
+      },
+      "canvas_height_px": 1200,
+      "hdmi_max_m": 15,
+      "spare_ratio": 0.1,
+      "spare_min": 1,
+      "power_margin": 0.1,
+      "server_room_w": {
+        "media_pc": 500,
+        "blender": 150,
+        "hdbaset_tx_each": 15,
+        "control_switch": 60,
+        "sample": true
+      }
     },
     "expect": {
       "P1_single_width_m": 4.32,
@@ -88,23 +158,482 @@
       "P3_min_distance_m": 2.16,
       "P3_lens": 0.5,
       "P4_actual_width_m": 4.48,
-      "P4_actual_height_m": 2.80,
+      "P4_actual_height_m": 2.8,
       "P5_overlap_ratio": 0.227,
       "P5_overlap_m": 1.02,
       "P5_check": "PASS",
       "P6_height_check": "PASS",
-      "P7_blended_px": [7854, 1200],
+      "P7_blended_px": [
+        7854,
+        1200
+      ],
       "P8_pixel_mm": 2.3,
       "P8_check": "NOTE",
-      "P9_lumens_required": {"value": 4926, "sample": true},
+      "P9_lumens_required": {
+        "value": 4926,
+        "sample": true
+      },
       "P10_occlusion_within_m": 1.44,
       "P10_check": "NOTE",
-      "P11_blender": {"required": true, "min_outputs": 5, "pick": "ZWIN 16ch", "qty": 1},
-      "P12_power_kw": {"value": 2.75, "sample": true},
+      "P11_blender": {
+        "required": true,
+        "min_outputs": 5,
+        "pick": "ZWIN 16ch",
+        "qty": 1
+      },
+      "P12_power_kw": {
+        "value": 3.04,
+        "with_margin": 3.34,
+        "sample": true
+      },
       "P12_circuits": 2,
-      "P12_transport": "HDBaseT",
-      "P13_canvas_px": [7854, 1200]
+      "P13_canvas_px": [
+        7854,
+        1200
+      ],
+      "P14_transport": "HDBaseT",
+      "P15_cables": {
+        "video": 5,
+        "video_spare": 1,
+        "control_cat6": 5,
+        "control_spare": 1,
+        "total_cat6": 12
+      },
+      "P16_power": {
+        "ceiling_13a_outlets": 5,
+        "server_room_w": 785,
+        "server_room_w_with_margin": 864,
+        "server_room_plugs": 8,
+        "option_a_outlets": 9,
+        "option_b_ups_kva": 1.5,
+        "sample": true
+      },
+      "P17_check": {
+        "result": "PASS",
+        "control_points": 7
+      }
     },
-    "tolerance": {"length_m": 0.01, "ratio": 0.001, "px": 2, "lumens": 5}
+    "tolerance": {
+      "length_m": 0.01,
+      "ratio": 0.001,
+      "px": 2,
+      "lumens": 5
+    }
+  },
+  "phoenix_sea_checks": {
+    "source": "Blackfort · Phoenix Sea Office system-integration review (2026-10-14/15). Behaviour cases only; wall sizes not provided yet.",
+    "cases": [
+      {
+        "name": "count mismatch",
+        "input": {
+          "projectors": 4,
+          "video_lines": 5
+        },
+        "expect": "BLOCK: P17 video lines must equal projector count"
+      },
+      {
+        "name": "text vs drawing conflict",
+        "input": {
+          "count_in_text": 4,
+          "count_in_drawing_note": 6
+        },
+        "expect": "field goes to confirmation gate as conflict, cannot calculate until confirmed"
+      },
+      {
+        "name": "long HDMI",
+        "input": {
+          "signal_run_m": 20
+        },
+        "expect": "P14 -> HDBaseT (HDMI only up to 15 m)"
+      },
+      {
+        "name": "fiber",
+        "input": {
+          "signal_run_m": 60
+        },
+        "expect": "P14 -> fiber HDMI"
+      },
+      {
+        "name": "spares",
+        "input": {
+          "projectors": 2
+        },
+        "expect": "video 2 + 1 spare, control 2 + 1 spare"
+      },
+      {
+        "name": "Past Zone option 1 (slide 06)",
+        "input": {
+          "projectors": 2,
+          "lumens": 9000,
+          "native_px": [
+            1920,
+            1200
+          ],
+          "lens_throw_ratio": 0.55,
+          "hdmi": 3,
+          "cat6": 3,
+          "source_location": "server_room"
+        },
+        "expect": "P15 PASS (video 2+1, control 2+1 matches 3 HDMI + 3 CAT6); P14 -> HDBaseT or fiber because run from Server Room > 15 m. Wall size not given on slide -> geometry (P1-P10) not tested yet"
+      }
+    ]
+  },
+  "led_gmc_u_shape": {
+    "source": "GMC Virtual Office LED (GMC - Visuals Office r02.pdf + GMC LED - Virtual Office.pdf), 2026-10-15. Side width uses 5760 (LED elevation); plan shows 5600 and spec table 3040 -> S7 conflict must be raised first.",
+    "rules_version": "v1.4",
+    "input": {
+      "shape": "U",
+      "pixel_pitch_mm": 2.5,
+      "module_mm": [
+        320,
+        160
+      ],
+      "faces": [
+        {
+          "id": "A",
+          "name": "Left",
+          "orientation": "wall",
+          "width_mm": 5760,
+          "height_mm": 4160
+        },
+        {
+          "id": "B",
+          "name": "Main",
+          "orientation": "wall",
+          "width_mm": 8000,
+          "height_mm": 4160
+        },
+        {
+          "id": "C",
+          "name": "Right",
+          "orientation": "wall",
+          "width_mm": 5760,
+          "height_mm": 4160
+        }
+      ],
+      "corners": [
+        {
+          "between": [
+            "A",
+            "B"
+          ],
+          "type": "inside_90"
+        },
+        {
+          "between": [
+            "B",
+            "C"
+          ],
+          "type": "inside_90"
+        }
+      ]
+    },
+    "source_conflicts": {
+      "side_width_mm": {
+        "plan": 5600,
+        "led_elevation": 5760,
+        "spec_table": 3040
+      },
+      "expect": "S7 BLOCK until chosen; 5600 -> snap options 5440/5760; 3040 -> snap options 2880/3200"
+    },
+    "expect": {
+      "per_face": {
+        "A": {
+          "px": [
+            2304,
+            1664
+          ],
+          "modules": 468,
+          "area_m2": 23.96,
+          "power_kw": 11.98,
+          "circuits": 5,
+          "db_box": 2,
+          "data_cables": "7+1"
+        },
+        "B": {
+          "px": [
+            3200,
+            1664
+          ],
+          "modules": 650,
+          "area_m2": 33.28,
+          "power_kw": 16.64,
+          "circuits": 7,
+          "db_box": 2,
+          "data_cables": "10+1"
+        },
+        "C": {
+          "px": [
+            2304,
+            1664
+          ],
+          "modules": 468,
+          "area_m2": 23.96,
+          "power_kw": 11.98,
+          "circuits": 5,
+          "db_box": 2,
+          "data_cables": "7+1"
+        }
+      },
+      "total": {
+        "canvas_px": [
+          7808,
+          1664
+        ],
+        "modules": 1586,
+        "spare_modules_pooled": 80,
+        "area_m2": 81.2,
+        "power_kw": 40.6,
+        "circuits": 17,
+        "db_box": 6,
+        "data_cables": 27,
+        "processor_outputs": 3
+      },
+      "checks": {
+        "S4_pitch_match": "PASS",
+        "S5_output_per_face_le_3840": "PASS",
+        "S3_data_vs_supplier": "NOTE rule 27 vs supplier drawing 31 (one per cabinet column)",
+        "S7_side_width_vs_wall": "NOTE 5760 > plan wall 5600 by 160 mm"
+      }
+    }
+  },
+  "led_digital_cube_l_shape": {
+    "source": "Phoenix Sea Office Proposal p.10 Digital Cube Back LED (Future Zone), GOB P2. The rendered image is 'for illustration purposes only' -> image purpose = reference.",
+    "rules_version": "v1.4",
+    "input": {
+      "shape": "L_wall_floor",
+      "pixel_pitch_mm": 2.0,
+      "module_mm": [
+        320,
+        160
+      ],
+      "faces": [
+        {
+          "id": "A",
+          "name": "Upper",
+          "orientation": "wall",
+          "width_mm": 2560,
+          "height_mm": 3360
+        },
+        {
+          "id": "B",
+          "name": "Base",
+          "orientation": "floor",
+          "width_mm": 2560,
+          "height_mm": 2560,
+          "load": "2000x2000 acrylic model on top",
+          "protection": "GOB"
+        }
+      ],
+      "corners": [
+        {
+          "between": [
+            "A",
+            "B"
+          ],
+          "type": "fold_wall_to_floor"
+        }
+      ],
+      "total_weight_kg": 600
+    },
+    "expect": {
+      "per_face": {
+        "A": {
+          "px": [
+            1280,
+            1680
+          ],
+          "modules": 168,
+          "area_m2": 8.6,
+          "power_kw": 4.3,
+          "circuits": 2,
+          "db_box": 1,
+          "data_cables": "4+1"
+        },
+        "B": {
+          "px": [
+            1280,
+            1280
+          ],
+          "modules": 128,
+          "area_m2": 6.55,
+          "power_kw": 3.28,
+          "circuits": 2,
+          "db_box": 1,
+          "data_cables": "3+1"
+        }
+      },
+      "total": {
+        "canvas_px": [
+          1280,
+          2960
+        ],
+        "modules": 296,
+        "spare_modules_pooled": 15,
+        "area_m2": 15.16,
+        "power_kw": 7.58,
+        "circuits": 4,
+        "data_cables": 9,
+        "processor_outputs": 2
+      },
+      "checks": {
+        "S6_floor_face_gob": "PASS",
+        "S6_weight": "NOTE 600 kg, structural check",
+        "vs_original": "NOTE original 9 x 20A isolators vs rule 4 circuits; original 10 CAT6 vs rule 9"
+      }
+    }
+  },
+  "projection_corner_l": {
+    "source": "Demo data (2026-10-23, CR-7). Replace with a real corner project from Jimmy.",
+    "rules_version": "v1.5",
+    "input": {
+      "projector": "PT-BHZ611C",
+      "lens_throw_ratio": 0.5,
+      "mount_distance_m": 2.24,
+      "image_m": [
+        4.48,
+        2.8
+      ],
+      "wall_height_mm": 2700,
+      "native_px": [
+        1920,
+        1200
+      ],
+      "corner_clash_threshold_m": {
+        "value": 0.6,
+        "sample": true
+      },
+      "shape": "L",
+      "faces_mm": {
+        "A": 8000,
+        "B": 7800
+      }
+    },
+    "expect": {
+      "projectors": {
+        "A": 2,
+        "B": 2,
+        "total": 4
+      },
+      "blend_ratio": {
+        "A": 0.214,
+        "B": 0.259
+      },
+      "px": {
+        "A": 3429,
+        "B": 3343
+      },
+      "canvas_px": [
+        6772,
+        1200
+      ],
+      "P20_corner_AB": {
+        "distance_m": 0.0,
+        "result": "BLOCK"
+      },
+      "P12_power_kw": {
+        "value": 2.53,
+        "sample": true
+      },
+      "P12_circuits": 2,
+      "P15_total_cat6": 10,
+      "P21_blender_outputs_min": 4
+    }
+  },
+  "projection_u": {
+    "source": "Demo data (2026-10-23, CR-7).",
+    "rules_version": "v1.5",
+    "input": {
+      "projector": "PT-BHZ611C",
+      "lens_throw_ratio": 0.5,
+      "mount_distance_m": 2.24,
+      "image_m": [
+        4.48,
+        2.8
+      ],
+      "wall_height_mm": 2700,
+      "native_px": [
+        1920,
+        1200
+      ],
+      "corner_clash_threshold_m": {
+        "value": 0.6,
+        "sample": true
+      },
+      "shape": "U",
+      "faces_mm": {
+        "A": 8000,
+        "B": 7800,
+        "C": 8000
+      }
+    },
+    "expect": {
+      "projectors": {
+        "total": 6
+      },
+      "canvas_px": [
+        10201,
+        1200
+      ],
+      "P20": {
+        "AB": "BLOCK",
+        "BC": "BLOCK"
+      },
+      "P12_power_kw": {
+        "value": 3.52,
+        "sample": true
+      },
+      "P12_circuits": 2,
+      "P15_total_cat6": 14
+    }
+  },
+  "led_royal_plaza_boq": {
+    "source": "CR-6 client BOQ format for 143-Royal Plaza",
+    "expect_lines": [
+      [
+        "P2.5 Indoor LED screen on wall 4480 × 2560 mm",
+        11.47,
+        "sqm"
+      ],
+      [
+        "Video processor",
+        1,
+        "set"
+      ],
+      [
+        "Sending controller",
+        1,
+        "set"
+      ],
+      [
+        "Server PC set (includes monitor, wireless mouse and keyboard)",
+        1,
+        "set"
+      ],
+      [
+        "Power distribution and cabling",
+        1,
+        "lot"
+      ],
+      [
+        "Supply and install metal frame structure (4480 × 2560 mm)",
+        11.47,
+        "sqm"
+      ],
+      [
+        "Shipping, delivery and onsite system testing and installation",
+        11.47,
+        "sqm"
+      ]
+    ],
+    "led_spec_rows": [
+      "Overall dimension",
+      "Cabinet size",
+      "Brightness",
+      "Overall screen resolution",
+      "Aspect ratio",
+      "Spares"
+    ],
+    "no_prices": true
   }
 }

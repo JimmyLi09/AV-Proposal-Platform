@@ -23,11 +23,6 @@ export function nextVersion(v: string) {
   return m ? `v${m[1]}.${Number(m[2]) + 1}` : v;
 }
 
-export function money(cents: number | null | undefined) {
-  if (cents === null || cents === undefined) return "—";
-  return (cents / 100).toLocaleString("en-SG", { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-}
-
 export function InputField({ def, value, onChange }: { def: InputDef; value: unknown; onChange: (v: unknown) => void }) {
   const num = (s: string) => (s === "" ? null : Number(s));
   if (def.type === "choice")

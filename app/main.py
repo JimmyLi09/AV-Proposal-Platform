@@ -5,10 +5,11 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import sessionmaker
 
-from . import annotate, api, costs, workspace
+from . import annotate, api, workspace
 from .db import make_engine, migrate
 from .products import api as products_api
 from .rules import api as rules_api
+from .templates import api as templates_api
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB_DIST = ROOT / "web" / "dist"
@@ -36,9 +37,9 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
     app.state.oda = cfg.get("oda_converter") or None
     app.state.Session = sessionmaker(engine, expire_on_commit=False)
     with app.state.Session() as db:
-        for module in (rules_api, products_api, costs):
+        for module in (rules_api, products_api, templates_api):
             module.ensure_seed(db)
-    for module in (api, rules_api, products_api, costs, workspace, annotate):
+    for module in (api, rules_api, products_api, templates_api, workspace, annotate):
         app.include_router(module.router, prefix="/api")
     if WEB_DIST.is_dir():
         app.mount("/", StaticFiles(directory=WEB_DIST, html=True), name="web")

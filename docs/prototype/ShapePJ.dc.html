@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Projection Shape 投影屏形</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
+</style>
+</helmet>
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+<div style="flex: 1 1 320px"><div style="font-size: 12px; color: #6B6558"><span class="zh">演示数据 · 投影 · Rev 0</span><span class="en">Demo · Projection · Rev 0</span></div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Shape &amp; Faces</span><span class="zh">投影屏形与分面</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">先判断是单面墙还是转角、三面、弧形。多面时每面单独输入尺寸、可用进深和挂高；投影按面排，不跨角投射。单面墙直接进入确认输入。</span><span class="en">First decide whether it is a single wall, corner, three walls or curved. For multiple walls, enter size, usable depth and mount height for each wall; projection is laid out per wall, never across corners. A single wall goes straight to input confirmation.</span></p></div>
+<div role="group" aria-label="Example 示例" style="display: flex; border: 1px solid #E6E0D6; border-radius: 8px; overflow: hidden">
+<button type="button" onClick="{{exL}}" style="{{exLBtn}}"><span class="zh">转角 L · 两面墙</span><span class="en">Corner L · two walls</span></button>
+<button type="button" onClick="{{exU}}" style="{{exUBtn}}"><span class="zh">U 形 · 三面墙</span><span class="en">U-shape · three walls</span></button>
+</div>
+</div>
+
+<nav aria-label="Proposal steps 方案步骤" style="display: flex; flex-wrap: wrap; gap: 6px">
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">1 项目与文件</span><span class="en">1 Project &amp; Files</span></a>
+<a href="ShapePJ.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">2 屏形与输入</span><span class="en">2 Shape &amp; Inputs</span></a>
+<a href="FacesPJ.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">3 推荐</span><span class="en">3 Recommendation</span></a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">4 工程量清单</span><span class="en">4 BOQ</span></a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">5 标注</span><span class="en">5 Annotate</span></a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">6 审核导出</span><span class="en">6 Review &amp; Export</span></a>
+</nav>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px"><h2 style="margin: 0; font-size: 15px"><span class="en">Step 1 · Shape</span><span class="zh">先判断屏形</span></h2><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11.5px"><span class="zh">先猜 · 请你确认</span><span class="en">AI · Please confirm</span></span></div>
+<div style="padding: 10px 12px; border-radius: 8px; background: #FAF8F4; font-size: 12.5px; line-height: 1.6">{{guess}}</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px">
+<sc-for list="{{shapes}}" as="s" hint-placeholder-count="6">
+<button type="button" onClick="{{s.pick}}" style="{{s.style}}"><span style="display: block; font-weight: 700">{{s.label}}</span><span style="display: block; font-size: 11.5px; color: #6B6558; margin-top: 2px">{{s.desc}}</span><span style="display: block; font-size: 11px; margin-top: 4px; color: #2C5AA0">{{s.tag}}</span></button>
+</sc-for>
+</div>
+<sc-if value="{{isFlat}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 8px; background: #E6F2EC; color: #2F7A5B; font-weight: 600"><span class="zh">单面墙走原来的流程，不用分面。</span><span class="en">A single wall uses the original flow, no splitting into walls.</span><a href="ConfirmPJ.dc.html" style="color: #15203A"><span class="zh">去确认输入 →</span><span class="en">Go to confirm inputs →</span></a></div>
+</sc-if>
+<sc-if value="{{isWarp}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 10px 12px; border-radius: 8px; background: #FDF1E6; color: #7C3A10"><span class="zh">弧形幕和环幕要做几何校正（warp），融合器必须支持曲面校正，否则阻断（P22）。示例数据用的是转角 L 和 U 形。</span><span class="en">Curved and ring screens need geometric correction (warp); the blender must support curved correction, otherwise blocked (P22). The sample data uses corner L and U-shape.</span></div>
+</sc-if>
+</section>
+
+<sc-if value="{{showFaces}}" hint-placeholder-val="{{ true }}">
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px"><h2 style="margin: 0; font-size: 15px"><span class="en">Step 2 · Faces</span><span class="zh">每面单独输入</span></h2><span style="font-size: 12px; color: #6B6558"><span class="zh">数字可以直接改；改过的标「手填」</span><span class="en">Numbers can be edited directly; edited ones are marked "Manual entry"</span></span></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px">
+<sc-for list="{{faces}}" as="f" hint-placeholder-count="2">
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; align-items: center; gap: 8px"><span style="width: 26px; height: 26px; border-radius: 50%; background: #15203A; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center">{{f.id}}</span><b style="flex: 1">{{f.name}}</b><span style="font-size: 11.5px; color: #6B6558">{{f.src}}</span></div>
+<sc-for list="{{f.fields}}" as="x" hint-placeholder-count="4">
+<label style="display: flex; align-items: center; gap: 8px; font-size: 12.5px"><span style="flex: 1; color: #6B6558">{{x.label}}</span><input type="text" value="{{x.v}}" onChange="{{x.on}}" style="{{x.style}}"><span style="width: 18px; color: #6B6558">{{x.unit}}</span></label>
+</sc-for>
+</div>
+</sc-for>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px">
+<sc-for list="{{corners}}" as="c" hint-placeholder-count="1">
+<div style="border: 1px dashed #C9BFAE; border-radius: 10px; padding: 10px 12px; font-size: 12.5px"><b>{{c.name}}</b><div style="color: #6B6558">{{c.desc}}</div></div>
+</sc-for>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 8px; font-size: 12.5px">
+<div style="padding: 8px 10px; border-radius: 8px; background: #FAF8F4"><span style="color: #6B6558"><span class="zh">投影机</span><span class="en">Projector</span></span><br><b>PT-BHZ611C · 1920 × 1200</b></div>
+<div style="padding: 8px 10px; border-radius: 8px; background: #FAF8F4"><span style="color: #6B6558"><span class="zh">镜头</span><span class="en">Lens</span></span><br><b><span class="zh">国产定焦 0.5（同 114）</span><span class="en">Domestic fixed lens 0.5 (same as 114)</span></b></div>
+<div style="padding: 8px 10px; border-radius: 8px; background: #FAF8F4"><span style="color: #6B6558"><span class="zh">播放源</span><span class="en">Source</span></span><br><b>Server Room · 35 m</b></div>
+<div style="padding: 8px 10px; border-radius: 8px; background: #FAF8F4"><span style="color: #6B6558"><span class="zh">转角接缝</span><span class="en">Seam at corner</span></span><br><b><span class="zh">硬接缝 · 画布连续</span><span class="en">Hard edge · continuous canvas</span></b></div>
+</div>
+<div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px">
+<a href="FacesPJ.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">运行方案引擎 →</span><span class="en">Run proposal engine →</span></a>
+</div>
+</section>
+</sc-if>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
+  renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {"单面墙":"Single wall","一面墙横向融合，走原来的流程":"Single wall horizontal blending, uses the original flow","内转角 L 形":"Inside corner L-shape","内转角 L":"Inside corner L","L 形":"L-shape","转角":"Corner","两面墙在内角相接，每面一组投影":"Two walls meet at an inside corner; one projection group per wall","投影":"Projection","U 形三面":"U-shape, 3 walls","U 形":"U-shape","左墙 + 正墙 + 右墙，两个内角":"Left wall + front wall + right wall, two inside corners","弧形幕":"Curved screen","弧形":"Curved","一面弧形，需要几何校正":"Single curved surface, needs geometric correction (warp)","环幕":"360 ring screen","四面或圆形环幕，需要几何校正":"Four walls or round 360 ring screen, needs geometric correction (warp)","墙 + 地面":"Wall + floor","地面投影单独一面，机位在正上方":"Floor projection as a separate surface, mount positions directly above","Wall A 左墙":"Wall A left wall","Plan_RCP_RevA.pdf · 文字识别":"Plan_RCP_RevA.pdf · OCR","内角 90° · 硬接缝 · 两侧第 1 台机位要查冲突（P20）":"Inside corner 90° · hard edge · check unit 1 mount positions on both sides for conflict (P20)","台":" units","RCP L 形」。":"RCP L-shape\".","平面图上三面墙都有投影机位，两个内角相接 → 推测「U 形三面」。":"The plan shows projector positions on three walls meeting at two inside corners → guess \"U-shape, 3 walls\".","平面图上三面墙都有投影机位，两个内角相接 → 推测「U":"Plan shows projector mount positions on all three walls, meeting at two inside corners → guess \"U","平面":"Flat","有":"Yes"}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
+    const s = this.state || {};
+    const ex = s.ex || 'L';
+    const guessShape = ex;
+    const shape = s.shape || guessShape;
+    const ov = s.ov || {};
+    const defs = [
+      ['FLAT', 'Single wall', '单面墙', '一面墙横向融合，走原来的流程'],
+      ['L', 'Inside corner L', '内转角 L 形', '两面墙在内角相接，每面一组投影'],
+      ['U', 'U-shape', 'U 形三面', '左墙 + 正墙 + 右墙，两个内角'],
+      ['CURVE', 'Curved screen', '弧形幕', '一面弧形，需要几何校正'],
+      ['RING', '360 ring', '环幕', '四面或圆形环幕，需要几何校正'],
+      ['FLOOR', 'Wall + floor', '墙 + 地面', '地面投影单独一面，机位在正上方']
+    ];
+    const seg = (on) => 'height: 36px; padding: 0 14px; border: 0; font: inherit; cursor: pointer; ' + (on ? 'background: #15203A; color: #FFFFFF; font-weight: 600' : 'background: #FFFFFF; color: #3B3A36');
+    const shapes = defs.map(([k, en, zh, desc]) => ({
+      label: en + ' ' + zh, desc, tag: k === guessShape ? 'AI 推测' : '',
+      style: 'text-align: left; padding: 10px 12px; border-radius: 10px; font: inherit; cursor: pointer; ' + (k === shape ? 'border: 2px solid #15203A; background: #E8EFF9;' : 'border: 1px solid #E6E0D6; background: #FFFFFF;'),
+      pick: () => this.setState({ shape: k })
+    }));
+    const base = ex === 'L'
+      ? [['A', 'Wall A 左墙', 8000], ['B', 'Wall B 正墙', 7800]]
+      : [['A', 'Wall A 左墙', 8000], ['B', 'Wall B 正墙', 7800], ['C', 'Wall C 右墙', 8000]];
+    const faces = base.map(([id, name, w]) => {
+      const f = [['w', 'Width 宽', String(w), 'mm'], ['h', 'Height 高', '2700', 'mm'], ['d', 'Usable depth 可用进深', '3.2', 'm'], ['m', 'Mount height 挂高', '2.8', 'm']];
+      return {
+        id, name, src: 'Plan_RCP_RevA.pdf · 文字识别',
+        fields: f.map(([k, label, v0, unit]) => {
+          const key = id + k; const v = ov[key] !== undefined ? ov[key] : v0; const ed = v !== v0;
+          return { label, unit, v, on: (e) => { const n = Object.assign({}, ov); n[key] = e.target.value; this.setState({ ov: n }); },
+            style: 'width: 80px; height: 30px; padding: 0 6px; text-align: right; border-radius: 6px; font: inherit; font-weight: 600; background: #FFFFFF; border: 1px solid ' + (ed ? '#E8C96A' : '#E6E0D6') };
+        })
+      };
+    });
+    const corners = (ex === 'L' ? [['A', 'B']] : [['A', 'B'], ['B', 'C']]).map(([a, b]) => ({ name: 'Corner 转角 ' + a + ' / ' + b, desc: '内角 90° · 硬接缝 · 两侧第 1 台机位要查冲突（P20）' }));
+    return {
+      exL: () => this.setState({ ex: 'L', shape: null, ov: {} }), exU: () => this.setState({ ex: 'U', shape: null, ov: {} }),
+      exLBtn: seg(ex === 'L'), exUBtn: seg(ex === 'U'),
+      guess: ex === 'L' ? 'RCP 和平面图上投影机画在两面墙前，墙在内角相接；立面图分两张 → 推测「内转角 L 形」。' : '平面图上三面墙都有投影机位，两个内角相接 → 推测「U 形三面」。',
+      shapes, faces, corners,
+      isFlat: shape === 'FLAT', isWarp: shape === 'CURVE' || shape === 'RING', showFaces: shape !== 'FLAT'
+    };
+  }
+}
+</script>
+</body>
+</html>

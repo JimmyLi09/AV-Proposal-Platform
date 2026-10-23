@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Drawing 拼接与线路图（CR-3）</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
+</style>
+</helmet>
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div><div style="font-size: 12px; color: #6B6558">{{projLine}} · <span style="padding: 1px 8px; border-radius: 10px; background: #E8EEF8; color: #2C5AA0; font-weight: 600"><span class="zh">CR-3 新增</span><span class="en">CR-3 added</span></span></div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Drawing</span><span class="zh">拼接与线路图</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">由 F3 箱体排布、F6 / F7 电源回路、F9 网线自动生成，可导出 DXF / DWG。</span><span class="en">Auto-generated from F3 cabinet layout, F6 / F7 power circuits and F9 data cables; exportable as DXF / DWG.</span></p></div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 22px; border-bottom: 1px solid #E6E0D6">
+<a href="Workspace.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">推荐</span><span class="en">Recommendation</span></a>
+<a href="Calculations.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">计算依据</span><span class="en">Calculations</span></a>
+<a href="DiagramV2.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">示意图</span><span class="en">Diagram</span></a>
+<a href="Annotate.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">标注</span><span class="en">Annotate</span></a>
+<a href="Drawing.dc.html" style="padding: 10px 2px; border-bottom: 3px solid #15203A; color: #15203A; font-weight: 700; text-decoration: none"><span class="zh">图纸</span><span class="en">Drawing</span></a>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+<span style="color: #6B6558; font-size: 12.5px"><span class="zh">示例：</span><span class="en">Example</span></span>
+<button type="button" onClick="{{pickRoyal}}" style="{{royalStyle}}">143-Royal Plaza · 4480 × 2560</button>
+<button type="button" onClick="{{pickTrial}}" style="{{trialStyle}}"><span class="zh">试用样例 · 6400 × 3520</span><span class="en">Trial · 6400 × 3520</span></button>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+<span style="color: #6B6558; font-size: 12.5px"><span class="zh">图层：</span><span class="en">Layers</span></span>
+<sc-for list="{{layers}}" as="ly" hint-placeholder-count="6">
+<button type="button" onClick="{{ly.toggle}}" style="{{ly.style}}">{{ly.label}}</button>
+</sc-for>
+<div style="flex: 1"></div>
+<button type="button" onClick="{{modePower}}" style="{{modePowerStyle}}"><span class="zh">调整电源回路</span><span class="en">Adjust power</span></button>
+<button type="button" onClick="{{modeData}}" style="{{modeDataStyle}}"><span class="zh">调整网线</span><span class="en">Adjust data</span></button>
+<button type="button" onClick="{{resetAuto}}" style="height: 34px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">恢复自动</span><span class="en">Reset to auto</span></button>
+</div>
+
+<sc-if value="{{inMode}}" hint-placeholder-val="{{ false }}"><div style="padding: 10px 14px; border-radius: 10px; background: #E8EEF8; color: #15203A">{{modeHint}}</div></sc-if>
+<div style="padding: 10px 14px; border-radius: 10px; background: {{chkBg}}; color: {{chkFg}}; font-weight: 600">{{chkText}}</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section style="flex: 999 1 620px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<div style="display: flex; gap: 10px; align-items: stretch">
+<div style="flex: 1; min-width: 0">
+<sc-if value="{{showDim}}" hint-placeholder-val="{{ true }}">
+<div style="text-align: center; margin-right: 76px; font-size: 12px; font-weight: 700; color: #1F2430">{{wLabel}}</div>
+<div style="display: flex; border-bottom: 1px solid #6B6558; margin-bottom: 4px; margin-right: 76px">
+<sc-for list="{{colDims}}" as="d" hint-placeholder-count="10"><div style="flex: 1; text-align: center; font-size: 10.5px; color: #6B6558; border-left: 1px solid #B5AC9C">{{d}}</div></sc-for>
+</div>
+</sc-if>
+<div style="position: relative; margin-right: 76px">
+<div style="position: relative; width: 100%; aspect-ratio: {{aspect}}; background: #FAF8F4; outline: 2px solid #1F2430">
+<sc-for list="{{cabs}}" as="k" hint-placeholder-count="70">
+<button type="button" onClick="{{k.click}}" aria-label="{{k.id}}" style="{{k.style}}">
+<sc-if value="{{k.showId}}" hint-placeholder-val="{{ true }}"><span style="position: absolute; left: 3px; top: 2px; font-size: 9px; color: #3B3A36">{{k.id}}</span></sc-if>
+<sc-if value="{{k.showSize}}" hint-placeholder-val="{{ true }}"><span style="position: absolute; right: 3px; top: 2px; font-size: 9px; color: #6B6558">{{k.sz}}</span></sc-if>
+<sc-if value="{{k.showPow}}" hint-placeholder-val="{{ false }}"><span style="{{k.powStyle}}">P{{k.cir}}</span></sc-if>
+<sc-if value="{{k.showData}}" hint-placeholder-val="{{ true }}"><span style="{{k.dataStyle}}">{{k.cab}}{{k.arrow}}</span></sc-if>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{showDim}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; left: 100%; top: 0; bottom: 0; width: 76px; display: flex; gap: 4px; padding-left: 6px; box-sizing: border-box">
+<div style="flex: 1; display: flex; flex-direction: column; border-left: 1px solid #6B6558">
+<sc-for list="{{rowDims}}" as="d" hint-placeholder-count="7"><div style="{{d.style}}">{{d.t}}</div></sc-for>
+</div>
+<div style="writing-mode: vertical-rl; font-size: 11.5px; font-weight: 700; text-align: center">{{hLabel}}</div>
+</div>
+</sc-if>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; font-size: 11.5px; color: #6B6558">
+<span><span style="display: inline-block; width: 12px; height: 12px; background: #E3ECF7; border: 1px solid #9DB3D3; vertical-align: -2px"></span> A 640 × 480 × {{nA}}</span>
+<span><span style="display: inline-block; width: 12px; height: 12px; background: #F6E9D6; border: 1px solid #D9B98A; vertical-align: -2px"></span> B 640 × 640 × {{nB}}</span>
+<span><span class="zh">编号从左下角 R1C1 开始 · 网线起点在左侧</span><span class="en">Numbering starts at bottom-left R1C1 · data cables start on the left</span></span>
+</div>
+</div>
+</div>
+
+<sc-if value="{{showNote}}" hint-placeholder-val="{{ true }}">
+<div style="margin-top: 14px; border: 1px solid #1F2430; display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); font-size: 12px">
+<div style="padding: 8px 10px; border-right: 1px solid #E6E0D6"><div style="color: #6B6558"><span class="zh">项目</span><span class="en">Project</span></div><b>{{projName}}</b></div>
+<div style="padding: 8px 10px; border-right: 1px solid #E6E0D6"><div style="color: #6B6558"><span class="zh">尺寸 · 面积</span><span class="en">Size · Area</span></div><b>{{sizeArea}}</b></div>
+<div style="padding: 8px 10px; border-right: 1px solid #E6E0D6"><div style="color: #6B6558"><span class="zh">箱体</span><span class="en">Cabinets</span></div><b>A {{nA}} + B {{nB}} = {{nCab}}</b></div>
+<div style="padding: 8px 10px; border-right: 1px solid #E6E0D6"><div style="color: #6B6558"><span class="zh">分辨率</span><span class="en">Resolution</span></div><b>{{resTxt}}</b></div>
+<div style="padding: 8px 10px; border-right: 1px solid #E6E0D6"><div style="color: #6B6558"><span class="zh">功率 · 回路</span><span class="en">Power · Circuit</span></div><b><span class="zh">{{kw}} kW · {{nCir}} + 1 预留</span><span class="en">{{kw}} kW · {{nCir}} + 1 reserved</span></b></div>
+<div style="padding: 8px 10px"><div style="color: #6B6558"><span class="zh">网线</span><span class="en">Data</span></div><b><span class="zh">{{nData}} + 1 备用</span><span class="en">{{nData}} + 1 spare</span></b></div>
+<div style="grid-column: 1 / -1; padding: 6px 10px; border-top: 1px solid #E6E0D6; color: #6B6558"><span class="zh">本图为方案示意，箱体规格以厂家深化为准 · Rev 0 · Rules v1.4 · DRAFT</span><span class="en">Diagram for concept only; cabinet specs subject to manufacturer detailing · Rev 0 · Rules v1.4 · DRAFT</span></div>
+</div>
+</sc-if>
+</section>
+
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 8px; font-size: 15px"><span class="en">Power circuits</span><span class="zh">电源回路 · ≤ 2.5 kW</span></h2>
+<sc-for list="{{circuits}}" as="c" hint-placeholder-count="6">
+<div style="{{c.style}}"><span style="{{c.dot}}"></span><span style="flex: 1">{{c.name}}</span><span>{{c.text}}</span></div>
+</sc-for>
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 8px; font-size: 15px"><span class="en">Data cables</span><span class="zh">网线 · ≤ 560,000 px</span></h2>
+<sc-for list="{{cables}}" as="c" hint-placeholder-count="7">
+<div style="{{c.style}}"><span style="{{c.dot}}"></span><span style="flex: 1">{{c.name}}</span><span>{{c.text}}</span></div>
+</sc-for>
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 8px; font-size: 15px"><span class="zh">导出</span><span class="en">Export</span></h2>
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px">
+<sc-for list="{{exports}}" as="x" hint-placeholder-count="6">
+<button type="button" onClick="{{x.go}}" disabled="{{x.off}}" style="{{x.style}}">{{x.label}}</button>
+</sc-for>
+</div>
+<div style="margin-top: 8px; font-size: 12px; color: #6B6558">{{exportMsg}}</div>
+</section>
+</div>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Calculation basis</span><span class="zh">计算依据</span></h2>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 620px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">项目</span><span class="en">Item</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">公式（代入数值）</span><span class="en">Formula</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">结果</span><span class="en">Result</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">规则</span><span class="en">Rule</span></th></tr></thead>
+<tbody>
+<sc-for list="{{basis}}" as="r" hint-placeholder-count="5">
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{r.a}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{r.b}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{r.c}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{r.d}}</td></tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</section>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
+  renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {"回路":"Circuit","箱 ·":"cabinets ·","· 超载":"· Overloaded","预留 Spare":"Spare","网线":"Data cable","箱体编号 IDs":"Cabinet IDs","箱体尺寸 Sizes":"Cabinet sizes","电源 Power":"Power","网线 Data":"Data cable","尺寸线 Dims":"Dims","说明栏 Notes":"Notes","LED-1_Drawing_Rev0_DRAFT.svg · 和页面上显示的一样":"LED-1_Drawing_Rev0_DRAFT.svg · same as shown on page","页":"Page","LED-1_Drawing_Rev0_DRAFT.dxf · 单位 mm · 1:1 · 图层 AVP-CABINET / AVP-CABINET-ID / AVP-POWER / AVP-DATA / AVP-DIM / AVP-NOTE · 尺寸为 DIMENSION 实体":"LED-1_Drawing_Rev0_DRAFT.dxf · units mm · 1:1 · layers AVP-CABINET / AVP-CABINET-ID / AVP-POWER / AVP-DATA / AVP-DIM / AVP-NOTE · dimensions as DIMENSION entities","单位 mm":"Unit mm","行：编号、尺寸、回路、网线、行、列":"Rows: ID, size, circuit, data cable, row, column","行":"rows","LED-1_技术方案_Rev0_DRAFT.pdf · 图纸 + 说明栏 + 计算依据":"LED-1_Technical_Proposal_Rev0_DRAFT.pdf · drawing + notes panel + calculation basis","列；":"columns;","㎡ × 500 W/㎡（示例值）":"㎡ × 500 W/㎡ (sample value)","；每":"; per","列一路":"columns per circuit","+ 1 预留":"+ 1 reserved","；按列蛇形分组":"; grouped in serpentine by column","+ 1 备用":"+ 1 spare","点箱体，把它换到下一个回路；改完立即重新校验每个回路的功率。":"Click a cabinet to move it to the next circuit; each circuit's power is rechecked immediately.","点箱体，把它换到下一根网线；改完立即重新校验每根网线的带载。":"Click a cabinet to move it to the next data cable; each data cable's load is rechecked immediately.","有":"Yes","处超载，已标红。这个 Rev 不能批准，改回或点「恢复自动」。":" overloaded, marked red. This Rev cannot be approved; revert or click \"Restore auto\".","处超载，已标红。这个 Rev":"overloads, marked in red. This Rev","校验通过：每个回路 ≤ 2.5 kW，每根网线 ≤ 560,000 px。手动调整随 Rev 保存，锁定后只读。":"Check passed: each circuit ≤ 2.5 kW, each data cable ≤ 560,000 px. Manual adjustments are saved with the Rev and read-only after locking.","校验通过：每个回路 ≤ 2.5 kW，每根网线 ≤ 560,000 px。手动调整随 Rev":"Check passed: each circuit ≤ 2.5 kW, each data cable ≤ 560,000 px. Manual adjustments follow the Rev","未批准的 Rev 导出带 DRAFT 水印；文件属性写入 Rev、规则版本和产品库版本。服务器未装 ODA File Converter，暂时只能出 DXF。":"Unapproved Revs export with a DRAFT watermark; file properties include Rev, rules version and product library version. ODA File Converter is not installed on the server, so only DXF for now."}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
+    const s = this.state || {};
+    const L = Object.assign({ id: true, size: true, dim: true, pow: true, data: true, note: true }, s.L || {});
+    const mode = s.mode || null;
+    const po = s.po || {}, dov = s.dov || {};
+    const cap = 560000, cirCap = 2500;
+    const exK = s.ex || 'royal';
+    const P = exK === 'royal' ? { name: '143-Royal Plaza · LED-1 Lobby', line: '143-Royal Plaza LED · LED-1 Lobby · 4480 × 2560 · P2.5 · Rev 1', W: 4480, H: 2560, COLS: 7, rowsH: [480, 480, 480, 480, 640] } : { name: 'Trial 试用样例 · LED-1', line: 'Trial 试用样例 · LED-1 · 6400 × 3520 · P2.5 · Rev 0', W: 6400, H: 3520, COLS: 10, rowsH: [480, 480, 480, 480, 480, 480, 640] };
+    const COLS = P.COLS, rowsH = P.rowsH, NR = rowsH.length;
+    const colW = rowsH.reduce((x, h) => x + (h === 640 ? 204.8 : 153.6), 0);
+    const perCir = Math.floor(2500 / colW), nCir = Math.ceil(COLS / perCir);
+    const cirCol = ['#2C5AA0', '#2F7A5B', '#C2410C', '#7A4FA0', '#A0782C'];
+    const dataCol = ['#D1495B', '#2E86AB', '#3B8B5A', '#E59F2B', '#6D597A', '#1F7A8C', '#8C5A1F'];
+    const NUM = '①②③④⑤⑥⑦⑧⑨⑩';
+    const auto = {}; let cable = 1, cur = 0;
+    for (let c = 0; c < COLS; c++) {
+      const up = rowsH.map((_, q) => q); const rr = c % 2 === 0 ? up : up.slice().reverse();
+      rr.forEach((r, i) => {
+        const px = 256 * rowsH[r] / 2.5;
+        if (cur + px > cap) { cable++; cur = 0; }
+        cur += px;
+        const last = i === NR - 1;
+        auto[r + '_' + c] = { cab: cable, arrow: last ? '→' : (c % 2 === 0 ? '↑' : '↓') };
+      });
+    }
+    const cabs = []; const nData = cable; const cirW = Array(nCir).fill(0); const cirN = Array(nCir).fill(0); const dPx = Array(nData).fill(0); const dN = Array(nData).fill(0);
+    const totalH = P.H;
+    for (let r = 0; r < NR; r++) {
+      const yBottom = rowsH.slice(0, r).reduce((a, b) => a + b, 0);
+      for (let c = 0; c < COLS; c++) {
+        const key = r + '_' + c;
+        const big = rowsH[r] === 640;
+        const w = big ? 204.8 : 153.6;
+        const cir = po[key] || (Math.floor(c / perCir) + 1);
+        const cab = dov[key] || auto[key].cab;
+        cirW[cir - 1] += w; cirN[cir - 1]++;
+        dPx[cab - 1] += 256 * rowsH[r] / 2.5; dN[cab - 1]++;
+        let fill = big ? '#F6E9D6' : '#E3ECF7';
+        if (mode === 'power') fill = cirCol[cir - 1] + '33';
+        if (mode === 'data') fill = dataCol[cab - 1] + '33';
+        const edited = (mode === 'power' && po[key]) || (mode === 'data' && dov[key]);
+        cabs.push({
+          id: 'R' + (r + 1) + 'C' + (c + 1), sz: big ? 'B' : 'A', cir, cab: NUM[cab - 1], arrow: (dov[key] ? '' : auto[key].arrow),
+          showId: L.id, showSize: L.size, showPow: L.pow, showData: L.data,
+          powStyle: 'position: absolute; left: 3px; bottom: 2px; font-size: 9.5px; font-weight: 700; color: ' + cirCol[cir - 1],
+          dataStyle: 'position: absolute; right: 3px; bottom: 1px; font-size: 11px; font-weight: 700; color: ' + dataCol[cab - 1],
+          click: () => {
+            if (mode === 'power') { const n = Object.assign({}, po); n[key] = cir % nCir + 1; this.setState({ po: n }); }
+            if (mode === 'data') { const n = Object.assign({}, dov); n[key] = cab % nData + 1; this.setState({ dov: n }); }
+          },
+          style: 'position: absolute; box-sizing: border-box; padding: 0; margin: 0; font: inherit; left: ' + (c * 100 / COLS) + '%; width: ' + (100 / COLS) + '%; top: ' + ((totalH - yBottom - rowsH[r]) / totalH * 100) + '%; height: ' + (rowsH[r] / totalH * 100) + '%; background: ' + fill + '; border: ' + (edited ? '2px solid #15203A' : '1px solid #8F8676') + '; cursor: ' + (mode ? 'pointer' : 'default')
+        });
+      }
+    }
+    const row = (bad) => 'display: flex; align-items: center; gap: 8px; padding: 6px 4px; border-bottom: 1px solid #EFEBE4; font-size: 12.5px; ' + (bad ? 'background: #FBE4E0; color: #A23A2A; font-weight: 700' : '');
+    const dot = (col) => 'width: 10px; height: 10px; border-radius: 50%; background: ' + col;
+    let bad = 0;
+    const circuits = cirW.map((w, i) => { const over = w > cirCap; if (over) bad++; return { name: '回路 ' + (i + 1), text: cirN[i] + ' 箱 · ' + Math.round(w) + ' W · ' + (w / 230).toFixed(1) + ' A' + (over ? ' · 超载' : ''), style: row(over), dot: dot(cirCol[i]) }; });
+    circuits.push({ name: '回路 ' + (nCir + 1), text: '预留 Spare', style: row(false) + '; color: #6B6558', dot: dot('#B5AC9C') });
+    const cables = dPx.map((p, i) => { const over = p > cap; if (over) bad++; return { name: '网线 ' + NUM[i], text: dN[i] + ' 箱 · ' + p.toLocaleString() + ' px' + (over ? ' · 超载' : ''), style: row(over), dot: dot(dataCol[i]) }; });
+    cables.push({ name: '网线 ' + NUM[nData], text: 'FOR SPARE 备用', style: row(false) + '; color: #6B6558', dot: dot('#B5AC9C') });
+    const chip = (onv) => 'height: 30px; padding: 0 10px; border-radius: 15px; font: inherit; font-size: 12px; cursor: pointer; ' + (onv ? 'border: 0; background: #15203A; color: #FFFFFF; font-weight: 600' : 'border: 1px solid #D9CFBF; background: #FFFFFF; color: #6B6558');
+    const tg = (k) => () => { const n = Object.assign({}, L); n[k] = !L[k]; this.setState({ L: n }); };
+    const layers = [['id', '箱体编号 IDs'], ['size', '箱体尺寸 Sizes'], ['pow', '电源 Power'], ['data', '网线 Data'], ['dim', '尺寸线 Dims'], ['note', '说明栏 Notes']].map(([k, l]) => ({ label: l, toggle: tg(k), style: chip(L[k]) }));
+    const btn = (act) => 'height: 34px; padding: 0 12px; border-radius: 8px; font: inherit; font-weight: 600; cursor: pointer; ' + (act ? 'border: 0; background: #C2410C; color: #FFFFFF' : 'border: 1px solid #15203A; background: #FFFFFF; color: #15203A');
+    const ex = (label, msg, off) => ({ label, off: !!off, go: () => this.setState({ exMsg: msg }), style: 'height: 34px; border-radius: 8px; font: inherit; font-size: 12.5px; ' + (off ? 'border: 1px dashed #D9CFBF; background: #FAF8F4; color: #B5AC9C; cursor: not-allowed' : 'border: 1px solid #E6E0D6; background: #FFFFFF; color: #1F2430; cursor: pointer; font-weight: 600') });
+    const exports = [
+      ex('SVG', 'LED-1_Drawing_Rev0_DRAFT.svg · 和页面上显示的一样'),
+      ex('DXF', 'LED-1_Drawing_Rev0_DRAFT.dxf · 单位 mm · 1:1 · 图层 AVP-CABINET / AVP-CABINET-ID / AVP-POWER / AVP-DATA / AVP-DIM / AVP-NOTE · 尺寸为 DIMENSION 实体'),
+      ex('DWG（需 ODA）', '', true),
+      ex('Excel 箱体清单', 'LED-1_Cabinets_Rev0.xlsx · ' + cabs.length + ' 行：编号、尺寸、回路、网线、行、列'),
+      ex('PDF 中文', 'LED-1_技术方案_Rev0_DRAFT.pdf · 图纸 + 说明栏 + 计算依据'),
+      ex('PDF English', 'LED-1_Technical_Rev0_DRAFT.pdf · Drawing + notes + calculation basis')
+    ];
+    const nB = COLS, nA = COLS * (NR - 1), area = P.W * P.H / 1e6, kw = (area * 0.5).toFixed(2), px = (P.W / 2.5) * (P.H / 2.5);
+    return {
+      pickRoyal: () => this.setState({ ex: 'royal', po: {}, dov: {}, mode: null }), pickTrial: () => this.setState({ ex: 'trial', po: {}, dov: {}, mode: null }),
+      royalStyle: chip(exK === 'royal'), trialStyle: chip(exK === 'trial'),
+      projLine: P.line, projName: P.name, aspect: P.W + ' / ' + P.H,
+      wLabel: P.W + ' = 640 × ' + COLS, hLabel: P.H + ' = 640 + 480 × ' + (NR - 1),
+      nA: nA, nB: nB, nCab: nA + nB, nCir, nData,
+      sizeArea: P.W + ' × ' + P.H + ' · ' + area.toFixed(2) + ' ㎡', resTxt: (P.W / 2.5) + ' × ' + (P.H / 2.5), kw: kw,
+      basis: [
+        { a: 'Cabinets 箱体', b: P.W + ' ÷ 640 = ' + COLS + ' 列；' + P.H + ' = 640 + 480 × ' + (NR - 1) + ' → ' + NR + ' 行', c: nA + ' A + ' + nB + ' B', d: 'F3' },
+        { a: 'Resolution 分辨率', b: P.W + ' ÷ 2.5 × ' + P.H + ' ÷ 2.5', c: (P.W / 2.5) + ' × ' + (P.H / 2.5) + ' = ' + (px / 1e6).toFixed(2) + ' MP', d: 'F4' },
+        { a: 'Power 功率', b: area.toFixed(2) + ' ㎡ × 500 W/㎡（示例值）', c: kw + ' kW', d: 'F5' },
+        { a: 'Circuits 回路', b: '⌈' + kw + ' ÷ 2.5⌉ = ' + nCir + '；每 ' + perCir + ' 列一路', c: nCir + ' + 1 预留', d: 'F6 / F7' },
+        { a: 'Data cables 网线', b: '⌈' + (px / 1e6).toFixed(2) + ' ÷ 0.56 MP⌉ = ' + nData + '；按列蛇形分组', c: nData + ' + 1 备用', d: 'F9' }
+      ],
+      layers, cabs, circuits, cables, exports,
+      colDims: Array(COLS).fill('640'),
+      rowDims: rowsH.slice().reverse().map(t => ({ t, style: 'flex: ' + t + ' 0 0; display: flex; align-items: center; padding-left: 4px; font-size: 10.5px; color: #6B6558; border-top: 1px solid #B5AC9C' })),
+      showDim: L.dim, showNote: L.note,
+      modePower: () => this.setState({ mode: mode === 'power' ? null : 'power' }),
+      modeData: () => this.setState({ mode: mode === 'data' ? null : 'data' }),
+      modePowerStyle: btn(mode === 'power'), modeDataStyle: btn(mode === 'data'),
+      resetAuto: () => this.setState({ po: {}, dov: {}, mode: null }),
+      inMode: !!mode,
+      modeHint: mode === 'power' ? '点箱体，把它换到下一个回路；改完立即重新校验每个回路的功率。' : '点箱体，把它换到下一根网线；改完立即重新校验每根网线的带载。',
+      chkBg: bad ? '#FBE4E0' : '#E6F2EC', chkFg: bad ? '#A23A2A' : '#2F7A5B',
+      chkText: bad ? '有 ' + bad + ' 处超载，已标红。这个 Rev 不能批准，改回或点「恢复自动」。' : '校验通过：每个回路 ≤ 2.5 kW，每根网线 ≤ 560,000 px。手动调整随 Rev 保存，锁定后只读。',
+      exportMsg: s.exMsg || '未批准的 Rev 导出带 DRAFT 水印；文件属性写入 Rev、规则版本和产品库版本。服务器未装 ODA File Converter，暂时只能出 DXF。'
+    };
+  }
+}
+</script>
+</body>
+</html>

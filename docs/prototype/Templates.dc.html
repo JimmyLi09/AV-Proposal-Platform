@@ -12,86 +12,101 @@
 body{margin:0;background:#F5F2EC}
 a{color:#2C5AA0}
 a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
 </style>
 </helmet>
-<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
 
 <nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
 <div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
-<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
-<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
-<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
-<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
-<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
-<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
-<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
 <div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
-<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
-<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
 <div style="flex: 1; min-height: 24px"></div>
-<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
 </nav>
 
 <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
 <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
-<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
 <div style="flex: 1"></div>
-<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
 <span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
-<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">+ New Proposal 新建方案</a>
+<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">+ 新建方案</span><span class="en">+ New Proposal</span></a>
 </header>
 
 <main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
-<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px"><div style="flex: 1 1 300px"><h1 style="margin: 0; font-size: 24px; color: #15203A">Templates <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">模板</span></h1><p style="margin: 2px 0 0; color: #6B6558">LED 方案的章节顺序、信头和标准条款。Proposal 文字由这些内容拼装而成，不由 AI 撰写。</p></div><span style="padding: 2px 10px; border-radius: 12px; background: #E8EFF9; color: #2C5AA0; font-weight: 600">LED template 模板 v1.0</span></div>
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px"><div style="flex: 1 1 300px"><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Templates</span><span class="zh">模板</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">方案的章节顺序、信头和标准条款。文字由这些内容拼装而成，不由 AI 撰写。</span><span class="en">LEDProposal</span></p></div><span style="padding: 2px 10px; border-radius: 12px; background: #E8EFF9; color: #2C5AA0; font-weight: 600"><span class="zh">模板 v1.0</span><span class="en">LED template v1.0</span></span></div>
 <div role="tablist" aria-label="Business line 业务线" style="display: flex; gap: 6px">
 <a href="Templates.dc.html" style="padding: 7px 14px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none">LED</a>
-<a href="TemplatesPJ.dc.html" style="padding: 7px 14px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #3B3A36; font-size: 12.5px; text-decoration: none">Projection 投影 · 单面墙</a>
+<a href="TemplatesPJ.dc.html" style="padding: 7px 14px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #3B3A36; font-size: 12.5px; text-decoration: none"><span class="zh">投影 · 单面墙</span><span class="en">Projection · single-face wall</span></a>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
 <section style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">Sections, in order <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">章节顺序</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Sections, in order</span><span class="zh">章节顺序</span></h2>
 <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px">
-<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1">Cover &amp; site photo 封面与现场照片</span><input type="checkbox" checked aria-label="Include Cover 包含封面" style="accent-color: #15203A"></li>
-<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1">Concept 概念</span><input type="checkbox" checked aria-label="Include Concept" style="accent-color: #15203A"></li>
-<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1">Recommended configuration 推荐配置</span><input type="checkbox" checked aria-label="Include Recommended configuration" style="accent-color: #15203A"></li>
-<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1">Quantity range &amp; BOQ 数量范围与 BOQ</span><input type="checkbox" checked aria-label="Include BOQ" style="accent-color: #15203A"></li>
-<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1">System diagram &amp; schematic 系统图与原理图</span><input type="checkbox" checked aria-label="Include diagrams" style="accent-color: #15203A"></li>
-<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1">Annotated drawings 标注图</span><input type="checkbox" checked aria-label="Include annotated drawings" style="accent-color: #15203A"></li>
-<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1">Risks &amp; assumptions 风险与假设</span><input type="checkbox" checked aria-label="Include risks" style="accent-color: #15203A"></li>
-<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1">Calculation basis 计算依据（附录）</span><input type="checkbox" checked aria-label="Include calculation appendix" style="accent-color: #15203A"></li>
+<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1"><span class="zh">封面与现场照片</span><span class="en">Cover &amp; site photo</span></span><input type="checkbox" checked="" aria-label="Include Cover 包含封面" style="accent-color: #15203A"></li>
+<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1"><span class="zh">概念</span><span class="en">Concept</span></span><input type="checkbox" checked="" aria-label="Include Concept" style="accent-color: #15203A"></li>
+<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1"><span class="zh">推荐配置</span><span class="en">Recommended configuration</span></span><input type="checkbox" checked="" aria-label="Include Recommended configuration" style="accent-color: #15203A"></li>
+<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1"><span class="zh">数量范围与 BOQ</span><span class="en">Quantity range &amp; BOQ</span></span><input type="checkbox" checked="" aria-label="Include BOQ" style="accent-color: #15203A"></li>
+<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1"><span class="zh">系统图与原理图</span><span class="en">System diagram &amp; schematic</span></span><input type="checkbox" checked="" aria-label="Include diagrams" style="accent-color: #15203A"></li>
+<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1"><span class="zh">标注图</span><span class="en">Annotated drawings</span></span><input type="checkbox" checked="" aria-label="Include annotated drawings" style="accent-color: #15203A"></li>
+<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1"><span class="zh">风险与假设</span><span class="en">Risks &amp; assumptions</span></span><input type="checkbox" checked="" aria-label="Include risks" style="accent-color: #15203A"></li>
+<li style="display: flex; align-items: center; gap: 10px; border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><span aria-hidden="true" style="color: #6B6558">⋮⋮</span><span style="flex: 1"><span class="zh">计算依据（附录）</span><span class="en">Calculation basis</span></span><input type="checkbox" checked="" aria-label="Include calculation appendix" style="accent-color: #15203A"></li>
 </ol>
 </section>
 
 <section style="flex: 1 1 320px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px">
-<h2 style="margin: 0; font-size: 15px">Letterhead &amp; format <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">信头与格式</span></h2>
-<div><label for="cn" style="display: block; font-weight: 600; margin-bottom: 4px">Company name 公司名称</label><input id="cn" type="text" placeholder="[Company full name]" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
-<div><label for="ad" style="display: block; font-weight: 600; margin-bottom: 4px">Address 地址</label><input id="ad" type="text" placeholder="[Address]" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+<h2 style="margin: 0; font-size: 15px"><span class="en">Letterhead &amp; format</span><span class="zh">信头与格式</span></h2>
+<div><label for="cn" style="display: block; font-weight: 600; margin-bottom: 4px"><span class="zh">公司名称</span><span class="en">Company name</span></label><input id="cn" type="text" placeholder="[Company full name]" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+<div><label for="ad" style="display: block; font-weight: 600; margin-bottom: 4px"><span class="zh">地址</span><span class="en">Address</span></label><input id="ad" type="text" placeholder="[Address]" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
 <div><label for="uen" style="display: block; font-weight: 600; margin-bottom: 4px">UEN</label><input id="uen" type="text" placeholder="[UEN]" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
-<div style="display: flex; align-items: center; gap: 10px"><div style="width: 92px; height: 40px; border: 1px solid #E6E0D6; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><button type="button" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">Replace logo 更换 Logo</button></div>
+<div style="display: flex; align-items: center; gap: 10px"><div style="width: 92px; height: 40px; border: 1px solid #E6E0D6; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><button type="button" style="height: 36px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">更换 Logo</span><span class="en">Replace logo Logo</span></button></div>
 <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
-<div><label for="lg" style="display: block; font-weight: 600; margin-bottom: 4px">Language 语言</label><select id="lg" style="width: 100%; height: 36px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit; background: #FFFFFF"><option>English 英文</option><option>Chinese 中文</option><option>Bilingual 双语</option></select></div>
-<div><label for="pg" style="display: block; font-weight: 600; margin-bottom: 4px">Page 页面</label><select id="pg" style="width: 100%; height: 36px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit; background: #FFFFFF"><option>A4</option><option>A3 landscape 横向</option></select></div>
+<div><label for="lg" style="display: block; font-weight: 600; margin-bottom: 4px"><span class="zh">语言</span><span class="en">Language</span></label><select id="lg" style="width: 100%; height: 36px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit; background: #FFFFFF"><option>{{__s.o0}}</option><option>{{__s.o1}}</option><option>{{__s.o2}}</option></select></div>
+<div><label for="pg" style="display: block; font-weight: 600; margin-bottom: 4px"><span class="zh">页面</span><span class="en">Page</span></label><select id="pg" style="width: 100%; height: 36px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit; background: #FFFFFF"><option>A4</option><option>{{__s.o3}}</option></select></div>
 </div>
-<div><label for="nb" style="display: block; font-weight: 600; margin-bottom: 4px">Numbering 编号规则</label><input id="nb" type="text" value="AVP-{year}-{project no.}-Rev{n}" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"><div style="font-size: 12px; color: #6B6558; margin-top: 3px">未关联编号的项目先用 "TBC"，关联后自动替换。</div></div>
+<div><label for="nb" style="display: block; font-weight: 600; margin-bottom: 4px"><span class="zh">编号规则</span><span class="en">Numbering</span></label><input id="nb" type="text" value="AVP-{year}-{project no.}-Rev{n}" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"><div style="font-size: 12px; color: #6B6558; margin-top: 3px"><span class="zh">未关联编号的项目先用 "TBC"，关联后自动替换。</span><span class="en">Items without a linked number use "TBC" first, replaced automatically once linked.</span></div></div>
 </section>
 </div>
 
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px">Standard clauses <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">标准条款</span></h2><div style="flex: 1"></div><button type="button" style="height: 34px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">+ Add clause 添加条款</button></div>
+<div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px"><span class="en">Standard clauses</span><span class="zh">标准条款</span></h2><div style="flex: 1"></div><button type="button" style="height: 34px; padding: 0 12px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">+ 添加条款</span><span class="en">+ Add clause</span></button></div>
 <div style="overflow-x: auto">
 <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 620px">
-<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Type 类型</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Text 条款内容</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Added when 加入条件</th></tr></thead>
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">类型</span><span class="en">Type</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">条款内容</span><span class="en">Text</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">加入条件</span><span class="en">Added when</span></th></tr></thead>
 <tbody>
-<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Assumption 假设</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">墙体可承受屏幕荷载；结构核算由他方负责。</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Always 始终</td></tr>
-<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Assumption 假设</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">供电点距屏幕 {power distance} 以内。</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">文件中没有供电距离</td></tr>
-<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Assumption 假设</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">数量待现场勘察后确认。</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">A Light 模式下始终加入</td></tr>
-<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Exclusion 不含</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">土建、市电接入和网络布线。</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Always 始终</td></tr>
-<tr><td style="padding: 8px">Exclusion 不含</td><td style="padding: 8px">钢结构设计及 PE 签认。</td><td style="padding: 8px; color: #6B6558">安装方式为壁挂或吊装</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">假设</span><span class="en">Assumption</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">墙体可承受屏幕荷载；结构核算由他方负责。</span><span class="en">Wall can bear the screen load; structural calculation by others.</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">始终</span><span class="en">Always</span></td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">假设</span><span class="en">Assumption</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">供电点距屏幕 {power distance} 以内。</span><span class="en">Power point within {power distance} of the screen.</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">文件中没有供电距离</span><span class="en">Power distance not in file</span></td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">假设</span><span class="en">Assumption</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">数量待现场勘察后确认。</span><span class="en">Quantities to be confirmed after site survey.</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">A 模式下始终加入</span><span class="en">A Light</span></td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">不含</span><span class="en">Exclusion</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">土建、市电接入和网络布线。</span><span class="en">Civil works, mains power connection and network cabling.</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">始终</span><span class="en">Always</span></td></tr>
+<tr><td style="padding: 8px"><span class="zh">不含</span><span class="en">Exclusion</span></td><td style="padding: 8px"><span class="zh">钢结构设计及 PE 签认。</span><span class="en">Steel structure design and PE endorsement.</span></td><td style="padding: 8px; color: #6B6558"><span class="zh">安装方式为壁挂或吊装</span><span class="en">Mounting is wall or ceiling</span></td></tr>
 </tbody>
 </table>
 </div>
-<div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px"><button type="button" style="height: 40px; padding: 0 18px; border-radius: 8px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Save as v1.1 另存为 v1.1</button></div>
+<div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 12px"><button type="button" style="height: 40px; padding: 0 18px; border-radius: 8px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer"><span class="zh">Save as v1.1 另存为 v1.1</span><span class="en">Save as v1.1</span></button></div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px"><h2 style="margin: 0; font-size: 15px"><span class="en">Deck template</span><span class="zh">演示稿模板（PPT）</span></h2><div style="flex: 1"></div><a href="Deck.dc.html" style="font-size: 12.5px"><span class="zh">预览演示稿 →</span><span class="en">Preview deck →</span></a></div>
+<div style="font-size: 12.5px; color: #6B6558"><span class="zh">16:9。上传公司 .母版后，封面、页眉页脚、字体和颜色都按母版出。页面顺序和默认勾选在这里定，生成时每份 还可以再勾掉。</span><span class="en">16:9. Upload company .potx Proposal</span></div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; font-size: 12.5px">
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px 12px"><div style="font-weight: 600"><span class="zh">母版</span><span class="en">Master</span></div><div style="color: #6B6558">Audax_Deck_Master.potx · v1.0 <span style="padding: 0 6px; border-radius: 8px; background: #F1EEE8; font-size: 11px"><span class="zh">示例值 sample</span><span class="en">Sample value</span></span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px 12px"><div style="font-weight: 600"><span class="zh">封面字段</span><span class="en">Cover fields</span></div><div style="color: #6B6558">Title · Project · Project No. · Client · Location · Date</div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px 12px"><div style="font-weight: 600"><span class="zh">每页</span><span class="en">Every slide</span></div><div style="color: #6B6558"><span class="zh">页眉 · 页脚 · 页码</span><span class="en">AUDAX · Confidential · Page no.</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px 12px"><div style="font-weight: 600"><span class="zh">页面</span><span class="en">Slides</span></div><div style="color: #6B6558"><span class="zh">LED 10 页 · 投影 11 页；封面和最后一页固定</span><span class="en">LED 10 pages · Projection 11 pages; cover and last page fixed</span></div></div>
+</div>
 </section>
 </main>
 </div>
@@ -99,7 +114,103 @@ a:hover{color:#15203A}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
 class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
   renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"o0":["英文","English"],"o1":["中文","Chinese"],"o2":["双语","Bilingual"],"o3":["A3 横向","A3 landscape"],"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
     return {};
   }
 }

@@ -12,87 +12,92 @@
 body{margin:0;background:#F5F2EC}
 a{color:#2C5AA0}
 a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
 </style>
 </helmet>
-<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
 
 <nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
 <div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
-<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
-<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
-<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
-<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
-<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
-<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
-<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
 <div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
-<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
-<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
 <div style="flex: 1; min-height: 24px"></div>
-<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
 </nav>
 
 <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
 <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
-<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
 <div style="flex: 1"></div>
-<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
 <span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
 </header>
 
 <main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
-<div><div style="font-size: 12px; color: #6B6558">143-Royal Plaza LED · LED-1 Lobby · Rev 1</div><h1 style="margin: 0; font-size: 24px; color: #15203A">Diagram <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">示意图</span></h1><p style="margin: 2px 0 0; color: #6B6558">由 BOQ 生成。图中每个设备和线缆都对应一行 BOQ；可以拖动方框、编辑标签。</p></div>
+<div><div style="font-size: 12px; color: #6B6558">143-Royal Plaza LED · LED-1 Lobby · Rev 1</div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Diagram</span><span class="zh">示意图</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">由 BOQ 生成。图中每个设备和线缆都对应一行 BOQ；可以拖动方框、编辑标签。</span><span class="en">Generated from BOQ. Every device and cable in the diagram maps to a BOQ line; boxes can be dragged and labels edited.</span></p></div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 22px; border-bottom: 1px solid #E6E0D6">
-<a href="Workspace.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none">Recommendation 推荐</a>
-<a href="Calculations.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none">Calculations 计算依据</a>
-<a href="Diagram.dc.html" style="padding: 10px 2px; border-bottom: 3px solid #15203A; color: #15203A; font-weight: 700; text-decoration: none">Diagram 示意图</a>
+<a href="Workspace.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">推荐</span><span class="en">Recommendation</span></a>
+<a href="Calculations.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">计算依据</span><span class="en">Calculations</span></a>
+<a href="Diagram.dc.html" style="padding: 10px 2px; border-bottom: 3px solid #15203A; color: #15203A; font-weight: 700; text-decoration: none"><span class="zh">示意图</span><span class="en">Diagram</span></a>
+<a href="Drawing.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">图纸</span><span class="en">Drawing</span></a>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
-<span style="padding: 7px 14px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px">Level 1 · Concept 概念</span>
-<span style="padding: 7px 14px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px">Level 2 · Schematic 原理</span>
-<span style="padding: 7px 14px; border-radius: 16px; border: 1px solid #EFEBE4; background: #FAF8F4; color: #6B6558; font-size: 12.5px">Level 3 · Construction 施工（B 模式，下一版）</span>
+<span style="padding: 7px 14px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px"><span class="zh">Level 1 · 概念</span><span class="en">Level 1 · Concept</span></span>
+<span style="padding: 7px 14px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px"><span class="zh">Level 2 · 原理</span><span class="en">Level 2 · Schematic</span></span>
+<span style="padding: 7px 14px; border-radius: 16px; border: 1px solid #EFEBE4; background: #FAF8F4; color: #6B6558; font-size: 12.5px"><span class="zh">Level 3 · 施工（B 模式，下一版）</span><span class="en">Level 3 · Construction (B mode, next version)</span></span>
 <div style="flex: 1"></div>
-<button type="button" style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Edit labels 编辑标签</button>
-<button type="button" style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer">Reset layout 重置布局</button>
+<button type="button" style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer"><span class="zh">编辑标签</span><span class="en">Edit labels</span></button>
+<button type="button" style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">重置布局</span><span class="en">Reset layout</span></button>
 </div>
 
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 4px; font-size: 15px">Level 1 · Concept diagram <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">概念图</span></h2>
-<p style="margin: 0 0 14px; color: #6B6558">信号从左到右；电源来自下方的配电箱。</p>
+<h2 style="margin: 0 0 4px; font-size: 15px"><span class="en">Level 1 · Concept diagram</span><span class="zh">概念图</span></h2>
+<p style="margin: 0 0 14px; color: #6B6558"><span class="zh">信号从左到右；电源来自下方的配电箱。</span><span class="en">Signal flows left to right; power comes from the DB box below.</span></p>
 <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px">
-<div style="flex: 1 1 150px; border: 1px solid #C9BFAE; border-radius: 10px; padding: 12px; text-align: center"><div style="font-weight: 700">Content source 信号源</div><div style="font-size: 12px; color: #6B6558">播放器或电脑</div></div>
+<div style="flex: 1 1 150px; border: 1px solid #C9BFAE; border-radius: 10px; padding: 12px; text-align: center"><div style="font-weight: 700"><span class="zh">信号源</span><span class="en">Content source</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">播放器或电脑</span><span class="en">Player or PC</span></div></div>
 <div style="flex: 0 1 90px; text-align: center; color: #6B6558; font-size: 11.5px">HDMI<div aria-hidden="true" style="font-size: 18px; color: #15203A">→</div></div>
-<div style="flex: 1 1 150px; border: 1px solid #C9BFAE; border-radius: 10px; padding: 12px; text-align: center"><div style="font-weight: 700">Video processor 视频处理器</div><div style="font-size: 12px; color: #6B6558">SP-1 × 1</div></div>
+<div style="flex: 1 1 150px; border: 1px solid #C9BFAE; border-radius: 10px; padding: 12px; text-align: center"><div style="font-weight: 700"><span class="zh">视频处理器</span><span class="en">Video processor</span></div><div style="font-size: 12px; color: #6B6558">SP-1 × 1</div></div>
 <div style="flex: 0 1 90px; text-align: center; color: #6B6558; font-size: 11.5px">HDMI<div aria-hidden="true" style="font-size: 18px; color: #15203A">→</div></div>
-<div style="flex: 1 1 150px; border: 1px solid #C9BFAE; border-radius: 10px; padding: 12px; text-align: center"><div style="font-weight: 700">Controller 控制器</div><div style="font-size: 12px; color: #6B6558">SC-4 × 1 · 4 口</div></div>
+<div style="flex: 1 1 150px; border: 1px solid #C9BFAE; border-radius: 10px; padding: 12px; text-align: center"><div style="font-weight: 700"><span class="zh">控制器</span><span class="en">Controller</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">SC-4 × 1 · 4 口</span><span class="en">SC-4 × 1 · 4 ports</span></div></div>
 <div style="flex: 0 1 90px; text-align: center; color: #6B6558; font-size: 11.5px">Cat6 × 4 (+1)<div aria-hidden="true" style="font-size: 18px; color: #15203A">→</div></div>
-<div style="flex: 1 1 170px; border: 2px solid #15203A; background: #F3F5FA; border-radius: 10px; padding: 12px; text-align: center"><div style="font-weight: 700">LED wall LED 屏</div><div style="font-size: 12px; color: #6B6558">4480 × 2560 · P2.5 · 35 个箱体</div></div>
+<div style="flex: 1 1 170px; border: 2px solid #15203A; background: #F3F5FA; border-radius: 10px; padding: 12px; text-align: center"><div style="font-weight: 700"><span class="zh">LED 屏</span><span class="en">LED wall</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">4480 × 2560 · P2.5 · 35 个箱体</span><span class="en">4480 × 2560 · P2.5 · 35 cabinets</span></div></div>
 </div>
 <div style="display: flex; justify-content: flex-end; margin-top: 8px">
-<div style="flex: 0 1 300px; text-align: center; color: #6B6558; font-size: 11.5px"><div aria-hidden="true" style="font-size: 18px; color: #C2410C">↑</div>3 回路 · 4 根电源线（+1 备用）<div style="margin-top: 6px; border: 1px solid #E4B596; background: #FDF1E6; border-radius: 10px; padding: 10px; color: #1F2430"><b>DB box 配电箱 × 1</b><br><span style="font-size: 12px; color: #6B6558">每回路一个 MCB · 5.73 kW</span></div></div>
+<div style="flex: 0 1 300px; text-align: center; color: #6B6558; font-size: 11.5px"><div aria-hidden="true" style="font-size: 18px; color: #C2410C">↑</div><span class="zh">3 回路 · 4 根电源线（+1 备用）</span><span class="en">3 circuits · 4 power cables (+1 spare)</span><div style="margin-top: 6px; border: 1px solid #E4B596; background: #FDF1E6; border-radius: 10px; padding: 10px; color: #1F2430"><b><span class="zh">配电箱 × 1</span><span class="en">DB box × 1</span></b><br><span style="font-size: 12px; color: #6B6558"><span class="zh">每回路一个 MCB · 5.73 kW</span><span class="en">One MCB per circuit · 5.73 kW</span></span></div></div>
 </div>
 </section>
 
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 4px; font-size: 15px">Level 2 · Schematic <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">原理图</span></h2>
-<p style="margin: 0 0 14px; color: #6B6558">设备照片、型号和数量取自 Product Library 产品库，每条连接都标出线缆。</p>
+<h2 style="margin: 0 0 4px; font-size: 15px"><span class="en">Level 2 · Schematic</span><span class="zh">原理图</span></h2>
+<p style="margin: 0 0 14px; color: #6B6558"><span class="zh">设备照片、型号和数量取自 产品库，每条连接都标出线缆。</span><span class="en">Device photos, models and quantities come from the Product Library</span></p>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px">
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 10px"><div style="height: 70px; border-radius: 6px; background: #EFEBE4; display: flex; align-items: center; justify-content: center; color: #6B6558; font-size: 11.5px">产品库照片</div><div style="font-weight: 700; margin-top: 6px">Media player 播放器</div><div style="font-size: 12px; color: #6B6558">业主提供 · 1</div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 10px"><div style="height: 70px; border-radius: 6px; background: #EFEBE4; display: flex; align-items: center; justify-content: center; color: #6B6558; font-size: 11.5px">产品库照片</div><div style="font-weight: 700; margin-top: 6px">示例 SP-1</div><div style="font-size: 12px; color: #6B6558">视频处理器 · 1 套</div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 10px"><div style="height: 70px; border-radius: 6px; background: #EFEBE4; display: flex; align-items: center; justify-content: center; color: #6B6558; font-size: 11.5px">产品库照片</div><div style="font-weight: 700; margin-top: 6px">示例 SC-4</div><div style="font-size: 12px; color: #6B6558">控制器 · 1 套 · 2.3 MP</div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 10px"><div style="height: 70px; border-radius: 6px; background: #EFEBE4; display: flex; align-items: center; justify-content: center; color: #6B6558; font-size: 11.5px">产品库照片</div><div style="font-weight: 700; margin-top: 6px">示例 IC-25</div><div style="font-size: 12px; color: #6B6558">箱体 28 + 7 · P2.5</div></div>
-<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 10px"><div style="height: 70px; border-radius: 6px; background: #EFEBE4; display: flex; align-items: center; justify-content: center; color: #6B6558; font-size: 11.5px">产品库照片</div><div style="font-weight: 700; margin-top: 6px">DB box 配电箱</div><div style="font-size: 12px; color: #6B6558">定制 · MCB × 3 · 1 套</div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 10px"><div style="height: 70px; border-radius: 6px; background: #EFEBE4; display: flex; align-items: center; justify-content: center; color: #6B6558; font-size: 11.5px"><span class="zh">产品库照片</span><span class="en">Product library photo</span></div><div style="font-weight: 700; margin-top: 6px"><span class="zh">播放器</span><span class="en">Media player</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">业主提供 · 1</span><span class="en">Client-supplied · 1</span></div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 10px"><div style="height: 70px; border-radius: 6px; background: #EFEBE4; display: flex; align-items: center; justify-content: center; color: #6B6558; font-size: 11.5px"><span class="zh">产品库照片</span><span class="en">Product library photo</span></div><div style="font-weight: 700; margin-top: 6px"><span class="zh">示例 SP-1</span><span class="en">Sample SP-1</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">视频处理器 · 1 套</span><span class="en">Video processor · 1 set</span></div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 10px"><div style="height: 70px; border-radius: 6px; background: #EFEBE4; display: flex; align-items: center; justify-content: center; color: #6B6558; font-size: 11.5px"><span class="zh">产品库照片</span><span class="en">Product library photo</span></div><div style="font-weight: 700; margin-top: 6px"><span class="zh">示例 SC-4</span><span class="en">Sample SC-4</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">控制器 · 1 套 · 2.3 MP</span><span class="en">Sending controller · 1 set · 2.3 MP</span></div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 10px"><div style="height: 70px; border-radius: 6px; background: #EFEBE4; display: flex; align-items: center; justify-content: center; color: #6B6558; font-size: 11.5px"><span class="zh">产品库照片</span><span class="en">Product library photo</span></div><div style="font-weight: 700; margin-top: 6px"><span class="zh">示例 IC-25</span><span class="en">Sample IC-25</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">箱体 28 + 7 · P2.5</span><span class="en">Cabinets 28 + 7 · P2.5</span></div></div>
+<div style="border: 1px solid #E6E0D6; border-radius: 10px; padding: 10px"><div style="height: 70px; border-radius: 6px; background: #EFEBE4; display: flex; align-items: center; justify-content: center; color: #6B6558; font-size: 11.5px"><span class="zh">产品库照片</span><span class="en">Product library photo</span></div><div style="font-weight: 700; margin-top: 6px"><span class="zh">配电箱</span><span class="en">DB box</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">定制 · MCB × 3 · 1 套</span><span class="en">Custom · MCB × 3 · 1 set</span></div></div>
 </div>
 <div style="overflow-x: auto; margin-top: 14px">
 <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 560px">
-<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">From 起点</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">To 终点</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Cable 线缆</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Qty 数量</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">BOQ line BOQ 行</th></tr></thead>
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">起点</span><span class="en">From</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">终点</span><span class="en">To</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">线缆</span><span class="en">Cable</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">数量</span><span class="en">Qty</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">BOQ 行</span><span class="en">BOQ line</span></th></tr></thead>
 <tbody>
-<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Media player 播放器</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">SP-1</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">HDMI</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">1</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">业主提供</td></tr>
-<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">SP-1</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">SC-4</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">HDMI</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">1</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">随 SP-1 附带</td></tr>
-<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">SC-4</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">LED wall LED 屏</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Cat6</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">4 + 1 备用</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">第 10 行</td></tr>
-<tr><td style="padding: 8px">DB box 配电箱</td><td style="padding: 8px">LED wall LED 屏</td><td style="padding: 8px">Power cable 电源线</td><td style="padding: 8px">3 + 1 备用</td><td style="padding: 8px">第 9 行</td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">播放器</span><span class="en">Media player</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">SP-1</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">HDMI</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">1</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">业主提供</span><span class="en">Client-supplied</span></td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">SP-1</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">SC-4</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">HDMI</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">1</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">随 SP-1 附带</span><span class="en">Included with SP-1</span></td></tr>
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">SC-4</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">LED 屏</span><span class="en">LED wall</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">Cat6</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">4 + 1 备用</span><span class="en">4 + 1 spare</span></td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span class="zh">第 10 行</span><span class="en">Row 10</span></td></tr>
+<tr><td style="padding: 8px"><span class="zh">配电箱</span><span class="en">DB box</span></td><td style="padding: 8px"><span class="zh">LED 屏</span><span class="en">LED wall</span></td><td style="padding: 8px"><span class="zh">电源线</span><span class="en">Power cable</span></td><td style="padding: 8px"><span class="zh">3 + 1 备用</span><span class="en">3 + 1 spare</span></td><td style="padding: 8px"><span class="zh">第 9 行</span><span class="en">Row 9</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -103,7 +108,103 @@ a:hover{color:#15203A}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
 class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
   renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
     return {};
   }
 }

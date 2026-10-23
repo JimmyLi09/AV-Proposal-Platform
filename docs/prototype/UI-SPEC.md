@@ -10,6 +10,12 @@
 ## 配色（Audax）
 bg #F5F2EC · 卡片 #FFFFFF · 线 #E6E0D6 / #EFEBE4 · 正文 #1F2430 · 次文字 #6B6558 · 深蓝 #15203A · 橙色主按钮 #C2410C · 绿 #2F7A5B/#E6F2EC · 琥珀 #9A4A12/#FDF1E6 · 红 #B91C1C/#FDE4E4 · 蓝 #2C5AA0/#E8EFF9 · 示例值标签背景 #F1EEE8。
 
+## 2026-10-22 更新：一次只显示一种语言
+
+- 界面右上角有「EN / 中文」切换按钮，默认中文，一次只显示一种语言（见改动单 CR-4）。
+- 原型源码里仍按下面的「English 中文」写法录入，由脚本拆成 `<span class="zh">…</span><span class="en">…</span>`，说明句也配了英文。**正式开发请用语言包（zh.json / en.json），不要照搬原型的拆分方式。**
+- 以下双语规则仅用于原型录入。
+
 ## 双语规则（统一一种样式）
 1. **标签类文字写「English 中文」**：页面标题、区块标题、tab、表头、字段名、按钮、状态标签。例：`Confirmed inputs 已确认输入`、`Approve 批准`、`PASS 通过`、`NOTE 提示`、`BLOCK 阻断`。h1 写法：`<h1 ...>LED Recommendation <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">LED 推荐方案</span></h1>`；h2 同理（中文用 `font-weight: 500; color: #6B6558; font-size: 0.85em`）。表头、字段名、按钮直接用空格连接 `English 中文`。
 2. **说明类句子只写中文**（提示、帮助文字、风险条目、日志描述等），专有名词保留英文（Rev、BOQ、Proposal、Agent、DWG、PDF 等）。不要把一段话中英各写一遍。
@@ -99,3 +105,9 @@ BOQ（投影）：投影机 PT-BHZ611C × 5、国产定焦镜头 0.5 × 5、ZWIN
 ## 投影模板（TemplatesPJ 用）
 章节：Concept 概念 · Recommended Configuration 推荐配置 · Quantity Range & BOQ · System Diagram L1 · Schematic L2 · 专属图（立面融合区、平面机位、剖面遮挡）· Annotated Drawings 标注图 · Risks & Assumptions 风险与假设 · Calculation Basis 计算依据 P1–P13。
 4 条固定风险条款：融合带可能偏亮；清晰度受像素尺寸限制；天花过矮影响安装；天花或建筑抖动可能导致融合错位。另有「资料齐全度」条款：缺剖面 / RCP 时自动加入。
+
+## 2026-10-15 追加
+- **方案演示稿**：Deck.dc.html（第 6 步审核导出 → Proposal Deck）。封面保留标题、项目名、项目编号、客户、地点；每页 AUDAX 页眉、Confidential 页脚、页码；不显示价格。
+- **投影系统与布线**：SystemPJ.dc.html，投影第 3 步第 4 个子 tab「System & Cabling 系统与布线」。规则 P14–P17，规则版本 v1.4；备用线行用浅黄 #FFF3B0 标出。确认关（ConfirmPJ）新增：播放源位置、中控、同步组。
+- 新常量：hdmiMax 15 m（已定）、spareRatio 10 %、powerMargin 10 %。
+- **LED 异形屏**：ShapeLED.dc.html（第 2 步「屏形与输入」，先判屏形，再分面输入，含资料冲突表）、FacesLED.dc.html（第 3 步多面推荐，展开画布 + 按面表格 + S1–S7）。New Proposal 选 LED 后先进 ShapeLED；选「平面」回到原来的 Confirm.dc.html。示例：GMC U 形、Phoenix Sea Digital Cube L 形。
