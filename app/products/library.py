@@ -36,6 +36,11 @@ FIELDS = {
         "processor": COMMON + [
             ("inputs", "Inputs 输入数", "number"),
             ("max_px", "Max resolution 最大分辨率 px", "number"),
+            # CR-2：处理器（含发送）——一台同时做视频处理和发送，不用另配控制器
+            ("sending", "With sending 含发送", "flag"),
+            ("capacity_px", "Load 带载像素 px（含发送时）", "number"),
+            ("ports", "Ports 网口数（含发送时）", "number"),
+            ("max_input_px", "Max input 最大输入分辨率 px", "number"),
         ],
     },
 }
@@ -51,6 +56,7 @@ CHECKS = {
     "status": lambda v: v in STATUSES,
     "scenes": lambda v: isinstance(v, list) and all(s in SCENES for s in v),
     "bool": lambda v: isinstance(v, bool),
+    "flag": lambda v: v is None or isinstance(v, bool),
     "number": _number,
     "sizes": lambda v: v is None or (isinstance(v, list) and all(
         isinstance(s, list) and len(s) == 2 and all(_number(x) and x is not None for x in s) for s in v)),
@@ -64,6 +70,12 @@ class LibraryError(ValueError):
 
 def load_seed(line: str) -> dict:
     return json.loads((Path(__file__).parent / f"seed_{line.lower()}.json").read_text(encoding="utf-8"))
+
+
+def load_reference(line: str) -> list[dict]:
+    """参考型号表：不在产品库里，只用来给建议型号（数值待核对规格书）。"""
+    path = Path(__file__).parent / f"reference_{line.lower()}.json"
+    return json.loads(path.read_text(encoding="utf-8"))["products"] if path.exists() else []
 
 
 def validate(content: dict, line: str) -> None:
@@ -81,6 +93,8 @@ def validate(content: dict, line: str) -> None:
                 raise LibraryError(f"{p['id']}：{label} 填写不对")
         if not (p.get("model") or "").strip():
             raise LibraryError(f"{p['id']}：型号不能为空")
+        if p.get("sending") and not (p.get("capacity_px") and p.get("ports")):
+            raise LibraryError(f"{p['id']}：含发送的处理器要填带载像素和网口数")
 
 
 def active(content: dict, category: str) -> list[dict]:

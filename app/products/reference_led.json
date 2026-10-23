@@ -1,0 +1,17 @@
+{
+  "note": "参考型号表（CR-2）：产品库里没有够用的处理器 / 控制器时，从这里给建议型号。数值都是大约值，待核对规格书；入库前由 Jimmy 按规格书核实。",
+  "products": [
+    {"id": "VX400", "category": "processor", "brand": "NovaStar", "model": "VX400", "status": "approved", "scenes": ["indoor", "outdoor", "rental"],
+     "sample": true, "sending": true, "capacity_px": 2600000, "ports": 4, "inputs": null, "max_px": null, "max_input_px": null,
+     "datasheet": "", "remark": "小屏"},
+    {"id": "VX600", "category": "processor", "brand": "NovaStar", "model": "VX600", "status": "approved", "scenes": ["indoor", "outdoor", "rental"],
+     "sample": true, "sending": true, "capacity_px": 3900000, "ports": 6, "inputs": null, "max_px": null, "max_input_px": null,
+     "datasheet": "", "remark": ""},
+    {"id": "VX1000", "category": "processor", "brand": "NovaStar", "model": "VX1000", "status": "approved", "scenes": ["indoor", "outdoor", "rental"],
+     "sample": true, "sending": true, "capacity_px": 6500000, "ports": 10, "inputs": null, "max_px": null, "max_input_px": null,
+     "datasheet": "", "remark": ""},
+    {"id": "VX16s", "category": "processor", "brand": "NovaStar", "model": "VX16s", "status": "approved", "scenes": ["indoor", "outdoor", "rental"],
+     "sample": true, "sending": true, "capacity_px": 10400000, "ports": 16, "inputs": null, "max_px": null, "max_input_px": null,
+     "datasheet": "", "remark": "大屏 / 多面屏"}
+  ]
+}

@@ -173,7 +173,7 @@ def test_unconfirmed_fields_cannot_be_calculated(client):
     assert v["pending"] == ["width_mm"] and v["result"] is None  # 换成 medium 的值又要确认
 
     v = post(client, "confirm", {"field": "width_mm"})
-    assert v["pending"] == [] and v["rev"]["status"] == "draft"  # 还缺信号源数（F13）
+    assert v["pending"] == [] and v["rev"]["status"] == "calculated"  # 信号源数没填，按 1 路算（CR-2）
 
     r = client.put(f"/api/proposals/{client.proposal}/inputs",
                    json={"inputs": v["rev"]["inputs"] | {"signal_sources": 1}})

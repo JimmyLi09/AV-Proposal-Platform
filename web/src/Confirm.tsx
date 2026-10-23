@@ -66,6 +66,7 @@ export default function ConfirmInputs({ view, inputs, setInputs, onApply, error 
                   </td>
                   <td>
                     <InputField def={d} value={inputs[d.name]} onChange={(v) => setInputs({ ...inputs, [d.name]: v })} />
+                    {d.name === "signal_sources" && (inputs[d.name] ?? null) === null && <div className="small muted">空着按 1 路计算</div>}
                   </td>
                   <td>
                     {meta?.source === "file" ? (

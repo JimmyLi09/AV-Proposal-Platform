@@ -136,7 +136,8 @@ def test_workspace_flow(client):
     assert v["result"]["recommendation"]["cabinet"]["id"] == "IC-25"
     assert len(v["boq"]["rows"]) == 7 and v["template_version"] == "v1.0"
 
-    assert put_inputs(client, {k: x for k, x in INPUT.items() if k != "signal_sources"})["rev"]["status"] == "draft"
+    # CR-2：信号源数量空着也能算（按 1 路）
+    assert put_inputs(client, {k: x for k, x in INPUT.items() if k != "signal_sources"})["rev"]["status"] == "calculated"
     bad = client.put(f"/api/proposals/{client.proposal}/inputs", json={"inputs": INPUT | {"module_w_mm": 300}})
     assert bad.status_code == 422  # 模组尺寸由产品库带出，不能手填
 

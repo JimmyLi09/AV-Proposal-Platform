@@ -2,7 +2,7 @@
 import math
 from decimal import Decimal
 
-from ..products.library import active, name
+from ..products.library import active, load_reference, name
 from .expr import fmt
 
 
@@ -58,9 +58,40 @@ def cabinet_layout(ctx: dict, catalog: dict) -> dict:
     }
 
 
+def _sources(ctx: dict) -> Decimal:
+    return ctx.get("signal_sources") or Decimal(1)  # CR-2：没填按 1 路算
+
+
+def integrated_pick(ctx: dict, catalog: dict) -> dict | None:
+    """处理器（含发送）：带载像素、网口、输入路数都够的第一台（首选在前）。输入路数没填的按待核对处理，不挡。"""
+    load, runs, sources = ctx["total_pixels"], ctx["data_runs"], _sources(ctx)
+    for p in catalog.get("processors", []):
+        if (p.get("sending") and load <= p["capacity_px"] and runs <= p["ports"]
+                and (p.get("inputs") is None or sources <= p["inputs"])):
+            return p
+    return None
+
+
+def _load(load: Decimal, cap) -> str:
+    return f"{load / 1_000_000:.2f} / {Decimal(cap) / 1_000_000:.2f} MP（{load / Decimal(cap) * 100:.0f} %）"
+
+
 def controller_pick(ctx: dict, catalog: dict) -> dict:
-    """F11：带载像素和网口数都要够，否则阻断。按产品库顺序取第一款够用的。"""
+    """F11：带载像素和网口数都要够，否则阻断。按产品库顺序取第一款够用的。
+    产品库里有够用的处理器（含发送）时，不再单独配控制器（CR-2）。"""
     load, runs = ctx["total_pixels"], ctx["data_runs"]
+    if p := integrated_pick(ctx, catalog):
+        cap, ports = Decimal(p["capacity_px"]), Decimal(p["ports"])
+        return {
+            "outputs": {
+                "controller": f"已包含在处理器 {p['model']} 里", "controller_id": "", "controller_qty": Decimal(0),
+                "load_mp": load / 1_000_000, "capacity_mp": cap / 1_000_000, "ports_used": runs, "ports": ports,
+            },
+            "check": "PASS",
+            "note": f"处理器 {p['model']} 含发送，不单独配控制器",
+            "trace": f"含发送：{_load(load, cap)}，{_n(runs)} 路 ≤ {_n(ports)} 口",
+            "sample": p.get("sample", False),
+        }
     for c in catalog.get("controllers", []):
         cap, ports = Decimal(c["capacity_px"]), Decimal(c["ports"])
         if load <= cap and runs <= ports:
@@ -80,16 +111,32 @@ def controller_pick(ctx: dict, catalog: dict) -> dict:
 
 
 def processor_pick(ctx: dict, catalog: dict) -> dict:
-    """F13：按信号源数量和分辨率选视频处理器，取产品库里第一款够用的。"""
-    load, sources = ctx["total_pixels"], ctx["signal_sources"]
+    """F13：先找一台够用的处理器（含发送）；找不到再按信号源数量和分辨率选独立处理器（另配 F11 的控制器）。"""
+    load, runs, sources = ctx["total_pixels"], ctx["data_runs"], _sources(ctx)
+    notes = [] if "signal_sources" in ctx else ["信号源数量没填，按 1 路计算"]
+    if p := integrated_pick(ctx, catalog):
+        cap = Decimal(p["capacity_px"])
+        if load / cap > Decimal("0.9"):
+            notes.append("负载超过 90 %，余量偏小")
+        if p.get("inputs") is None:
+            notes.append("输入路数待核对规格书")
+        return {
+            "outputs": {"processor": p["model"], "processor_id": p.get("id"), "processor_qty": Decimal(1),
+                        "processor_sending": True},
+            "check": "NOTE" if notes else None, "note": "；".join(notes),
+            "trace": f"含发送：{_load(load, cap)}，{_n(runs)} 路 ≤ {_n(Decimal(p['ports']))} 口，{_n(sources)} 路信号源",
+            "sample": p.get("sample", False),
+        }
     for p in catalog.get("processors", []):
-        if sources <= p["inputs"] and load <= p["max_px"]:
+        if not p.get("sending") and p.get("inputs") and p.get("max_px") and sources <= p["inputs"] and load <= p["max_px"]:
             return {
-                "outputs": {"processor": p["model"], "processor_id": p.get("id"), "processor_qty": Decimal(1)},
+                "outputs": {"processor": p["model"], "processor_id": p.get("id"), "processor_qty": Decimal(1),
+                            "processor_sending": False},
+                "check": "NOTE" if notes else None, "note": "；".join(notes),
                 "trace": f"{_n(sources)} 路信号源，{load / 1_000_000:.2f} MP ≤ {Decimal(p['max_px']) / 1_000_000:.2f} MP",
                 "sample": p.get("sample", False),
             }
-    return {"check": "NOTE", "note": "产品库里没有输入数和分辨率都够的视频处理器", "sample": True}
+    return {"check": "NOTE", "note": "；".join(notes + ["产品库里没有输入数和分辨率都够的视频处理器"]), "sample": True}
 
 
 # 步骤名 → (函数, 需要的名称, 产出的名称)
@@ -98,7 +145,8 @@ STEPS = {
                        ["cabinets", "layout", "cabinet_counts"]),
     "controller_pick": (controller_pick, ["total_pixels", "data_runs"],
                         ["controller", "controller_id", "controller_qty", "load_mp", "capacity_mp", "ports_used", "ports"]),
-    "processor_pick": (processor_pick, ["total_pixels", "signal_sources"], ["processor", "processor_id", "processor_qty"]),
+    "processor_pick": (processor_pick, ["total_pixels", "data_runs"],
+                       ["processor", "processor_id", "processor_qty", "processor_sending"]),
 }
 
 
@@ -134,9 +182,11 @@ def catalog(library: dict, cabinet: dict | None) -> dict:
         "controllers": [{"id": c["id"], "model": name(c), "capacity_px": c["capacity_px"], "ports": c["ports"],
                          "sample": c.get("sample", False)}
                         for c in active(library, "controller") if c.get("capacity_px") and c.get("ports")],
-        "processors": [{"id": p["id"], "model": name(p), "inputs": p["inputs"], "max_px": p["max_px"],
+        "processors": [{"id": p["id"], "model": name(p), "inputs": p.get("inputs"), "max_px": p.get("max_px"),
+                        "sending": bool(p.get("sending")), "capacity_px": p.get("capacity_px"), "ports": p.get("ports"),
                         "sample": p.get("sample", False)}
-                       for p in active(library, "processor") if p.get("inputs") and p.get("max_px")],
+                       for p in active(library, "processor")
+                       if (p.get("sending") and p.get("capacity_px") and p.get("ports")) or (p.get("inputs") and p.get("max_px"))],
     }
 
 
@@ -166,8 +216,9 @@ def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict) -> list
         add(values["controller_id"], "Controller 控制器", products[values["controller_id"]]["model"],
             values["controller_qty"], "台", f"{values['load_mp']:.2f} / {values['capacity_mp']:.2f} MP，F11", "F11")
     if values.get("processor_id") in products:
-        add(values["processor_id"], "Video processor 视频处理器", products[values["processor_id"]]["model"],
-            values["processor_qty"], "台", f"{inputs.get('signal_sources')} 路信号源，F13", "F13")
+        add(values["processor_id"], "Video processor with sending 视频处理器（含发送）" if values.get("processor_sending")
+            else "Video processor 视频处理器", products[values["processor_id"]]["model"],
+            values["processor_qty"], "台", f"{inputs.get('signal_sources') or 1} 路信号源，F13", "F13")
     if values.get("circuits") is not None:
         add("power_cable", "Power cable 电源线", "—", values.get("power_cables"), "路", f"{values['circuits']} 回路 + 备用，F7", "F7")
         add("db_box", "DB box with MCB 配电箱（含 MCB）", "定制", values.get("db_boxes"), "个", f"{values['circuits']} 回路，F12", "F12")
@@ -182,11 +233,13 @@ def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict) -> list
 ENVIRONMENT_LABEL = {"indoor": "Indoor", "outdoor": "Outdoor", "rental": "Rental"}
 INSTALLATION_LABEL = {"wall": "on wall", "floor": "on floor stand", "hanging": "hanging", "embedded": "embedded"}
 BOQ_EXTRA = ["environment_label", "installation_label", "cabinet_model", "cabinet_sizes", "brightness_nits",
-             "aspect_ratio", "load_pct", "power_spares", "data_spares"]
+             "aspect_ratio", "load_pct", "power_spares", "data_spares", "processor_title"]
 
 
 def boq_context(values: dict, cabinet: dict | None, inputs: dict) -> dict:
     ctx = {**inputs, **product_inputs(cabinet), **values}
+    ctx["signal_sources"] = inputs.get("signal_sources") or 1  # 没填按 1 路算（和 F13 一致）
+    ctx["processor_title"] = "Video processor with sending" if values.get("processor_sending") else "Video processor"
     ctx["environment_label"] = ENVIRONMENT_LABEL.get(inputs.get("environment"))
     ctx["installation_label"] = INSTALLATION_LABEL.get(inputs.get("installation"))
     if cabinet:
@@ -205,7 +258,33 @@ def boq_context(values: dict, cabinet: dict | None, inputs: dict) -> dict:
     return ctx
 
 
-def diagram(values: dict, boq_lines: list[dict], inputs: dict, cabinet: dict | None, library: dict) -> dict | None:
+SUGGEST_LABEL = {"recommended": "推荐", "headroom": "余量大", "no": "不推荐"}
+
+
+def suggest(values: dict, inputs: dict, library: dict) -> list[dict]:
+    """CR-2：产品库里没有够用的处理器 / 控制器时，从参考型号表给出建议型号（未入库，数值待核对规格书）。
+    第一款够用的标「推荐」，再大的标「余量大」，不够的写明哪里不够；由人选，点一下加进产品库。"""
+    load, runs = values.get("total_pixels"), values.get("data_runs")
+    if load is None or runs is None or (values.get("controller_qty") is not None and values.get("processor_id")):
+        return []
+    in_library, sources = {p["id"] for p in library["products"]}, inputs.get("signal_sources") or 1
+    out, found = [], False
+    for p in sorted(load_reference(library["business_line"]), key=lambda p: p["capacity_px"]):
+        if p["id"] in in_library:
+            continue
+        why = [w for ok, w in ((load <= p["capacity_px"], "带载不够"), (runs <= p["ports"], "网口不够"),
+                               (p.get("inputs") is None or sources <= p["inputs"], "输入路数不够")) if not ok]
+        pct = round(load / p["capacity_px"] * 100)
+        status = "no" if why else "headroom" if found else "recommended"
+        found = found or not why
+        out.append({"id": p["id"], "model": name(p), "capacity_px": p["capacity_px"], "ports": p["ports"],
+                    "ports_used": runs, "load_pct": pct, "status": status, "label": SUGGEST_LABEL[status],
+                    "reason": "、".join(why), "note": "余量偏小" if not why and pct > 90 else "", "remark": p.get("remark", "")})
+    return out
+
+
+def diagram(values: dict, boq_lines: list[dict], inputs: dict, cabinet: dict | None, library: dict,
+            suggestions: list[dict] | None = None) -> dict | None:
     """Level 1 / Level 2 示意图由 BOQ 生成：每台设备、每条线缆都对应 BOQ 行。
     业主提供（supply=owner）或随设备附带（supply=included）的不进 BOQ，会在图上标出来（示例假设，清单 H4）。"""
     if not cabinet or values.get("cabinets") is None:
@@ -213,17 +292,27 @@ def diagram(values: dict, boq_lines: list[dict], inputs: dict, cabinet: dict | N
     products = {p["id"]: p for p in library["products"]}
     nodes = {"source": {"title": "Content source 信号源", "model": "播放器或电脑", "qty": inputs.get("signal_sources") or 1,
                         "detail": "", "boq": [], "supply": "owner"}}
-    # 处理器 / 控制器选不出来（F13 / F11）时保留位置并标出，不能悄悄从图上消失
+    # 处理器 / 控制器选不出来（F13 / F11）时保留位置并标出，不能悄悄从图上消失；有建议型号就写在框里
     missing = {"model": "—", "qty": "", "boq": [], "supply": "missing"}
-    nodes["processor"] = {"title": "Video processor 视频处理器", "model": products[values["processor_id"]]["model"],
-                          "qty": values["processor_qty"], "detail": "", "boq": [values["processor_id"]], "supply": "boq"
-                          } if values.get("processor_id") in products else missing | {
-        "title": "Video processor 视频处理器", "detail": "F13 未选出（缺输入或产品库没有合适的）"}
-    nodes["controller"] = {"title": "Controller 控制器", "model": products[values["controller_id"]]["model"],
-                           "qty": values["controller_qty"], "detail": f"{values['ports']} 口 · {values['capacity_mp']:.1f} MP",
-                           "boq": [values["controller_id"]], "supply": "boq"
-                           } if values.get("controller_id") in products else missing | {
-        "title": "Controller 控制器", "detail": "F11 阻断：产品库里没有合适的"}
+    fits = [x["model"] for x in suggestions or [] if x["status"] != "no"]
+    hint = f"建议型号：{' / '.join(fits)}（含发送，未入库）" if fits else ""
+    sending = bool(values.get("processor_sending"))
+    if values.get("processor_id") in products:
+        nodes["processor"] = {
+            "title": "Processor 处理器（含发送）" if sending else "Video processor 视频处理器",
+            "model": products[values["processor_id"]]["model"], "qty": values["processor_qty"],
+            "detail": f"{values['ports_used']} / {values['ports']} 口 · 负载 {values['load_mp'] / values['capacity_mp'] * 100:.0f} %"
+            if sending else "", "boq": [values["processor_id"]], "supply": "boq"}
+    else:
+        nodes["processor"] = missing | {"title": "Video processor 视频处理器",
+                                        "detail": hint or "F13 未选出（缺输入或产品库没有合适的）"}
+    # 用处理器（含发送）时不画控制器；处理器、控制器都没有而有建议的一体机时，也只画三个框
+    if not sending and not (nodes["processor"]["supply"] == "missing" and hint):
+        nodes["controller"] = {"title": "Controller 控制器", "model": products[values["controller_id"]]["model"],
+                               "qty": values["controller_qty"], "detail": f"{values['ports']} 口 · {values['capacity_mp']:.1f} MP",
+                               "boq": [values["controller_id"]], "supply": "boq"
+                               } if values.get("controller_id") in products else missing | {
+            "title": "Controller 控制器", "detail": hint or "F11 阻断：产品库里没有合适的"}
     w, h = inputs.get("width_mm"), inputs.get("height_mm")
     nodes["screen"] = {"title": "LED wall LED 屏", "model": cabinet["model"], "qty": f"{values['cabinets']} 个箱体",
                        "detail": f"{w} × {h} · P{inputs.get('pixel_pitch_mm')}",

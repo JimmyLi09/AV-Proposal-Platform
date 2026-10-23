@@ -94,7 +94,23 @@ export type RunResult = {
   recommendation: Recommendation;
   boq: BoqLine[];
   diagram: Diagram | null;
+  suggestions?: Suggestion[];
   library_version?: string;
+};
+
+// CR-2：产品库里没有够用的型号时，从参考型号表给出的建议型号（未入库，待核对规格书）
+export type Suggestion = {
+  id: string;
+  model: string;
+  capacity_px: number;
+  ports: number;
+  ports_used: number;
+  load_pct: number;
+  status: "recommended" | "headroom" | "no";
+  label: string;
+  reason: string;
+  note: string;
+  remark: string;
 };
 
 export type DiagramNode = { title: string; model: string; qty: number | string; detail: string; boq: string[]; supply: string };

@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from ..api import get_db, require_user
 from ..models import ProductLibraryVersion, User
 from ..versions import check_base, history, latest, next_label, version_out
-from .library import CATEGORY_LABEL, FIELDS, SCENES, STATUSES, LibraryError, load_seed, validate
+from .library import CATEGORY_LABEL, FIELDS, SCENES, STATUSES, LibraryError, load_reference, load_seed, name, validate
 
 router = APIRouter(prefix="/products")
 
@@ -51,6 +51,28 @@ def save_version(line: str, body: SaveIn, user: User = Depends(require_user), db
         raise HTTPException(422, "产品库内容格式不对")
     v = ProductLibraryVersion(business_line=line, version=next_label(base.version), content=body.content,
                               reason=body.reason.strip(), created_by=user.id)
+    db.add(v)
+    db.commit()
+    return version_out(v)
+
+
+class ReferenceIn(BaseModel):
+    id: str = Field(min_length=1, max_length=40)
+
+
+@router.post("/{line}/reference", status_code=201)
+def add_reference(line: str, body: ReferenceIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
+    """把参考型号表里的建议型号加进产品库（另存新版本）。数值仍标示例值，等按规格书核实。"""
+    ref = next((p for p in load_reference(line) if p["id"] == body.id), None)
+    if ref is None:
+        raise HTTPException(404, "参考型号表里没有这个型号")
+    base = latest(db, ProductLibraryVersion, line)
+    if any(p["id"] == ref["id"] for p in base.content["products"]):
+        raise HTTPException(409, f"{ref['model']} 已经在产品库里")
+    content = {**base.content, "products": [*base.content["products"], ref]}
+    validate(content, line)
+    v = ProductLibraryVersion(business_line=line, version=next_label(base.version), content=content,
+                              reason=f"加入建议型号 {name(ref)}（参考型号表，数值待核对规格书）", created_by=user.id)
     db.add(v)
     db.commit()
     return version_out(v)
