@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Knowledge Base 资料库</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
+</style>
+</helmet>
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">+ 新建方案</span><span class="en">+ New Proposal</span></a>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+<div style="flex: 1 1 360px"><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Knowledge Base</span><span class="zh">资料库</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">把以往的项目资料、规格书和模板先放进来。平台在公司服务器上逐份读取：识别文字和尺寸、抽出参数、建立索引。全部在本地处理，不用云端 AI。</span><span class="en">Add past project files, spec sheets and templates here first. The platform reads them one by one on the company server: recognizes text and dimensions, extracts parameters and builds an index. All processed locally, no cloud AI.</span></p></div>
+<span style="padding: 4px 10px; border-radius: 12px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12px"><span class="zh">本地处理 · 不联网</span><span class="en">Local processing · offline</span></span>
+</div>
+
+<div style="padding: 10px 14px; border-radius: 10px; background: #E8EFF9; color: #15203A"><span class="zh">学到的内容</span><span class="en">What was learned</span><b><span class="zh">不会直接改数量</span><span class="en">Will not change quantities directly</span></b><span class="zh">：只给建议值、来源和置信度。要进产品库、规则或模板，必须有人确认，并生成新版本。</span><span class="en">: gives only suggested values, sources and confidence. Anything going into the product library, rules or templates must be confirmed by a person and creates a new version.</span></div>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px">
+<sc-for list="{{kpis}}" as="k" hint-placeholder-count="4">
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">{{k.label}}</div><div style="font-size: 22px; font-weight: 700; color: {{k.color}}">{{k.value}}</div></div>
+</sc-for>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 15px"><span class="en">Import</span><span class="zh">导入资料</span></h2>
+<label style="display: flex; flex-direction: column; gap: 4px; font-size: 12.5px"><span style="color: #6B6558"><span class="zh">服务器文件夹</span><span class="en">Folder on server</span></span><input type="text" value="{{folder}}" onChange="{{onFolder}}" style="height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font-family: ui-monospace, Consolas, monospace; font-size: 12.5px"></label>
+<div style="display: flex; flex-wrap: wrap; gap: 6px">
+<sc-for list="{{types}}" as="t" hint-placeholder-count="5"><button type="button" onClick="{{t.toggle}}" style="{{t.style}}">{{t.label}}</button></sc-for>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button type="button" onClick="{{scan}}" style="height: 38px; padding: 0 16px; border-radius: 8px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer"><span class="zh">扫描文件夹</span><span class="en">Scan folder</span></button>
+<button type="button" style="height: 38px; padding: 0 14px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">上传文件</span><span class="en">Upload files</span></button>
+</div>
+<div style="font-size: 12px; color: #6B6558">{{scanMsg}}</div>
+<div style="font-size: 12px; color: #6B6558"><span class="zh">原文件只读，不移动、不改名。每晚自动复扫一次，新增或修改过的文件重新读取。</span><span class="en">Original files are read-only: not moved or renamed. Rescanned automatically every night; new or modified files are re-read.</span></div>
+</section>
+
+<section style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 15px"><span class="en">Search</span><span class="zh">资料搜索</span></h2>
+<input type="search" aria-label="Search 搜索" value="{{q}}" onChange="{{onQ}}" placeholder="例：弧形 P2.5 / VX1000 / 转角投影" style="height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit">
+<sc-for list="{{hits}}" as="h" hint-placeholder-count="3">
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 8px 10px"><div style="display: flex; gap: 8px; align-items: baseline"><b style="flex: 1">{{h.title}}</b><span style="font-size: 11.5px; color: #6B6558">{{h.kind}}</span></div><div style="font-size: 12px; color: #3B3A36">{{h.snip}}</div></div>
+</sc-for>
+<sc-if value="{{noHits}}" hint-placeholder-val="{{ false }}"><div style="font-size: 12.5px; color: #6B6558"><span class="zh">没有找到。</span><span class="en">Not found.</span></div></sc-if>
+</section>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px"><span class="en">Learned · to confirm</span><span class="zh">学到的内容 · 待确认</span></h2><span style="font-size: 12px; color: #6B6558">{{pendingText}}</span></div>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 860px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">学到的内容</span><span class="en">Learned</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">来源</span><span class="en">From</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">放进</span><span class="en">Goes to</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">置信度</span><span class="en">Confidence</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">操作</span><span class="en">Action</span></th></tr></thead>
+<tbody>
+<sc-for list="{{facts}}" as="f" hint-placeholder-count="6">
+<tr style="{{f.rowStyle}}"><td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><b>{{f.what}}</b><div style="color: #3B3A36">{{f.detail}}</div></td>
+<td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">{{f.src}}</td>
+<td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{f.to}}</td>
+<td style="padding: 8px; border-bottom: 1px solid #EFEBE4"><span style="{{f.confStyle}}">{{f.conf}}</span></td>
+<td style="padding: 8px; border-bottom: 1px solid #EFEBE4; white-space: nowrap">
+<sc-if value="{{f.open}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{f.accept}}" style="height: 30px; padding: 0 10px; border-radius: 8px; border: 1px solid #15203A; background: #15203A; color: #FFFFFF; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer"><span class="zh">采用</span><span class="en">Accept</span></button> <button type="button" onClick="{{f.reject}}" style="height: 30px; padding: 0 10px; border-radius: 8px; border: 1px solid #D9CFBF; background: #FFFFFF; font: inherit; font-size: 12px; cursor: pointer"><span class="zh">不采用</span><span class="en">Reject</span></button></sc-if>
+<sc-if value="{{f.closed}}" hint-placeholder-val="{{ false }}"><span style="{{f.doneStyle}}">{{f.doneText}}</span> <button type="button" onClick="{{f.undo}}" style="height: 26px; padding: 0 8px; border-radius: 6px; border: 1px solid #D9CFBF; background: #FFFFFF; font: inherit; font-size: 11.5px; cursor: pointer"><span class="zh">撤销</span><span class="en">Undo</span></button></sc-if>
+</td></tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Where it is used</span><span class="zh">用在哪里</span></h2>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 10px; font-size: 12.5px">
+<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><b><span class="zh">相似项目</span><span class="en">Similar projects</span></b><div style="color: #6B6558"><span class="zh">确认输入时列出 3 个最像的以往项目，可以直接对照尺寸、屏形和当时的方案。</span><span class="en">When confirming inputs, the 3 most similar past projects are listed so you can compare size, screen shape and their solution directly.</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><b><span class="zh">产品参数</span><span class="en">Product specs</span></b><div style="color: #6B6558"><span class="zh">规格书读出的带载、网口、亮度、功耗，确认后替换产品库里的示例值。</span><span class="en">Load, network ports, brightness and power read from spec sheets replace the sample values in the product library once confirmed.</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><b><span class="zh">BOQ 写法</span><span class="en">BOQ wording</span></b><div style="color: #6B6558"><span class="zh">以往 BOQ 的行描述和规格写法，确认后成为 里的默认行。</span><span class="en">Line descriptions and spec wording from past BOQs; become Templates once confirmed</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><b><span class="zh">回归用例</span><span class="en">Regression cases</span></b><div style="color: #6B6558"><span class="zh">做完的项目和规则结果逐条对比，差异列出来，作为调整系数的依据。</span><span class="en">Compare completed projects against rule results line by line; list the differences as the basis for adjusting coefficients.</span></div></div>
+</div>
+</section>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1300}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
+  renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {"NovaStar VX1000 规格":"NovaStar VX1000 specs","带载 6.5 MP · 10 网口 · 6 路输入":"Load 6.5 MP · 10 network ports · 6 inputs","口 ·":"ports ·","口":"ports","PT-BHZ611C 规格":"PT-BHZ611C specs","亮度 6000 lm · 功耗 450 W":"Brightness 6000 lm · power 450 W","Discussion_Area_BOQ.xlsx · 第 6 行":"Discussion_Area_BOQ.xlsx · row 6","行":"rows","Supply and install metal frame structure (3200 × 1760 mm) · 按 sqm":"Supply and install metal frame structure (3200 × 1760 mm) · per sqm","Discussion_Area_BOQ.xlsx · 第 9 行":"Discussion_Area_BOQ.xlsx · row 9","第 9 行":"Row 9","以往项目：GMC Virtual Office":"Past project: GMC Virtual Office","U 形 3 面 · P2 · 7808 × 1664 · 81.20 ㎡":"U-shape, 3 faces · P2 · 7808 × 1664 · 81.20 ㎡","U 形":"U-shape","Project history · 相似项目":"Project history · similar projects","以往项目：114 Showroom":"Past project: 114 Showroom","投影 5 × PT-BHZ611C · 0.5 定焦 · 18325 × 2700 墙":"Projection 5 × PT-BHZ611C · 0.5 fixed lens · 18325 × 2700 wall","投影":"Projection","Project history · 回归用例":"Project history · regression cases","系数建议：数据线带载":"Coefficient suggestion: data cable load","以往 4 个项目实际每根网线 0.52–0.58 MP（规则 0.56）":"Across 4 past projects, actual load per data cable was 0.52–0.58 MP (rule 0.56)","网线":"Data cable","4 个项目的接线图":"Wiring diagrams for 4 projects","Rules · 只作参考，不自动改":"Rules · reference only, no automatic changes","Accepted · 新版本":"Accepted · new version","P2.5 Curve LED screen on wall 6400 × 3600 mm · 弧形 · 23.04 sqm":"P2.5 Curve LED screen on wall 6400 × 3600 mm · curved · 23.04 sqm","弧形":"Curved","以往项目 Project":"Past project","U 形三面 LED · 左右面 5760 / 正面 8000":"U-shape 3-face LED · sides 5760 / front 8000","U 形三面":"U-shape, 3 walls","规格书 Spec":"Spec sheet","投影单面融合墙 · 5 台 · 0.5 定焦 · 转角无":"Single-wall projection blend · 5 units · 0.5 fixed lens · no corners","单面融合墙":"Single-face blend wall","台 ·":" units ·","转角":"Corner","台":" units","投影 · HDMI 15 m 以上改 HDBaseT · Server Room":"Projection · HDMI over 15 m switches to HDBaseT · Server Room","已扫描：新增 12 个文件，其中 8 个已读取，4 个排队中。":"Scanned: 12 new files, 8 read, 4 queued.","上次扫描：今天 02:00":"Last scan: today 02:00","还有":"Still ","有":"Yes","条等你确认":" items awaiting your confirmation","全部处理完":"All handled"}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
+    const s = this.state || {};
+    const st = s.st || {}, on = s.on || { p: true, s: true, d: true, b: true, t: true }, q = s.q || '';
+    const scanned = !!s.scanned;
+    const facts = [
+      ['f1', 'NovaStar VX1000 规格', '带载 6.5 MP · 10 网口 · 6 路输入', 'VX1000_Spec_EN.pdf · p.3', 'Product library 产品库（替换「待核对规格书」）', 'Medium'],
+      ['f2', 'PT-BHZ611C 规格', '亮度 6000 lm · 功耗 450 W', 'PT-BHZ611C_datasheet.pdf · p.2', 'Product library 产品库（替换示例值）', 'Medium'],
+      ['f3', 'BOQ 行写法：弧形 LED 屏', 'P2.5 Curve LED screen on wall 6400 × 3600 mm · 23.04 sqm · cabinet 320 × 160 / 640 × 480 · 2560 × 1440 · 16:9', 'Discussion_Area_BOQ.xlsx · 第 6 行', 'Templates 模板 · BOQ 默认行', 'High'],
+      ['f4', 'BOQ 行写法：钢结构', 'Supply and install metal frame structure (3200 × 1760 mm) · 按 sqm 计', 'Discussion_Area_BOQ.xlsx · 第 9 行', 'Templates 模板 · BOQ 默认行', 'High'],
+      ['f5', '以往项目：GMC Virtual Office', 'U 形 3 面 · P2 · 7808 × 1664 · 81.20 ㎡', 'GMC - Visuals Office r02.pdf', 'Project history 项目记录 · 相似项目', 'Medium'],
+      ['f6', '以往项目：114 Showroom', '投影 5 × PT-BHZ611C · 0.5 定焦 · 18325 × 2700 墙', '114_Showroom_Final.pdf', 'Project history 项目记录 · 回归用例', 'High'],
+      ['f7', '系数建议：数据线带载', '以往 4 个项目实际每根网线 0.52–0.58 MP（规则 0.56）', '4 个项目的接线图', 'Rules 规则 · 只作参考，不自动改', 'Low']
+    ];
+    const pill = (bg, fg) => 'padding: 1px 8px; border-radius: 10px; background: ' + bg + '; color: ' + fg + '; font-weight: 600; font-size: 11.5px';
+    const CF = { High: ['High 高', pill('#E6F2EC', '#2F7A5B')], Medium: ['Medium 中', pill('#FDF1E6', '#9A4A12')], Low: ['Low 低', pill('#FDE4E4', '#B91C1C')] };
+    const set = (k, v) => { const n = Object.assign({}, st); if (v) n[k] = v; else delete n[k]; this.setState({ st: n }); };
+    const F = facts.map(([k, what, detail, src, to, cf]) => ({
+      what, detail, src, to, conf: CF[cf][0], confStyle: CF[cf][1],
+      open: !st[k], closed: !!st[k],
+      doneText: st[k] === 'ok' ? 'Accepted 已采用 · 新版本' : 'Rejected 不采用',
+      doneStyle: 'font-weight: 600; color: ' + (st[k] === 'ok' ? '#2F7A5B' : '#6B6558'),
+      rowStyle: st[k] ? 'opacity: 0.75' : '',
+      accept: () => set(k, 'ok'), reject: () => set(k, 'no'), undo: () => set(k, null)
+    }));
+    const pending = F.filter((f) => f.open).length;
+    const docs = [
+      ['Discussion_Area_BOQ.xlsx', 'BOQ', 'P2.5 Curve LED screen on wall 6400 × 3600 mm · 弧形 · 23.04 sqm'],
+      ['GMC - Visuals Office r02.pdf', '以往项目 Project', 'U 形三面 LED · 左右面 5760 / 正面 8000'],
+      ['VX1000_Spec_EN.pdf', '规格书 Spec', 'NovaStar VX1000 · 6.5 MP · 10 ports'],
+      ['114_Showroom_Final.pdf', '以往项目 Project', '投影单面融合墙 · 5 台 · 0.5 定焦 · 转角无'],
+      ['Phoenix_Sea_Office_SI.pdf', '以往项目 Project', '投影 · HDMI 15 m 以上改 HDBaseT · Server Room 供电']
+    ];
+    const words = q.toLowerCase().split(/\s+/).filter(Boolean);
+    const hits = (words.length ? docs.filter((d) => words.every((w) => (d[0] + ' ' + d[2]).toLowerCase().indexOf(w) >= 0 || (w === '转角' && d[2].indexOf('转角') >= 0) || (w === '弧形' && d[2].indexOf('弧形') >= 0))) : docs.slice(0, 3)).map((d) => ({ title: d[0], kind: d[1], snip: d[2] }));
+    const T = [['p', 'Past projects 以往项目'], ['s', 'Spec sheets 规格书'], ['d', 'Drawings 图纸'], ['b', 'BOQs BOQ'], ['t', 'Templates 模板与条款']];
+    const chip = (v) => 'height: 30px; padding: 0 10px; border-radius: 15px; font: inherit; font-size: 12px; cursor: pointer; ' + (v ? 'border: 0; background: #15203A; color: #FFFFFF; font-weight: 600' : 'border: 1px solid #D9CFBF; background: #FFFFFF; color: #6B6558');
+    return {
+      kpis: [
+        { label: 'Files 文件（示例）', value: scanned ? '1,296' : '1,284', color: '#15203A' },
+        { label: 'Read 已读取', value: scanned ? '1,110' : '1,102', color: '#2F7A5B' },
+        { label: 'To confirm 待确认', value: String(pending), color: '#9A4A12' },
+        { label: 'Could not read 读取失败', value: '6', color: '#B91C1C' }
+      ],
+      folder: s.folder !== undefined ? s.folder : 'D:\\avp-data\\knowledge\\Projects', onFolder: (e) => this.setState({ folder: e.target.value }),
+      types: T.map(([k, label]) => ({ label, style: chip(on[k]), toggle: () => { const n = Object.assign({}, on); n[k] = !on[k]; this.setState({ on: n }); } })),
+      scan: () => this.setState({ scanned: true }),
+      scanMsg: scanned ? '已扫描：新增 12 个文件，其中 8 个已读取，4 个排队中。' : '上次扫描：今天 02:00',
+      q, onQ: (e) => this.setState({ q: e.target.value }), hits, noHits: hits.length === 0,
+      facts: F, pendingText: pending ? '还有 ' + pending + ' 条等你确认' : '全部处理完',
+    };
+  }
+}
+</script>
+</body>
+</html>

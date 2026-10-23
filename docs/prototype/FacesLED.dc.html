@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Multi-face Recommendation</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
+</style>
+</helmet>
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+<div style="flex: 1 1 320px"><div style="font-size: 12px; color: #6B6558">{{crumb}}</div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Multi-face Recommendation</span><span class="zh">多面屏推荐</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">每一面按 F1–F16 单独算（因为每面有自己的信号和电源输入点），再按 S1–S7 合起来检查转角、画布、处理器和资料一致性。</span><span class="en">Each face is calculated separately with F1–F16 (each face has its own signal and power entry points), then checked together with S1–S7 for corners, canvas, processor and document consistency.</span></p></div>
+<div role="group" aria-label="Example 示例" style="display: flex; border: 1px solid #E6E0D6; border-radius: 8px; overflow: hidden">
+<button type="button" onClick="{{exU}}" style="{{exUBtn}}"><span class="zh">GMC · U 形</span><span class="en">GMC · U-shape</span></button>
+<button type="button" onClick="{{exL}}" style="{{exLBtn}}"><span class="zh">Digital Cube · L 形</span><span class="en">Digital Cube · L-shape</span></button>
+</div>
+</div>
+
+<nav aria-label="Proposal steps 方案步骤" style="display: flex; flex-wrap: wrap; gap: 6px">
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">1 项目与文件</span><span class="en">1 Project &amp; Files</span></a>
+<a href="ShapeLED.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">2 屏形与输入</span><span class="en">2 Shape &amp; Inputs</span></a>
+<a href="FacesLED.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">3 推荐</span><span class="en">3 Recommendation</span></a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">4 工程量清单</span><span class="en">4 BOQ</span></a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">5 标注</span><span class="en">5 Annotate</span></a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">6 审核导出</span><span class="en">6 Review &amp; Export</span></a>
+</nav>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px">
+<sc-for list="{{kpis}}" as="k" hint-placeholder-count="6">
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 10px; padding: 11px 13px"><div style="color: #6B6558; font-size: 12px">{{k.label}}</div><div style="font-size: 20px; font-weight: 700; color: #15203A">{{k.value}}</div><div style="font-size: 11.5px; font-family: ui-monospace, Consolas, monospace">{{k.sub}}</div></div>
+</sc-for>
+</div>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-bottom: 12px"><h2 style="margin: 0; font-size: 15px"><span class="en">Unfolded canvas</span><span class="zh">展开画布与输入点</span></h2><div style="flex: 1"></div><span style="font-size: 12px; color: #6B6558">{{canvasNote}}</span></div>
+<sc-if value="{{isU}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; gap: 0; align-items: stretch; min-height: 150px">
+<div style="flex: 5760 1 0; min-width: 0; background: #E8EFF9; border: 2px solid #2C5AA0; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; font-size: 12px"><b><span class="zh">A · 左墙</span><span class="en">A · Left</span></b><span>5760 × 4160 · 2304 × 1664 px</span><span style="color: #6B6558">x 0 – 2303</span><span style="color: #C2410C; font-weight: 600"><span class="zh">● 信号 D1–D8 · 电源 DB-A1/A2</span><span class="en">● Signal D1–D8 · Power DB-A1/A2</span></span></div>
+<div style="flex: 0 0 10px; background: repeating-linear-gradient(45deg, #C2410C 0 3px, #FFFFFF 3px 6px)" title="内角 90°"></div>
+<div style="flex: 8000 1 0; min-width: 0; background: #E6F2EC; border: 2px solid #2F7A5B; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; font-size: 12px"><b><span class="zh">B · 正墙</span><span class="en">B · Main</span></b><span>8000 × 4160 · 3200 × 1664 px</span><span style="color: #6B6558">x 2304 – 5503</span><span style="color: #C2410C; font-weight: 600"><span class="zh">● 信号 D9–D19 · 电源 DB-B1/B2</span><span class="en">● Signal D9–D19 · Power DB-B1/B2</span></span></div>
+<div style="flex: 0 0 10px; background: repeating-linear-gradient(45deg, #C2410C 0 3px, #FFFFFF 3px 6px)" title="内角 90°"></div>
+<div style="flex: 5760 1 0; min-width: 0; background: #E8EFF9; border: 2px solid #2C5AA0; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; font-size: 12px"><b><span class="zh">C · 右墙</span><span class="en">C · Right</span></b><span>5760 × 4160 · 2304 × 1664 px</span><span style="color: #6B6558">x 5504 – 7807</span><span style="color: #C2410C; font-weight: 600"><span class="zh">● 信号 D20–D27 · 电源 DB-C1/C2</span><span class="en">● Signal D20–D27 · Power DB-C1/C2</span></span></div>
+</div>
+</sc-if>
+<sc-if value="{{isL}}" hint-placeholder-val="{{ false }}">
+<div style="display: flex; flex-direction: column; align-items: center; gap: 0">
+<div style="width: min(100%, 320px); aspect-ratio: 2560 / 3360; background: #E6F2EC; border: 2px solid #2F7A5B; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; box-sizing: border-box; font-size: 12px"><b><span class="zh">A · 立面</span><span class="en">A · Upper</span></b><span>2560 × 3360 · 1280 × 1680 px</span><span style="color: #6B6558">y 0 – 1679</span><span style="color: #C2410C; font-weight: 600"><span class="zh">● 信号 D1–D5 · 电源 DB-A</span><span class="en">● Signal D1–D5 · Power DB-A</span></span></div>
+<div style="width: min(100%, 320px); height: 10px; background: repeating-linear-gradient(45deg, #C2410C 0 3px, #FFFFFF 3px 6px)" title="折角 墙 → 地面"></div>
+<div style="width: min(100%, 320px); aspect-ratio: 1; background: #FDF1E6; border: 2px dashed #9A4A12; display: flex; flex-direction: column; justify-content: space-between; padding: 8px 10px; box-sizing: border-box; font-size: 12px"><b><span class="zh">B · 底座（地面）</span><span class="en">B · Base</span></b><span>2560 × 2560 · 1280 × 1280 px</span><span style="color: #6B6558">y 1680 – 2959</span><span><span class="zh">上放 2000 × 2000 亚克力模型</span><span class="en">2000 × 2000 acrylic model on top</span></span><span style="color: #C2410C; font-weight: 600"><span class="zh">● 信号 D6–D9 · 电源 DB-B</span><span class="en">● Signal D6–D9 · Power DB-B</span></span></div>
+</div>
+</sc-if>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558"><span class="zh">内容按展开画布制作，转角处（斜纹）像素连续。每面单独接处理器的一路输出，各路同步。</span><span class="en">Content is produced on the unfolded canvas; pixels are continuous across corners (hatched). Each face connects to its own processor output, all synchronized.</span></div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Per face</span><span class="zh">按面计算（F1–F16）</span></h2>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 880px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">面</span><span class="en">Face</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">尺寸</span><span class="en">Size</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">像素</span><span class="en">Pixels</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600; text-align: right"><span class="zh">模组</span><span class="en">Modules</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600; text-align: right">㎡</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600; text-align: right">kW</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600; text-align: right"><span class="zh">回路</span><span class="en">Circuits</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600; text-align: right">DB box</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600; text-align: right"><span class="zh">数据线</span><span class="en">Data</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">控制器</span><span class="en">Controller</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="3">
+<tr style="{{r.style}}"><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; font-weight: 700">{{r.face}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{r.size}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{r.px}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; text-align: right">{{r.mods}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; text-align: right">{{r.area}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; text-align: right">{{r.kw}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; text-align: right">{{r.circ}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; text-align: right">{{r.db}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; text-align: right">{{r.data}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4; color: #3B3A36">{{r.ctrl}}</td></tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div style="margin-top: 8px; font-size: 12px; color: #6B6558">{{tableNote}}</div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section style="flex: 1 1 380px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Checks</span><span class="zh">合并检查</span></h2>
+<div style="display: flex; flex-direction: column; gap: 7px; font-size: 12.5px">
+<sc-for list="{{checks}}" as="c" hint-placeholder-count="6">
+<div style="display: flex; gap: 8px"><span style="{{c.tagStyle}}">{{c.tag}}</span><span>{{c.text}}</span></div>
+</sc-for>
+</div>
+</section>
+<section style="flex: 1 1 380px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Shape rules S1–S7</span><span class="zh">异形屏规则（v1.4 新增）</span></h2>
+<div style="display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; font-size: 12.5px">
+<b>S1</b><span><span class="zh">屏形判定：从图纸看几面、朝向，AI 先猜（平面 / L / U / 弧形 / 立方体 / 自定义），人确认</span><span class="en">Shape detection: from the drawings count faces and orientation; AI guesses (flat / L / U / curved / cube / custom), a person confirms</span></span>
+<b>S2</b><span><span class="zh">分面输入：每面尺寸、朝向、维护方式，以及信号输入点和电源输入点</span><span class="en">Per-face input: size, orientation and maintenance access for each face, plus signal and power entry points</span></span>
+<b>S3</b><span><span class="zh">按面计算：F2 尺寸吸附、F5–F12 回路 / 配电箱 / 数据线按面算；同型号备品按整屏合计</span><span class="en">Per face: F2 size snapping, F5–F12 circuits / DB box / data cables per face; spares of the same model totaled across the whole screen</span></span>
+<b>S4</b><span><span class="zh">转角：相邻面点间距必须一致（否则阻断）；内角要确认哪面压哪面、净宽怎么扣；外转角要选转角箱体或 45° 切角模组，两面按外边尺寸算，转角处像素要连续</span><span class="en">Corners: adjacent walls must have the same pixel pitch (otherwise blocked); inside corners need confirmation of which wall overlaps which and how net width is deducted; outside corners need corner cabinets or 45° bevel modules, both walls calculated by outer dimensions, pixels must be continuous at the corner</span></span>
+<b>S5</b><span><span class="zh">画布与处理器：U 形横向展开、L 形（墙 + 地面）纵向展开；每面 1 路输出，单路不超过处理器上限</span><span class="en">Canvas and processor: U-shape unfolds horizontally, L-shape (wall + floor) vertically; 1 output per face, each within the processor limit</span></span>
+<b>S6</b><span><span class="zh">特殊面：地面面要 GOB 防护和承重；顶面要吊挂和重量；有模型或展品压在屏上要列出</span><span class="en">Special faces: floor face needs GOB protection and load bearing; ceiling face needs hanging and weight; list any models or exhibits resting on the screen</span></span>
+<b>S7</b><span><span class="zh">资料一致性：同一尺寸在不同资料里不一样时，进确认关，选定前不能计算</span><span class="en">Document consistency: when the same dimension differs across documents, it goes to the confirmation gate and can't be calculated until one is chosen</span></span>
+</div>
+</section>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px">
+<a href="ShapeLED.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #1F2430; font-weight: 600; text-decoration: none"><span class="zh">← 屏形与输入</span><span class="en">← Shape</span></a>
+<a href="Cost.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">下一步：工程量清单 →</span><span class="en">Next: BOQ →</span></a>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
+  renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {"GMC · Virtual Office LED · LED-1 · Rev 0 · 规则 v1.4 · 左右面按 5760 计算":"GMC · Virtual Office LED · LED-1 · Rev 0 · Rules v1.4 · Left/right faces calculated at 5760","Phoenix Sea Office · Future Zone · Digital Cube LED · Rev 0 · 规则 v1.4":"Phoenix Sea Office · Future Zone · Digital Cube LED · Rev 0 · Rules v1.4","U · 3 面":"U · 3 faces","2 个内角 90°":"2 inside corners 90°","备品 5 % 按整屏合计":"Spare 5 % totaled across the whole screen","5 + 7 + 5（按面）":"5 + 7 + 5 (by face)","8 + 11 + 8（含每面 1 备用）":"8 + 11 + 8 (incl. 1 spare per face)","L · 2 面":"L · 2 faces","墙 + 地面，1 个折角":"Wall + floor, 1 corner","墙 + 地面":"Wall + floor","1680 + 1280（纵向）":"1680 + 1280 (vertical)","2 + 2（按面）":"2 + 2 (by face)","5 + 4（含每面 1 备用）":"5 + 4 (incl. 1 spare per face)","U 形：横向展开，左 → 正 → 右":"U-shape: unfolded horizontally, left → front → right","U 形":"U-shape","L 形（墙 + 地面）：纵向展开，立面在上、底座在下":"L-shape (wall + floor): unfolded vertically, elevation on top, base below","L 形":"L-shape","Sample SC-8 · 3.83 / 5.2 MP · 7 / 8 口":"Sample SC-8 · 3.83 / 5.2 MP · 7 / 8 ports","口":"ports","Sample SC-16 · 5.32 / 10.4 MP · 10 / 16 口":"Sample SC-16 · 5.32 / 10.4 MP · 10 / 16 ports","19520 × 4160（展开）":"19520 × 4160 (unfolded)","3 台 · 处理器 3 路输出":"3 units · processor 3 outputs","台 ·":" units ·","台":" units","Sample SC-8（两面共用）":"Sample SC-8 (shared by both faces)","同上 · 3.79 / 5.2 MP · 7 / 8 口":"Same as above · 3.79 / 5.2 MP · 7 / 8 ports","2560 × 5920（展开）":"2560 × 5920 (unfolded)","1 台 · 处理器 2 路输出":"1 unit · processor 2 outputs","2 路":"2 ch","回路按面算是 17 路；如果整屏合算只要 16 路。因为每面有自己的电源输入点和配电箱，平台按面算。控制器和功耗均为示例值。":"Per face it is 17 circuits; the whole screen combined would need only 16. Since each face has its own power entry point and DB box, the platform calculates per face. Sending controller and power are sample values.","回路":"Circuit","有":"Yes","原方案写 9 个 20A 空开、10 根 CAT6，和规则结果不同，见右侧检查。控制器和功耗均为示例值。":"Original design lists 9 × 20A breakers and 10 CAT6 cables, which differs from the rule result; see checks on the right. Controller and power are sample values.","原方案写 9 个 20A":"Original design states 9 × 20A","三面同为 P2.5、同一模组，转角像素连续":"All three faces P2.5, same module, continuous pixels at corners","转角":"Corner","各面都是模组整数倍：18 / 25 / 18 列 × 26 行":"All faces are whole multiples of the module: 18 / 25 / 18 columns × 26 rows","行":"rows","每面 1 路处理器输出：2304 / 3200 / 2304 px 都 ≤ 3840":"1 processor output per face: 2304 / 3200 / 2304 px all ≤ 3840","数据线：规则 27 路，供应商接线图 31 路（按箱体列，每列 1 路）。按哪个口径要定（清单 C1）":"Data cables: rules give 27, supplier wiring diagram gives 31 (by cabinet column, 1 per column). Decide which to use (checklist C1)","左右面 5760 比平面图墙长 5600 多 160 mm，报价前复核":"Side faces 5760 are 160 mm longer than the 5600 wall on the floor plan; recheck before quoting","平面":"Flat","两个内角：正墙净宽是否要扣左右屏厚度，待确认":"Two inside corners: whether front wall net width deducts left/right screen thickness, to be confirmed","两面同为 P2 GOB，折角处像素连续":"Both faces P2 GOB, continuous pixels at the corner","地面面已是 GOB 防护":"Floor face already has GOB protection","每面 1 路输出：画布高 2960 超过单路 2160，按面分 2 路":"1 output per face: canvas height 2960 exceeds 2160 per output, split into 2 by face","画布":"Canvas","原方案 9 × 20A 空开，规则按 500 W/㎡ 算出 4 路，功耗口径要核（清单 C4）":"Original design has 9 × 20A breakers, rule gives 4 circuits at 500 W/m², check power basis (checklist C4)","4 路":"4 ch","原方案 10 根 CAT6，规则 9 根（含备用）":"Original design 10 CAT6, rule 9 (incl. spare)","总重 600 kg：背墙加固、地面承重由结构确认；模型压在底座上":"Total weight 600 kg: back wall reinforcement and floor load to be confirmed by structural; model rests on the base"}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
+    const st = this.state || {};
+    const u = (st.ex || 'u') === 'u';
+    const segOn = 'height: 36px; padding: 0 14px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer';
+    const segOff = 'height: 36px; padding: 0 14px; border: 0; background: #FFFFFF; color: #3B3A36; font: inherit; cursor: pointer';
+    const tag = (t) => ({
+      PASS: ['PASS 通过', 'background: #E6F2EC; color: #2F7A5B'],
+      NOTE: ['NOTE 提示', 'background: #FDF1E6; color: #9A4A12'],
+      BLOCK: ['BLOCK 阻断', 'background: #FDE4E4; color: #B91C1C']
+    })[t];
+    const chk = (t, text) => ({ tag: tag(t)[0], tagStyle: 'flex: 0 0 auto; padding: 0 8px; border-radius: 10px; font-weight: 700; font-size: 11px; ' + tag(t)[1], text });
+    const total = 'font-weight: 700; background: #FAF8F4';
+    const R = (face, size, px, mods, area, kw, circ, db, data, ctrl, style) => ({ face, size, px, mods, area, kw, circ, db, data, ctrl, style: style || '' });
+    return {
+      exU: () => this.setState({ ex: 'u' }),
+      exL: () => this.setState({ ex: 'l' }),
+      exUBtn: u ? segOn : segOff,
+      exLBtn: u ? segOff : segOn,
+      isU: u,
+      isL: !u,
+      crumb: u ? 'GMC · Virtual Office LED · LED-1 · Rev 0 · 规则 v1.4 · 左右面按 5760 计算' : 'Phoenix Sea Office · Future Zone · Digital Cube LED · Rev 0 · 规则 v1.4',
+      kpis: u
+        ? [
+            { label: 'Shape 屏形', value: 'U · 3 面', sub: '2 个内角 90°' },
+            { label: 'Canvas 展开画布', value: '7808 × 1664', sub: '2304 + 3200 + 2304' },
+            { label: 'Modules 模组', value: '1586 + 80', sub: '备品 5 % 按整屏合计' },
+            { label: 'Power 功率', value: '40.60 kW', sub: '81.20 ㎡ × 500 W/㎡' },
+            { label: 'Circuits 回路', value: '17', sub: '5 + 7 + 5（按面）' },
+            { label: 'Data 数据线', value: '27', sub: '8 + 11 + 8（含每面 1 备用）' }
+          ]
+        : [
+            { label: 'Shape 屏形', value: 'L · 2 面', sub: '墙 + 地面，1 个折角' },
+            { label: 'Canvas 展开画布', value: '1280 × 2960', sub: '1680 + 1280（纵向）' },
+            { label: 'Modules 模组', value: '296 + 15', sub: '备品 5 % 按整屏合计' },
+            { label: 'Power 功率', value: '7.58 kW', sub: '15.16 ㎡ × 500 W/㎡' },
+            { label: 'Circuits 回路', value: '4', sub: '2 + 2（按面）' },
+            { label: 'Data 数据线', value: '9', sub: '5 + 4（含每面 1 备用）' }
+          ],
+      canvasNote: u ? 'U 形：横向展开，左 → 正 → 右' : 'L 形（墙 + 地面）：纵向展开，立面在上、底座在下',
+      rows: u
+        ? [
+            R('A Left 左墙', '5760 × 4160', '2304 × 1664', '468', '23.96', '11.98', '5', '2', '7 + 1', 'Sample SC-8 · 3.83 / 5.2 MP · 7 / 8 口'),
+            R('B Main 正墙', '8000 × 4160', '3200 × 1664', '650', '33.28', '16.64', '7', '2', '10 + 1', 'Sample SC-16 · 5.32 / 10.4 MP · 10 / 16 口'),
+            R('C Right 右墙', '5760 × 4160', '2304 × 1664', '468', '23.96', '11.98', '5', '2', '7 + 1', 'Sample SC-8 · 3.83 / 5.2 MP · 7 / 8 口'),
+            R('Total 合计', '19520 × 4160（展开）', '7808 × 1664', '1586 + 80', '81.20', '40.60', '17', '6', '27', '3 台 · 处理器 3 路输出', total)
+          ]
+        : [
+            R('A Upper 立面', '2560 × 3360', '1280 × 1680', '168', '8.60', '4.30', '2', '1', '4 + 1', 'Sample SC-8（两面共用）'),
+            R('B Base 底座', '2560 × 2560', '1280 × 1280', '128', '6.55', '3.28', '2', '1', '3 + 1', '同上 · 3.79 / 5.2 MP · 7 / 8 口'),
+            R('Total 合计', '2560 × 5920（展开）', '1280 × 2960', '296 + 15', '15.16', '7.58', '4', '2', '9', '1 台 · 处理器 2 路输出', total)
+          ],
+      tableNote: u
+        ? '回路按面算是 17 路；如果整屏合算只要 16 路。因为每面有自己的电源输入点和配电箱，平台按面算。控制器和功耗均为示例值。'
+        : '原方案写 9 个 20A 空开、10 根 CAT6，和规则结果不同，见右侧检查。控制器和功耗均为示例值。',
+      checks: u
+        ? [
+            chk('PASS', '三面同为 P2.5、同一模组，转角像素连续'),
+            chk('PASS', '各面都是模组整数倍：18 / 25 / 18 列 × 26 行'),
+            chk('PASS', '每面 1 路处理器输出：2304 / 3200 / 2304 px 都 ≤ 3840'),
+            chk('NOTE', '数据线：规则 27 路，供应商接线图 31 路（按箱体列，每列 1 路）。按哪个口径要定（清单 C1）'),
+            chk('NOTE', '左右面 5760 比平面图墙长 5600 多 160 mm，报价前复核'),
+            chk('NOTE', '两个内角：正墙净宽是否要扣左右屏厚度，待确认')
+          ]
+        : [
+            chk('PASS', '两面同为 P2 GOB，折角处像素连续'),
+            chk('PASS', '地面面已是 GOB 防护'),
+            chk('NOTE', '每面 1 路输出：画布高 2960 超过单路 2160，按面分 2 路'),
+            chk('NOTE', '原方案 9 × 20A 空开，规则按 500 W/㎡ 算出 4 路，功耗口径要核（清单 C4）'),
+            chk('NOTE', '原方案 10 根 CAT6，规则 9 根（含备用）'),
+            chk('NOTE', '总重 600 kg：背墙加固、地面承重由结构确认；模型压在底座上')
+          ]
+    };
+  }
+}
+</script>
+</body>
+</html>

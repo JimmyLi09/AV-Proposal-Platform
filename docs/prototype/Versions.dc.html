@@ -12,68 +12,71 @@
 body{margin:0;background:#F5F2EC}
 a{color:#2C5AA0}
 a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
 </style>
 </helmet>
-<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
 
 <nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
 <div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
-<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
-<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
-<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
-<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
-<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
-<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
-<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
 <div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
-<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
-<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
 <div style="flex: 1; min-height: 24px"></div>
-<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
 </nav>
 
 <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
 <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
-<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
 <div style="flex: 1"></div>
-<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
 <span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
-<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">+ New Proposal 新建方案</a>
+<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">+ 新建方案</span><span class="en">+ New Proposal</span></a>
 </header>
 
 <main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
-<div><h1 style="margin: 0; font-size: 24px; color: #15203A">Versions <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">版本</span></h1><p style="margin: 2px 0 0; color: #6B6558">每个 Rev 都会锁定当时的已确认输入、规则版本、产品库版本、成本快照、模板版本和输出文件。</p></div>
+<div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Versions</span><span class="zh">版本</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">每个 Rev 都会锁定当时的已确认输入、规则版本、产品库版本、BOQ 快照、模板版本和输出文件。</span><span class="en">Each Rev locks the confirmed inputs, rule version, product library version, BOQ snapshot, template version and output files at that time.</span></p></div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center">
-<label for="pr" style="color: #6B6558">Proposal 方案</label>
+<label for="pr" style="color: #6B6558"><span class="zh">方案</span><span class="en">Proposal</span></label>
 <select id="pr" style="height: 38px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit; background: #FFFFFF"><option>143-Royal Plaza LED · LED-1 Lobby</option><option>082-Chuan Grove LED</option></select>
-<label for="ra" style="color: #6B6558; margin-left: 8px">Compare 对比</label>
+<label for="ra" style="color: #6B6558; margin-left: 8px"><span class="zh">对比</span><span class="en">Compare</span></label>
 <select id="ra" style="height: 38px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit; background: #FFFFFF"><option>Rev 0</option></select>
-<span style="color: #6B6558">与</span>
+<span style="color: #6B6558"><span class="zh">与</span><span class="en">and</span></span>
 <select aria-label="Second revision 第二个版本" style="height: 38px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit; background: #FFFFFF"><option>Rev 1</option></select>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
 <section style="flex: 1 1 280px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">History <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">历史</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">History</span><span class="zh">历史</span></h2>
 <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px">
-<li style="border-left: 3px solid #15203A; padding-left: 10px"><div style="font-weight: 700">Rev 1 <span style="padding: 0 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-size: 11px">Current 当前</span></div><div style="font-size: 12px; color: #6B6558">11 Oct 09:40 · Jimmy</div><div style="font-size: 12.5px">控制器改为 SC-4；备品率 5%（规则 v1.3）</div></li>
-<li style="border-left: 3px solid #D9CFBF; padding-left: 10px"><div style="font-weight: 700">Rev 0 <span style="padding: 0 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-size: 11px">Blocked 已阻断</span></div><div style="font-size: 12px; color: #6B6558">9 Oct 16:20 · Jimmy</div><div style="font-size: 12.5px">首次计算。控制器 SC-2 超容量，导出被阻断</div></li>
+<li style="border-left: 3px solid #15203A; padding-left: 10px"><div style="font-weight: 700">Rev 1 <span style="padding: 0 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-size: 11px"><span class="zh">当前</span><span class="en">Current</span></span></div><div style="font-size: 12px; color: #6B6558">11 Oct 09:40 · Jimmy</div><div style="font-size: 12.5px"><span class="zh">控制器改为 SC-4；备品率 5%（规则 v1.3）</span><span class="en">Sending controller changed to SC-4; spare rate 5% (rules v1.3)</span></div></li>
+<li style="border-left: 3px solid #D9CFBF; padding-left: 10px"><div style="font-weight: 700">Rev 0 <span style="padding: 0 8px; border-radius: 10px; background: #FDE4E4; color: #B91C1C; font-size: 11px"><span class="zh">已阻断</span><span class="en">Blocked</span></span></div><div style="font-size: 12px; color: #6B6558">9 Oct 16:20 · Jimmy</div><div style="font-size: 12.5px"><span class="zh">首次计算。控制器 SC-2 超容量，导出被阻断</span><span class="en">First calculation. Controller SC-2 over capacity, export blocked</span></div></li>
 </ol>
 </section>
 
 <section style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 4px; font-size: 15px">Rev 0 → Rev 1 · 5 differences <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">5 处差异</span></h2>
-<p style="margin: 0 0 10px; color: #6B6558">尺寸、分辨率、功率、回路和线缆没有变化。</p>
+<h2 style="margin: 0 0 4px; font-size: 15px"><span class="en">Rev 0 → Rev 1 · 5 differences</span><span class="zh">5 处差异</span></h2>
+<p style="margin: 0 0 10px; color: #6B6558"><span class="zh">尺寸、分辨率、功率、回路和线缆没有变化。</span><span class="en">Size, resolution, power, circuits and cables unchanged.</span></p>
 <div style="overflow-x: auto">
 <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 600px">
-<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Item 项目</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Rev 0</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Rev 1</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Why 原因</th></tr></thead>
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">项目</span><span class="en">Item</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Rev 0</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Rev 1</th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">原因</span><span class="en">Why</span></th></tr></thead>
 <tbody>
-<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Rules version 规则版本</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">v1.2</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; background: #FFF7EC">v1.3</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">10 Oct 在规则引擎中修改了备品率</td></tr>
-<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Spare modules 备品模组</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">7 <span style="color: #6B6558">(224 × 3%)</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; background: #FFF7EC">12 <span style="color: #6B6558">(224 × 5%)</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">按新备品率计算</td></tr>
-<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Controller 控制器</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">SC-2 · 1.3 MP</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; background: #FFF7EC">SC-4 · 2.3 MP</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">1.84 MP 屏幕超出 SC-2 容量</td></tr>
-<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">Checks 检查</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #B91C1C; font-weight: 600">1 BLOCK 阻断</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; background: #FFF7EC; color: #2F7A5B; font-weight: 600">0 BLOCK 无阻断</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">控制器容量现已通过</td></tr>
-<tr><td style="padding: 9px 8px; font-weight: 600">Cost subtotal 成本小计</td><td style="padding: 9px 8px">S$ 58,610</td><td style="padding: 9px 8px; background: #FFF7EC">S$ 59,960</td><td style="padding: 9px 8px; color: #6B6558">备品 + S$ 450，控制器 + S$ 900</td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600"><span class="zh">规则版本</span><span class="en">Rules version</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">v1.2</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; background: #FFF7EC">v1.3</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">10 在规则引擎中修改了备品率</span><span class="en">10 Oct</span></td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600"><span class="zh">备品模组</span><span class="en">Spare modules</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">7 <span style="color: #6B6558">(224 × 3%)</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; background: #FFF7EC">12 <span style="color: #6B6558">(224 × 5%)</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">按新备品率计算</span><span class="en">Calculated at new spare rate</span></td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600"><span class="zh">控制器</span><span class="en">Controller</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4">SC-2 · 1.3 MP</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; background: #FFF7EC">SC-4 · 2.3 MP</td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">1.84 MP 屏幕超出 SC-2 容量</span><span class="en">1.84 MP screen exceeds SC-2 capacity</span></td></tr>
+<tr><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600"><span class="zh">检查</span><span class="en">Checks</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #B91C1C; font-weight: 600"><span class="zh">1 阻断</span><span class="en">1 BLOCK</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; background: #FFF7EC; color: #2F7A5B; font-weight: 600"><span class="zh">0 无阻断</span><span class="en">0 BLOCK</span></td><td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">控制器容量现已通过</span><span class="en">Sending controller capacity now passes</span></td></tr>
 </tbody>
 </table>
 </div>
@@ -81,14 +84,14 @@ a:hover{color:#15203A}
 </div>
 
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">What Rev 1 has locked <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">Rev 1 已锁定内容</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">What Rev 1 has locked</span><span class="zh">Rev 1 已锁定内容</span></h2>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; font-size: 12.5px">
-<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px"><div style="color: #6B6558">Confirmed inputs 已确认输入</div><b>9 fields 个字段</b></div>
-<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px"><div style="color: #6B6558">Rules 规则</div><b>v1.3</b></div>
-<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px"><div style="color: #6B6558">Product library 产品库</div><b>v1.0</b></div>
-<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px"><div style="color: #6B6558">Cost snapshot 成本快照</div><b>11 Oct 09:52</b></div>
-<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px"><div style="color: #6B6558">Template 模板</div><b>v1.0</b></div>
-<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px"><div style="color: #6B6558">Files 文件</div><b>PDF · Word · JPG</b></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px"><div style="color: #6B6558"><span class="zh">已确认输入</span><span class="en">Confirmed inputs</span></div><b><span class="zh">9 个字段</span><span class="en">9 fields</span></b></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px"><div style="color: #6B6558"><span class="zh">规则</span><span class="en">Rules</span></div><b>v1.3</b></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px"><div style="color: #6B6558"><span class="zh">产品库</span><span class="en">Product library</span></div><b>v1.0</b></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px"><div style="color: #6B6558"><span class="zh">BOQ 快照</span><span class="en">BOQ snapshot</span></div><b>11 Oct 09:52</b></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px"><div style="color: #6B6558"><span class="zh">模板</span><span class="en">Template</span></div><b>v1.0</b></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px"><div style="color: #6B6558"><span class="zh">文件</span><span class="en">Files</span></div><b>PDF · Word · JPG</b></div>
 </div>
 </section>
 </main>
@@ -97,7 +100,103 @@ a:hover{color:#15203A}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1000}}'>
 class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
   renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
     return {};
   }
 }

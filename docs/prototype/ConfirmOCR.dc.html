@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Confirm Inputs 确认输入（CR-1）</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
+</style>
+</helmet>
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div><div style="font-size: 12px; color: #6B6558"><span class="zh">试用样例 · LED-1 · Rev 0 ·</span><span class="en">Trial · LED-1 · Rev 0 ·</span> <span style="padding: 1px 8px; border-radius: 10px; background: #E8EEF8; color: #2C5AA0; font-weight: 600"><span class="zh">CR-1 修改后</span><span class="en">CR-1 after change</span></span></div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Confirm Inputs</span><span class="zh">确认输入</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">图纸上单独标的尺寸（例如尺寸线旁的「6400mm」）现在按位置配对：在框上方或下方的算屏宽，在框左右两侧或竖排的算屏高。</span><span class="en">Standalone dimensions on the drawing (e.g. "6400mm" next to a dimension line) are now paired by position: above or below the box counts as screen width; left or right of the box, or vertical, counts as screen height.</span></p></div>
+
+<nav aria-label="Proposal steps" style="display: flex; flex-wrap: wrap; gap: 6px">
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">1 项目与文件</span><span class="en">1 Project &amp; Files</span></a>
+<a href="ConfirmOCR.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">2 确认输入</span><span class="en">2 Confirm Inputs</span></a>
+<a href="DiagramV2.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">3 推荐</span><span class="en">3 Recommendation</span></a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">4 工程量清单</span><span class="en">4 BOQ</span></a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">5 标注</span><span class="en">5 Annotate</span></a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">6 审核导出</span><span class="en">6 Review &amp; Export</span></a>
+</nav>
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 11px 14px; border-radius: 10px; background: {{bannerBg}}; border: 1px solid {{bannerBd}}">
+<div style="flex: 1 1 360px; color: #1F2430">{{bannerText}}</div>
+<sc-if value="{{notFilled}}" hint-placeholder-val="{{ true }}"><button type="button" onClick="{{fill}}" style="height: 38px; padding: 0 16px; border-radius: 8px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer"><span class="zh">从文件填入</span><span class="en">Fill from files</span></button></sc-if>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+
+<section style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Extracted information</span><span class="zh">提取的信息</span></h2>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 680px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">字段</span><span class="en">Field</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">值</span><span class="en">Value</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">识别依据</span><span class="en">How it was read</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">置信度</span><span class="en">Confidence</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">其它读到的值</span><span class="en">Other values</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">状态</span><span class="en">Status</span></th></tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="6">
+<tr style="{{r.rowStyle}}">
+<td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; font-weight: 600">{{r.label}}</td>
+<td style="padding: 7px 8px; border-bottom: 1px solid #EFEBE4"><input type="text" aria-label="{{r.label}}" value="{{r.inputVal}}" onChange="{{r.onInput}}" placeholder="—" style="{{r.inputStyle}}"></td>
+<td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4; color: #6B6558">{{r.how}}</td>
+<td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><span style="{{r.confStyle}}">{{r.conf}}</span></td>
+<td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{r.hasOther}}" hint-placeholder-val="{{ false }}"><span style="padding: 1px 8px; border-radius: 10px; background: #FFF3B0; color: #6B4E00; font-weight: 600">{{r.other}}</span> <button type="button" onClick="{{r.useOther}}" style="height: 26px; padding: 0 8px; border-radius: 6px; border: 1px solid #D9CFBF; background: #FFFFFF; font: inherit; font-size: 12px; cursor: pointer"><span class="zh">采用</span><span class="en">Use</span></button></sc-if><sc-if value="{{r.noOther}}" hint-placeholder-val="{{ true }}"><span style="color: #B5AC9C">—</span></sc-if></td>
+<td style="padding: 9px 8px; border-bottom: 1px solid #EFEBE4"><sc-if value="{{r.done}}" hint-placeholder-val="{{ false }}"><span style="color: #2F7A5B; font-weight: 600"><span class="zh">已确认</span><span class="en">Confirmed</span></span></sc-if><sc-if value="{{r.canConfirm}}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{r.confirm}}" style="height: 30px; padding: 0 12px; border-radius: 8px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-weight: 600; cursor: pointer"><span class="zh">确认</span><span class="en">Confirm</span></button></sc-if><sc-if value="{{r.empty}}" hint-placeholder-val="{{ false }}"><span style="color: #9A4A12; font-weight: 600"><span class="zh">未填</span><span class="en">Empty</span></span></sc-if></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558"><span class="zh">每个值都可以直接改，改过的记为「手填」。「从文件填入」只填还空着的字段；已经手填的字段，文件读到不同的值时放在「其它读到的值」，由你决定用哪个。</span><span class="en">Every value can be edited directly; edited values are marked "manual". "Fill from file" only fills empty fields; for manual fields, different values read from files go to "Other values read" and you choose which to use.</span></div>
+</section>
+
+<div style="flex: 1 1 340px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 8px; font-size: 15px"><span class="en">Source preview</span><span class="zh">来源预览</span></h2>
+<div style="display: flex; gap: 6px; margin-bottom: 8px">
+<button type="button" onClick="{{srcImg}}" style="{{srcImgStyle}}"><span class="zh">图片 PNG · OCR</span><span class="en">Image PNG · OCR</span></button>
+<button type="button" onClick="{{srcDxf}}" style="{{srcDxfStyle}}">CAD DXF</button>
+</div>
+<sc-if value="{{isImg}}" hint-placeholder-val="{{ true }}">
+<div style="font-size: 12px; color: #6B6558; margin-bottom: 8px"><span class="zh">图片_2026-10-20_161859_683.png · 文字识别</span><span class="en">Image_2026-10-20_161859_683.png · OCR</span></div>
+<svg viewBox="0 0 360 250" style="width: 100%; height: auto; display: block; background: #FAF8F4; border: 1px solid #E6E0D6; border-radius: 8px" role="img" aria-label="Elevation with dimensions 带尺寸的立面">
+<line x1="40" y1="40" x2="290" y2="40" stroke="#6B6558" stroke-width="1"/><line x1="40" y1="34" x2="40" y2="62" stroke="#6B6558"/><line x1="290" y1="34" x2="290" y2="62" stroke="#6B6558"/>
+<rect x="{{wx}}" y="22" width="64" height="16" fill="{{hlFill}}" stroke="{{hlStroke}}" stroke-width="1.5" rx="2"/>
+<text x="165" y="34" text-anchor="middle" font-size="11" fill="#1F2430">6400mm</text>
+<rect x="40" y="60" width="250" height="138" fill="#FFFFFF" stroke="#1F2430" stroke-width="1.5"/>
+<rect x="110" y="118" width="110" height="20" fill="{{hlFill2}}" stroke="{{hlStroke2}}" stroke-width="1.2" rx="2"/>
+<text x="165" y="132" text-anchor="middle" font-size="11" font-weight="700" fill="#1F2430">P2.5 LED SCREEN</text>
+<line x1="310" y1="60" x2="310" y2="198" stroke="#6B6558"/><line x1="290" y1="60" x2="318" y2="60" stroke="#6B6558"/><line x1="290" y1="198" x2="318" y2="198" stroke="#6B6558"/>
+<rect x="314" y="96" width="18" height="66" fill="{{hlFill}}" stroke="{{hlStroke}}" stroke-width="1.5" rx="2"/>
+<text x="327" y="129" text-anchor="middle" font-size="11" fill="#1F2430" transform="rotate(-90 327 129)">3520mm</text>
+<text x="40" y="228" font-size="10" fill="#6B6558"><tspan class="zh">FFL ±0.000 · 室内壁挂 · 前维护 · 650 nits</tspan><tspan class="en">FFL ±0.000 · Indoor wall-mounted · Front service · 650 nits</tspan></text>
+</svg>
+<sc-if value="{{filled}}" hint-placeholder-val="{{ false }}">
+<ul style="margin: 10px 0 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; font-size: 12.5px">
+<li><span class="zh">「6400mm」横排，在框体上方 →</span><span class="en">"6400mm" horizontal, above frame →</span> <b><span class="zh">屏宽</span><span class="en">Screen width</span></b> <span class="zh">候选</span><span class="en">Candidate</span></li>
+<li><span class="zh">「3520mm」竖排，在框体右侧 →</span><span class="en">"3520mm" vertical, right of frame →</span> <b><span class="zh">屏高</span><span class="en">Screen height</span></b> <span class="zh">候选</span><span class="en">Candidate</span></li>
+<li><span class="zh">框体取包住「P2.5 LED SCREEN」的矩形</span><span class="en">Frame is the rectangle enclosing "P2.5 LED SCREEN"</span></li>
+</ul>
+</sc-if>
+</sc-if>
+<sc-if value="{{isDxf}}" hint-placeholder-val="{{ false }}">
+<div style="font-size: 12px; color: #6B6558; margin-bottom: 8px"><span class="zh">Lobby_LED.dxf · 读 TEXT / MTEXT + DIMENSION 实体</span><span class="en">Lobby_LED.dxf · reads TEXT / MTEXT + DIMENSION entities</span></div>
+<table style="width: 100%; border-collapse: collapse; font-size: 12px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 6px; border-bottom: 1px solid #E6E0D6"><span class="zh">实体</span><span class="en">Entity</span></th><th style="padding: 6px; border-bottom: 1px solid #E6E0D6"><span class="zh">方向</span><span class="en">Direction</span></th><th style="padding: 6px; border-bottom: 1px solid #E6E0D6">get_measurement()</th><th style="padding: 6px; border-bottom: 1px solid #E6E0D6">→</th></tr></thead>
+<tbody>
+<tr><td style="padding: 6px; border-bottom: 1px solid #EFEBE4">DIMENSION #2F1</td><td style="padding: 6px; border-bottom: 1px solid #EFEBE4"><span class="zh">水平</span><span class="en">Horizontal</span></td><td style="padding: 6px; border-bottom: 1px solid #EFEBE4">6400</td><td style="padding: 6px; border-bottom: 1px solid #EFEBE4"><span class="zh">屏宽 · 中</span><span class="en">Screen width · Medium</span></td></tr>
+<tr><td style="padding: 6px; border-bottom: 1px solid #EFEBE4">DIMENSION #2F4</td><td style="padding: 6px; border-bottom: 1px solid #EFEBE4"><span class="zh">垂直</span><span class="en">Vertical</span></td><td style="padding: 6px; border-bottom: 1px solid #EFEBE4">3520</td><td style="padding: 6px; border-bottom: 1px solid #EFEBE4"><span class="zh">屏高 · 中</span><span class="en">Screen height · Medium</span></td></tr>
+<tr><td style="padding: 6px">MTEXT</td><td style="padding: 6px">—</td><td style="padding: 6px">P2.5 LED SCREEN</td><td style="padding: 6px"><span class="zh">点间距 · 中</span><span class="en">Pixel pitch · Medium</span></td></tr>
+</tbody>
+</table>
+<div style="font-size: 12px; color: #6B6558; margin-top: 8px"><span class="zh">的标注是实测值，比图片 OCR 可靠，所以给 Medium；仍需逐项确认。</span><span class="en">DXF Medium; still needs item-by-item confirmation.</span></div>
+</sc-if>
+</section>
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 8px; font-size: 15px"><span class="en">Pairing rules</span><span class="zh">尺寸配对规则</span></h2>
+<ul style="margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 5px; font-size: 12.5px">
+<li><span class="zh">收集单独成行的「数字 + mm / m」</span><span class="en">Collect standalone "number + mm / m" entries</span></li>
+<li><span class="zh">横排在框上 / 下 → 屏宽；在框左 / 右或竖排 → 屏高</span><span class="en">Horizontal text above / below frame → screen width; left / right of frame or vertical text → screen height</span></li>
+<li><span class="zh">同一个数字不会既当屏宽又当屏高</span><span class="en">The same number won't be used as both screen width and screen height</span></li>
+<li><span class="zh">图片 OCR 给 Low，文字层和 DXF 标注给 Medium</span><span class="en">Image OCR gives Low, PDF Medium</span></li>
+<li><span class="zh">原写法（4480 x 2560、Width: 4480、Excel）照旧识别</span><span class="en">Old formats (4480 x 2560, Width: 4480, Excel) are still recognized</span></li>
+</ul>
+</section>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 10px">
+<sc-if value="{{notReady}}" hint-placeholder-val="{{ true }}"><span style="color: #9A4A12; font-weight: 600"><span class="zh">还有 {{left}} 个字段需要确认</span><span class="en">{{left}} fields still need confirmation</span></span></sc-if>
+<button type="button" onClick="{{reset}}" style="height: 42px; padding: 0 16px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">重置演示</span><span class="en">Reset demo</span></button>
+<sc-if value="{{notReady}}" hint-placeholder-val="{{ true }}"><button type="button" disabled style="height: 42px; padding: 0 20px; border-radius: 8px; border: 0; background: #D8D2C8; color: #6B6558; font: inherit; font-weight: 600; cursor: not-allowed"><span class="zh">运行方案引擎</span><span class="en">Run proposal engine</span></button></sc-if>
+<sc-if value="{{ready}}" hint-placeholder-val="{{ false }}"><a href="DiagramV2.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">运行方案引擎 →</span><span class="en">Run proposal engine →</span></a></sc-if>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
+  renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {"手改 · Jimmy":"Manual · Jimmy","手填":"Manual","图片 · 竖排数字在框右侧":"Image · vertical numbers right of the box","3520 mm · 图片":"3520 mm · image","图片 · 横排数字在框上方":"Image · horizontal numbers above the box","未读到":"Not read","读到":"Read","手填 · 图片「P2.5 LED SCREEN」一致":"Manual · matches image \"P2.5 LED SCREEN\"","壁挂 · 前维护":"Wall mount · front maintenance","已从 1 张图片读到屏宽 6400 mm、屏高 3520 mm、点间距 2.5。图片来源都是 Low，请逐项确认。":"Read screen width 6400 mm, screen height 3520 mm, pixel pitch 2.5 from 1 image. Image sources are all Low; please confirm each item.","屏宽":"Screen width","屏高":"Screen height","屏宽还空着，屏高是手填的 3500 mm。点「从文件填入」，从上传的图片里读尺寸。":"Screen width is still empty; screen height is manual 3500 mm. Click \"Fill from file\" to read dimensions from the uploaded image."}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
+    const s = this.state || {};
+    const filled = !!s.filled;
+    const c = s.c || {};
+    const h = s.h || 3500;
+    const src = s.src || 'img';
+    const low = 'padding: 1px 8px; border-radius: 10px; background: #FBE4E0; color: #A23A2A; font-weight: 600; font-size: 11.5px';
+    const med = 'padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px';
+    const high = 'padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px';
+    const manual = 'padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-weight: 600; font-size: 11.5px';
+    const conf = (k) => () => this.setState({ c: Object.assign({}, c, { [k]: true }) });
+    const ed = s.ed || {};
+    const mk = (k, label, value0, how0, cf0, cs0, needs0, extra) => {
+      const edited = ed[k] !== undefined && ed[k] !== value0;
+      const value = edited ? (ed[k] === '' ? '—' : ed[k]) : value0;
+      const how = edited ? '手改 · Jimmy' : how0, cf = edited ? 'Manual 手填' : cf0, cs = edited ? manual : cs0, needs = edited ? false : needs0;
+      return Object.assign({
+      label, value, how, conf: cf, confStyle: cs, inputVal: value === '—' ? '' : value,
+      inputStyle: 'width: 100%; min-width: 110px; box-sizing: border-box; height: 32px; padding: 0 8px; border-radius: 6px; font: inherit; font-weight: 600; background: #FFFFFF; border: 1px solid ' + (edited ? '#E8C96A' : '#E6E0D6'),
+      onInput: (e) => this.setState({ ed: Object.assign({}, ed, { [k]: e.target.value }) }),
+      done: !!c[k] || (!needs && value !== '—'),
+      canConfirm: needs && !c[k] && value !== '—',
+      empty: value === '—',
+      rowStyle: needs && !c[k] && value !== '—' ? 'background: #FFFBF5' : '',
+      hasOther: false, noOther: true, other: '', useOther: () => {}, confirm: conf(k)
+    }, edited ? {} : (extra || {}));
+    };
+    const heightRow = mk('h', 'Screen height 屏幕高度', h + ' mm', h === 3500 ? '手填' : '图片 · 竖排数字在框右侧', h === 3500 ? 'Manual 手填' : 'Low 低', h === 3500 ? manual : low, h !== 3500, filled && h === 3500 ? {
+      hasOther: true, noOther: false, other: '3520 mm · 图片', useOther: () => { const n = Object.assign({}, ed); delete n.h; this.setState({ h: 3520, ed: n }); }
+    } : {});
+    const rows = [
+      mk('w', 'Screen width 屏幕宽度', filled ? '6400 mm' : '—', filled ? '图片 · 横排数字在框上方' : '未读到', filled ? 'Low 低' : '—', filled ? low : manual, true),
+      heightRow,
+      mk('p', 'Pixel pitch 像素间距', 'P2.5', filled ? '手填 · 图片「P2.5 LED SCREEN」一致' : '手填', 'Manual 手填', manual, false),
+      mk('e', 'Indoor / Outdoor 室内 / 户外', 'Indoor 室内', '手填', 'Manual 手填', manual, false),
+      mk('i', 'Installation 安装 / 维护', '壁挂 · 前维护', '手填', 'Manual 手填', manual, false),
+      mk('b', 'Brightness 亮度', '650 nits', '手填', 'Manual 手填', manual, false)
+    ];
+    const left = rows.filter(r => r.canConfirm || r.empty).length;
+    const on = 'height: 30px; padding: 0 10px; border-radius: 8px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-size: 12px; font-weight: 600; cursor: pointer';
+    const off = 'height: 30px; padding: 0 10px; border-radius: 8px; border: 1px solid #D9CFBF; background: #FFFFFF; color: #1F2430; font: inherit; font-size: 12px; cursor: pointer';
+    return {
+      rows, filled, notFilled: !filled, left, ready: left === 0, notReady: left > 0,
+      fill: () => this.setState({ filled: true }),
+      reset: () => this.setState({ filled: false, c: {}, h: 3500, ed: {} }),
+      bannerBg: filled ? '#E6F2EC' : '#FDF1E6', bannerBd: filled ? '#BFDCCD' : '#F0D2B4',
+      bannerText: filled ? '已从 1 张图片读到屏宽 6400 mm、屏高 3520 mm、点间距 2.5。图片来源都是 Low，请逐项确认。' : '屏宽还空着，屏高是手填的 3500 mm。点「从文件填入」，从上传的图片里读尺寸。',
+      wx: 133, hlFill: filled ? '#FDE7C8' : 'none', hlStroke: filled ? '#C2410C' : 'none',
+      hlFill2: filled ? '#E8EEF8' : 'none', hlStroke2: filled ? '#2C5AA0' : 'none',
+      isImg: src === 'img', isDxf: src === 'dxf',
+      srcImg: () => this.setState({ src: 'img' }), srcDxf: () => this.setState({ src: 'dxf' }),
+      srcImgStyle: src === 'img' ? on : off, srcDxfStyle: src === 'dxf' ? on : off
+    };
+  }
+}
+</script>
+</body>
+</html>

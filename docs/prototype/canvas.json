@@ -1,325 +1,507 @@
 {
- "v": 3,
- "createdOnFiles": {
-  "v": 1,
-  "at": "2026-10-11T00:30:00+08:00"
- },
- "title": "AV Proposal Platform · V1 原型（LED + 投影单面墙 · 中英双语）",
- "launch": {
-  "view": "focused",
-  "file": "Main.dc.html"
- },
- "pages": [],
- "boards": {
-  "Main.dc.html": {
-   "x": 0,
-   "y": 0,
-   "w": 1440,
-   "h": 1100,
-   "title": "Dashboard",
-   "expand": "fill",
-   "is_interactive": true
+  "v": 3,
+  "attachments": {},
+  "boards": {
+    "Agent.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "Local Agent · 在线 / 离线（新增）",
+      "w": 1440,
+      "x": 3040,
+      "y": 4220
+    },
+    "Annotate.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "5 · Annotation Editor（新增）",
+      "w": 1440,
+      "x": 4560,
+      "y": 1440
+    },
+    "CalcPJ.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "投影 3 · Calculations P1–P13（114 回归）",
+      "w": 1440,
+      "x": 3040,
+      "y": 5800
+    },
+    "Calculations.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "3 · Calculations（14 项规则）",
+      "w": 1440,
+      "x": 0,
+      "y": 1440
+    },
+    "Confirm.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "2 · Confirm Inputs（确认关）",
+      "w": 1440,
+      "x": 3040,
+      "y": 0
+    },
+    "ConfirmPJ.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "投影 2 · Confirm Inputs 确认输入",
+      "w": 1440,
+      "x": 0,
+      "y": 5800
+    },
+    "Cost.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "4 · BOQ 工程量清单（不含价格 · 1023 改）",
+      "w": 1440,
+      "x": 3040,
+      "y": 1440
+    },
+    "Diagram.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "3 · Diagram L1 / L2",
+      "w": 1440,
+      "x": 1520,
+      "y": 1440
+    },
+    "DiagramPJ.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "投影 3 · Diagram 立面/平面/剖面/信号链",
+      "w": 1440,
+      "x": 4560,
+      "y": 5800
+    },
+    "Main.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "Dashboard",
+      "w": 1440,
+      "x": 0,
+      "y": 0
+    },
+    "NewProposal.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "1 · New Proposal",
+      "w": 1440,
+      "x": 1520,
+      "y": 0
+    },
+    "Preview.dc.html": {
+      "expand": "fill",
+      "h": 1000,
+      "is_interactive": true,
+      "title": "6 · Review & Export（审核关）",
+      "w": 1440,
+      "x": 0,
+      "y": 2880
+    },
+    "Products.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "Product Library（新增）",
+      "w": 1440,
+      "x": 0,
+      "y": 4220
+    },
+    "ProductsPJ.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "投影 · Product Library 产品库",
+      "w": 1440,
+      "x": 0,
+      "y": 7240
+    },
+    "Projects.dc.html": {
+      "expand": "fill",
+      "h": 1000,
+      "is_interactive": true,
+      "title": "Projects（新增）",
+      "w": 1440,
+      "x": 3040,
+      "y": 2880
+    },
+    "Rules.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "Rules Engine · 可编辑（新增）",
+      "w": 1440,
+      "x": 1520,
+      "y": 4220
+    },
+    "RulesPJ.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "投影 · Rules Engine 规则引擎",
+      "w": 1440,
+      "x": 1520,
+      "y": 7240
+    },
+    "Settings.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "Settings（新增）",
+      "w": 1440,
+      "x": 4560,
+      "y": 4220
+    },
+    "Templates.dc.html": {
+      "expand": "fill",
+      "h": 1000,
+      "is_interactive": true,
+      "title": "Templates（新增）",
+      "w": 1440,
+      "x": 4560,
+      "y": 2880
+    },
+    "TemplatesPJ.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "投影 · Templates 模板",
+      "w": 1440,
+      "x": 3040,
+      "y": 7240
+    },
+    "Versions.dc.html": {
+      "expand": "fill",
+      "h": 1000,
+      "is_interactive": true,
+      "title": "Versions · Rev 对比（新增）",
+      "w": 1440,
+      "x": 1520,
+      "y": 2880
+    },
+    "Workspace.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "3 · LED Recommendation（数字已改正）",
+      "w": 1440,
+      "x": 4560,
+      "y": 0
+    },
+    "WorkspacePJ.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "投影 3 · Recommendation 推荐",
+      "w": 1440,
+      "x": 1520,
+      "y": 5800
+    },
+    "Deck.dc.html": {
+      "x": 0,
+      "y": 8680,
+      "w": 1440,
+      "h": 1100,
+      "title": "Proposal Deck 方案演示稿（PPT · 新增）",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "SystemPJ.dc.html": {
+      "x": 4560,
+      "y": 7240,
+      "w": 1440,
+      "h": 1100,
+      "title": "投影 3 · System & Cabling 系统与布线（新增 · 参考 Phoenix Sea）",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "ShapeLED.dc.html": {
+      "x": 0,
+      "y": 10120,
+      "w": 1440,
+      "h": 1100,
+      "title": "LED 2 · Shape & Faces 屏形与分面（新增 · U / L 形）",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "FacesLED.dc.html": {
+      "x": 1520,
+      "y": 10120,
+      "w": 1440,
+      "h": 1100,
+      "title": "LED 3 · Multi-face Recommendation 多面屏推荐（新增）",
+      "expand": "fill",
+      "is_interactive": true
+    },
+    "ConfirmOCR.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "CR-1 · Confirm Inputs 尺寸识别（修改后）",
+      "w": 1440,
+      "x": 0,
+      "y": 11560
+    },
+    "DiagramV2.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "CR-2 · Diagram 链路与建议型号（修改后）",
+      "w": 1440,
+      "x": 1520,
+      "y": 11560
+    },
+    "Drawing.dc.html": {
+      "expand": "fill",
+      "h": 1500,
+      "is_interactive": true,
+      "title": "CR-3 · Drawing 拼接与线路图 + CAD 导出（新增）",
+      "w": 1440,
+      "x": 3040,
+      "y": 11560
+    },
+    "ShapePJ.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "投影 2 · Shape & Faces 屏形与分面（转角 / U 形 · 新增）",
+      "w": 1440,
+      "x": 0,
+      "y": 13240
+    },
+    "FacesPJ.dc.html": {
+      "expand": "fill",
+      "h": 1500,
+      "is_interactive": true,
+      "title": "投影 3 · Multi-face 多面投影推荐（P18–P22 · 新增）",
+      "w": 1440,
+      "x": 1520,
+      "y": 13240
+    },
+    "Knowledge.dc.html": {
+      "expand": "fill",
+      "h": 1300,
+      "is_interactive": true,
+      "title": "Knowledge Base 资料库（新增）",
+      "w": 1440,
+      "x": 3040,
+      "y": 13240
+    }
   },
-  "NewProposal.dc.html": {
-   "x": 1520,
-   "y": 0,
-   "w": 1440,
-   "h": 1100,
-   "title": "1 · New Proposal",
-   "expand": "fill",
-   "is_interactive": true
+  "createdOnFiles": {
+    "at": "2026-10-11T00:30:00+08:00",
+    "v": 1
   },
-  "Confirm.dc.html": {
-   "x": 3040,
-   "y": 0,
-   "w": 1440,
-   "h": 1100,
-   "title": "2 · Confirm Inputs（确认关）",
-   "expand": "fill",
-   "is_interactive": true
+  "designSystems": [],
+  "launch": {
+    "file": "Main.dc.html",
+    "view": "focused"
   },
-  "Workspace.dc.html": {
-   "x": 4560,
-   "y": 0,
-   "w": 1440,
-   "h": 1100,
-   "title": "3 · LED Recommendation（数字已改正）",
-   "expand": "fill",
-   "is_interactive": true
+  "notes": {
+    "s1": {
+      "fill": "orange",
+      "size": 24,
+      "text": "第一行要看的：\n\n· Dashboard：只有 LED 可点，其余 5 条业务线标 Next version；Mode 只有 A。\n· New Proposal：Project Platform 编号可空，先建后补。\n· Confirm Inputs：识别出宽 4500，不是模组整数倍，给 4480 / 4800 两个选项；中低置信度字段逐个点确认后，Run 才能点。\n· Recommendation：数字已全部改正，每个数字下面直接写算式。",
+      "w": 420,
+      "x": 6080,
+      "y": 560
+    },
+    "s2": {
+      "fill": "orange",
+      "size": 24,
+      "text": "第二行要看的：\n\n· Calculations：你列的 14 项规则逐条展开，标出哪些系数已定、哪些待填。\n· Diagram：Level 1 概念图 + Level 2 示意图，设备全部来自 BOQ。\n· Cost：单价人工录入，过期单价标红；Sell price 人工填，系统不推算。\n· Annotation：点两点定比例，标注另存，原件不动。",
+      "w": 420,
+      "x": 6080,
+      "y": 1440
+    },
+    "s3": {
+      "fill": "orange",
+      "size": 24,
+      "text": "第三行要看的：\n\n· Review & Export：可以自审；保留 Export JPG Boards；同时导出 PDF 和 Word。\n· Versions：任选两个 Rev 对比，改了哪些输入、哪些数字跟着变。\n· Projects：没有 Project Platform 编号的项目标「未关联」，可以后补。",
+      "w": 420,
+      "x": 6080,
+      "y": 2880
+    },
+    "s4": {
+      "fill": "orange",
+      "size": 24,
+      "text": "第四行要看的：\n\n· 产品库和规则库里的数都在页面上直接改，保存时填原因，自动生成新版本；已发出的 Rev 不受影响。\n· 产品与价格均为示例数据，等清单 D 组填好后替换。\n· Local Agent 页可以切在线 / 离线，看两种状态下能做什么。",
+      "w": 420,
+      "x": 6080,
+      "y": 4220
+    },
+    "s5": {
+      "fill": "orange",
+      "size": 24,
+      "text": "投影这两行要看的：\n\n· 入口：Dashboard 的投影卡片，或 New Proposal 切到「投影」。\n· Confirm：7 个中低置信度字段逐个确认后才能运行计算；缺剖面/RCP → B 级。\n· 推荐：先选镜头再反推机位，融合带 22.7% ≈ 1.02 m，两条 NOTE（清晰度、遮挡）。\n· 计算依据顶部是 114 回归验证。\n· Cost / 标注 / 审核导出是共用页，沿用 LED 示例。\n· 产品库 / 规则 / 模板用顶部的 LED | 投影 tab 切换。",
+      "w": 420,
+      "x": 6080,
+      "y": 5800
+    },
+    "t1": {
+      "kind": "title1",
+      "maxW": 6000,
+      "text": "主流程 ① 建 Proposal → 确认 → 推荐",
+      "w": 240,
+      "x": 0,
+      "y": -250
+    },
+    "t2": {
+      "kind": "title1",
+      "maxW": 6000,
+      "text": "主流程 ② 计算依据 · 示意图 · Cost · 标注",
+      "w": 240,
+      "x": 0,
+      "y": 1190
+    },
+    "t3": {
+      "kind": "title1",
+      "maxW": 6000,
+      "text": "输出、版本与项目",
+      "w": 240,
+      "x": 0,
+      "y": 2630
+    },
+    "t4": {
+      "kind": "title1",
+      "maxW": 6000,
+      "text": "库与系统（全部可编辑）",
+      "w": 240,
+      "x": 0,
+      "y": 3970
+    },
+    "t5": {
+      "kind": "title1",
+      "maxW": 6000,
+      "text": "投影单面融合墙（示例：114-Showroom，5 × 0.5 定焦）",
+      "w": 240,
+      "x": 0,
+      "y": 5550
+    },
+    "t6": {
+      "x": 0,
+      "y": 8430,
+      "text": "新增输出：方案演示稿 PPT（可编辑）",
+      "kind": "title1",
+      "maxW": 6000
+    },
+    "s6": {
+      "x": 1520,
+      "y": 8680,
+      "w": 420,
+      "fill": "orange",
+      "size": 24,
+      "text": "演示稿要看的：\n\n· 入口：第 6 步审核导出 → Proposal Deck。\n· 顶部切 LED / 投影，页面列表跟着变（LED 10 页，投影 11 页）。\n· 封面保留：标题、项目名、项目编号、客户、地点；右侧可改。\n· 每页固定 AUDAX 页眉、Confidential 页脚和页码；不显示价格。\n· 数字来自锁定的 Rev，平台里不能改；导出的 PPT 全部可编辑。\n· 未批准只能出带 DRAFT 水印的草稿。"
+    },
+    "s7": {
+      "x": 6080,
+      "y": 7240,
+      "w": 420,
+      "fill": "orange",
+      "size": 24,
+      "text": "系统与布线（参考 Phoenix Sea）：\n\n· 投影第 3 步新增第 4 个子页。\n· 每台投影 1 根视频 + 1 根控制 CAT6，各加 1 根备用（标黄）。\n· HDMI 上限定为 15 m；35 m → HDBaseT；超过 50 m → 光纤；可切 AVoIP 看差别。\n· 机房设备 × 1.1 余量，方案 A 插座 / 方案 B UPS 可切换。\n· 新规则 P14–P17，规则版本升到 v1.4。\n· 确认关新增：播放源位置、中控、同步组。"
+    },
+    "t7": {
+      "x": 0,
+      "y": 9870,
+      "text": "LED 异形屏：先判断屏形，再分面输入（示例：GMC U 形、Digital Cube L 形）",
+      "kind": "title1",
+      "maxW": 6000
+    },
+    "s8": {
+      "x": 3040,
+      "y": 10120,
+      "w": 420,
+      "fill": "orange",
+      "size": 24,
+      "text": "异形屏要看的：\n\n· New Proposal 选 LED 后先到「屏形与分面」，AI 先猜屏形，人确认；平面屏直接回到原来的确认页。\n· 每一面单独填尺寸、朝向、信号输入点、电源输入点。\n· GMC 的左右面宽度 3 份资料对不上（5600 / 5760 / 3040），选定前不能算。\n· 多面推荐：按面算回路、配电箱、数据线；展开画布标出每面的像素范围和输入点。\n· 新规则 S1–S7。"
+    },
+    "t8": {
+      "x": 0,
+      "y": 11310,
+      "text": "2026-10-21 试用反馈修改后（CR-1 尺寸识别 · CR-2 链路与建议型号 · CR-3 图纸与 CAD 导出）",
+      "kind": "title1",
+      "maxW": 6000
+    },
+    "s9": {
+      "x": 4560,
+      "y": 11560,
+      "w": 420,
+      "fill": "orange",
+      "size": 24,
+      "text": "试用反馈三项要看的（样例 6400 × 3520 · P2.5）：\n\n· CR-1：点「从文件填入」，图片上单独的 6400mm / 3520mm 按位置配成屏宽 / 屏高（Low，需确认）；手填 3500 和文件读到的 3520 不同，放在「其它读到的值」。可切 DXF 看 DIMENSION 读取。\n· CR-2：链路三个框；先选建议型号 VX600 / VX1000，再「加入产品库」看负载和 BOQ；也可切到旧的「处理器 + 控制器」。\n· CR-3：图纸页可开关图层；点「调整电源回路」后点箱体换回路，超载立刻标红、不能批准；导出 SVG / DXF / Excel / PDF。"
+    },
+    "s10": {
+      "x": 6080,
+      "y": 0,
+      "w": 420,
+      "fill": "blue",
+      "size": 24,
+      "text": "1022 反馈已改：\n\n· 每页右上角「EN / 中文」按钮切换界面语言，一次只显示一种；选择会记住，换页保持。\n· 确认输入：每个值都能直接改，改过的标「手填」。\n· 推荐页：每张数字卡片可「修改」，必须填原因，标「手动」，可恢复规则值。\n· 推荐页子页签新增「Drawing 图纸」。"
+    },
+    "t9": {
+      "x": 0,
+      "y": 12990,
+      "text": "1023 反馈：多面 / 转角投影 + 资料库",
+      "kind": "title1",
+      "maxW": 6000
+    },
+    "s11": {
+      "x": 4560,
+      "y": 13240,
+      "w": 420,
+      "fill": "orange",
+      "size": 24,
+      "text": "1023 反馈要看的：\n\n· 第 4 步改为 BOQ（不含价格）：按区域分组，每行带规格，数量 + 单位；可切 GMC U 形示例。\n· 投影：New Proposal 选投影后先到「屏形与分面」，有转角 L、U 形、弧形、环幕、墙 + 地面。多面推荐页每面单独排投影，转角两侧机位冲突会阻断，宽度可直接改。\n· LED 屏形新增「外转角」。\n· 资料库：导入以往资料，本地读取；学到的内容要人确认才进产品库 / 模板。"
+    }
   },
-  "Calculations.dc.html": {
-   "x": 0,
-   "y": 1440,
-   "w": 1440,
-   "h": 1100,
-   "title": "3 · Calculations（14 项规则）",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "Diagram.dc.html": {
-   "x": 1520,
-   "y": 1440,
-   "w": 1440,
-   "h": 1100,
-   "title": "3 · Diagram L1 / L2",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "Cost.dc.html": {
-   "x": 3040,
-   "y": 1440,
-   "w": 1440,
-   "h": 1100,
-   "title": "4 · Cost & BOQ（新增）",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "Annotate.dc.html": {
-   "x": 4560,
-   "y": 1440,
-   "w": 1440,
-   "h": 1100,
-   "title": "5 · Annotation Editor（新增）",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "Preview.dc.html": {
-   "x": 0,
-   "y": 2880,
-   "w": 1440,
-   "h": 1000,
-   "title": "6 · Review & Export（审核关）",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "Versions.dc.html": {
-   "x": 1520,
-   "y": 2880,
-   "w": 1440,
-   "h": 1000,
-   "title": "Versions · Rev 对比（新增）",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "Projects.dc.html": {
-   "x": 3040,
-   "y": 2880,
-   "w": 1440,
-   "h": 1000,
-   "title": "Projects（新增）",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "Templates.dc.html": {
-   "x": 4560,
-   "y": 2880,
-   "w": 1440,
-   "h": 1000,
-   "title": "Templates（新增）",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "Products.dc.html": {
-   "x": 0,
-   "y": 4220,
-   "w": 1440,
-   "h": 1100,
-   "title": "Product Library（新增）",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "Rules.dc.html": {
-   "x": 1520,
-   "y": 4220,
-   "w": 1440,
-   "h": 1100,
-   "title": "Rules Engine · 可编辑（新增）",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "Agent.dc.html": {
-   "x": 3040,
-   "y": 4220,
-   "w": 1440,
-   "h": 1100,
-   "title": "Local Agent · 在线 / 离线（新增）",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "Settings.dc.html": {
-   "x": 4560,
-   "y": 4220,
-   "w": 1440,
-   "h": 1100,
-   "title": "Settings（新增）",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "ConfirmPJ.dc.html": {
-   "x": 0,
-   "y": 5800,
-   "w": 1440,
-   "h": 1100,
-   "title": "投影 2 · Confirm Inputs 确认输入",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "WorkspacePJ.dc.html": {
-   "x": 1520,
-   "y": 5800,
-   "w": 1440,
-   "h": 1100,
-   "title": "投影 3 · Recommendation 推荐",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "CalcPJ.dc.html": {
-   "x": 3040,
-   "y": 5800,
-   "w": 1440,
-   "h": 1100,
-   "title": "投影 3 · Calculations P1–P13（114 回归）",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "DiagramPJ.dc.html": {
-   "x": 4560,
-   "y": 5800,
-   "w": 1440,
-   "h": 1100,
-   "title": "投影 3 · Diagram 立面/平面/剖面/信号链",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "ProductsPJ.dc.html": {
-   "x": 0,
-   "y": 7240,
-   "w": 1440,
-   "h": 1100,
-   "title": "投影 · Product Library 产品库",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "RulesPJ.dc.html": {
-   "x": 1520,
-   "y": 7240,
-   "w": 1440,
-   "h": 1100,
-   "title": "投影 · Rules Engine 规则引擎",
-   "expand": "fill",
-   "is_interactive": true
-  },
-  "TemplatesPJ.dc.html": {
-   "x": 3040,
-   "y": 7240,
-   "w": 1440,
-   "h": 1100,
-   "title": "投影 · Templates 模板",
-   "expand": "fill",
-   "is_interactive": true
-  }
- },
- "order": [
-  "Main.dc.html",
-  "NewProposal.dc.html",
-  "Confirm.dc.html",
-  "Workspace.dc.html",
-  "Calculations.dc.html",
-  "Diagram.dc.html",
-  "Cost.dc.html",
-  "Annotate.dc.html",
-  "Preview.dc.html",
-  "Versions.dc.html",
-  "Projects.dc.html",
-  "Templates.dc.html",
-  "Products.dc.html",
-  "Rules.dc.html",
-  "Agent.dc.html",
-  "Settings.dc.html",
-  "ConfirmPJ.dc.html",
-  "WorkspacePJ.dc.html",
-  "CalcPJ.dc.html",
-  "DiagramPJ.dc.html",
-  "ProductsPJ.dc.html",
-  "RulesPJ.dc.html",
-  "TemplatesPJ.dc.html"
- ],
- "notes": {
-  "t1": {
-   "x": 0,
-   "y": -250,
-   "text": "主流程 ① 建 Proposal → 确认 → 推荐",
-   "kind": "title1",
-   "maxW": 6000
-  },
-  "t2": {
-   "x": 0,
-   "y": 1190,
-   "text": "主流程 ② 计算依据 · 示意图 · Cost · 标注",
-   "kind": "title1",
-   "maxW": 6000
-  },
-  "t3": {
-   "x": 0,
-   "y": 2630,
-   "text": "输出、版本与项目",
-   "kind": "title1",
-   "maxW": 6000
-  },
-  "t4": {
-   "x": 0,
-   "y": 3970,
-   "text": "库与系统（全部可编辑）",
-   "kind": "title1",
-   "maxW": 6000
-  },
-  "s1": {
-   "x": 6080,
-   "y": 0,
-   "w": 420,
-   "fill": "orange",
-   "size": "m",
-   "text": "第一行要看的：\n\n· Dashboard：只有 LED 可点，其余 5 条业务线标 Next version；Mode 只有 A。\n· New Proposal：Project Platform 编号可空，先建后补。\n· Confirm Inputs：识别出宽 4500，不是模组整数倍，给 4480 / 4800 两个选项；中低置信度字段逐个点确认后，Run 才能点。\n· Recommendation：数字已全部改正，每个数字下面直接写算式。"
-  },
-  "s2": {
-   "x": 6080,
-   "y": 1440,
-   "w": 420,
-   "fill": "orange",
-   "size": "m",
-   "text": "第二行要看的：\n\n· Calculations：你列的 14 项规则逐条展开，标出哪些系数已定、哪些待填。\n· Diagram：Level 1 概念图 + Level 2 示意图，设备全部来自 BOQ。\n· Cost：单价人工录入，过期单价标红；Sell price 人工填，系统不推算。\n· Annotation：点两点定比例，标注另存，原件不动。"
-  },
-  "s3": {
-   "x": 6080,
-   "y": 2880,
-   "w": 420,
-   "fill": "orange",
-   "size": "m",
-   "text": "第三行要看的：\n\n· Review & Export：可以自审；保留 Export JPG Boards；同时导出 PDF 和 Word。\n· Versions：任选两个 Rev 对比，改了哪些输入、哪些数字跟着变。\n· Projects：没有 Project Platform 编号的项目标「未关联」，可以后补。"
-  },
-  "s4": {
-   "x": 6080,
-   "y": 4220,
-   "w": 420,
-   "fill": "orange",
-   "size": "m",
-   "text": "第四行要看的：\n\n· 产品库和规则库里的数都在页面上直接改，保存时填原因，自动生成新版本；已发出的 Rev 不受影响。\n· 产品与价格均为示例数据，等清单 D 组填好后替换。\n· Local Agent 页可以切在线 / 离线，看两种状态下能做什么。"
-  },
-  "t5": {
-   "x": 0,
-   "y": 5550,
-   "text": "投影单面融合墙（示例：114-Showroom，5 × 0.5 定焦）",
-   "kind": "title1",
-   "maxW": 6000
-  },
-  "s5": {
-   "x": 6080,
-   "y": 5800,
-   "w": 420,
-   "fill": "orange",
-   "size": "m",
-   "text": "投影这两行要看的：\n\n· 入口：Dashboard 的投影卡片，或 New Proposal 切到「投影」。\n· Confirm：7 个中低置信度字段逐个确认后才能运行计算；缺剖面/RCP → B 级。\n· 推荐：先选镜头再反推机位，融合带 22.7% ≈ 1.02 m，两条 NOTE（清晰度、遮挡）。\n· 计算依据顶部是 114 回归验证。\n· Cost / 标注 / 审核导出是共用页，沿用 LED 示例。\n· 产品库 / 规则 / 模板用顶部的 LED | 投影 tab 切换。"
-  }
- },
- "designSystems": []
+  "order": [
+    "Main.dc.html",
+    "NewProposal.dc.html",
+    "ShapeLED.dc.html",
+    "FacesLED.dc.html",
+    "Confirm.dc.html",
+    "Workspace.dc.html",
+    "Calculations.dc.html",
+    "Diagram.dc.html",
+    "Cost.dc.html",
+    "Annotate.dc.html",
+    "Preview.dc.html",
+    "Deck.dc.html",
+    "Versions.dc.html",
+    "Projects.dc.html",
+    "Templates.dc.html",
+    "Products.dc.html",
+    "Rules.dc.html",
+    "Agent.dc.html",
+    "Settings.dc.html",
+    "ConfirmPJ.dc.html",
+    "WorkspacePJ.dc.html",
+    "CalcPJ.dc.html",
+    "DiagramPJ.dc.html",
+    "SystemPJ.dc.html",
+    "ProductsPJ.dc.html",
+    "RulesPJ.dc.html",
+    "TemplatesPJ.dc.html",
+    "ConfirmOCR.dc.html",
+    "DiagramV2.dc.html",
+    "Drawing.dc.html",
+    "ShapePJ.dc.html",
+    "FacesPJ.dc.html",
+    "Knowledge.dc.html"
+  ],
+  "pages": [],
+  "title": "AV Proposal Platform · V1 原型（LED + 投影单面墙 · 中英双语）"
 }

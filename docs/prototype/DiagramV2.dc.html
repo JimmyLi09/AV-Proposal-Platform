@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Diagram 示意图（CR-2）</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
+</style>
+</helmet>
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div><div style="font-size: 12px; color: #6B6558"><span class="zh">试用样例 · LED-1 · 6400 × 3520 · P2.5 · Rev 0 ·</span><span class="en">Trial · LED-1 · 6400 × 3520 · P2.5 · Rev 0 ·</span> <span style="padding: 1px 8px; border-radius: 10px; background: #E8EEF8; color: #2C5AA0; font-weight: 600"><span class="zh">CR-2 修改后</span><span class="en">CR-2 after change</span></span></div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Diagram</span><span class="zh">示意图</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">链路改为 信号源 → 处理器（含发送）→ LED 屏。产品库没有够用的型号时，给出建议型号。</span><span class="en">Chain changed to source → processor (with sending) → LED screen. If the product library has no sufficient model, a suggested model is given.</span></p></div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 22px; border-bottom: 1px solid #E6E0D6">
+<a href="Workspace.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">推荐</span><span class="en">Recommendation</span></a>
+<a href="Calculations.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">计算依据</span><span class="en">Calculations</span></a>
+<a href="DiagramV2.dc.html" style="padding: 10px 2px; border-bottom: 3px solid #15203A; color: #15203A; font-weight: 700; text-decoration: none"><span class="zh">示意图</span><span class="en">Diagram</span></a>
+<a href="Annotate.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">标注</span><span class="en">Annotate</span></a>
+<a href="Drawing.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">图纸</span><span class="en">Drawing</span> <span style="padding: 0 6px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-size: 10.5px; font-weight: 700">NEW</span></a>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+<span style="color: #6B6558; font-size: 12.5px"><span class="zh">演示情景：</span><span class="en">Demo scenario</span></span>
+<button type="button" onClick="{{scA}}" style="{{scAStyle}}"><span class="zh">产品库没有够用的型号</span><span class="en">No adequate model in product library</span></button>
+<button type="button" onClick="{{scB}}" style="{{scBStyle}}"><span class="zh">已入库一体机</span><span class="en">All-in-one in library</span></button>
+<button type="button" onClick="{{scC}}" style="{{scCStyle}}"><span class="zh">只有独立处理器 + 控制器（退回旧逻辑）</span><span class="en">Standalone processor + sending controller only (legacy logic)</span></button>
+</div>
+
+<div style="padding: 10px 14px; border-radius: 10px; background: #FFF3B0; color: #6B4E00"><span class="zh">信号源数量未填，</span><span class="en">Number of sources not filled,</span><b><span class="zh">按 1 路计算</span><span class="en">Count as 1 circuit</span></b><span class="zh">。可在确认输入里改。</span><span class="en">. Can be changed in Confirm inputs.</span></div>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 4px; font-size: 15px"><span class="en">Level 1 · Concept diagram</span><span class="zh">概念图</span></h2>
+<p style="margin: 0 0 14px; color: #6B6558"><span class="zh">只画实际用到的设备。屏 2560 × 1408 = 3.60 MP，需要 7 根工作网线（3.60 ÷ 0.56 MP = 6.44 → 7）。</span><span class="en">Only devices actually used are drawn. Screen 2560 × 1408 = 3.60 MP, needs 7 working data cables (3.60 ÷ 0.56 MP = 6.44 → 7).</span></p>
+<div style="display: flex; flex-wrap: wrap; align-items: stretch; gap: 8px">
+<div style="flex: 1 1 150px; border: 1px solid #C9BFAE; border-radius: 10px; padding: 12px; text-align: center; display: flex; flex-direction: column; justify-content: center"><div style="font-weight: 700"><span class="zh">信号源</span><span class="en">Content source</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">播放器或电脑 × 1</span><span class="en">Player or PC × 1</span></div></div>
+<div style="flex: 0 1 80px; text-align: center; color: #6B6558; font-size: 11.5px; align-self: center">HDMI × 1<div aria-hidden="true" style="font-size: 18px; color: #15203A">→</div></div>
+<div style="{{procBox}}">
+<div style="font-weight: 700">{{procTitle}}</div>
+<sc-if value="{{isSuggest}}" hint-placeholder-val="{{ true }}">
+<div style="font-size: 12px; color: #9A4A12; margin: 4px 0 8px"><span class="zh">产品库没有带得动 3.60 MP 的型号</span><span class="en">No model in product library can drive 3.60 MP</span></div>
+<div style="display: flex; flex-direction: column; gap: 6px; text-align: left">
+<sc-for list="{{sugg}}" as="g" hint-placeholder-count="2">
+<button type="button" onClick="{{g.pick}}" style="{{g.style}}"><div style="display: flex; justify-content: space-between; gap: 6px"><b>{{g.model}}</b><span style="{{g.loadStyle}}">{{g.load}}</span></div><div style="font-size: 11.5px; color: #6B6558">{{g.spec}}</div><div style="font-size: 11px; color: #9A4A12"><span class="zh">建议型号 · 未入库 · 待核对规格书</span><span class="en">Suggested model · not in library · check datasheet</span></div></button>
+</sc-for>
+<div style="padding: 8px 10px; border-radius: 8px; border: 1px dashed #D9CFBF; color: #6B6558; font-size: 11.5px"><s>NovaStar VX600</s> <span class="zh">· 带载 3.9 MP 够，但只有 6 口 &lt; 7 根网线，不推荐</span><span class="en">· 3.9 MP load is enough, but only 6 ports &lt; 7 data cables, not recommended</span></div>
+</div>
+<sc-if value="{{hasPick}}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{addLib}}" style="margin-top: 8px; width: 100%; height: 34px; border-radius: 8px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer"><span class="zh">加入产品库并重算</span><span class="en">Add to library</span></button></sc-if>
+</sc-if>
+<sc-if value="{{notSuggest}}" hint-placeholder-val="{{ false }}"><div style="font-size: 12px; color: #6B6558">{{procSub}}</div></sc-if>
+</div>
+<sc-if value="{{isSep}}" hint-placeholder-val="{{ false }}">
+<div style="flex: 0 1 80px; text-align: center; color: #6B6558; font-size: 11.5px; align-self: center">HDMI × 1<div aria-hidden="true" style="font-size: 18px; color: #15203A">→</div></div>
+<div style="flex: 1 1 150px; border: 1px solid #C9BFAE; border-radius: 10px; padding: 12px; text-align: center; display: flex; flex-direction: column; justify-content: center"><div style="font-weight: 700"><span class="zh">发送控制器</span><span class="en">Sending controller</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">Sample SC-8 × 1 · 8 口</span><span class="en">Sample SC-8 × 1 · 8 ports</span></div></div>
+</sc-if>
+<div style="flex: 0 1 100px; text-align: center; color: #6B6558; font-size: 11.5px; align-self: center">CAT6 × 7 (+1)<div aria-hidden="true" style="font-size: 18px; color: #15203A">→</div></div>
+<div style="flex: 1 1 170px; border: 2px solid #15203A; background: #F3F5FA; border-radius: 10px; padding: 12px; text-align: center; display: flex; flex-direction: column; justify-content: center"><div style="font-weight: 700"><span class="zh">LED 屏</span><span class="en">LED wall</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">6400 × 3520 · P2.5 · 70 个箱体</span><span class="en">6400 × 3520 · P2.5 · 70 cabinets</span></div></div>
+</div>
+<div style="display: flex; justify-content: flex-end; margin-top: 8px">
+<div style="flex: 0 1 300px; text-align: center; color: #6B6558; font-size: 11.5px"><div aria-hidden="true" style="font-size: 18px; color: #C2410C">↑</div><span class="zh">5 回路 · 6 根电源线（含 1 备用）</span><span class="en">5 circuits · 6 power cables (incl. 1 spare)</span><div style="margin-top: 6px; border: 1px solid #E4B596; background: #FDF1E6; border-radius: 10px; padding: 10px; color: #1F2430"><b><span class="zh">配电箱 × 2</span><span class="en">DB box × 2</span></b><br><span style="font-size: 12px; color: #6B6558"><span class="zh">每回路一个 MCB · 11.26 kW</span><span class="en">One MCB per circuit · 11.26 kW</span></span></div></div>
+</div>
+</section>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+<section style="flex: 999 1 520px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Level 2 · Connections</span><span class="zh">连接与线缆</span></h2>
+<div style="overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 520px">
+<thead><tr style="text-align: left; color: #6B6558"><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">起点</span><span class="en">From</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">终点</span><span class="en">To</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">线缆</span><span class="en">Cable</span></th><th style="padding: 8px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">数量</span><span class="en">Qty</span></th></tr></thead>
+<tbody>
+<sc-for list="{{links}}" as="l" hint-placeholder-count="4">
+<tr><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{l.a}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{l.b}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{l.c}}</td><td style="padding: 8px; border-bottom: 1px solid #EFEBE4">{{l.q}}</td></tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+</section>
+<section style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">BOQ · control</span><span class="zh">控制部分</span></h2>
+<sc-for list="{{boq}}" as="b" hint-placeholder-count="3">
+<div style="display: flex; justify-content: space-between; gap: 8px; padding: 8px 0; border-bottom: 1px solid #EFEBE4"><span>{{b.n}}</span><b>{{b.q}}</b></div>
+</sc-for>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558">{{boqNote}}</div>
+<div style="margin-top: 10px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 12px; color: #3B3A36"><span class="zh">选型顺序：先找一台够用的「处理器（含发送）」（带载 ≥ 屏像素、网口 ≥ 工作网线、输入 ≥ 信号源）；找不到才配「独立处理器 + 发送控制器」。</span><span class="en">Selection order: first look for one "processor (with sending)" that is sufficient (load ≥ screen pixels, ports ≥ working data cables, inputs ≥ sources); only if none, use "standalone processor + sending controller".</span></div>
+</section>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
+  renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {"推荐":"Recommended","余量大，可带多块屏":"Ample headroom, can drive multiple screens","带载约":"Load approx.","口 ·":"ports ·","口":"ports","负载":"Load","· 余量偏小":"· Low headroom","口，剩":"ports, remaining","Sample SP-4 × 1 · 4K 输入":"Sample SP-4 × 1 · 4K input","7 + 1 备用":"7 + 1 spare","+ 1 备用":"+ 1 spare","5 + 1 备用":"5 + 1 spare","产品库里没有一体机，按 F13 + F11 原逻辑配两台。":"No all-in-one unit in product library; configure two units per original F13 + F11 logic.","有":"Yes","台":" units","× 1 · 负载":"× 1 · Load","处理器（待选）":"Processor (to be selected)","待选":"To be selected","Processor· 待选":"Processor· to be selected","F11 发送控制器：已包含在处理器里，BOQ 不再单列控制器。":"F11 Sending controller: included in the processor, no separate controller line in BOQ.","NOTE：负载超过 90 %，余量偏小。":"NOTE: load above 90 %, low headroom.","选一个建议型号并加入产品库后，才能出正式 BOQ。":"Pick a suggested model and add it to the product library before a formal BOQ can be issued."}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
+    const s = this.state || {};
+    const sc = s.sc || 'A';
+    const pick = s.pick || null;
+    const lib = s.lib || 'NovaStar VX1000';
+    const on = 'height: 32px; padding: 0 12px; border-radius: 16px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-size: 12.5px; font-weight: 600; cursor: pointer';
+    const off = 'height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid #D9CFBF; background: #FFFFFF; color: #1F2430; font: inherit; font-size: 12.5px; cursor: pointer';
+    const models = [
+      { model: 'NovaStar VX1000', mp: 6.5, ports: 10, note: '推荐' },
+      { model: 'NovaStar VX16s', mp: 10.4, ports: 16, note: '余量大，可带多块屏' }
+    ];
+    const sugg = models.map(m => {
+      const load = Math.round(3.6045 / m.mp * 100);
+      const sel = pick === m.model;
+      return {
+        model: m.model,
+        spec: '带载约 ' + m.mp + ' MP · ' + m.ports + ' 口 · ' + m.note,
+        load: '负载 ' + load + ' %' + (load > 90 ? ' · 余量偏小' : ''),
+        loadStyle: 'font-size: 12px; font-weight: 700; color: ' + (load > 90 ? '#9A4A12' : '#2F7A5B'),
+        pick: () => this.setState({ pick: m.model }),
+        style: 'display: block; width: 100%; text-align: left; padding: 8px 10px; border-radius: 8px; font: inherit; cursor: pointer; background: ' + (sel ? '#F3F5FA' : '#FFFFFF') + '; border: ' + (sel ? '2px solid #15203A' : '1px solid #E6E0D6')
+      };
+    });
+    const m = models.find(x => x.model === lib);
+    const libLoad = Math.round(3.6045 / m.mp * 100);
+    const portsNote = '7 / ' + m.ports + ' 口，剩 ' + (m.ports - 7) + ' 口';
+    let procTitle, procSub, procBox, links, boq, boqNote;
+    const box = 'flex: 1 1 210px; border-radius: 10px; padding: 12px; text-align: center; display: flex; flex-direction: column; justify-content: center; ';
+    if (sc === 'C') {
+      procTitle = 'Video processor 视频处理器';
+      procSub = 'Sample SP-4 × 1 · 4K 输入';
+      procBox = box + 'border: 1px solid #C9BFAE';
+      links = [
+        { a: 'Media player 播放器', b: 'SP-4', c: 'HDMI', q: '1' },
+        { a: 'SP-4', b: 'SC-8', c: 'HDMI', q: '1' },
+        { a: 'SC-8', b: 'LED wall LED 屏', c: 'CAT6', q: '7 + 1 备用' },
+        { a: 'DB box 配电箱', b: 'LED wall LED 屏', c: 'Power cable 电源线', q: '5 + 1 备用' }
+      ];
+      boq = [{ n: 'Video processor 视频处理器 · SP-4', q: '1' }, { n: 'Sending controller 发送控制器 · SC-8', q: '1' }, { n: 'CAT6', q: '8' }];
+      boqNote = '产品库里没有一体机，按 F13 + F11 原逻辑配两台。';
+    } else {
+      procTitle = 'Processor 处理器（含发送）';
+      procSub = sc === 'B' ? lib + ' × 1 · 负载 ' + libLoad + ' % · ' + portsNote : '';
+      procBox = box + (sc === 'A' ? 'border: 2px dashed #C2410C; background: #FFFBF5' : 'border: 1px solid #C9BFAE');
+      const pn = sc === 'B' ? lib : '处理器（待选）';
+      links = [
+        { a: 'Media player 播放器', b: pn, c: 'HDMI', q: '1' },
+        { a: pn, b: 'LED wall LED 屏', c: 'CAT6', q: '7 + 1 备用' },
+        { a: 'DB box 配电箱', b: 'LED wall LED 屏', c: 'Power cable 电源线', q: '5 + 1 备用' }
+      ];
+      boq = sc === 'B' ? [{ n: 'Processor 处理器（含发送）· ' + lib, q: '1' }, { n: 'CAT6', q: '8' }] : [{ n: 'Processor 处理器（含发送）· 待选', q: '1' }, { n: 'CAT6', q: '8' }];
+      boqNote = sc === 'B' ? 'F11 发送控制器：已包含在处理器里，BOQ 不再单列控制器。' + (libLoad > 90 ? ' NOTE：负载超过 90 %，余量偏小。' : '') : '选一个建议型号并加入产品库后，才能出正式 BOQ。';
+    }
+    return {
+      scA: () => this.setState({ sc: 'A', pick: null }), scB: () => this.setState({ sc: 'B' }), scC: () => this.setState({ sc: 'C' }),
+      scAStyle: sc === 'A' ? on : off, scBStyle: sc === 'B' ? on : off, scCStyle: sc === 'C' ? on : off,
+      isSuggest: sc === 'A', notSuggest: sc !== 'A', isSep: sc === 'C',
+      sugg, hasPick: !!pick,
+      addLib: () => this.setState({ sc: 'B', lib: pick || lib }),
+      procTitle, procSub, procBox, links, boq, boqNote
+    };
+  }
+}
+</script>
+</body>
+</html>

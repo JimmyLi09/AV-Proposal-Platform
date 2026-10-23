@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · Proposal Deck</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
+</style>
+</helmet>
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+
+<main style="box-sizing: border-box; width: 100%; max-width: 1360px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+<div style="flex: 1 1 320px"><div style="font-size: 12px; color: #6B6558">{{crumb}}</div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Proposal Deck</span><span class="zh">方案演示稿</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">从已计算的 Rev 自动生成 16:9 演示稿，和 用同一份数据。导出的 PPT 是原生文本框和表格，可以在 PowerPoint 里直接改。</span><span class="en">Auto-generate a 16:9 deck from a calculated Rev, plus PDF / Word</span></p></div>
+<div role="tablist" aria-label="Business line 业务线" style="display: flex; gap: 6px">
+<button type="button" onClick="{{toLed}}" style="{{ledTab}}">LED</button>
+<button type="button" onClick="{{toPj}}" style="{{pjTab}}"><span class="zh">投影 · 单面墙</span><span class="en">Projection · single-face wall</span></button>
+</div>
+</div>
+
+<nav aria-label="Proposal steps" style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center">
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">1 项目与文件</span><span class="en">1 Project &amp; Files</span></a>
+<a href="{{confirmHref}}" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">2 确认输入</span><span class="en">2 Confirm Inputs</span></a>
+<a href="{{recoHref}}" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">3 推荐</span><span class="en">3 Recommendation</span></a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">4 工程量清单</span><span class="en">4 BOQ</span></a>
+<a href="Annotate.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">5 标注</span><span class="en">5 Annotate</span></a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">6 审核导出</span><span class="en">6 Review &amp; Export</span></a>
+<span style="color: #6B6558; font-size: 12.5px"><span class="zh">› 演示稿</span><span class="en">› Deck</span></span>
+</nav>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
+
+<section aria-label="Slides 页面列表" style="flex: 1 1 230px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 14px 12px; display: flex; flex-direction: column; gap: 6px">
+<div style="display: flex; align-items: baseline; padding: 0 4px 4px"><h2 style="margin: 0; font-size: 15px"><span class="en">Slides</span><span class="zh">页面</span></h2><div style="flex: 1"></div><span style="font-size: 12px; color: #6B6558">{{countText}}</span></div>
+<sc-for list="{{slides}}" as="s" hint-placeholder-count="10">
+<div style="{{s.rowStyle}}">
+<input type="checkbox" checked="{{s.on}}" disabled="{{s.locked}}" onChange="{{s.toggle}}" aria-label="Include 包含 {{s.title}}" style="margin: 0; accent-color: #15203A">
+<button type="button" onClick="{{s.pick}}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 8px; border: 0; background: transparent; padding: 0; font: inherit; text-align: left; cursor: pointer; color: inherit">
+<span style="flex: 0 0 auto; width: 46px; height: 26px; border-radius: 3px; border: 1px solid #D8D1C4; background: {{s.thumbBg}}; display: flex; align-items: center; justify-content: center; font-size: 10px; color: {{s.thumbFg}}; font-weight: 700">{{s.num}}</span>
+<span style="min-width: 0"><span style="display: block; font-weight: 600; font-size: 12.5px">{{s.railName}}</span></span>
+</button>
+<sc-if value="{{s.locked}}" hint-placeholder-val="{{ false }}"><span title="固定页" style="font-size: 10.5px; color: #6B6558; padding: 0 6px; border-radius: 8px; background: #F1EEE8"><span class="zh">固定</span><span class="en">Fixed</span></span></sc-if>
+</div>
+</sc-for>
+<div style="font-size: 11.5px; color: #6B6558; padding: 6px 4px 0"><span class="zh">封面和最后一页固定保留；其余可勾掉不导出。页面顺序和默认勾选在 模板里设置。</span><span class="en">Cover and last page are always kept; others can be unchecked to skip export. Page order and default selection in Templates</span></div>
+</section>
+
+<section aria-label="Slide preview 页面预览" style="flex: 999 1 560px; min-width: 0; background: #E9E5DD; border: 1px solid #E6E0D6; border-radius: 12px; padding: 18px; display: flex; flex-direction: column; gap: 10px">
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px; color: #6B6558"><span><span class="zh">页 {{selNum}} / {{onCount}}</span><span class="en">Slide {{selNum}} / {{onCount}}</span></span><div style="flex: 1"></div><span>16:9 · {{langLabel}}</span><sc-if value="{{draft}}" hint-placeholder-val="{{ true }}"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px"><span class="zh">草稿水印</span><span class="en">DRAFT</span></span></sc-if></div>
+
+<div style="position: relative; width: 100%; aspect-ratio: 16 / 9; background: #FFFFFF; box-shadow: 0 1px 3px rgba(0,0,0,0.14); overflow: hidden; container-type: inline-size">
+
+<sc-if value="{{isCover}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; inset: 0; display: flex">
+<div style="flex: 0 0 38%; background: #15203A; color: #FFFFFF; padding: 6cqw 4cqw; box-sizing: border-box; display: flex; flex-direction: column">
+<div style="font-size: 3.2cqw; font-weight: 800; letter-spacing: 0.5cqw">AUDAX</div>
+<div style="font-size: 1.1cqw; letter-spacing: 0.15cqw; opacity: 0.7">[Company full name]</div>
+<div style="flex: 1"></div>
+<div style="font-size: 1.3cqw; opacity: 0.75">{{dateText}}</div>
+</div>
+<div style="flex: 1; padding: 7cqw 5cqw 5cqw; box-sizing: border-box; display: flex; flex-direction: column; gap: 1.4cqw">
+<div style="font-size: 1.4cqw; color: #C2410C; font-weight: 700; letter-spacing: 0.15cqw">{{kicker}}</div>
+<div style="font-size: 4.2cqw; line-height: 1.15; font-weight: 700; color: #15203A">{{title}}</div>
+<div style="height: 0.3cqw; width: 6cqw; background: #C2410C"></div>
+<div style="display: grid; grid-template-columns: auto 1fr; gap: 0.8cqw 2cqw; font-size: 1.6cqw; color: #3B3A36; margin-top: 1cqw">
+<span style="color: #6B6558">Project</span><span style="font-weight: 600">{{project}}</span>
+<span style="color: #6B6558">Project No.</span><span>{{projNo}}</span>
+<span style="color: #6B6558">Client</span><span>{{client}}</span>
+<span style="color: #6B6558">Location</span><span>{{location}}</span>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{isContent}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; display: flex; flex-direction: column; padding: 2.6cqw 3.4cqw 0; box-sizing: border-box">
+<div style="display: flex; align-items: center; gap: 1.2cqw; padding-bottom: 1cqw; border-bottom: 0.2cqw solid #15203A">
+<span style="font-size: 1.6cqw; font-weight: 800; letter-spacing: 0.3cqw; color: #15203A">AUDAX</span>
+<div style="flex: 1"></div>
+<span style="font-size: 1.1cqw; color: #6B6558">{{project}}</span>
+</div>
+<div style="padding-top: 2cqw; font-size: 1.2cqw; color: #C2410C; font-weight: 700; letter-spacing: 0.1cqw">{{cur.kicker}}</div>
+<div style="font-size: 2.8cqw; font-weight: 700; color: #15203A; line-height: 1.2">{{cur.heading}}</div>
+<div style="flex: 1; display: flex; gap: 2.6cqw; padding: 2cqw 0; min-height: 0">
+<div style="flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; gap: 1cqw">
+<sc-for list="{{cur.bullets}}" as="b" hint-placeholder-count="4">
+<div style="display: flex; gap: 1cqw; font-size: 1.55cqw; color: #1F2430; line-height: 1.35"><span style="flex: 0 0 auto; width: 0.7cqw; height: 0.7cqw; margin-top: 0.7cqw; background: #C2410C; border-radius: 50%"></span><span>{{b.t}}</span></div>
+</sc-for>
+<sc-if value="{{cur.hasMetrics}}" hint-placeholder-val="{{ false }}">
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1cqw; margin-top: 0.6cqw">
+<sc-for list="{{cur.metrics}}" as="m" hint-placeholder-count="6">
+<div style="border: 0.1cqw solid #E6E0D6; border-radius: 0.6cqw; padding: 0.9cqw 1.1cqw"><div style="font-size: 1.05cqw; color: #6B6558">{{m.k}}</div><div style="font-size: 2.1cqw; font-weight: 700; color: #15203A">{{m.v}}</div></div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{cur.hasVisual}}" hint-placeholder-val="{{ true }}">
+<div style="flex: 1 1 0; min-width: 0; border-radius: 0.6cqw; background: #EFEAE1; border: 0.1cqw dashed #C9BFAE; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6cqw; color: #6B6558; text-align: center; padding: 1.5cqw; box-sizing: border-box">
+<div style="font-size: 1.5cqw; font-weight: 700; color: #3B3A36">{{cur.visual}}</div>
+<div style="font-size: 1.1cqw">{{cur.visualSrc}}</div>
+</div>
+</sc-if>
+</div>
+<div style="display: flex; align-items: center; gap: 1cqw; padding: 1cqw 0 1.4cqw; border-top: 0.1cqw solid #EFEBE4; font-size: 1cqw; color: #6B6558">
+<span>Confidential · Prepared by Audax</span><div style="flex: 1"></div><span>{{selNum}}</span>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{draft}}" hint-placeholder-val="{{ true }}">
+<div aria-hidden="true" style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; pointer-events: none"><span style="transform: rotate(-18deg); font-size: 9cqw; font-weight: 800; color: rgba(194, 65, 12, 0.10); letter-spacing: 1cqw">DRAFT</span></div>
+</sc-if>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between">
+<button type="button" onClick="{{prev}}" style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid #D8D1C4; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">← 上一页</span><span class="en">← Previous</span></button>
+<span style="align-self: center; font-size: 12px; color: #6B6558">{{sourceNote}}</span>
+<button type="button" onClick="{{next}}" style="height: 36px; padding: 0 14px; border-radius: 8px; border: 1px solid #D8D1C4; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">下一页 →</span><span class="en">Next →</span></button>
+</div>
+</section>
+
+<div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 15px"><span class="en">Cover fields</span><span class="zh">封面信息</span></h2>
+<div style="font-size: 12px; color: #6B6558"><span class="zh">从项目和 自动带入，可在这里改；改动随这个 Rev 保存。</span><span class="en">Saved from the project and Proposal Rev.</span></div>
+<div><label for="dt" style="display: block; font-weight: 600; margin-bottom: 4px"><span class="zh">标题</span><span class="en">Title</span></label><input id="dt" type="text" value="{{title}}" onChange="{{setTitle}}" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+<div><label for="dp" style="display: block; font-weight: 600; margin-bottom: 4px"><span class="zh">项目名称</span><span class="en">Project name</span></label><input id="dp" type="text" value="{{project}}" onChange="{{setProject}}" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<div><label for="dn" style="display: block; font-weight: 600; margin-bottom: 4px"><span class="zh">Project no. 项目编号</span><span class="en">Project no.</span></label><input id="dn" type="text" value="{{projNo}}" onChange="{{setProjNo}}" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+<div><label for="dl" style="display: block; font-weight: 600; margin-bottom: 4px"><span class="zh">地点</span><span class="en">Location</span></label><input id="dl" type="text" value="{{location}}" onChange="{{setLocation}}" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+</div>
+<div><label for="dc" style="display: block; font-weight: 600; margin-bottom: 4px"><span class="zh">客户</span><span class="en">Client</span></label><input id="dc" type="text" value="{{client}}" onChange="{{setClient}}" style="width: 100%; box-sizing: border-box; height: 36px; padding: 0 10px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit"></div>
+<div><label for="lg" style="display: block; font-weight: 600; margin-bottom: 4px"><span class="zh">演示稿语言</span><span class="en">Deck language</span></label><select id="lg" onChange="{{setLang}}" style="width: 100%; height: 36px; padding: 0 8px; border: 1px solid #E6E0D6; border-radius: 8px; font: inherit; background: #FFFFFF"><option value="en">{{__s.o0}}</option><option value="zh">{{__s.o1}}</option><option value="bi">{{__s.o2}}</option></select></div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 15px"><span class="en">On every slide</span><span class="zh">每页固定</span></h2>
+<div style="display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 12.5px">
+<span style="color: #6B6558"><span class="zh">页眉</span><span class="en">Header</span></span><span><span class="zh">标志 · 项目名称</span><span class="en">AUDAX · Project name</span></span>
+<span style="color: #6B6558"><span class="zh">页脚</span><span class="en">Footer</span></span><span><span class="zh">Confidential · Prepared by Audax · 页码</span><span class="en">Confidential · Prepared by Audax · Page no.</span></span>
+<span style="color: #6B6558"><span class="zh">价格</span><span class="en">Prices</span></span><span><span class="zh">不含（V1 不做价格）</span><span class="en">Not included (V1 has no pricing)</span></span>
+<span style="color: #6B6558"><span class="zh">文件属性</span><span class="en">File info</span></span><span><span class="zh">Rev、规则版本、产品库版本写入 属性</span><span class="en">Write Rev, rules version and product library version into PPT</span></span>
+</div>
+</section>
+
+<section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 8px">
+<h2 style="margin: 0; font-size: 15px"><span class="en">Export</span><span class="zh">导出</span></h2>
+<div role="group" aria-label="Demo approval state 演示审批状态" style="display: flex; border: 1px solid #E6E0D6; border-radius: 8px; overflow: hidden; align-self: flex-start">
+<button type="button" onClick="{{setDraft}}" style="{{draftBtn}}"><span class="zh">未批准</span><span class="en">Not approved</span></button>
+<button type="button" onClick="{{setApproved}}" style="{{apprBtn}}"><span class="zh">已批准</span><span class="en">Approved</span></button>
+</div>
+<sc-if value="{{draft}}" hint-placeholder-val="{{ true }}">
+<div style="font-size: 12.5px; color: #6B6558"><span class="zh">Rev 未批准：只能导出带 DRAFT 水印的草稿，内部讨论用。</span><span class="en">Rev not approved: only a DRAFT-watermarked draft can be exported, for internal discussion.</span></div>
+<button type="button" style="height: 40px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer"><span class="zh">下载草稿 PPT</span><span class="en">Download draft PPTX</span></button>
+</sc-if>
+<sc-if value="{{approved}}" hint-placeholder-val="{{ false }}">
+<button type="button" style="height: 42px; border-radius: 8px; border: 0; background: #C2410C; color: #FFFFFF; font: inherit; font-weight: 700; cursor: pointer"><span class="zh">下载 PPT（可编辑）</span><span class="en">Download PPTX</span></button>
+<button type="button" style="height: 40px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer"><span class="zh">下载演示稿 PDF</span><span class="en">Download deck PDF</span></button>
+</sc-if>
+<div style="font-size: 12px; color: #6B6558; line-height: 1.6"><span class="zh">里文字、指标、BOQ 表都是可编辑对象；示意图和标注图是图片，可整张替换。导出后在 PowerPoint 里的修改不会回写平台。</span><span class="en">PPT</span></div>
+<a href="Preview.dc.html" style="font-size: 12.5px"><span class="zh">← 返回审核导出</span><span class="en">← Back to Review &amp; Export</span></a>
+</section>
+</div>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
+  renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"o0":["英文","English"],"o1":["中文 Chinese","Chinese"],"o2":["中英双语","Bilingual"],"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {"114-Showroom · PJ-1 展厅投影墙 · Rev 0 · 规则 v1.3 · 产品库 v1.0":"114-Showroom · PJ-1 Showroom projection wall · Rev 0 · Rules v1.3 · Product library v1.0","114-Showroom · PJ-1 展厅投影墙 · Rev 0":"114-Showroom · PJ-1 Showroom projection wall · Rev 0","114-Showroom · PJ-1 展厅投影墙":"114-Showroom · PJ-1 Showroom projection wall","PJ-1 展厅投影墙":"PJ-1 Showroom projection wall","投影":"Projection","143-Royal Plaza LED · LED-1 Lobby · Rev 1 · 规则 v1.3 · 产品库 v1.0":"143-Royal Plaza LED · LED-1 Lobby · Rev 1 · Rules v1.3 · Product library v1.0","封面":"Cover","项目概况":"Project overview","来自上传文件 · 114_site_photo.jpg":"From uploaded file · 114_site_photo.jpg","方案概念":"Concept","来自模板 · 可替换":"From template · replaceable","推荐配置":"Recommended configuration","推荐":"Recommended","立面融合区图":"Elevation blend zone drawing","来自第 3 步示意图 · DiagramPJ":"From step 3 diagram · DiagramPJ","来自第 3 步示意图":"From step 3 diagram","平面机位与剖面":"Plan mount positions and section","平面":"Flat","与":" and ","系统图 L1":"System diagram L1","标注图":"Annotated drawing","来自第 5 步标注":"From step 5 annotations","数量与 BOQ":"Quantities and BOQ","来自第 4 步 · 不显示价格":"From step 4 · prices hidden","风险与假设":"Risks and assumptions","下一步与联系":"Next steps & contact","来自上传文件 · Lobby_site_photo.jpg":"From uploaded file · Lobby_site_photo.jpg","示意图 L2":"Diagram L2","中文 Chinese":"Chinese","页":"Page","封面字段可在右侧修改":"Cover fields can be edited on the right","数字来自锁定的 Rev，平台里不可改；导出后可改":"Numbers come from the locked Rev and can't be edited in the platform; editable after export","台":" units","文字来自模板和 Proposal，可在 Templates":"Text comes from templates and the Proposal; editable in Templates"}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  base(pj) {
+    return pj ? {
+      crumb: '114-Showroom · PJ-1 展厅投影墙 · Rev 0 · 规则 v1.3 · 产品库 v1.0',
+      title: 'Projection Wall Proposal',
+      project: '114-Showroom · Projection Wall PJ-1',
+      projNo: '114',
+      client: '114 Showroom',
+      location: 'Singapore',
+      kicker: 'SHOWROOM PROJECTION WALL'
+    } : {
+      crumb: '143-Royal Plaza LED · LED-1 Lobby · Rev 1 · 规则 v1.3 · 产品库 v1.0',
+      title: 'LED Display Proposal',
+      project: '143-Royal Plaza · LED-1 Lobby',
+      projNo: '143',
+      client: 'Royal Plaza',
+      location: 'Singapore',
+      kicker: 'LOBBY LED WALL'
+    };
+  }
+  slideDefs(pj) {
+    const P = (title, zh, kicker, heading, bullets, extra) => Object.assign({ title, zh, kicker, heading, bullets: bullets.map((t) => ({ t })) }, extra || {});
+    if (pj) return [
+      P('Cover', '封面', '', '', [], { cover: true, locked: true }),
+      P('Project overview', '项目概况', 'PROJECT', 'Project overview', ['Showroom feature wall, 18325 × 2700 mm', 'Dark showroom, ambient ≤ 150 lux', 'Ceiling mount, 3.2 m available depth', 'Nearest viewing about 1.5 m'], { visual: 'Site photo', visualSrc: '来自上传文件 · 114_site_photo.jpg' }),
+      P('Concept', '方案概念', 'CONCEPT', 'One seamless image across the wall', ['Five projectors blended into a single canvas', 'Fixed short-throw lenses keep the room clear', 'Content made for the full-wall canvas'], { visual: 'Concept image', visualSrc: '来自模板 · 可替换' }),
+      P('Recommended configuration', '推荐配置', 'CONFIGURATION', '5 × PT-BHZ611C with 0.5 fixed lens', ['Lens front 2.24 m from the wall', 'Image 4.48 m wide per projector', 'Blend zone 22.7 % (≈ 1.02 m)', 'ZWIN 16ch blender'], { metrics: [{ k: 'Projectors', v: '5' }, { k: 'Canvas', v: '7854 × 1200' }, { k: 'Pixel size', v: '2.3 mm' }, { k: 'Blend', v: '22.7 %' }, { k: 'Throw', v: '2.24 m' }, { k: 'Circuits', v: '2' }] }),
+      P('Elevation & blend zones', '立面融合区图', 'DRAWINGS', 'Elevation and blend zones', ['Five images, four blend zones', 'Total width 18325 mm'], { visual: 'Elevation blend diagram', visualSrc: '来自第 3 步示意图 · DiagramPJ' }),
+      P('Plan & section', '平面机位与剖面', 'DRAWINGS', 'Projector positions and shadow check', ['Lens front 2.24 m from the wall', 'People within 1.44 m of the wall may cast shadows'], { visual: 'Plan + section drawings', visualSrc: '来自第 3 步示意图 · DiagramPJ' }),
+      P('System diagram', '系统图 L1', 'SYSTEM', 'Signal chain', ['Media PC → blender → HDBaseT → projectors', 'Signal run 35 m, no fibre needed'], { visual: 'System diagram Level 1', visualSrc: '来自第 3 步示意图' }),
+      P('Annotated drawing', '标注图', 'DRAWINGS', 'Annotated client drawing', ['Projector positions marked on the client plan'], { visual: 'Annotated drawing', visualSrc: '来自第 5 步标注' }),
+      P('Quantities & BOQ', '数量与 BOQ', 'SCOPE', 'Equipment and quantities', ['PT-BHZ611C projector × 5', '0.5 fixed lens × 5', 'ZWIN 16ch blender × 1', 'HDBaseT TX/RX × 5 sets', 'Content production (7854 × 1200 canvas)'], { visual: 'BOQ table (no prices)', visualSrc: '来自第 4 步 · 不显示价格' }),
+      P('Risks & assumptions', '风险与假设', 'NOTES', 'Risks and assumptions', ['Blend zones may look slightly brighter', 'Sharpness limited by 2.3 mm pixel size up close', 'Low ceilings may limit mounting', 'Section drawing not provided; to confirm on site']),
+      P('Next steps & contact', '下一步与联系', 'NEXT STEPS', 'Next steps', ['Site survey to confirm ceiling and power', 'Content brief and storyboard', 'Final quotation after survey'], { locked: true, visual: 'Contact', visualSrc: 'Jimmy · PM · Audax' })
+    ];
+    return [
+      P('Cover', '封面', '', '', [], { cover: true, locked: true }),
+      P('Project overview', '项目概况', 'PROJECT', 'Project overview', ['Lobby feature wall, indoor', 'Viewing distance 4–6 m', 'Wall mount, front maintenance'], { visual: 'Site photo', visualSrc: '来自上传文件 · Lobby_site_photo.jpg' }),
+      P('Concept', '方案概念', 'CONCEPT', 'A fine-pitch wall for the lobby', ['P2.5 indoor LED, 14 × 16 modules', 'Clean frame, front service', 'Bright enough for a daylight lobby'], { visual: 'Concept image', visualSrc: '来自模板 · 可替换' }),
+      P('Recommended configuration', '推荐配置', 'CONFIGURATION', 'P2.5 Indoor LED Wall · 4480 × 2560 mm', ['35 cabinets, front maintenance', 'Controller SC-4, 1.84 of 2.3 MP', '3 power circuits, 1 DB box'], { metrics: [{ k: 'Resolution', v: '1792 × 1024' }, { k: 'Modules', v: '224' }, { k: 'Cabinets', v: '35' }, { k: 'Power', v: '5.73 kW' }, { k: 'Brightness', v: '≥ 600 nits' }, { k: 'Spares', v: '12 modules' }] }),
+      P('System diagram', '系统图 L1', 'SYSTEM', 'Signal chain', ['Source → processor → controller → LED wall', '5 data cables including 1 spare'], { visual: 'System diagram Level 1', visualSrc: '来自第 3 步示意图' }),
+      P('Schematic', '示意图 L2', 'SYSTEM', 'Equipment schematic', ['Device photos, models and quantities', 'Power and data cable runs'], { visual: 'Schematic Level 2', visualSrc: '来自第 3 步示意图' }),
+      P('Annotated drawing', '标注图', 'DRAWINGS', 'Screen position on site', ['Screen, DB box and rack marked on the site photo'], { visual: 'Annotated site photo', visualSrc: '来自第 5 步标注' }),
+      P('Quantities & BOQ', '数量与 BOQ', 'SCOPE', 'Equipment and quantities', ['LED cabinets × 35 (+ 12 spare modules)', 'Controller × 1, processor × 1', 'Power cables 3 + 1, data cables 4 + 1', 'DB box × 1, mounting frame × 1 set'], { visual: 'BOQ table (no prices)', visualSrc: '来自第 4 步 · 不显示价格' }),
+      P('Risks & assumptions', '风险与假设', 'NOTES', 'Risks and assumptions', ['Power point within 25 m of the screen', 'Wall load check by others', 'Quantities confirmed after site survey', 'Excludes civil works and mains supply']),
+      P('Next steps & contact', '下一步与联系', 'NEXT STEPS', 'Next steps', ['Site survey and wall check', 'Confirm content sources', 'Final quotation after survey'], { locked: true, visual: 'Contact', visualSrc: 'Jimmy · PM · Audax' })
+    ];
+  }
+  __rv() {
+    const st = this.state || {};
+    const pj = st.line === 'pj';
+    const b = this.base(pj);
+    const ed = (pj ? st.edPj : st.edLed) || {};
+    const val = (k) => (ed[k] !== undefined ? ed[k] : b[k]);
+    const off = (pj ? st.offPj : st.offLed) || {};
+    const defs = this.slideDefs(pj);
+    const sel = Math.min(st.sel || 0, defs.length - 1);
+    const onIdx = defs.map((d, i) => i).filter((i) => !off[i]);
+    let n = 0;
+    const slides = defs.map((d, i) => {
+      const on = !off[i];
+      if (on) n += 1;
+      const active = i === sel;
+      return {
+        num: on ? String(n) : '–',
+        title: d.title,
+        zh: d.zh,
+        railName: d.title + ' ' + d.zh,
+        on,
+        locked: !!d.locked,
+        thumbBg: d.cover ? '#15203A' : '#FFFFFF',
+        thumbFg: d.cover ? '#FFFFFF' : '#15203A',
+        rowStyle: 'display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 8px; ' + (active ? 'background: #E8EFF9; outline: 1px solid #B9CBEA;' : '') + (on ? '' : ' opacity: 0.5;'),
+        pick: () => this.setState({ sel: i }),
+        toggle: () => {
+          if (d.locked) return;
+          const key = pj ? 'offPj' : 'offLed';
+          const next = Object.assign({}, off);
+          next[i] = !next[i];
+          this.setState({ [key]: next });
+        }
+      };
+    });
+    const d = defs[sel];
+    const pos = onIdx.indexOf(sel);
+    const edit = (k) => (e) => {
+      const key = pj ? 'edPj' : 'edLed';
+      const next = Object.assign({}, ed);
+      next[k] = e.target.value;
+      this.setState({ [key]: next });
+    };
+    const approved = !!st.approved;
+    const tabOn = 'padding: 7px 14px; border-radius: 16px; border: 1px solid #15203A; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; font-size: 12.5px; cursor: pointer';
+    const tabOff = 'padding: 7px 14px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #3B3A36; font: inherit; font-size: 12.5px; cursor: pointer';
+    const segOn = 'height: 34px; padding: 0 12px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer';
+    const segOff = 'height: 34px; padding: 0 12px; border: 0; background: #FFFFFF; color: #3B3A36; font: inherit; cursor: pointer';
+    const langs = { en: 'English 英文', zh: '中文 Chinese', bi: 'Bilingual 中英双语' };
+    const step = (dir) => () => {
+      const p = onIdx.indexOf(sel);
+      const target = p < 0 ? onIdx[0] : onIdx[Math.max(0, Math.min(onIdx.length - 1, p + dir))];
+      this.setState({ sel: target });
+    };
+    return {
+      crumb: b.crumb,
+      kicker: b.kicker,
+      title: val('title'),
+      project: val('project'),
+      projNo: val('projNo'),
+      client: val('client'),
+      location: val('location'),
+      dateText: '15 October 2026',
+      setTitle: edit('title'),
+      setProject: edit('project'),
+      setProjNo: edit('projNo'),
+      setClient: edit('client'),
+      setLocation: edit('location'),
+      setLang: (e) => this.setState({ lang: e.target.value }),
+      langLabel: langs[st.lang || 'en'],
+      toLed: () => this.setState({ line: 'led', sel: 0 }),
+      toPj: () => this.setState({ line: 'pj', sel: 0 }),
+      ledTab: pj ? tabOff : tabOn,
+      pjTab: pj ? tabOn : tabOff,
+      confirmHref: pj ? 'ConfirmPJ.dc.html' : 'Confirm.dc.html',
+      recoHref: pj ? 'WorkspacePJ.dc.html' : 'Workspace.dc.html',
+      slides,
+      countText: onIdx.length + ' / ' + defs.length + ' 页',
+      onCount: String(onIdx.length),
+      selNum: pos < 0 ? '–' : String(pos + 1),
+      isCover: !!d.cover,
+      isContent: !d.cover,
+      cur: {
+        kicker: d.kicker,
+        heading: d.heading,
+        bullets: d.bullets,
+        hasMetrics: !!d.metrics,
+        metrics: d.metrics || [],
+        hasVisual: !!d.visual,
+        visual: d.visual || '',
+        visualSrc: d.visualSrc || ''
+      },
+      sourceNote: d.cover ? '封面字段可在右侧修改' : (d.metrics ? '数字来自锁定的 Rev，平台里不可改；导出后可改' : '文字来自模板和 Proposal，可在 Templates 改默认'),
+      prev: step(-1),
+      next: step(1),
+      draft: !approved,
+      approved,
+      setDraft: () => this.setState({ approved: false }),
+      setApproved: () => this.setState({ approved: true }),
+      draftBtn: approved ? segOff : segOn,
+      apprBtn: approved ? segOn : segOff
+    };
+  }
+}
+</script>
+</body>
+</html>

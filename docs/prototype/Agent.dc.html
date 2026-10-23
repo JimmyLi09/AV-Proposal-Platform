@@ -12,86 +12,90 @@
 body{margin:0;background:#F5F2EC}
 a{color:#2C5AA0}
 a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
 </style>
 </helmet>
-<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
 
 <nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
 <div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
-<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
-<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
-<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
-<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
-<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
-<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
-<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
 <div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
-<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
-<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
 <div style="flex: 1; min-height: 24px"></div>
-<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
 </nav>
 
 <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
 <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
-<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
 <div style="flex: 1"></div>
 <span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; font-size: 12px; font-weight: 600; {{pillStyle}}">{{pillText}}</span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
 <span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
 </header>
 
 <sc-if value="{{offline}}" hint-placeholder-val="{{ false }}">
-<div style="padding: 10px 28px; background: #FDF1E6; border-bottom: 1px solid #F0D2B4; color: #7C3A10; font-weight: 600">Offline 离线 · 规则 v1.3 已于 11 Oct 09:12 缓存 · 可以计算、标注和保存草稿；批准和正式导出需等服务器恢复。</div>
+<div style="padding: 10px 28px; background: #FDF1E6; border-bottom: 1px solid #F0D2B4; color: #7C3A10; font-weight: 600"><span class="zh">离线 · 规则 v1.3 已于 11 Oct 09:12 缓存 · 可以计算、标注和保存草稿；批准和正式导出需等服务器恢复。</span><span class="en">Offline · rules v1.3 cached at 11 Oct 09:12 · You can calculate, annotate and save drafts; approval and formal export wait until the server is back.</span></div>
 </sc-if>
 
 <main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
 <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
-<div style="flex: 1 1 300px"><h1 style="margin: 0; font-size: 24px; color: #15203A">Local Agent <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">本地 Agent</span></h1><p style="margin: 2px 0 0; color: #6B6558">安装在本机的小程序：读取本地文件夹、做文字识别、调用 AutoCAD、标注文件。它自带一份界面副本，服务器连不上时也能继续工作。</p></div>
+<div style="flex: 1 1 300px"><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">安装在本机的小程序：读取本地文件夹、做文字识别、调用 AutoCAD、标注文件。它自带一份界面副本，服务器连不上时也能继续工作。</span><span class="en">A small app installed on this PC: reads local folders, runs OCR, calls AutoCAD and annotates files. It carries its own copy of the UI and keeps working when the server is unreachable.</span></p></div>
 <div role="group" aria-label="Demo connection state 演示连接状态" style="display: flex; border: 1px solid #E6E0D6; border-radius: 8px; overflow: hidden">
-<button type="button" onClick="{{goOnline}}" style="{{onBtn}}">Online 在线</button>
-<button type="button" onClick="{{goOffline}}" style="{{offBtn}}">Offline 离线</button>
+<button type="button" onClick="{{goOnline}}" style="{{onBtn}}"><span class="zh">在线</span><span class="en">Online</span></button>
+<button type="button" onClick="{{goOffline}}" style="{{offBtn}}"><span class="zh">离线</span><span class="en">Offline</span></button>
 </div>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
 <section style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">This PC <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">本机</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">This PC</span><span class="zh">本机</span></h2>
 <div style="display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; font-size: 12.5px">
-<span>Agent version 版本</span><span>v0.3.0 · up to date 已是最新</span>
-<span>Server 服务器</span><span style="font-weight: 600; {{serverColor}}">{{serverText}}</span>
-<span>AutoCAD</span><span style="color: #2F7A5B; font-weight: 600">2024 · DWG → DXF 可用</span>
-<span>ODA File Converter</span><span style="color: #6B6558">本机不需要</span>
-<span>Text recognition 文字识别</span><span style="color: #2F7A5B; font-weight: 600">Running 运行中 · 本机运行，不联网</span>
-<span>Project folder 项目文件夹</span><span style="font-family: ui-monospace, Consolas, monospace; font-size: 12px">D:\Projects</span>
-<span>Rules cache 规则缓存</span><span>v1.3 · 11 Oct 09:12</span>
-<span>Product library cache 产品库缓存</span><span>v1.0 · 11 Oct 09:12</span>
-<span>Drafts waiting to upload 待上传草稿</span><span style="font-weight: 600">{{drafts}}</span>
+<span><span class="zh">版本</span><span class="en">Agent version</span></span><span><span class="zh">v0.3.0 · 已是最新</span><span class="en">v0.3.0 · up to date</span></span>
+<span><span class="zh">服务器</span><span class="en">Server</span></span><span style="font-weight: 600; {{serverColor}}">{{serverText}}</span>
+<span>AutoCAD</span><span style="color: #2F7A5B; font-weight: 600"><span class="zh">2024 · DWG → 可用</span><span class="en">2024 · DWG → DXF</span></span>
+<span>ODA File Converter</span><span style="color: #6B6558"><span class="zh">本机不需要</span><span class="en">Not needed for this unit</span></span>
+<span><span class="zh">文字识别</span><span class="en">Text recognition</span></span><span style="color: #2F7A5B; font-weight: 600"><span class="zh">运行中 · 本机运行，不联网</span><span class="en">Running · runs locally, offline</span></span>
+<span><span class="zh">项目文件夹</span><span class="en">Project folder</span></span><span style="font-family: ui-monospace, Consolas, monospace; font-size: 12px">D:\Projects</span>
+<span><span class="zh">规则缓存</span><span class="en">Rules cache</span></span><span>v1.3 · 11 Oct 09:12</span>
+<span><span class="zh">产品库缓存</span><span class="en">Product library cache</span></span><span>v1.0 · 11 Oct 09:12</span>
+<span><span class="zh">待上传草稿</span><span class="en">Drafts waiting to upload</span></span><span style="font-weight: 600">{{drafts}}</span>
 </div>
 </section>
 
 <section style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">What works right now <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">当前可用功能</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">What works right now</span><span class="zh">当前可用功能</span></h2>
 <div style="display: grid; grid-template-columns: 1fr auto; gap: 8px 12px; font-size: 12.5px">
-<span>Read local files 读取本机文件和文件夹</span><span style="color: #2F7A5B; font-weight: 700">Yes 可用</span>
-<span>Text &amp; dimension recognition 文字与尺寸识别</span><span style="color: #2F7A5B; font-weight: 700">Yes 可用</span>
-<span>Calculate &amp; recommend 计算与推荐</span><span style="color: #2F7A5B; font-weight: 700">Yes 可用</span>
-<span>Annotate 标注 PDF / JPG</span><span style="color: #2F7A5B; font-weight: 700">Yes 可用</span>
-<span>Save drafts 保存草稿</span><span style="color: #2F7A5B; font-weight: 700">Yes 可用</span>
-<span>Approve a Rev 批准 Rev</span><span style="font-weight: 700; {{gateColor}}">{{gateText}}</span>
-<span>Official export 正式导出 PDF / Word</span><span style="font-weight: 700; {{gateColor}}">{{gateText}}</span>
-<span>Edit rules / library 编辑规则或产品库</span><span style="font-weight: 700; {{gateColor}}">{{gateText}}</span>
+<span><span class="zh">读取本机文件和文件夹</span><span class="en">Read local files</span></span><span style="color: #2F7A5B; font-weight: 700"><span class="zh">可用</span><span class="en">Yes</span></span>
+<span><span class="zh">文字与尺寸识别</span><span class="en">Text &amp; dimension recognition</span></span><span style="color: #2F7A5B; font-weight: 700"><span class="zh">可用</span><span class="en">Yes</span></span>
+<span><span class="zh">计算与推荐</span><span class="en">Calculate &amp; recommend</span></span><span style="color: #2F7A5B; font-weight: 700"><span class="zh">可用</span><span class="en">Yes</span></span>
+<span><span class="zh">标注 PDF / JPG</span><span class="en">Annotate</span></span><span style="color: #2F7A5B; font-weight: 700"><span class="zh">可用</span><span class="en">Yes</span></span>
+<span><span class="zh">保存草稿</span><span class="en">Save drafts</span></span><span style="color: #2F7A5B; font-weight: 700"><span class="zh">可用</span><span class="en">Yes</span></span>
+<span><span class="zh">Approve a Rev 批准 Rev</span><span class="en">Approve a Rev</span></span><span style="font-weight: 700; {{gateColor}}">{{gateText}}</span>
+<span><span class="zh">正式导出 PDF / Word</span><span class="en">Official export PDF / Word</span></span><span style="font-weight: 700; {{gateColor}}">{{gateText}}</span>
+<span><span class="zh">编辑规则或产品库</span><span class="en">Edit rules / library</span></span><span style="font-weight: 700; {{gateColor}}">{{gateText}}</span>
 </div>
-<div style="margin-top: 10px; font-size: 12px; color: #6B6558">离线时使用缓存的规则；服务器恢复后草稿自动上传。</div>
+<div style="margin-top: 10px; font-size: 12px; color: #6B6558"><span class="zh">离线时使用缓存的规则；服务器恢复后草稿自动上传。</span><span class="en">When offline, cached rules are used; drafts upload automatically when the server is back.</span></div>
 </section>
 </div>
 
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 10px; font-size: 15px">Recent activity <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">最近活动</span></h2>
+<h2 style="margin: 0 0 10px; font-size: 15px"><span class="en">Recent activity</span><span class="zh">最近活动</span></h2>
 <div style="font-family: ui-monospace, Consolas, monospace; font-size: 12px; color: #3B3A36; line-height: 1.9; background: #FAF8F4; border: 1px solid #EFEBE4; border-radius: 8px; padding: 10px 12px">
-09:52  已保存 Lobby_site_photo_annotated_Rev1.jpg（原图未改动）<br>
-09:31  读取 143-Royal Plaza LED 的 4 个文件 · 识别出 9 个字段<br>
-09:30  对 Lobby_site_photo.jpg 做文字识别 · 2 处尺寸文字<br>
-09:12  从 192.168.1.241 同步规则 v1.3 和产品库 v1.0
+<span class="zh">09:52  已保存 Lobby_site_photo_annotated_Rev1.jpg（原图未改动）</span><span class="en">09:52  Saved Lobby_site_photo_annotated_Rev1.jpg (original unchanged)</span><br>
+<span class="zh">09:31 读取 143-的 4 个文件 · 识别出 9 个字段</span><span class="en">09:31 Read 143-Royal Plaza LED · 9 fields recognized</span><br>
+<span class="zh">09:30  对 Lobby_site_photo.jpg 做文字识别 · 2 处尺寸文字</span><span class="en">09:30  Text recognition on Lobby_site_photo.jpg · 2 dimension texts</span><br>
+<span class="zh">09:12  从 192.168.1.241 同步规则 v1.3 和产品库 v1.0</span><span class="en">09:12  Synced rules v1.3 and product library v1.0 from 192.168.1.241</span>
 </div>
 </section>
 </main>
@@ -100,7 +104,103 @@ a:hover{color:#15203A}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
 class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
   renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {"Offline · 缓存规则 v1.3":"Offline · cached rules v1.3","1（143-Royal Plaza，Rev 1 修改）":"1 (143-Royal Plaza, Rev 1 change)"}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
     const off = !!(this.state && this.state.off);
     const on = 'height: 38px; padding: 0 16px; border: 0; background: #15203A; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer';
     const idle = 'height: 38px; padding: 0 16px; border: 0; background: #FFFFFF; color: #3B3A36; font: inherit; cursor: pointer';

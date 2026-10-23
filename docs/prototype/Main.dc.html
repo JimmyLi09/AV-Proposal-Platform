@@ -12,106 +12,110 @@
 body{margin:0;background:#F5F2EC}
 a{color:#2C5AA0}
 a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
 </style>
 </helmet>
-<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
 
 <nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
 <div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
-<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none">Dashboard<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">总览</span></a>
-<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Proposal Builder<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">方案制作</span></a>
-<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Projects<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">项目</span></a>
-<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Product Library<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">产品库</span></a>
-<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Rules Engine<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">规则引擎</span></a>
-<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Templates<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">模板</span></a>
-<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Versions<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">版本</span></a>
+<a href="Main.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #FFFFFF; background: #15203A; font-weight: 600; text-decoration: none"><span class="en">Dashboard</span><span class="zh">总览</span></a>
+<a href="NewProposal.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Proposal Builder</span><span class="zh">方案制作</span></a>
+<a href="Projects.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Projects</span><span class="zh">项目</span></a>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Versions.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Versions</span><span class="zh">版本</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
 <div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
-<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Local Agent<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">本地 Agent</span></a>
-<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none">Settings<span style="font-size: 12px; opacity: 0.72; margin-left: 4px">设置</span></a>
+<a href="Agent.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
 <div style="flex: 1; min-height: 24px"></div>
-<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6">V1 · LED + 投影单面墙 Projection wall<br>下一版 Next: 互动投影、BYOD、PA、CCTV、General AV</div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">V1 · LED + 投影单面墙<br>下一版：互动投影、BYOD、PA、CCTV、General AV</span><span class="en">V1 · LED + projection wall<br>Next: interactive projection, BYOD, PA, CCTV, General AV</span></div>
 </nav>
 
 <div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
 <header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
-<input type="search" aria-label="Search 搜索" placeholder="搜索项目、方案、产品 Search projects, proposals, products" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
 <div style="flex: 1"></div>
-<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span>Agent online 在线 · Rules 规则 v1.3</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 14px; background: #E6F2EC; color: #2F7A5B; font-size: 12px; font-weight: 600"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: #2F7A5B"></span><span class="zh">在线 · 规则 v1.3</span><span class="en">Agent online · Rules v1.3</span></span>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
 <span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
-<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none">+ New Proposal 新建方案</a>
+<a href="NewProposal.dc.html" style="display: inline-flex; align-items: center; height: 38px; padding: 0 16px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">+ 新建方案</span><span class="en">+ New Proposal</span></a>
 </header>
 
 <main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
 <div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
-<div style="flex: 1 1 300px"><h1 style="margin: 0; font-size: 24px; color: #15203A">Good morning, Jimmy <span style="font-weight: 500; color: #6B6558; font-size: 0.7em">早上好</span></h1><p style="margin: 2px 0 0; color: #6B6558">LED 与投影售前方案：从客户文件到审批通过的 PDF。</p></div>
-<span style="color: #6B6558">Sun, 11 Oct 2026 · 2026年10月11日 周日</span>
+<div style="flex: 1 1 300px"><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Good morning, Jimmy</span><span class="zh">早上好</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">与投影售前方案：从客户文件到审批通过的 PDF。</span><span class="en">LED</span></p></div>
+<span style="color: #6B6558"><span class="zh">Sun, 11 Oct 2026 · 2026年10月11日 周日</span><span class="en">Sun, 11 Oct 2026</span></span>
 </div>
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px">
-<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 14px 16px"><div style="color: #6B6558">In progress 进行中</div><div style="font-size: 28px; font-weight: 700; color: #15203A">6</div><div style="font-size: 12px; color: #6B6558">草稿或已计算</div></div>
-<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 14px 16px"><div style="color: #6B6558">Awaiting confirmation 待确认</div><div style="font-size: 28px; font-weight: 700; color: #9A4A12">2</div><div style="font-size: 12px; color: #6B6558">提取的字段尚未确认</div></div>
-<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 14px 16px"><div style="color: #6B6558">In review 审核中</div><div style="font-size: 28px; font-weight: 700; color: #2C5AA0">1</div><div style="font-size: 12px; color: #6B6558">已提交审批</div></div>
-<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 14px 16px"><div style="color: #6B6558">Approved this month 本月已批准</div><div style="font-size: 28px; font-weight: 700; color: #2F7A5B">4</div><div style="font-size: 12px; color: #6B6558">已导出 PDF</div></div>
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 14px 16px"><div style="color: #6B6558"><span class="zh">进行中</span><span class="en">In progress</span></div><div style="font-size: 28px; font-weight: 700; color: #15203A">6</div><div style="font-size: 12px; color: #6B6558"><span class="zh">草稿或已计算</span><span class="en">Draft or calculated</span></div></div>
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 14px 16px"><div style="color: #6B6558"><span class="zh">待确认</span><span class="en">Awaiting confirmation</span></div><div style="font-size: 28px; font-weight: 700; color: #9A4A12">2</div><div style="font-size: 12px; color: #6B6558"><span class="zh">提取的字段尚未确认</span><span class="en">Extracted fields not yet confirmed</span></div></div>
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 14px 16px"><div style="color: #6B6558"><span class="zh">审核中</span><span class="en">In review</span></div><div style="font-size: 28px; font-weight: 700; color: #2C5AA0">1</div><div style="font-size: 12px; color: #6B6558"><span class="zh">已提交审批</span><span class="en">Submitted for approval</span></div></div>
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 14px 16px"><div style="color: #6B6558"><span class="zh">本月已批准</span><span class="en">Approved this month</span></div><div style="font-size: 28px; font-weight: 700; color: #2F7A5B">4</div><div style="font-size: 12px; color: #6B6558"><span class="zh">已导出 PDF</span><span class="en">PDF exported</span></div></div>
 </div>
 
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 12px; font-size: 15px">Create a proposal <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">制作方案</span></h2>
+<h2 style="margin: 0 0 12px; font-size: 15px"><span class="en">Create a proposal</span><span class="zh">制作方案</span></h2>
 <ol style="margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px">
-<li style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A">1 · Project &amp; files 项目与文件</div><div style="font-size: 12px; color: #6B6558">PDF、Excel、JPG、PNG</div></li>
-<li style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A">2 · Confirm inputs 确认输入</div><div style="font-size: 12px; color: #6B6558">关卡：确认之前不做任何计算</div></li>
-<li style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A">3 · Recommend 推荐</div><div style="font-size: 12px; color: #6B6558">规则引擎计算，可追溯</div></li>
-<li style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A">4 · Cost &amp; BOQ 成本与 BOQ</div><div style="font-size: 12px; color: #6B6558">成本人工录入</div></li>
-<li style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A">5 · Annotate 标注</div><div style="font-size: 12px; color: #6B6558">标注另存为副本</div></li>
-<li style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A">6 · Review &amp; export 审核导出</div><div style="font-size: 12px; color: #6B6558">关卡：只能导出已批准的 Rev</div></li>
+<li style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A"><span class="zh">1 · 项目与文件</span><span class="en">1 · Project &amp; files</span></div><div style="font-size: 12px; color: #6B6558">PDF、Excel、JPG、PNG</div></li>
+<li style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A"><span class="zh">2 · 确认输入</span><span class="en">2 · Confirm inputs</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">关卡：确认之前不做任何计算</span><span class="en">Gate: no calculation before confirmation</span></div></li>
+<li style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A"><span class="zh">3 · 推荐</span><span class="en">3 · Recommend</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">规则引擎计算，可追溯</span><span class="en">Calculated by rules engine, traceable</span></div></li>
+<li style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A"><span class="zh">4 · 工程量清单</span><span class="en">4 · BOQ</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">按区域分组，数量来自规则，不含价格</span><span class="en">Grouped by area, quantities from rules, no pricing</span></div></li>
+<li style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A"><span class="zh">5 · 标注</span><span class="en">5 · Annotate</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">标注另存为副本</span><span class="en">Save annotations as copy</span></div></li>
+<li style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 10px 12px"><div style="font-weight: 700; color: #15203A"><span class="zh">6 · 审核导出</span><span class="en">6 · Review &amp; export</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">关卡：只能导出已批准的 Rev</span><span class="en">Gate: can only export an approved Rev</span></div></li>
 </ol>
 </section>
 
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-bottom: 12px"><h2 style="margin: 0; font-size: 15px">Business lines <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">业务线</span></h2><span style="color: #6B6558">V1 支持 LED 和投影单面融合墙，其它业务线沿用同一框架陆续加入。</span></div>
+<div style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px; margin-bottom: 12px"><h2 style="margin: 0; font-size: 15px"><span class="en">Business lines</span><span class="zh">业务线</span></h2><span style="color: #6B6558"><span class="zh">V1 支持 LED 和投影单面融合墙，其它业务线沿用同一框架陆续加入。</span><span class="en">V1 supports LED and single-face blended projection walls; other business lines will be added on the same framework.</span></span></div>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px">
-<a href="NewProposal.dc.html" style="display: block; text-decoration: none; color: #1F2430; border: 2px solid #15203A; border-radius: 10px; padding: 12px"><div style="font-weight: 700">LED Screen LED 屏</div><div style="font-size: 12px; color: #6B6558">室内、户外、租赁</div><div style="margin-top: 8px; font-size: 12px; font-weight: 600; color: #C2410C">Start proposal 开始制作 →</div></a>
-<a href="WorkspacePJ.dc.html" style="display: block; text-decoration: none; color: #1F2430; border: 2px solid #15203A; border-radius: 10px; padding: 12px"><div style="font-weight: 700">Projection 投影</div><div style="font-size: 12px; color: #6B6558">单面融合墙</div><div style="margin-top: 8px; font-size: 12px; font-weight: 600; color: #C2410C">Start proposal 开始制作 →</div></a>
-<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 12px; background: #FAF8F4"><div style="font-weight: 700; color: #6B6558">Interactive Projection 互动投影</div><div style="margin-top: 8px; display: inline-block; padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-size: 11.5px; font-weight: 600">Next version 下一版</div></div>
-<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 12px; background: #FAF8F4"><div style="font-weight: 700; color: #6B6558">BYOD Meeting Room BYOD 会议室</div><div style="margin-top: 8px; display: inline-block; padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-size: 11.5px; font-weight: 600">Next version 下一版</div></div>
-<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 12px; background: #FAF8F4"><div style="font-weight: 700; color: #6B6558">PA System 广播系统</div><div style="margin-top: 8px; display: inline-block; padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-size: 11.5px; font-weight: 600">Next version 下一版</div></div>
-<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 12px; background: #FAF8F4"><div style="font-weight: 700; color: #6B6558">CCTV 监控</div><div style="margin-top: 8px; display: inline-block; padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-size: 11.5px; font-weight: 600">Next version 下一版</div></div>
-<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 12px; background: #FAF8F4"><div style="font-weight: 700; color: #6B6558">General AV 通用 AV</div><div style="margin-top: 8px; display: inline-block; padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-size: 11.5px; font-weight: 600">Next version 下一版</div></div>
+<a href="NewProposal.dc.html" style="display: block; text-decoration: none; color: #1F2430; border: 2px solid #15203A; border-radius: 10px; padding: 12px"><div style="font-weight: 700"><span class="zh">LED 屏</span><span class="en">LED Screen</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">室内、户外、租赁</span><span class="en">Indoor, outdoor, rental</span></div><div style="margin-top: 8px; font-size: 12px; font-weight: 600; color: #C2410C"><span class="zh">开始制作 →</span><span class="en">Start proposal →</span></div></a>
+<a href="WorkspacePJ.dc.html" style="display: block; text-decoration: none; color: #1F2430; border: 2px solid #15203A; border-radius: 10px; padding: 12px"><div style="font-weight: 700"><span class="zh">投影</span><span class="en">Projection</span></div><div style="font-size: 12px; color: #6B6558"><span class="zh">单面融合墙</span><span class="en">Single-face blend wall</span></div><div style="margin-top: 8px; font-size: 12px; font-weight: 600; color: #C2410C"><span class="zh">开始制作 →</span><span class="en">Start proposal →</span></div></a>
+<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 12px; background: #FAF8F4"><div style="font-weight: 700; color: #6B6558"><span class="zh">互动投影</span><span class="en">Interactive Projection</span></div><div style="margin-top: 8px; display: inline-block; padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-size: 11.5px; font-weight: 600"><span class="zh">下一版</span><span class="en">Next version</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 12px; background: #FAF8F4"><div style="font-weight: 700; color: #6B6558"><span class="zh">BYOD 会议室</span><span class="en">BYOD Meeting Room</span></div><div style="margin-top: 8px; display: inline-block; padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-size: 11.5px; font-weight: 600"><span class="zh">下一版</span><span class="en">Next version</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 12px; background: #FAF8F4"><div style="font-weight: 700; color: #6B6558"><span class="zh">广播系统</span><span class="en">PA System</span></div><div style="margin-top: 8px; display: inline-block; padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-size: 11.5px; font-weight: 600"><span class="zh">下一版</span><span class="en">Next version</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 12px; background: #FAF8F4"><div style="font-weight: 700; color: #6B6558"><span class="zh">监控</span><span class="en">CCTV</span></div><div style="margin-top: 8px; display: inline-block; padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-size: 11.5px; font-weight: 600"><span class="zh">下一版</span><span class="en">Next version</span></div></div>
+<div style="border: 1px solid #EFEBE4; border-radius: 10px; padding: 12px; background: #FAF8F4"><div style="font-weight: 700; color: #6B6558"><span class="zh">通用 AV</span><span class="en">General AV</span></div><div style="margin-top: 8px; display: inline-block; padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-size: 11.5px; font-weight: 600"><span class="zh">下一版</span><span class="en">Next version</span></div></div>
 </div>
 </section>
 
 <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: flex-start">
 <section style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px"><h2 style="margin: 0; font-size: 15px">Recent proposals <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">最近方案</span></h2><div style="flex: 1"></div><a href="Projects.dc.html" style="font-size: 12.5px">All projects 全部项目 →</a></div>
+<div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px"><h2 style="margin: 0; font-size: 15px"><span class="en">Recent proposals</span><span class="zh">最近方案</span></h2><div style="flex: 1"></div><a href="Projects.dc.html" style="font-size: 12.5px"><span class="zh">全部项目 →</span><span class="en">All projects →</span></a></div>
 <div style="overflow-x: auto">
 <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 620px">
 <thead><tr style="text-align: left; color: #6B6558">
-<th style="padding: 8px 10px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Proposal 方案</th>
-<th style="padding: 8px 10px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Mode 模式</th>
-<th style="padding: 8px 10px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Status 状态</th>
+<th style="padding: 8px 10px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">方案</span><span class="en">Proposal</span></th>
+<th style="padding: 8px 10px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">模式</span><span class="en">Mode</span></th>
+<th style="padding: 8px 10px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">状态</span><span class="en">Status</span></th>
 <th style="padding: 8px 10px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Rev</th>
-<th style="padding: 8px 10px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Owner 负责人</th>
-<th style="padding: 8px 10px; border-bottom: 1px solid #E6E0D6; font-weight: 600">Updated 更新</th>
+<th style="padding: 8px 10px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">负责人</span><span class="en">Owner</span></th>
+<th style="padding: 8px 10px; border-bottom: 1px solid #E6E0D6; font-weight: 600"><span class="zh">更新</span><span class="en">Updated</span></th>
 </tr></thead>
 <tbody>
-<tr><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><a href="Workspace.dc.html" style="font-weight: 600">143-Royal Plaza LED · LED-1 Lobby</a></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">A Light 轻量</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11.5px">Calculated 已计算</span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Rev 1</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Jimmy</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Today 今天 09:40</td></tr>
-<tr><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><a href="WorkspacePJ.dc.html" style="font-weight: 600">114-Showroom · PJ-1 展厅投影墙</a></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Projection 投影</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11.5px">Calculated 已计算</span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Rev 0</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Jimmy</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Today 今天 08:55</td></tr>
-<tr><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><a href="Confirm.dc.html" style="font-weight: 600">148-Dairy Farm LED</a></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">A Light 轻量</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px">Awaiting confirmation 待确认</span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Rev 0</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Skye</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4; color: #6B6558">Yesterday 昨天</td></tr>
-<tr><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span style="font-weight: 600">Riverside Showflat LED</span> <span style="padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-size: 11px; font-weight: 600">No project no. yet 暂无项目编号</span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">A Light 轻量</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-weight: 600; font-size: 11.5px">Draft 草稿</span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Rev 0</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Candy</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4; color: #6B6558">9 Oct</td></tr>
-<tr><td style="padding: 9px 10px"><a href="Preview.dc.html" style="font-weight: 600">082-Chuan Grove LED</a></td><td style="padding: 9px 10px">A Light 轻量</td><td style="padding: 9px 10px"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px">Approved 已批准</span></td><td style="padding: 9px 10px">Rev 2</td><td style="padding: 9px 10px">Jimmy</td><td style="padding: 9px 10px; color: #6B6558">6 Oct</td></tr>
+<tr><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><a href="Workspace.dc.html" style="font-weight: 600">143-Royal Plaza LED · LED-1 Lobby</a></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span class="zh">A 轻量</span><span class="en">A Light</span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11.5px"><span class="zh">已计算</span><span class="en">Calculated</span></span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Rev 1</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Jimmy</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">今天 09:40</span><span class="en">Today 09:40</span></td></tr>
+<tr><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><a href="WorkspacePJ.dc.html" style="font-weight: 600"><span class="zh">114-Showroom · PJ-1 展厅投影墙</span><span class="en">114-Showroom · PJ-1 Showroom projection wall</span></a></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span class="zh">投影</span><span class="en">Projection</span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #E8EFF9; color: #2C5AA0; font-weight: 600; font-size: 11.5px"><span class="zh">已计算</span><span class="en">Calculated</span></span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Rev 0</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Jimmy</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">今天 08:55</span><span class="en">Today 08:55</span></td></tr>
+<tr><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><a href="Confirm.dc.html" style="font-weight: 600">148-Dairy Farm LED</a></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span class="zh">A 轻量</span><span class="en">A Light</span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #FDF1E6; color: #9A4A12; font-weight: 600; font-size: 11.5px"><span class="zh">待确认</span><span class="en">Awaiting confirmation</span></span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Rev 0</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Skye</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4; color: #6B6558"><span class="zh">昨天</span><span class="en">Yesterday</span></td></tr>
+<tr><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span style="font-weight: 600">Riverside Showflat LED</span> <span style="padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-size: 11px; font-weight: 600"><span class="zh">No project no. 暂无项目编号</span><span class="en">No project no. yet</span></span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span class="zh">A 轻量</span><span class="en">A Light</span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4"><span style="padding: 1px 8px; border-radius: 10px; background: #F1EEE8; color: #6B6558; font-weight: 600; font-size: 11.5px"><span class="zh">草稿</span><span class="en">Draft</span></span></td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Rev 0</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4">Candy</td><td style="padding: 9px 10px; border-bottom: 1px solid #EFEBE4; color: #6B6558">9 Oct</td></tr>
+<tr><td style="padding: 9px 10px"><a href="Preview.dc.html" style="font-weight: 600">082-Chuan Grove LED</a></td><td style="padding: 9px 10px"><span class="zh">A 轻量</span><span class="en">A Light</span></td><td style="padding: 9px 10px"><span style="padding: 1px 8px; border-radius: 10px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 11.5px"><span class="zh">已批准</span><span class="en">Approved</span></span></td><td style="padding: 9px 10px">Rev 2</td><td style="padding: 9px 10px">Jimmy</td><td style="padding: 9px 10px; color: #6B6558">6 Oct</td></tr>
 </tbody>
 </table>
 </div>
 </section>
 
 <section style="flex: 1 1 280px; min-width: 0; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px">Local Agent <span style="font-weight: 500; color: #6B6558; font-size: 0.85em">本地 Agent</span></h2><div style="flex: 1"></div><a href="Agent.dc.html" style="font-size: 12.5px">Manage 管理 →</a></div>
-<div style="padding: 10px 12px; border-radius: 8px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; margin-bottom: 10px">Online 在线 · v0.3.0 · this PC 本机</div>
+<div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px"><h2 style="margin: 0; font-size: 15px"><span class="en">Local Agent</span><span class="zh">本地 Agent</span></h2><div style="flex: 1"></div><a href="Agent.dc.html" style="font-size: 12.5px"><span class="zh">管理 →</span><span class="en">Manage →</span></a></div>
+<div style="padding: 10px 12px; border-radius: 8px; background: #E6F2EC; color: #2F7A5B; font-weight: 600; margin-bottom: 10px"><span class="zh">在线 · v0.3.0 · 本机</span><span class="en">Online · v0.3.0 · this PC</span></div>
 <div style="display: grid; grid-template-columns: 1fr auto; gap: 7px 10px; font-size: 12.5px">
-<span>AutoCAD</span><span style="color: #2F7A5B; font-weight: 600">2024 detected 已检测</span>
-<span>Text recognition 文字识别</span><span style="color: #2F7A5B; font-weight: 600">Running 运行中</span>
-<span>Rules cache 规则缓存</span><span>v1.3 · 09:12</span>
-<span>Product library cache 产品库缓存</span><span>v1.0 · 09:12</span>
-<span>Drafts waiting to upload 待上传草稿</span><span>0</span>
+<span>AutoCAD</span><span style="color: #2F7A5B; font-weight: 600"><span class="zh">2024 已检测</span><span class="en">2024 detected</span></span>
+<span><span class="zh">文字识别</span><span class="en">Text recognition</span></span><span style="color: #2F7A5B; font-weight: 600"><span class="zh">运行中</span><span class="en">Running</span></span>
+<span><span class="zh">规则缓存</span><span class="en">Rules cache</span></span><span>v1.3 · 09:12</span>
+<span><span class="zh">产品库缓存</span><span class="en">Product library cache</span></span><span>v1.0 · 09:12</span>
+<span><span class="zh">待上传草稿</span><span class="en">Drafts waiting to upload</span></span><span>0</span>
 </div>
 </section>
 </div>
@@ -121,7 +125,103 @@ a:hover{color:#15203A}
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
 class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
   renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
     return {};
   }
 }
