@@ -2,6 +2,7 @@
 import math
 from decimal import Decimal
 
+from ..i18n import text, tr
 from ..products.library import active, load_reference, name
 from .expr import fmt
 
@@ -37,13 +38,16 @@ def cabinet_layout(ctx: dict, catalog: dict) -> dict:
     sizes = ctx["cabinet_sizes_mm"]
     widths = {w for w, _ in sizes}
     if len(widths) != 1:
-        return {"check": "BLOCK", "note": "V1 只支持同宽的箱体尺寸组合"}
+        return {"check": "BLOCK", "note": tr("V1 只支持同宽的箱体尺寸组合", "V1 supports only cabinet sizes of the same width")}
     w = widths.pop()
     if ctx["width_mm"] % w:
-        return {"check": "BLOCK", "note": f"屏宽 {_n(ctx['width_mm'])} 不是箱体宽 {_n(w)} 的整数倍，现有箱体拼不出"}
+        return {"check": "BLOCK", "note": tr(f"屏宽 {_n(ctx['width_mm'])} 不是箱体宽 {_n(w)} 的整数倍，现有箱体拼不出",
+                                             f"Width {_n(ctx['width_mm'])} is not a multiple of cabinet width {_n(w)}; "
+                                             "the cabinets cannot fill it")}
     counts = _stack(ctx["height_mm"], [h for _, h in sizes])
     if counts is None:
-        return {"check": "BLOCK", "note": f"屏高 {_n(ctx['height_mm'])} 用现有箱体高度拼不出"}
+        return {"check": "BLOCK", "note": tr(f"屏高 {_n(ctx['height_mm'])} 用现有箱体高度拼不出",
+                                             f"Height {_n(ctx['height_mm'])} cannot be made from the cabinet heights")}
     cols = ctx["width_mm"] / w
     used = [(c, h) for c, (_, h) in zip(counts, sizes) if c]
     total = cols * sum(counts)
@@ -73,7 +77,8 @@ def integrated_pick(ctx: dict, catalog: dict) -> dict | None:
 
 
 def _load(load: Decimal, cap) -> str:
-    return f"{load / 1_000_000:.2f} / {Decimal(cap) / 1_000_000:.2f} MP（{load / Decimal(cap) * 100:.0f} %）"
+    pct = f"{load / Decimal(cap) * 100:.0f} %"
+    return f"{load / 1_000_000:.2f} / {Decimal(cap) / 1_000_000:.2f} MP" + tr(f"（{pct}）", f" ({pct})")
 
 
 def controller_pick(ctx: dict, catalog: dict) -> dict:
@@ -84,12 +89,15 @@ def controller_pick(ctx: dict, catalog: dict) -> dict:
         cap, ports = Decimal(p["capacity_px"]), Decimal(p["ports"])
         return {
             "outputs": {
-                "controller": f"已包含在处理器 {p['model']} 里", "controller_id": "", "controller_qty": Decimal(0),
+                "controller": tr(f"已包含在处理器 {p['model']} 里", f"Included in processor {p['model']}"),
+                "controller_id": "", "controller_qty": Decimal(0),
                 "load_mp": load / 1_000_000, "capacity_mp": cap / 1_000_000, "ports_used": runs, "ports": ports,
             },
             "check": "PASS",
-            "note": f"处理器 {p['model']} 含发送，不单独配控制器",
-            "trace": f"含发送：{_load(load, cap)}，{_n(runs)} 路 ≤ {_n(ports)} 口",
+            "note": tr(f"处理器 {p['model']} 含发送，不单独配控制器",
+                       f"Processor {p['model']} has sending built in; no separate controller"),
+            "trace": tr(f"含发送：{_load(load, cap)}，{_n(runs)} 路 ≤ {_n(ports)} 口",
+                        f"With sending: {_load(load, cap)}, {_n(runs)} runs ≤ {_n(ports)} ports"),
             "sample": p.get("sample", False),
         }
     for c in catalog.get("controllers", []):
@@ -102,29 +110,34 @@ def controller_pick(ctx: dict, catalog: dict) -> dict:
                     "ports_used": runs, "ports": ports,
                 },
                 "check": "PASS",
-                "note": "网口全部用满，备用线没有空余网口" if runs == ports else "",
-                "trace": f"{fmt(load)} ≤ {fmt(cap)}，且 {_n(runs)} 路 ≤ {_n(ports)} 口",
+                "note": tr("网口全部用满，备用线没有空余网口", "All ports are used; no free port for the spare cable")
+                        if runs == ports else "",
+                "trace": tr(f"{fmt(load)} ≤ {fmt(cap)}，且 {_n(runs)} 路 ≤ {_n(ports)} 口",
+                            f"{fmt(load)} ≤ {fmt(cap)}, and {_n(runs)} runs ≤ {_n(ports)} ports"),
                 "sample": c.get("sample", False),
             }
-    return {"check": "BLOCK", "note": f"没有带载和网口都够的控制器：需要 {fmt(load)} px、{_n(runs)} 口",
+    return {"check": "BLOCK", "note": tr(f"没有带载和网口都够的控制器：需要 {fmt(load)} px、{_n(runs)} 口",
+                                         f"No controller with enough load and ports: needs {fmt(load)} px, {_n(runs)} ports"),
             "sample": True}
 
 
 def processor_pick(ctx: dict, catalog: dict) -> dict:
     """F13：先找一台够用的处理器（含发送）；找不到再按信号源数量和分辨率选独立处理器（另配 F11 的控制器）。"""
     load, runs, sources = ctx["total_pixels"], ctx["data_runs"], _sources(ctx)
-    notes = [] if "signal_sources" in ctx else ["信号源数量没填，按 1 路计算"]
+    notes = [] if "signal_sources" in ctx else [tr("信号源数量没填，按 1 路计算", "Signal sources not filled in; 1 assumed")]
     if p := integrated_pick(ctx, catalog):
         cap = Decimal(p["capacity_px"])
         if load / cap > Decimal("0.9"):
-            notes.append("负载超过 90 %，余量偏小")
+            notes.append(tr("负载超过 90 %，余量偏小", "Load above 90 %; little headroom"))
         if p.get("inputs") is None:
-            notes.append("输入路数待核对规格书")
+            notes.append(tr("输入路数待核对规格书", "Input count to be checked against the datasheet"))
         return {
             "outputs": {"processor": p["model"], "processor_id": p.get("id"), "processor_qty": Decimal(1),
                         "processor_sending": True},
-            "check": "NOTE" if notes else None, "note": "；".join(notes),
-            "trace": f"含发送：{_load(load, cap)}，{_n(runs)} 路 ≤ {_n(Decimal(p['ports']))} 口，{_n(sources)} 路信号源",
+            "check": "NOTE" if notes else None, "note": tr("；", "; ").join(notes),
+            "trace": tr(f"含发送：{_load(load, cap)}，{_n(runs)} 路 ≤ {_n(Decimal(p['ports']))} 口，{_n(sources)} 路信号源",
+                        f"With sending: {_load(load, cap)}, {_n(runs)} runs ≤ {_n(Decimal(p['ports']))} ports, "
+                        f"{_n(sources)} signal sources"),
             "sample": p.get("sample", False),
         }
     for p in catalog.get("processors", []):
@@ -132,11 +145,13 @@ def processor_pick(ctx: dict, catalog: dict) -> dict:
             return {
                 "outputs": {"processor": p["model"], "processor_id": p.get("id"), "processor_qty": Decimal(1),
                             "processor_sending": False},
-                "check": "NOTE" if notes else None, "note": "；".join(notes),
-                "trace": f"{_n(sources)} 路信号源，{load / 1_000_000:.2f} MP ≤ {Decimal(p['max_px']) / 1_000_000:.2f} MP",
+                "check": "NOTE" if notes else None, "note": tr("；", "; ").join(notes),
+                "trace": tr(f"{_n(sources)} 路信号源，{load / 1_000_000:.2f} MP ≤ {Decimal(p['max_px']) / 1_000_000:.2f} MP",
+                            f"{_n(sources)} signal sources, {load / 1_000_000:.2f} MP ≤ {Decimal(p['max_px']) / 1_000_000:.2f} MP"),
                 "sample": p.get("sample", False),
             }
-    return {"check": "NOTE", "note": "；".join(notes + ["产品库里没有输入数和分辨率都够的视频处理器"]), "sample": True}
+    notes.append(tr("产品库里没有输入数和分辨率都够的视频处理器", "No video processor in the library with enough inputs and resolution"))
+    return {"check": "NOTE", "note": tr("；", "; ").join(notes), "sample": True}
 
 
 # 步骤名 → (函数, 需要的名称, 产出的名称)
@@ -165,8 +180,9 @@ def recommend(inputs: dict, library: dict, cabinet_id: str | None = None) -> dic
                   if p.get("pixel_pitch_mm") and Decimal(str(p["pixel_pitch_mm"])) == pitch
                   and inputs["environment"] in p["scenes"] and p["maintenance"] in (inputs["maintenance"], "both")]
     chosen = next((p for p in candidates if p["id"] == cabinet_id), candidates[0] if candidates else None)
-    block = None if chosen else (f"产品库里没有符合的箱体：P{_n(pitch)} · {inputs['environment']} · "
-                                 f"{inputs['maintenance']}，请先在产品库添加")
+    where = f"P{_n(pitch)} · {inputs['environment']} · {inputs['maintenance']}"
+    block = None if chosen else tr(f"产品库里没有符合的箱体：{where}，请先在产品库添加",
+                                   f"No matching cabinet in the library: {where}. Add one in the Product Library first")
     return {"cabinet": chosen, "candidates": candidates, "block": block, "missing": []}
 
 
@@ -203,29 +219,41 @@ def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict) -> list
     if cabinet:
         m = cabinet["model"]
         for i, (w, h, n) in enumerate(values.get("cabinet_counts") or []):
-            add(f"{cabinet['id']}:{w}x{h}", f"LED cabinet 箱体 {w} × {h}", m, n, "个", ("主尺寸，" if i == 0 else "") + "F3", "F3")
-        add(f"{cabinet['id']}:module", f"Spare modules 备用模组 {cabinet['module_w_mm']} × {cabinet['module_h_mm']}",
-            m, values.get("spare_modules"), "块", "F10", "F10")
+            add(f"{cabinet['id']}:{w}x{h}", tr("箱体", "LED cabinet") + f" {w} × {h}", m, n, tr("个", "pcs"),
+                (tr("主尺寸，", "main size, ") if i == 0 else "") + "F3", "F3")
+        add(f"{cabinet['id']}:module", tr("备用模组", "Spare modules") + f" {cabinet['module_w_mm']} × {cabinet['module_h_mm']}",
+            m, values.get("spare_modules"), tr("块", "pcs"), "F10", "F10")
         if values.get("cabinets") is not None:
             psu, rx = cabinet.get("psu_per_cabinet") or 1, cabinet.get("rx_per_cabinet") or 1
-            add("", "Power supply 电源", "箱内", values["cabinets"] * psu, "个", f"每箱 {psu} 个", "F3", included=True)
-            add("", "Receiving card 接收卡", "箱内", values["cabinets"] * rx, "张", f"每箱 {rx} 张", "F3", included=True)
-        add(f"{cabinet['id']}:psu", "Spare PSU 备用电源", m, values.get("spare_psu"), "个", "F8", "F8")
-        add(f"{cabinet['id']}:rx", "Spare receiving card 备用接收卡", m, values.get("spare_rx_cards"), "张", "F8", "F8")
+            inside = tr("箱内", "In cabinet")
+            add("", tr("电源", "Power supply"), inside, values["cabinets"] * psu, tr("个", "pcs"),
+                tr(f"每箱 {psu} 个", f"{psu} per cabinet"), "F3", included=True)
+            add("", tr("接收卡", "Receiving card"), inside, values["cabinets"] * rx, tr("张", "pcs"),
+                tr(f"每箱 {rx} 张", f"{rx} per cabinet"), "F3", included=True)
+        add(f"{cabinet['id']}:psu", tr("备用电源", "Spare PSU"), m, values.get("spare_psu"), tr("个", "pcs"), "F8", "F8")
+        add(f"{cabinet['id']}:rx", tr("备用接收卡", "Spare receiving card"), m, values.get("spare_rx_cards"), tr("张", "pcs"),
+            "F8", "F8")
     if values.get("controller_id") in products:
-        add(values["controller_id"], "Controller 控制器", products[values["controller_id"]]["model"],
-            values["controller_qty"], "台", f"{values['load_mp']:.2f} / {values['capacity_mp']:.2f} MP，F11", "F11")
+        add(values["controller_id"], tr("控制器", "Controller"), products[values["controller_id"]]["model"],
+            values["controller_qty"], tr("台", "units"),
+            f"{values['load_mp']:.2f} / {values['capacity_mp']:.2f} MP" + tr("，", ", ") + "F11", "F11")
     if values.get("processor_id") in products:
-        add(values["processor_id"], "Video processor with sending 视频处理器（含发送）" if values.get("processor_sending")
-            else "Video processor 视频处理器", products[values["processor_id"]]["model"],
-            values["processor_qty"], "台", f"{inputs.get('signal_sources') or 1} 路信号源，F13", "F13")
+        sources = inputs.get("signal_sources") or 1
+        add(values["processor_id"], tr("视频处理器（含发送）", "Video processor with sending") if values.get("processor_sending")
+            else tr("视频处理器", "Video processor"), products[values["processor_id"]]["model"],
+            values["processor_qty"], tr("台", "units"), tr(f"{sources} 路信号源，F13", f"{sources} signal sources, F13"), "F13")
     if values.get("circuits") is not None:
-        add("power_cable", "Power cable 电源线", "—", values.get("power_cables"), "路", f"{values['circuits']} 回路 + 备用，F7", "F7")
-        add("db_box", "DB box with MCB 配电箱（含 MCB）", "定制", values.get("db_boxes"), "个", f"{values['circuits']} 回路，F12", "F12")
+        c = values["circuits"]
+        add("power_cable", tr("电源线", "Power cable"), "—", values.get("power_cables"), tr("路", "runs"),
+            tr(f"{c} 回路 + 备用，F7", f"{c} circuits + spare, F7"), "F7")
+        add("db_box", tr("配电箱（含 MCB）", "DB box with MCB"), tr("定制", "Custom"), values.get("db_boxes"), tr("个", "pcs"),
+            tr(f"{c} 回路，F12", f"{c} circuits, F12"), "F12")
     if values.get("data_runs") is not None:
-        add("data_cable", "Data cable 数据线", "Cat6", values.get("data_cables"), "路", f"{values['data_runs']} 路 + 备用，F9", "F9")
+        r = values["data_runs"]
+        add("data_cable", tr("数据线", "Data cable"), "Cat6", values.get("data_cables"), tr("路", "runs"),
+            tr(f"{r} 路 + 备用，F9", f"{r} runs + spare, F9"), "F9")
     if values.get("installation_items"):
-        add(f"install:{inputs.get('installation')}", values["installation_items"], "—", 1, "套", "F16", "F16")
+        add(f"install:{inputs.get('installation')}", text(values["installation_items"]), "—", 1, tr("套", "set"), "F16", "F16")
     return lines
 
 
@@ -258,7 +286,8 @@ def boq_context(values: dict, cabinet: dict | None, inputs: dict) -> dict:
     return ctx
 
 
-SUGGEST_LABEL = {"recommended": "推荐", "headroom": "余量大", "no": "不推荐"}
+SUGGEST_LABEL = {"recommended": lambda: tr("推荐", "Recommended"), "headroom": lambda: tr("余量大", "More headroom"),
+                 "no": lambda: tr("不推荐", "Not recommended")}
 
 
 def suggest(values: dict, inputs: dict, library: dict) -> list[dict]:
@@ -272,14 +301,17 @@ def suggest(values: dict, inputs: dict, library: dict) -> list[dict]:
     for p in sorted(load_reference(library["business_line"]), key=lambda p: p["capacity_px"]):
         if p["id"] in in_library:
             continue
-        why = [w for ok, w in ((load <= p["capacity_px"], "带载不够"), (runs <= p["ports"], "网口不够"),
-                               (p.get("inputs") is None or sources <= p["inputs"], "输入路数不够")) if not ok]
+        why = [w for ok, w in ((load <= p["capacity_px"], tr("带载不够", "not enough load")),
+                               (runs <= p["ports"], tr("网口不够", "not enough ports")),
+                               (p.get("inputs") is None or sources <= p["inputs"], tr("输入路数不够", "not enough inputs")))
+               if not ok]
         pct = round(load / p["capacity_px"] * 100)
         status = "no" if why else "headroom" if found else "recommended"
         found = found or not why
         out.append({"id": p["id"], "model": name(p), "capacity_px": p["capacity_px"], "ports": p["ports"],
-                    "ports_used": runs, "load_pct": pct, "status": status, "label": SUGGEST_LABEL[status],
-                    "reason": "、".join(why), "note": "余量偏小" if not why and pct > 90 else "", "remark": p.get("remark", "")})
+                    "ports_used": runs, "load_pct": pct, "status": status, "label": SUGGEST_LABEL[status](),
+                    "reason": tr("、", ", ").join(why), "note": tr("余量偏小", "little headroom") if not why and pct > 90 else "",
+                    "remark": text(p.get("remark", ""))})
     return out
 
 
@@ -290,55 +322,64 @@ def diagram(values: dict, boq_lines: list[dict], inputs: dict, cabinet: dict | N
     if not cabinet or values.get("cabinets") is None:
         return None
     products = {p["id"]: p for p in library["products"]}
-    nodes = {"source": {"title": "Content source 信号源", "model": "播放器或电脑", "qty": inputs.get("signal_sources") or 1,
+    nodes = {"source": {"title": tr("信号源", "Content source"), "model": tr("播放器或电脑", "Player or PC"),
+                        "qty": inputs.get("signal_sources") or 1,
                         "detail": "", "boq": [], "supply": "owner"}}
     # 处理器 / 控制器选不出来（F13 / F11）时保留位置并标出，不能悄悄从图上消失；有建议型号就写在框里
     missing = {"model": "—", "qty": "", "boq": [], "supply": "missing"}
     fits = [x["model"] for x in suggestions or [] if x["status"] != "no"]
-    hint = f"建议型号：{' / '.join(fits)}（含发送，未入库）" if fits else ""
+    hint = (tr(f"建议型号：{' / '.join(fits)}（含发送，未入库）", f"Suggested: {' / '.join(fits)} (with sending, not in library)")
+            if fits else "")
     sending = bool(values.get("processor_sending"))
     if values.get("processor_id") in products:
+        pct = values["load_mp"] / values["capacity_mp"] * 100 if sending else 0
         nodes["processor"] = {
-            "title": "Processor 处理器（含发送）" if sending else "Video processor 视频处理器",
+            "title": tr("处理器（含发送）", "Processor with sending") if sending else tr("视频处理器", "Video processor"),
             "model": products[values["processor_id"]]["model"], "qty": values["processor_qty"],
-            "detail": f"{values['ports_used']} / {values['ports']} 口 · 负载 {values['load_mp'] / values['capacity_mp'] * 100:.0f} %"
+            "detail": tr(f"{values['ports_used']} / {values['ports']} 口 · 负载 {pct:.0f} %",
+                         f"{values['ports_used']} / {values['ports']} ports · load {pct:.0f} %")
             if sending else "", "boq": [values["processor_id"]], "supply": "boq"}
     else:
-        nodes["processor"] = missing | {"title": "Video processor 视频处理器",
-                                        "detail": hint or "F13 未选出（缺输入或产品库没有合适的）"}
+        nodes["processor"] = missing | {"title": tr("视频处理器", "Video processor"), "detail": hint or tr(
+            "F13 未选出（缺输入或产品库没有合适的）", "F13 not selected (missing inputs or nothing suitable in the library)")}
     # 用处理器（含发送）时不画控制器；处理器、控制器都没有而有建议的一体机时，也只画三个框
     if not sending and not (nodes["processor"]["supply"] == "missing" and hint):
-        nodes["controller"] = {"title": "Controller 控制器", "model": products[values["controller_id"]]["model"],
-                               "qty": values["controller_qty"], "detail": f"{values['ports']} 口 · {values['capacity_mp']:.1f} MP",
+        nodes["controller"] = {"title": tr("控制器", "Controller"), "model": products[values["controller_id"]]["model"],
+                               "qty": values["controller_qty"],
+                               "detail": tr(f"{values['ports']} 口", f"{values['ports']} ports") + f" · {values['capacity_mp']:.1f} MP",
                                "boq": [values["controller_id"]], "supply": "boq"
                                } if values.get("controller_id") in products else missing | {
-            "title": "Controller 控制器", "detail": hint or "F11 阻断：产品库里没有合适的"}
+            "title": tr("控制器", "Controller"),
+            "detail": hint or tr("F11 阻断：产品库里没有合适的", "F11 blocked: nothing suitable in the library")}
     w, h = inputs.get("width_mm"), inputs.get("height_mm")
-    nodes["screen"] = {"title": "LED wall LED 屏", "model": cabinet["model"], "qty": f"{values['cabinets']} 个箱体",
+    nodes["screen"] = {"title": tr("LED 屏", "LED wall"), "model": cabinet["model"],
+                       "qty": tr(f"{values['cabinets']} 个箱体", f"{values['cabinets']} cabinets"),
                        "detail": f"{w} × {h} · P{inputs.get('pixel_pitch_mm')}",
                        "boq": [f"{cabinet['id']}:{cw}x{ch}" for cw, ch, _ in values.get("cabinet_counts") or []],
                        "supply": "boq"}
     if values.get("db_boxes") is not None:
-        nodes["db_box"] = {"title": "DB box 配电箱", "model": "定制", "qty": values["db_boxes"],
-                           "detail": f"每回路一个 MCB · {values.get('power_kw', 0):.2f} kW", "boq": ["db_box"], "supply": "boq"}
+        nodes["db_box"] = {"title": tr("配电箱", "DB box"), "model": tr("定制", "Custom"), "qty": values["db_boxes"],
+                           "detail": tr("每回路一个 MCB", "One MCB per circuit") + f" · {values.get('power_kw', 0):.2f} kW",
+                           "boq": ["db_box"], "supply": "boq"}
     chain = [n for n in ("source", "processor", "controller", "screen") if n in nodes]
     links = []
     for a, b in zip(chain, chain[1:]):
         if b == "screen":
             if values.get("data_runs") is not None:
-                links.append({"from": a, "to": b, "cable": "Cat6", "qty": f"{values['data_runs']} + {values['data_cables'] - values['data_runs']} 备用",
+                links.append({"from": a, "to": b, "cable": "Cat6", "qty": f"{values['data_runs']} + {values['data_cables'] - values['data_runs']} " + tr("备用", "spare"),
                               "boq": "data_cable", "supply": "boq"})
         elif a == "source":
             links.append({"from": a, "to": b, "cable": "HDMI", "qty": str(nodes["source"]["qty"]), "boq": None, "supply": "owner"})
         else:
             links.append({"from": a, "to": b, "cable": "HDMI", "qty": "1", "boq": None, "supply": "included"})
     if "db_box" in nodes and values.get("power_cables") is not None:
-        links.append({"from": "db_box", "to": "screen", "cable": "Power cable 电源线",
-                      "qty": f"{values['circuits']} + {values['power_cables'] - values['circuits']} 备用",
+        links.append({"from": "db_box", "to": "screen", "cable": tr("电源线", "Power cable"),
+                      "qty": f"{values['circuits']} + {values['power_cables'] - values['circuits']} " + tr("备用", "spare"),
                       "boq": "power_cable", "supply": "boq"})
     keys = {line["key"] for line in boq_lines if line["key"]}
-    unmatched = [f"{n['title']}（{k}）" for n in nodes.values() if n["supply"] == "boq" for k in n["boq"] if k not in keys]
-    unmatched += [f"{n['title']}（{n['detail']}）" for n in nodes.values() if n["supply"] == "missing"]
-    unmatched += [f"{x['cable']}（{x['boq']}）" for x in links if x["supply"] == "boq" and x["boq"] not in keys]
+    paren = lambda x: tr(f"（{x}）", f" ({x})")  # noqa: E731
+    unmatched = [n["title"] + paren(k) for n in nodes.values() if n["supply"] == "boq" for k in n["boq"] if k not in keys]
+    unmatched += [n["title"] + paren(n["detail"]) for n in nodes.values() if n["supply"] == "missing"]
+    unmatched += [x["cable"] + paren(x["boq"]) for x in links if x["supply"] == "boq" and x["boq"] not in keys]
     return {"chain": chain, "power": "db_box" if "db_box" in nodes else None, "nodes": nodes, "links": links,
             "unmatched": unmatched}

@@ -2,6 +2,8 @@
 import json
 from pathlib import Path
 
+from ..i18n import text, tr
+
 STATUSES = ["preferred", "approved", "retired"]  # 首选排在已批准前面；已停用不参与推荐
 SCENES = ["indoor", "outdoor", "rental"]
 
@@ -80,21 +82,22 @@ def load_reference(line: str) -> list[dict]:
 
 def validate(content: dict, line: str) -> None:
     if content.get("business_line") != line:
-        raise LibraryError("业务线不对")
+        raise LibraryError(tr("业务线不对", "Wrong business line"))
     ids = [p.get("id") for p in content["products"]]
     if len(set(ids)) != len(ids) or not all(isinstance(i, str) and i.strip() for i in ids):
-        raise LibraryError("产品编号不能为空，也不能重复")
+        raise LibraryError(tr("产品编号不能为空，也不能重复", "Product IDs must be filled in and unique"))
     for p in content["products"]:
         fields = FIELDS[line].get(p.get("category"))
         if fields is None:
-            raise LibraryError(f"{p['id']}：类别不对")
+            raise LibraryError(p["id"] + tr("：类别不对", ": wrong category"))
         for name, label, kind in fields:
             if not CHECKS[kind](p.get(name)):
-                raise LibraryError(f"{p['id']}：{label} 填写不对")
+                raise LibraryError(p["id"] + tr(f"：{text(label)} 填写不对", f": {text(label)} is not valid"))
         if not (p.get("model") or "").strip():
-            raise LibraryError(f"{p['id']}：型号不能为空")
+            raise LibraryError(p["id"] + tr("：型号不能为空", ": model is required"))
         if p.get("sending") and not (p.get("capacity_px") and p.get("ports")):
-            raise LibraryError(f"{p['id']}：含发送的处理器要填带载像素和网口数")
+            raise LibraryError(p["id"] + tr("：含发送的处理器要填带载像素和网口数",
+                                               ": a processor with sending needs load and ports"))
 
 
 def active(content: dict, category: str) -> list[dict]:

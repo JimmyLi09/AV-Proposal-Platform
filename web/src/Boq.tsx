@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ClientBoq, send, WorkspaceView } from "./api";
+import { t } from "./i18n";
 import { fmtDate } from "./labels";
 
 const UNITS = ["sqm", "set", "lot", "pcs"];
@@ -41,14 +42,15 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
   return (
     <>
       <section className="card">
-        <h2>
-          BOQ <span className="zh">工程量清单</span>
-        </h2>
-        <p className="muted">按区域分组；每行写清楚规格，数量来自规则。不含价格。行的默认写法在 <a href="#/templates">Templates 模板</a> 里设定（模板 {view.template_version}）。</p>
-        {boq.manual.length > 0 && <p className="warn">已有 {boq.manual.length} 项手动修改，审核时会逐项列出。</p>}
+        <h2>{t("ws.tabs.boq")}</h2>
+        <p className="muted">
+          {t("boq.intro")} <a href="#/templates">{t("nav.templates")}</a>
+          {t("boq.introVersion", { version: view.template_version })}
+        </p>
+        {boq.manual.length > 0 && <p className="warn">{t("boq.manualCount", { n: boq.manual.length })}</p>}
         <div className="row">
           <label className="row tight check">
-            <input type="checkbox" checked={showSource} onChange={(e) => setShowSource(e.target.checked)} /> Show rule source 显示规则来源（内部，不导出）
+            <input type="checkbox" checked={showSource} onChange={(e) => setShowSource(e.target.checked)} /> {t("boq.showSource")}
           </label>
         </div>
         <div className="table-wrap">
@@ -56,17 +58,17 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
             <thead>
               <tr>
                 <th>No.</th>
-                <th>Description 描述</th>
-                <th>Qty 数量</th>
-                <th>Unit 单位</th>
-                {showSource && <th>Source 来源</th>}
+                <th>{t("boq.description")}</th>
+                <th>{t("diagram.qty")}</th>
+                <th>{t("boq.unit")}</th>
+                {showSource && <th>{t("confirm.source")}</th>}
               </tr>
             </thead>
             <tbody>
               <tr className="group-row">
                 <td />
                 <td colSpan={showSource ? 4 : 3}>
-                  <input className="wide strong" aria-label="Group title 组标题" value={draft.group} onChange={(e) => setDraft({ ...draft, group: e.target.value })} />
+                  <input className="wide strong" aria-label={t("boq.group")} value={draft.group} onChange={(e) => setDraft({ ...draft, group: e.target.value })} />
                 </td>
               </tr>
               {rules.map((r) => {
@@ -76,28 +78,28 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
                   <tr key={r.key}>
                     <td>{r.no}</td>
                     <td>
-                      <input className="wide strong" aria-label={`第 ${r.no} 行描述`} value={d.title} onChange={(e) => setRow(r.key, { title: e.target.value })} />
-                      <textarea aria-label={`第 ${r.no} 行规格`} rows={Math.max(1, lines(d.specs).length)} placeholder="规格，每行一条"
+                      <input className="wide strong" aria-label={t("boq.rowField", { no: r.no, field: t("boq.description") })} value={d.title} onChange={(e) => setRow(r.key, { title: e.target.value })} />
+                      <textarea aria-label={t("boq.rowField", { no: r.no, field: t("boq.specs") })} rows={Math.max(1, lines(d.specs).length)} placeholder={t("boq.specsHint")}
                         value={d.specs} onChange={(e) => setRow(r.key, { specs: e.target.value })} />
                       {r.note && <div className="note">*{r.note}</div>}
                     </td>
                     <td>
-                      <input type="number" step="any" min="0" className={`num ${qtyChanged ? "manual" : ""}`} aria-label={`第 ${r.no} 行数量`}
+                      <input type="number" step="any" min="0" className={`num ${qtyChanged ? "manual" : ""}`} aria-label={t("boq.rowField", { no: r.no, field: t("diagram.qty") })}
                         value={d.qty} onChange={(e) => setRow(r.key, { qty: e.target.value })} />
                       {qtyChanged && (
                         <div className="small">
-                          <span className="tag st-sample">Manual 手动</span> 规则 <s>{r.rule_qty ?? "—"}</s>{" "}
+                          <span className="tag st-sample">{t("boq.manual")}</span> {t("boq.ruleValue")} <s>{r.rule_qty ?? "—"}</s>{" "}
                           <button className="btn-link" onClick={() => setRow(r.key, { qty: qtyText(r.rule_qty), reason: "" })}>
-                            Restore 恢复
+                            {t("boq.restore")}
                           </button>
-                          <input aria-label={`第 ${r.no} 行修改原因`} placeholder="Reason 原因（必填）" value={d.reason}
+                          <input aria-label={t("boq.rowField", { no: r.no, field: t("boq.reason") })} placeholder={t("boq.reasonHint")} value={d.reason}
                             onChange={(e) => setRow(r.key, { reason: e.target.value })} />
                           {r.manual && r.by && <div className="muted">{r.by} · {fmtDate(r.at!)}</div>}
                         </div>
                       )}
                     </td>
                     <td>{r.unit}</td>
-                    {showSource && <td className="muted small">{r.source || "Template default 模板默认行"}</td>}
+                    {showSource && <td className="muted small">{r.source || t("boq.templateDefault")}</td>}
                   </tr>
                 );
               })}
@@ -105,47 +107,47 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
                 <tr key={a.key ?? `new${i}`}>
                   <td>{rules.length + i + 1}</td>
                   <td>
-                    <input className="wide strong" aria-label={`手动行 ${i + 1} 描述`} placeholder="Description 描述" value={a.title}
+                    <input className="wide strong" aria-label={t("boq.addedField", { no: i + 1, field: t("boq.description") })} placeholder={t("boq.description")} value={a.title}
                       onChange={(e) => setAdded(i, { title: e.target.value })} />
-                    <textarea aria-label={`手动行 ${i + 1} 规格`} rows={Math.max(1, lines(a.specs).length)} placeholder="规格，每行一条"
+                    <textarea aria-label={t("boq.addedField", { no: i + 1, field: t("boq.specs") })} rows={Math.max(1, lines(a.specs).length)} placeholder={t("boq.specsHint")}
                       value={a.specs} onChange={(e) => setAdded(i, { specs: e.target.value })} />
                   </td>
                   <td>
-                    <input type="number" step="any" min="0" className="num manual" aria-label={`手动行 ${i + 1} 数量`} value={a.qty}
+                    <input type="number" step="any" min="0" className="num manual" aria-label={t("boq.addedField", { no: i + 1, field: t("diagram.qty") })} value={a.qty}
                       onChange={(e) => setAdded(i, { qty: e.target.value })} />
                     <div className="small">
-                      <span className="tag st-sample">Added manually 手动添加</span>{" "}
+                      <span className="tag st-sample">{t("boq.added")}</span>{" "}
                       <button className="btn-link" onClick={() => setDraft({ ...draft, added: draft.added.filter((_, j) => j !== i) })}>
-                        Remove 删除
+                        {t("common.remove")}
                       </button>
                     </div>
                   </td>
                   <td>
-                    <select aria-label={`手动行 ${i + 1} 单位`} value={a.unit} onChange={(e) => setAdded(i, { unit: e.target.value })}>
+                    <select aria-label={t("boq.addedField", { no: i + 1, field: t("boq.unit") })} value={a.unit} onChange={(e) => setAdded(i, { unit: e.target.value })}>
                       {UNITS.map((u) => (
                         <option key={u}>{u}</option>
                       ))}
                     </select>
                   </td>
-                  {showSource && <td className="muted small">Added manually 手动添加</td>}
+                  {showSource && <td className="muted small">{t("boq.added")}</td>}
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <p className="muted small">描述、规格和数量都可以直接改；改过的数量标「手动」，要写原因，审核页会列出。</p>
+        <p className="muted small">{t("boq.editHint")}</p>
         <div className="row">
           <button className="btn-outline" onClick={() => setDraft({ ...draft, added: [...draft.added, { key: null, title: "", specs: "", qty: "1", unit: "lot" }] })}>
-            + Add line 添加行
+            {t("boq.addLine")}
           </button>
           <button className="btn-primary" disabled={!dirty} onClick={save}>
-            Save 保存
+            {t("common.save")}
           </button>
           {dirty ? (
-            <span className="muted">导出的是已保存的内容，先保存再导出。</span>
+            <span className="muted">{t("boq.saveFirst")}</span>
           ) : (
             <a className="btn-outline" href={`/api/proposals/${id}/boq.xlsx`}>
-              Export BOQ Excel 导出 BOQ
+              {t("boq.export")}
             </a>
           )}
         </div>
@@ -154,18 +156,18 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
       <section className="card">
         <details>
           <summary>
-            <b>Internal breakdown 内部明细（不导出）</b>
+            <b>{t("boq.internal")}</b>
           </summary>
-          <p className="muted">示意图、图纸和计算依据用这份明细；客户版 BOQ 只显示上面的汇总行。</p>
+          <p className="muted">{t("boq.internalIntro")}</p>
           <div className="table-wrap">
             <table>
               <thead>
                 <tr>
                   <th>#</th>
-                  <th>Item 项目</th>
-                  <th>Model 型号</th>
-                  <th>Qty 数量</th>
-                  <th>Why this qty 数量依据</th>
+                  <th>{t("boq.item")}</th>
+                  <th>{t("ws.model")}</th>
+                  <th>{t("diagram.qty")}</th>
+                  <th>{t("boq.why")}</th>
                 </tr>
               </thead>
               <tbody>

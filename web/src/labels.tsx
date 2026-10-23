@@ -1,24 +1,21 @@
-export const LINE_LABEL: Record<string, string> = {
-  LED: "LED Screen LED 屏",
-  PJ: "Projection 投影 · 单面墙",
-};
+import { lang, t, tOr } from "./i18n";
 
-const STATUS_LABEL: Record<string, string> = {
-  draft: "Draft 草稿",
-  confirming: "Awaiting confirmation 待确认",
-  calculated: "Calculated 已计算",
-};
+export const LINES = ["LED", "PJ"];
+
+export function lineLabel(line: string) {
+  return t(`lines.${line}`);
+}
 
 export function StatusTag({ status, rev }: { status: string; rev: number }) {
   return (
     <span className="tag">
-      {STATUS_LABEL[status] ?? status} · Rev {rev}
+      {tOr(`status.${status}`, status)} · Rev {rev}
     </span>
   );
 }
 
 export function fmtDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  return new Date(iso).toLocaleDateString(lang() === "zh" ? "zh-CN" : "en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
 
 export function fmtSize(bytes: number) {

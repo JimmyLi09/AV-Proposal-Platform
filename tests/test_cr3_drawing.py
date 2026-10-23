@@ -114,12 +114,15 @@ def test_svg_excel_and_pdf_exports(client):
     rows = list(wb["Cabinets"].iter_rows(values_only=True))
     assert rows[3][:6] == ("ID", "Size 尺寸", "Circuit 回路", "Data cable 网线", "Row 行", "Column 列")
     assert len(rows) == 4 + 35 and rows[4][:6] == ("R1C1", "A 640 × 480", 1, 1, 1, 1)
-    assert wb.properties.keywords == "Rev 0 · Rules v1.3 · Product library v1.0 · DRAFT"
-    for lang, name in (("zh", "%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88"), ("en", "Technical")):
+    assert wb.properties.keywords == "Rev 0 · 规则 v1.3 · 产品库 v1.0 · DRAFT"
+    en = load_workbook(io.BytesIO(get(client, "cabinets.xlsx?lang=en").content))
+    assert en.properties.keywords == "Rev 0 · Rules v1.3 · Product library v1.0 · DRAFT"
+    for lang, name, stamp in (("zh", "%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88", "Rev 0 · 规则 v1.3 · 产品库 v1.0 · DRAFT"),
+                              ("en", "Technical", "Rev 0 · Rules v1.3 · Product library v1.0 · DRAFT")):
         r = get(client, f"drawing.pdf?lang={lang}")
         assert r.content[:5] == b"%PDF-" and name in r.headers["content-disposition"]
         meta = PdfReader(io.BytesIO(r.content)).metadata
-        assert meta["/Keywords"] == "Rev 0 · Rules v1.3 · Product library v1.0 · DRAFT"
+        assert meta["/Keywords"] == stamp
 
 
 def test_dwg_needs_oda(client):

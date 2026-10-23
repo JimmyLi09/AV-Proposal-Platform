@@ -23,14 +23,13 @@ def test_every_device_and_cable_in_diagram_is_in_boq():
     d, keys = out["diagram"], {line["key"] for line in out["boq"]}
     assert d["unmatched"] == []
     supplied = [n for n in d["nodes"].values() if n["supply"] == "boq"]
-    assert {n["title"] for n in supplied} == {"Video processor 视频处理器", "Controller 控制器", "LED wall LED 屏",
-                                              "DB box 配电箱"}
+    assert {n["title"] for n in supplied} == {"视频处理器", "控制器", "LED 屏", "配电箱"}
     for n in supplied:
         assert n["boq"] and set(n["boq"]) <= keys, n
     for link in d["links"]:
         assert link["boq"] in keys if link["supply"] == "boq" else link["supply"] in ("owner", "included")
     others = {n["title"]: n["supply"] for n in d["nodes"].values() if n["supply"] != "boq"}
-    assert others == {"Content source 信号源": "owner"}  # 业主提供，图上虚线标出
+    assert others == {"信号源": "owner"}  # 业主提供，图上虚线标出
 
 
 def test_diagram_follows_boq_and_flags_a_blocked_controller():

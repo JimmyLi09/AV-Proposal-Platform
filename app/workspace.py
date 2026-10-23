@@ -10,6 +10,7 @@ from .api import file_out, get_db, iso, proposal_out, require_user
 from . import drawing_export
 from .boq import build, to_xlsx
 from .drawing import build as build_drawing
+from .i18n import stored, text, tr, unit, use
 from .models import (ExtractedField, ProductLibraryVersion, Project, Proposal, RuleSetVersion, TemplateVersion, User,
                      utcnow)
 from .rules.engine import LINES, calculate
@@ -23,7 +24,7 @@ router = APIRouter(prefix="/proposals")
 def get_proposal(db: Session, proposal_id: int) -> Proposal:
     p = db.get(Proposal, proposal_id)
     if p is None:
-        raise HTTPException(404, "方案不存在")
+        raise HTTPException(404, tr("方案不存在", "Proposal not found"))
     return p
 
 
@@ -60,7 +61,7 @@ def candidates(db: Session, prop: Proposal) -> dict[str, list]:
         for x in f.extracted:
             out.setdefault(x.field, []).append(
                 {"id": x.id, "value": x.value, "confidence": x.confidence, "file_id": f.id, "filename": f.filename,
-                 "location": x.location, "snippet": x.snippet, "crop": bool(x.crop_path)})
+                 "location": stored(x.location), "snippet": x.snippet, "crop": bool(x.crop_path)})
     for items in out.values():
         items.sort(key=lambda c: RANK[c["confidence"]])
     return out
@@ -98,14 +99,16 @@ def view(db: Session, prop: Proposal) -> dict:
         "proposal": proposal_out(prop),
         "project": {"id": prop.project_id},
         "rev": {"rev_no": rev.rev_no, "status": rev.status, "inputs": rev.inputs or {}, "cabinet_id": rev.cabinet_id,
-                "input_meta": rev.input_meta or {}, "annotations": rev.annotations or {}},
+                "input_meta": {k: m | ({"location": stored(m["location"])} if m.get("location") else {})
+                               for k, m in (rev.input_meta or {}).items()},
+                "annotations": rev.annotations or {}},
         "pending": pending(rev),
         "files": [file_out(f) for f in db.get(Project, prop.project_id).files],
         "candidates": candidates(db, prop),
         "rules_version": used["rules"].version,
         "library_version": used["library"].version,
         "template_version": used["template"].version,
-        "input_defs": used["rules"].content["inputs"],
+        "input_defs": [d | {"label": text(d["label"]), "unit": unit(d.get("unit"))} for d in used["rules"].content["inputs"]],
         "product_fed": LINES[prop.business_line]["product_fed"],
         "result": result,
         "boq": client_boq(db, prop, used, result, rev.boq_edits),
@@ -138,7 +141,7 @@ def save_inputs(proposal_id: int, body: InputsIn, user: User = Depends(require_u
     prop = get_proposal(db, proposal_id)
     rev = prop.revisions[-1]
     if unknown := set(body.inputs) - allowed_inputs(db, prop):
-        raise HTTPException(422, f"不认识的输入：{', '.join(sorted(unknown))}")
+        raise HTTPException(422, tr("不认识的输入：", "Unknown inputs: ") + ", ".join(sorted(unknown)))
     old, meta = rev.inputs or {}, dict(rev.input_meta or {})
     for k in set(old) | set(body.inputs):
         if body.inputs.get(k) in (None, "", []):
@@ -182,7 +185,7 @@ def pick(proposal_id: int, body: PickIn, _: User = Depends(require_user), db: Se
     prop = get_proposal(db, proposal_id)
     x = db.get(ExtractedField, body.extracted_id)
     if x is None or x.source_file.project_id != prop.project_id or x.field not in allowed_inputs(db, prop):
-        raise HTTPException(404, "候选值不存在")
+        raise HTTPException(404, tr("候选值不存在", "Candidate value not found"))
     _use(prop.revisions[-1], x)
     refresh_status(db, prop)
     db.commit()
@@ -200,7 +203,7 @@ def confirm(proposal_id: int, body: ConfirmIn, user: User = Depends(require_user
     rev = prop.revisions[-1]
     meta = dict(rev.input_meta or {})
     if body.field not in meta:
-        raise HTTPException(404, "这个字段没有待确认的值")
+        raise HTTPException(404, tr("这个字段没有待确认的值", "This field has no value awaiting confirmation"))
     meta[body.field] = meta[body.field] | confirmed_by(user)
     rev.input_meta = meta
     refresh_status(db, prop)
@@ -241,7 +244,7 @@ def save_boq(proposal_id: int, body: BoqIn, user: User = Depends(require_user), 
     used, result = compute(db, prop)
     default = client_boq(db, prop, used, result, None)
     if default is None:
-        raise HTTPException(409, "还没有计算结果，算完才能改 BOQ")
+        raise HTTPException(409, tr("还没有计算结果，算完才能改 BOQ", "No results yet; calculate before editing the BOQ"))
     rules = {r["key"]: r for r in default["rows"]}
     old = rev.boq_edits or {}
     stamp = {"by": user.name, "at": iso(utcnow())}
@@ -253,7 +256,7 @@ def save_boq(proposal_id: int, body: BoqIn, user: User = Depends(require_user), 
     rows = {}
     for key, e in body.rows.items():
         if key not in rules:
-            raise HTTPException(422, "BOQ 里没有这一行")
+            raise HTTPException(422, tr("BOQ 里没有这一行", "This row is not in the BOQ"))
         r, out = rules[key], {}
         if e.title is not None and e.title.strip() and e.title.strip() != r["title_default"]:
             out["title"] = e.title.strip()
@@ -262,7 +265,8 @@ def save_boq(proposal_id: int, body: BoqIn, user: User = Depends(require_user), 
             out["specs"] = specs
         if e.qty is not None and _num(e.qty) != r["rule_qty"]:
             if not e.reason.strip():
-                raise HTTPException(422, f"「{r['title_default']}」改了数量，要写原因")
+                raise HTTPException(422, tr(f"「{r['title_default']}」改了数量，要写原因",
+                                           f"“{r['title_default']}”: a changed quantity needs a reason"))
             out |= {"qty": _num(e.qty), "reason": e.reason.strip()}
         if out:
             rows[key] = stamped(out, (old.get("rows") or {}).get(key, {}))
@@ -290,7 +294,7 @@ def export_boq(proposal_id: int, db: Session = Depends(get_db)):
     used, result = compute(db, prop)
     boq = client_boq(db, prop, used, result, rev.boq_edits)
     if boq is None:
-        raise HTTPException(409, "还没有计算结果，算完才能导出 BOQ")
+        raise HTTPException(409, tr("还没有计算结果，算完才能导出 BOQ", "No results yet; calculate before exporting the BOQ"))
     project = db.get(Project, prop.project_id)
     stamp = " · ".join(([] if rev.status == "approved" else ["DRAFT"]) + [
         f"Rev {rev.rev_no}", f"Rules {used['rules'].version}", f"Product library {used['library'].version}",
@@ -316,12 +320,12 @@ def save_drawing(proposal_id: int, body: DrawingIn, _: User = Depends(require_us
     used, result = compute(db, prop)
     auto = drawing_of(used, result, None)
     if auto is None:
-        raise HTTPException(409, "还没有计算结果，算完才能调整图纸")
+        raise HTTPException(409, tr("还没有计算结果，算完才能调整图纸", "No results yet; calculate before adjusting the drawing"))
     ids = {c["id"]: c for c in auto["cabinets"]}
     for kind, n in (("power", len(auto["circuits"])), ("data", len(auto["cables"]))):
         for cid, no in getattr(body, kind).items():
             if cid not in ids or not 1 <= no <= n:
-                raise HTTPException(422, f"没有箱体 {cid}，或编号超出 1–{n}")
+                raise HTTPException(422, tr(f"没有箱体 {cid}，或编号超出 1–{n}", f"No cabinet {cid}, or number outside 1–{n}"))
     rev.drawing_edits = {  # 和自动结果一样的不存
         "power": {k: v for k, v in body.power.items() if v != ids[k]["circuit"]},
         "data": {k: v for k, v in body.data.items() if v != ids[k]["cable"]},
@@ -330,17 +334,19 @@ def save_drawing(proposal_id: int, body: DrawingIn, _: User = Depends(require_us
     return view(db, prop)
 
 
-def _drawing_export(db: Session, proposal_id: int):
+def _drawing_export(db: Session, proposal_id: int, lang: str):
+    """导出按导出时选的语言（CR-4），图上的校验、计算依据也用这个语言。"""
     prop = get_proposal(db, proposal_id)
     rev = prop.revisions[-1]
-    used, result = compute(db, prop)
-    d = drawing_of(used, result, rev.drawing_edits)
-    if d is None:
-        raise HTTPException(409, "还没有计算结果，算完才能导出图纸")
-    project = db.get(Project, prop.project_id)
-    draft = rev.status != "approved"
-    stamp = " · ".join([f"Rev {rev.rev_no}", f"Rules {used['rules'].version}",
-                        f"Product library {used['library'].version}"] + (["DRAFT"] if draft else []))
+    with use(lang):
+        used, result = compute(db, prop)
+        d = drawing_of(used, result, rev.drawing_edits)
+        if d is None:
+            raise HTTPException(409, tr("还没有计算结果，算完才能导出图纸", "No results yet; calculate before exporting the drawing"))
+        project = db.get(Project, prop.project_id)
+        draft = rev.status != "approved"
+        stamp = " · ".join([f"Rev {rev.rev_no}", tr("规则 ", "Rules ") + used["rules"].version,
+                            tr("产品库 ", "Product library ") + used["library"].version] + (["DRAFT"] if draft else []))
     meta = {"project": f"{project.name} · {prop.name}", "stamp": stamp, "draft": draft, "values": result["values"]}
     base = f"{safe_name(prop.name)}_{{kind}}_Rev{rev.rev_no}{'_DRAFT' if draft else ''}"
     return d, meta, base
@@ -358,14 +364,14 @@ Lang = Literal["zh", "en"]
 
 @router.get("/{proposal_id}/drawing.svg")
 def export_drawing_svg(proposal_id: int, lang: Lang = "zh", layers: str | None = None, db: Session = Depends(get_db)):
-    d, meta, base = _drawing_export(db, proposal_id)
+    d, meta, base = _drawing_export(db, proposal_id, lang)
     shown = None if layers is None else [x for x in layers.split(",") if x in drawing_export.LAYERS]
     return _file(drawing_export.svg(d, meta, lang, shown), base.format(kind="Drawing") + ".svg", "image/svg+xml")
 
 
 @router.get("/{proposal_id}/drawing.dxf")
 def export_drawing_dxf(proposal_id: int, lang: Lang = "zh", db: Session = Depends(get_db)):
-    d, meta, base = _drawing_export(db, proposal_id)
+    d, meta, base = _drawing_export(db, proposal_id, lang)
     return _file(drawing_export.dxf(d, meta, lang), base.format(kind="Drawing") + ".dxf", "application/dxf")
 
 
@@ -373,21 +379,22 @@ def export_drawing_dxf(proposal_id: int, lang: Lang = "zh", db: Session = Depend
 def export_drawing_dwg(proposal_id: int, request: Request, lang: Lang = "zh", db: Session = Depends(get_db)):
     oda = request.app.state.oda
     if not drawing_export.oda_available(oda):
-        raise HTTPException(409, "服务器没有装 ODA File Converter，只能导出 DXF；装 ODA 后可导出 DWG")
-    d, meta, base = _drawing_export(db, proposal_id)
+        raise HTTPException(409, tr("服务器没有装 ODA File Converter，只能导出 DXF；装 ODA 后可导出 DWG",
+                                   "ODA File Converter is not installed on the server; DXF only. Install ODA to export DWG"))
+    d, meta, base = _drawing_export(db, proposal_id, lang)
     return _file(drawing_export.dwg(drawing_export.dxf(d, meta, lang), oda), base.format(kind="Drawing") + ".dwg",
                  "application/acad")
 
 
 @router.get("/{proposal_id}/cabinets.xlsx")
 def export_cabinets(proposal_id: int, lang: Lang = "zh", db: Session = Depends(get_db)):
-    d, meta, base = _drawing_export(db, proposal_id)
+    d, meta, base = _drawing_export(db, proposal_id, lang)
     return _file(drawing_export.cabinets_xlsx(d, meta, lang), base.format(kind="Cabinets").replace("_DRAFT", "") + ".xlsx",
                  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 
 @router.get("/{proposal_id}/drawing.pdf")
 def export_drawing_pdf(proposal_id: int, lang: Lang = "zh", db: Session = Depends(get_db)):
-    d, meta, base = _drawing_export(db, proposal_id)
+    d, meta, base = _drawing_export(db, proposal_id, lang)
     kind = "技术方案" if lang == "zh" else "Technical"
     return _file(drawing_export.pdf(d, meta, d["basis"], lang), base.format(kind=kind) + ".pdf", "application/pdf")

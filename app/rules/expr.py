@@ -4,6 +4,8 @@ import math
 import operator
 from decimal import ROUND_HALF_UP, Decimal
 
+from ..i18n import tr
+
 
 class ExprError(ValueError):
     pass
@@ -48,15 +50,15 @@ def parse(text: str) -> ast.Expression:
     try:
         tree = ast.parse(text.strip(), mode="eval")
     except SyntaxError:
-        raise ExprError(f"算式写法有误：{text}")
+        raise ExprError(tr("算式写法有误：", "Formula syntax error: ") + text)
     for node in ast.walk(tree):
         if not isinstance(node, _ALLOWED):
-            raise ExprError(f"算式里不允许用：{type(node).__name__}")
+            raise ExprError(tr("算式里不允许用：", "Not allowed in a formula: ") + type(node).__name__)
         if isinstance(node, ast.Call):
             if not isinstance(node.func, ast.Name) or node.func.id not in FUNCS or node.keywords:
-                raise ExprError(f"只能用这些函数：{', '.join(FUNCS)}")
+                raise ExprError(tr("只能用这些函数：", "Only these functions are allowed: ") + ", ".join(FUNCS))
         if isinstance(node, ast.Constant) and not isinstance(node.value, (int, float, str, bool)):
-            raise ExprError("算式里只能写数字或文字")
+            raise ExprError(tr("算式里只能写数字或文字", "Only numbers or text are allowed in a formula"))
     return tree
 
 
@@ -80,7 +82,7 @@ def evaluate(tree: ast.Expression, ctx: dict):
                 try:
                     return _BIN[type(op)](ev(l), ev(r))
                 except ArithmeticError:
-                    raise ExprError("计算出错（例如除以 0）")
+                    raise ExprError(tr("计算出错（例如除以 0）", "Calculation error (e.g. division by 0)"))
             case ast.UnaryOp(op=op, operand=x):
                 return _UNARY[type(op)](ev(x))
             case ast.Compare(left=left, ops=ops, comparators=rest):
@@ -99,7 +101,7 @@ def evaluate(tree: ast.Expression, ctx: dict):
                 return ev(b) if ev(t) else ev(o)
             case ast.Call(func=ast.Name(id=fn), args=args):
                 return FUNCS[fn](*[ev(a) for a in args])
-        raise ExprError(f"不支持：{ast.dump(node)}")
+        raise ExprError(tr("不支持：", "Not supported: ") + ast.dump(node))
 
     return ev(tree)
 

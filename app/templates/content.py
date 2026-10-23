@@ -7,6 +7,8 @@ import json
 import re
 from pathlib import Path
 
+from ..i18n import tr
+
 UNITS = ["sqm", "set", "lot", "pcs"]
 NAME = re.compile(r"\{(\w+)\}")
 LINE_NAMES = ["LED"]
@@ -23,41 +25,43 @@ def load_seed(line: str) -> dict:
 
 def _text(where: str, value, known: set[str], required=False) -> None:
     if not isinstance(value, str) or len(value) > 300 or (required and not value.strip()):
-        raise TemplateError(f"{where}：要填文字（最多 300 字）")
+        raise TemplateError(where + tr("：要填文字（最多 300 字）", ": text required (up to 300 characters)"))
     if "{" in NAME.sub("", value) or "}" in NAME.sub("", value):
-        raise TemplateError(f"{where}：花括号只能用来写 {{名字}}")
+        raise TemplateError(where + tr("：花括号只能用来写 {名字}", ": braces are only for {name}"))
     if unknown := sorted(set(NAME.findall(value)) - known):
-        raise TemplateError(f"{where}：不认识 {', '.join('{' + u + '}' for u in unknown)}")
+        raise TemplateError(where + tr("：不认识 ", ": unknown ") + ", ".join("{" + u + "}" for u in unknown))
 
 
 def validate(content: dict, line: str, known: set[str]) -> None:
     """known：规则集里的输入和结果名字。"""
     if content.get("business_line") != line:
-        raise TemplateError("业务线不对")
+        raise TemplateError(tr("业务线不对", "Wrong business line"))
     known = known | CONTEXT
     boq = content["boq"]
-    _text("组标题", boq["group"], known, required=True)
+    _text(tr("组标题", "Group title"), boq["group"], known, required=True)
     rows, keys = boq["rows"], set()
     if not isinstance(rows, list) or not rows:
-        raise TemplateError("至少要有一行")
+        raise TemplateError(tr("至少要有一行", "At least one row is required"))
     for i, r in enumerate(rows, 1):
-        where = f"第 {i} 行"
+        where = tr(f"第 {i} 行", f"Row {i}")
         if not isinstance(r.get("key"), str) or not re.fullmatch(r"[a-z0-9_]{1,40}", r["key"]) or r["key"] in keys:
-            raise TemplateError(f"{where}：编号要用小写字母、数字、下划线，且不能重复")
+            raise TemplateError(where + tr("：编号要用小写字母、数字、下划线，且不能重复",
+                                             ": key must be lowercase letters, digits or underscores, and unique"))
         keys.add(r["key"])
-        _text(f"{where} 描述", r["title"], known, required=True)
+        _text(where + tr(" 描述", " description"), r["title"], known, required=True)
         if not isinstance(r["specs"], list) or len(r["specs"]) > 12:
-            raise TemplateError(f"{where}：规格最多 12 行")
+            raise TemplateError(where + tr("：规格最多 12 行", ": up to 12 spec lines"))
         for j, spec in enumerate(r["specs"], 1):
-            _text(f"{where} 规格 {j}", spec, known, required=True)
+            _text(where + tr(f" 规格 {j}", f" spec {j}"), spec, known, required=True)
         for k in ("note", "source"):
             if k in r:
-                _text(f"{where} {'备注' if k == 'note' else '来源'}", r[k], known)
+                _text(where + (tr(" 备注", " note") if k == "note" else tr(" 来源", " source")), r[k], known)
         if "when" in r and r["when"] not in known:
-            raise TemplateError(f"{where}：「出现条件」要填某个规则结果的名字")
+            raise TemplateError(where + tr("：「出现条件」要填某个规则结果的名字", ": “show when” must be a rule result name"))
         if r["unit"] not in UNITS:
-            raise TemplateError(f"{where}：单位只能是 {' / '.join(UNITS)}")
+            raise TemplateError(where + tr("：单位只能是 ", ": unit must be ") + " / ".join(UNITS))
         qty = r["qty"]
         if isinstance(qty, bool) or not (isinstance(qty, str) and qty in known
                                           or isinstance(qty, (int, float)) and qty >= 0):
-            raise TemplateError(f"{where}：数量要填一个不小于 0 的数，或某个规则结果的名字")
+            raise TemplateError(where + tr("：数量要填一个不小于 0 的数，或某个规则结果的名字",
+                                             ": quantity must be a number ≥ 0 or a rule result name"))

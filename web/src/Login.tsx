@@ -1,7 +1,12 @@
 import { FormEvent, useEffect, useState } from "react";
 import { api, send, User } from "./api";
+import { t, tOr } from "./i18n";
 
-const ROLES = ["Sales", "PM", "工程"];
+const ROLES = ["Sales", "PM", "工程"]; // 存的是这几个值，显示按界面语言
+
+export function roleLabel(role: string) {
+  return tOr(`login.roles.${role}`, role);
+}
 
 export default function Login({ onLogin }: { onLogin: (u: User) => void }) {
   const [users, setUsers] = useState<User[]>([]);
@@ -33,26 +38,26 @@ export default function Login({ onLogin }: { onLogin: (u: User) => void }) {
           <div className="brand-name">AUDAX</div>
           <div className="brand-sub">AV PROPOSAL PLATFORM</div>
         </div>
-        <h1>
-          Choose your name <span className="zh">选择名字</span>
-        </h1>
-        <p className="muted">不用密码。名字用来记录每个 Rev 是谁做的、谁审的。</p>
+        <h1>{t("login.title")}</h1>
+        <p className="muted">{t("login.intro")}</p>
         <div className="name-list">
           {users.map((u) => (
             <button key={u.id} className="btn-outline" onClick={() => choose(u)}>
-              {u.name} {u.role && <span className="muted">· {u.role}</span>}
+              {u.name} {u.role && <span className="muted">· {roleLabel(u.role)}</span>}
             </button>
           ))}
-          {users.length === 0 && <p className="muted">还没有名字，先在下面添加。</p>}
+          {users.length === 0 && <p className="muted">{t("login.none")}</p>}
         </div>
         <form className="row" onSubmit={add}>
-          <input aria-label="Name 名字" placeholder="Name 名字" value={name} onChange={(e) => setName(e.target.value)} required />
-          <select aria-label="Role 角色" value={role} onChange={(e) => setRole(e.target.value)}>
+          <input aria-label={t("login.name")} placeholder={t("login.name")} value={name} onChange={(e) => setName(e.target.value)} required />
+          <select aria-label={t("login.role")} value={role} onChange={(e) => setRole(e.target.value)}>
             {ROLES.map((r) => (
-              <option key={r}>{r}</option>
+              <option key={r} value={r}>
+                {roleLabel(r)}
+              </option>
             ))}
           </select>
-          <button className="btn-primary">Add name 添加名字</button>
+          <button className="btn-primary">{t("login.add")}</button>
         </form>
         {error && <p className="error">{error}</p>}
       </div>

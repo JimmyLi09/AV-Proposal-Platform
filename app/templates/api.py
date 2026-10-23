@@ -4,6 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..api import get_db, require_user
+from ..i18n import tr
 from ..models import RuleSetVersion, TemplateVersion, User
 from ..rules.engine import value_names
 from ..versions import check_base, history, latest, next_label, version_out
@@ -51,7 +52,7 @@ def save_version(line: str, body: SaveIn, user: User = Depends(require_user), db
     except TemplateError as e:
         raise HTTPException(422, str(e))
     except (KeyError, TypeError, AttributeError):
-        raise HTTPException(422, "模板内容格式不对")
+        raise HTTPException(422, tr("模板内容格式不对", "Template content is malformed"))
     v = TemplateVersion(business_line=line, version=next_label(base.version), content=body.content,
                         reason=body.reason.strip(), created_by=user.id)
     db.add(v)

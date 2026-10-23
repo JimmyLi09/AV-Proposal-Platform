@@ -5,16 +5,21 @@
 import shutil
 from pathlib import Path
 
+from ..i18n import tr
 from .readers import Collector, convert_dwg, read_dxf, read_excel, read_image, read_pdf
 
-METHOD_LABEL = {
-    "text_layer": "文本层，直接读取",
-    "excel": "按栏名匹配",
-    "ocr": "先文字识别，再读尺寸",
-    "dxf": "读 DXF 里的文字",
-    "dwg": "DWG 经 ODA 转换后读取",
-    "none": "不读取，仅随项目保存",
-}
+
+def method_label(method: str | None) -> str:
+    return {
+        "text_layer": tr("文本层，直接读取", "Text layer, read directly"),
+        "excel": tr("按栏名匹配", "Matched by column name"),
+        "ocr": tr("先文字识别，再读尺寸", "OCR, then dimensions"),
+        "dxf": tr("读 DXF 里的文字", "Text in the DXF"),
+        "dwg": tr("DWG 经 ODA 转换后读取", "DWG converted by ODA, then read"),
+        "none": tr("不读取，仅随项目保存", "Not read; kept with the project"),
+    }.get(method or "", "")
+
+
 READERS = {"pdf": read_pdf, "jpg": read_image, "jpeg": read_image, "png": read_image,
            "xlsx": read_excel, "xlsm": read_excel, "dxf": read_dxf}
 

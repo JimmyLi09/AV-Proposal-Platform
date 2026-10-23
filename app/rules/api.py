@@ -4,9 +4,10 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..api import get_db, require_user
+from ..i18n import tr
 from ..models import ProductLibraryVersion, RuleSetVersion, User
 from ..versions import check_base, history, latest, next_label, version_out
-from .engine import LINES, calculate, load_seed, validate
+from .engine import LINES, calculate, display_text, load_seed, validate
 from .expr import ExprError
 
 router = APIRouter(prefix="/rules")
@@ -25,18 +26,19 @@ def ensure_seed(db: Session) -> None:
 def checked(content: dict, base: RuleSetVersion) -> dict:
     try:
         if content.get("business_line") != base.business_line:
-            raise ExprError("业务线不对")
+            raise ExprError(tr("业务线不对", "Wrong business line"))
         validate(content, base.content)
     except ExprError as e:
         raise HTTPException(422, str(e))
     except (KeyError, TypeError, AttributeError):
-        raise HTTPException(422, "规则内容格式不对")
+        raise HTTPException(422, tr("规则内容格式不对", "Rule content is malformed"))
     return content
 
 
 @router.get("/{line}")
 def get_latest(line: str, db: Session = Depends(get_db)):
-    return version_out(latest(db, RuleSetVersion, line)) | {"product_fed": LINES[line]["product_fed"]}
+    v = latest(db, RuleSetVersion, line)
+    return version_out(v) | {"product_fed": LINES[line]["product_fed"], "text": display_text(v.content)}
 
 
 @router.get("/{line}/versions")
@@ -49,7 +51,7 @@ def list_versions(line: str, db: Session = Depends(get_db)):
 def get_version(line: str, version_id: int, db: Session = Depends(get_db)):
     v = db.get(RuleSetVersion, version_id)
     if v is None or v.business_line != line:
-        raise HTTPException(404, "规则版本不存在")
+        raise HTTPException(404, tr("规则版本不存在", "Rule version not found"))
     return version_out(v)
 
 

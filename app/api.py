@@ -10,7 +10,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 from .extract.jobs import read_files
-from .extract.run import METHOD_LABEL
+from .extract.run import method_label
+from .i18n import LANGS, stored, tr
 from .models import ExtractedField, Project, Proposal, Revision, SourceFile, User
 from .storage import original_name, safe_name, save_original
 
@@ -30,7 +31,7 @@ def current_user(request: Request, db: Session = Depends(get_db)) -> User | None
 
 def require_user(user: User | None = Depends(current_user)) -> User:
     if user is None:
-        raise HTTPException(401, "请先选择名字登录")
+        raise HTTPException(401, tr("请先选择名字登录", "Please choose your name first"))
     return user
 
 
@@ -39,15 +40,15 @@ def iso(dt: datetime | None) -> str | None:
 
 
 def user_out(u: User) -> dict:
-    return {"id": u.id, "name": u.name, "role": u.role}
+    return {"id": u.id, "name": u.name, "role": u.role, "lang": u.lang}
 
 
 def file_out(f: SourceFile) -> dict:
     return {
         "id": f.id, "filename": f.filename, "file_type": f.file_type, "grade": f.grade,
         "size": f.size, "sha256": f.sha256, "uploaded_by": f.uploader.name, "uploaded_at": iso(f.uploaded_at),
-        "read_status": f.read_status, "read_method": METHOD_LABEL.get(f.read_method or "", ""),
-        "read_note": f.read_note or "", "fields_found": len(f.extracted),
+        "read_status": f.read_status, "read_method": method_label(f.read_method),
+        "read_note": stored(f.read_note), "fields_found": len(f.extracted),
     }
 
 
@@ -71,7 +72,7 @@ def project_out(p: Project) -> dict:
 def get_project(db: Session, project_id: int) -> Project:
     p = db.get(Project, project_id)
     if p is None:
-        raise HTTPException(404, "项目不存在")
+        raise HTTPException(404, tr("项目不存在", "Project not found"))
     return p
 
 
@@ -112,7 +113,7 @@ def add_user(body: UserIn, db: Session = Depends(get_db)):
     try:
         db.commit()
     except IntegrityError:
-        raise HTTPException(409, "这个名字已经存在")
+        raise HTTPException(409, tr("这个名字已经存在", "This name already exists"))
     return user_out(u)
 
 
@@ -125,9 +126,21 @@ def get_session(user: User | None = Depends(current_user)):
 def login(body: SessionIn, response: Response, db: Session = Depends(get_db)):
     u = db.get(User, body.user_id)
     if u is None:
-        raise HTTPException(404, "名字不存在")
+        raise HTTPException(404, tr("名字不存在", "Name not found"))
     response.set_cookie(COOKIE, str(u.id), httponly=True, samesite="lax", max_age=180 * 24 * 3600)
     return user_out(u)
+
+
+class LangIn(BaseModel):
+    lang: Literal[LANGS]
+
+
+@router.put("/session/lang")
+def set_lang(body: LangIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
+    """界面语言按用户保存：换页、刷新、下次登录都保持。"""
+    user.lang = body.lang
+    db.commit()
+    return user_out(user)
 
 
 @router.delete("/session", status_code=204)
@@ -157,7 +170,7 @@ class ProjectPatch(Stripped):
 
 def check_owner(db: Session, owner_id: int) -> None:
     if db.get(User, owner_id) is None:
-        raise HTTPException(422, "负责人不存在")
+        raise HTTPException(422, tr("负责人不存在", "Owner not found"))
 
 
 @router.get("/projects")
@@ -188,11 +201,11 @@ def update_project(project_id: int, body: ProjectPatch, _: User = Depends(requir
     changes = body.model_dump(exclude_unset=True)
     if "owner_id" in changes:
         if changes["owner_id"] is None:
-            raise HTTPException(422, "负责人不能为空")
+            raise HTTPException(422, tr("负责人不能为空", "Owner is required"))
         check_owner(db, changes["owner_id"])
     for key in ("name", "client"):
         if key in changes and changes[key] is None:
-            raise HTTPException(422, f"{key} 不能为空")
+            raise HTTPException(422, tr(f"{key} 不能为空", f"{key} is required"))
     if "project_no" in changes:
         changes["project_no"] = changes["project_no"] or None  # 清空 = 未关联
     for key, value in changes.items():
@@ -240,7 +253,7 @@ def reread_files(project_id: int, request: Request, background: BackgroundTasks,
 def extracted_crop(field_id: int, request: Request, db: Session = Depends(get_db)):
     x = db.get(ExtractedField, field_id)
     if x is None or not x.crop_path:
-        raise HTTPException(404, "没有原文截图")
+        raise HTTPException(404, tr("没有原文截图", "No crop of the source"))
     return FileResponse(request.app.state.data_dir / x.crop_path)
 
 
@@ -248,7 +261,7 @@ def extracted_crop(field_id: int, request: Request, db: Session = Depends(get_db
 def download_file(file_id: int, request: Request, db: Session = Depends(get_db)):
     f = db.get(SourceFile, file_id)
     if f is None:
-        raise HTTPException(404, "文件不存在")
+        raise HTTPException(404, tr("文件不存在", "File not found"))
     return FileResponse(request.app.state.data_dir / f.stored_path, filename=f.filename)
 
 

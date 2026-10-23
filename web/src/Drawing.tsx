@@ -1,8 +1,9 @@
 import { MouseEvent, useEffect, useState } from "react";
 import { api, Drawing, send, WorkspaceView } from "./api";
 import { CheckChip } from "./Calc";
+import { lang, t } from "./i18n";
 
-const LAYERS: [string, string][] = [["id", "IDs 箱体编号"], ["size", "Sizes 箱体尺寸"], ["power", "Power 电源"], ["data", "Data 网线"], ["dim", "Dims 尺寸线"], ["note", "Notes 说明栏"]];
+const LAYERS = ["id", "size", "power", "data", "dim", "note"];
 const circled = (n: number) => (n >= 1 && n <= 20 ? String.fromCharCode(0x2460 + n - 1) : String(n));
 
 /** 拼接与线路图（CR-3）：由 F3 箱体排布、F6 回路、F9 网线自动生成；可手动调整分组（随 Rev 保存），可导出 SVG / DXF / DWG / Excel / PDF。 */
@@ -16,7 +17,7 @@ export default function DrawingTab({ view, drawing: d, onApply }: { view: Worksp
     api<{ dwg: boolean }>("/capabilities").then((c) => setDwg(c.dwg));
   }, []);
   useEffect(() => {
-    fetch(`/api/proposals/${id}/drawing.svg`).then((r) => r.text()).then(setSvg);
+    fetch(`/api/proposals/${id}/drawing.svg?lang=${lang()}`).then((r) => r.text()).then(setSvg); // 页面上的图跟界面语言
   }, [id, d]);
 
   function click(e: MouseEvent) {
@@ -38,35 +39,37 @@ export default function DrawingTab({ view, drawing: d, onApply }: { view: Worksp
   return (
     <>
       <section className="card">
-        <h2>
-          Drawing <span className="zh">拼接与线路图</span>
-        </h2>
-        <p className="muted">由 F3 箱体排布、F6 / F7 电源回路、F9 网线自动生成，可导出 DXF / DWG。编号从左下角 R1C1 开始，网线起点在左侧。</p>
+        <h2>{t("drawing.title")}</h2>
+        <p className="muted">{t("drawing.intro")}</p>
         <div className="row">
-          <span className="muted small">Layers 图层：</span>
-          {LAYERS.map(([k, v]) => (
+          <span className="muted small">
+            {t("drawing.layers")}
+            {t("common.colon")}
+          </span>
+          {LAYERS.map((k) => (
             <button key={k} className={`pill ${hidden.includes(k) ? "" : "active"}`}
               onClick={() => setHidden(hidden.includes(k) ? hidden.filter((x) => x !== k) : [...hidden, k])}>
-              {v}
+              {t(`drawing.layer.${k}`)}
             </button>
           ))}
         </div>
         <div className="row">
           <button className={mode === "power" ? "btn-primary" : "btn-outline"} onClick={() => setMode(mode === "power" ? null : "power")}>
-            Adjust power 调整电源回路
+            {t("drawing.adjustPower")}
           </button>
           <button className={mode === "data" ? "btn-primary" : "btn-outline"} onClick={() => setMode(mode === "data" ? null : "data")}>
-            Adjust data 调整网线
+            {t("drawing.adjustData")}
           </button>
           <button className="btn-link" disabled={!d.manual.power && !d.manual.data} onClick={reset}>
-            Reset to auto 恢复自动
+            {t("drawing.reset")}
           </button>
-          {mode && <span className="muted small">{mode === "power" ? "点箱体，把它换到下一个回路；改完立即重新校验每个回路的功率。" : "点箱体，把它换到下一根网线；改完立即重新校验每根网线的带载。"}</span>}
+          {mode && <span className="muted small">{t(mode === "power" ? "drawing.hintPower" : "drawing.hintData")}</span>}
         </div>
         <p className={over ? "error-banner" : "ok-banner"}>
           {over
-            ? `有 ${over} 处超载，已标红。这个 Rev 不能批准，改回或点「恢复自动」。`
-            : `校验通过：每个回路 ≤ ${d.circuit_cap_w / 1000} kW，每根网线 ≤ ${d.cable_cap_px.toLocaleString()} px。${d.manual.power + d.manual.data ? `已手动调整 ${d.manual.power + d.manual.data} 个箱体，随 Rev 保存。` : ""}`}
+            ? t("drawing.over", { n: over })
+            : t("drawing.ok", { kw: d.circuit_cap_w / 1000, px: d.cable_cap_px.toLocaleString() })
+              + (d.manual.power + d.manual.data ? t("drawing.manualCount", { n: d.manual.power + d.manual.data }) : "")}
         </p>
         {d.checks.filter((c) => c.check === "NOTE").map((c, i) => (
           <p key={i} className="small">
@@ -80,62 +83,65 @@ export default function DrawingTab({ view, drawing: d, onApply }: { view: Worksp
       <div className="grid2">
         <section className="card">
           <h3>
-            Power circuits <span className="zh">电源回路 · ≤ {d.circuit_cap_w / 1000} kW</span>
+            {t("drawing.circuits")} · ≤ {d.circuit_cap_w / 1000} kW
           </h3>
           <ul className="plain">
             {d.circuits.map((c) => (
               <li key={c.no} className={c.over ? "error" : ""}>
-                回路 {c.no} · {c.cabinets} 箱 · {c.watts} W · {c.amps} A{c.over ? " · 超载" : ""}
+                {t("drawing.circuit", { no: c.no })} · {t("drawing.boxes", { n: c.cabinets })} · {c.watts} W · {c.amps} A
+                {c.over ? ` · ${t("drawing.overload")}` : ""}
               </li>
             ))}
-            <li className="muted">回路 {d.circuits.length + 1} · 预留 Reserved</li>
+            <li className="muted">
+              {t("drawing.circuit", { no: d.circuits.length + 1 })} · {t("drawing.reserved")}
+            </li>
           </ul>
         </section>
         <section className="card">
           <h3>
-            Data cables <span className="zh">网线 · ≤ {d.cable_cap_px.toLocaleString()} px</span>
+            {t("drawing.cables")} · ≤ {d.cable_cap_px.toLocaleString()} px
           </h3>
           <ul className="plain">
             {d.cables.map((c) => (
               <li key={c.no} className={c.over ? "error" : ""}>
-                网线 {circled(c.no)} · {c.cabinets} 箱 · {c.px.toLocaleString()} px{c.over ? " · 超载" : ""}
+                {t("drawing.cable", { no: circled(c.no) })} · {t("drawing.boxes", { n: c.cabinets })} · {c.px.toLocaleString()} px
+                {c.over ? ` · ${t("drawing.overload")}` : ""}
               </li>
             ))}
-            <li className="muted">网线 {circled(d.cables.length + 1)} · FOR SPARE 备用</li>
+            <li className="muted">
+              {t("drawing.cable", { no: circled(d.cables.length + 1) })} · FOR SPARE · {t("drawing.spare")}
+            </li>
           </ul>
         </section>
       </div>
 
       <section className="card">
-        <h3>
-          Export <span className="zh">导出</span>
-        </h3>
+        <h3>{t("drawing.export")}</h3>
         <div className="row">
           <a className="btn-outline" href={file("drawing.svg")}>SVG</a>
           <a className="btn-outline" href={file("drawing.dxf")}>DXF</a>
           {dwg ? <a className="btn-outline" href={file("drawing.dwg")}>DWG</a>
-            : <button className="btn-outline" disabled title="装 ODA 后可导出 DWG">DWG（需 ODA）</button>}
-          <a className="btn-outline" href={file("cabinets.xlsx")}>Excel 箱体清单</a>
-          <a className="btn-outline" href={file("drawing.pdf?lang=zh")}>PDF 中文</a>
-          <a className="btn-outline" href={file("drawing.pdf?lang=en")}>PDF English</a>
+            : <button className="btn-outline" disabled title={t("drawing.dwgHint")}>{t("drawing.dwgOff")}</button>}
+          <a className="btn-outline" href={file("cabinets.xlsx")}>{t("drawing.excel")}</a>
+          <a className="btn-outline" href={file("drawing.pdf?lang=zh")}>{t("drawing.pdfZh")}</a>
+          <a className="btn-outline" href={file("drawing.pdf?lang=en")}>{t("drawing.pdfEn")}</a>
         </div>
         <p className="muted small">
-          未批准的 Rev 导出带 DRAFT 水印；文件属性写入 Rev、规则版本和产品库版本。DXF：单位 mm、1:1，图层 AVP-CABINET / AVP-CABINET-ID / AVP-POWER / AVP-DATA / AVP-DIM / AVP-NOTE，尺寸为 DIMENSION 实体。{dwg ? "" : "服务器没有装 ODA File Converter，装好后可导出 DWG。"}
+          {t("drawing.exportNote")}
+          {dwg ? "" : t("drawing.noOda")}
         </p>
       </section>
 
       <section className="card">
-        <h3>
-          Calculation basis <span className="zh">计算依据</span>
-        </h3>
+        <h3>{t("ws.tabs.calc")}</h3>
         <div className="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>Item 项目</th>
-                <th>Formula 公式（代入数值）</th>
-                <th>Result 结果</th>
-                <th>Rule 规则</th>
+                <th>{t("boq.item")}</th>
+                <th>{t("drawing.formula")}</th>
+                <th>{t("calc.result")}</th>
+                <th>{t("calc.rule")}</th>
               </tr>
             </thead>
             <tbody>

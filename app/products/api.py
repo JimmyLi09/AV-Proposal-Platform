@@ -4,6 +4,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..api import get_db, require_user
+from ..i18n import text, tr
 from ..models import ProductLibraryVersion, User
 from ..versions import check_base, history, latest, next_label, version_out
 from .library import CATEGORY_LABEL, FIELDS, SCENES, STATUSES, LibraryError, load_reference, load_seed, name, validate
@@ -22,9 +23,10 @@ def ensure_seed(db: Session) -> None:
 @router.get("/{line}")
 def get_latest(line: str, db: Session = Depends(get_db)):
     v = latest(db, ProductLibraryVersion, line)
-    fields = {cat: [{"name": n, "label": label, "type": kind} for n, label, kind in fs]
+    fields = {cat: [{"name": n, "label": text(label), "type": kind} for n, label, kind in fs]
               for cat, fs in FIELDS[line].items()}
-    return version_out(v) | {"fields": fields, "categories": CATEGORY_LABEL, "statuses": STATUSES, "scenes": SCENES}
+    categories = {k: text(label) for k, label in CATEGORY_LABEL.items()}
+    return version_out(v) | {"fields": fields, "categories": categories, "statuses": STATUSES, "scenes": SCENES}
 
 
 @router.get("/{line}/versions")
@@ -48,7 +50,7 @@ def save_version(line: str, body: SaveIn, user: User = Depends(require_user), db
     except LibraryError as e:
         raise HTTPException(422, str(e))
     except (KeyError, TypeError, AttributeError):
-        raise HTTPException(422, "产品库内容格式不对")
+        raise HTTPException(422, tr("产品库内容格式不对", "Product library content is malformed"))
     v = ProductLibraryVersion(business_line=line, version=next_label(base.version), content=body.content,
                               reason=body.reason.strip(), created_by=user.id)
     db.add(v)
@@ -65,10 +67,10 @@ def add_reference(line: str, body: ReferenceIn, user: User = Depends(require_use
     """把参考型号表里的建议型号加进产品库（另存新版本）。数值仍标示例值，等按规格书核实。"""
     ref = next((p for p in load_reference(line) if p["id"] == body.id), None)
     if ref is None:
-        raise HTTPException(404, "参考型号表里没有这个型号")
+        raise HTTPException(404, tr("参考型号表里没有这个型号", "This model is not in the reference table"))
     base = latest(db, ProductLibraryVersion, line)
     if any(p["id"] == ref["id"] for p in base.content["products"]):
-        raise HTTPException(409, f"{ref['model']} 已经在产品库里")
+        raise HTTPException(409, ref["model"] + tr(" 已经在产品库里", " is already in the product library"))
     content = {**base.content, "products": [*base.content["products"], ref]}
     validate(content, line)
     v = ProductLibraryVersion(business_line=line, version=next_label(base.version), content=content,

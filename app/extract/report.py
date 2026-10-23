@@ -8,7 +8,7 @@ import tempfile
 from datetime import date
 from pathlib import Path
 
-from .run import METHOD_LABEL, extract
+from .run import extract, method_label
 
 GRADE = {"A": "A 数值直接读取", "B": "B 文字识别，须逐项确认", "C": "C 仅作参考，不用于计算"}
 CONF = {"high": "High 高", "medium": "Medium 中（须确认）", "low": "Low 低（须确认）"}
@@ -23,7 +23,7 @@ def main(folder: str) -> None:
             r = extract(path, path.suffix[1:].lower(), Path(tmp), f"derived/{i}", None)
             found = "<br>".join(f"{f['field']} = {f['value']} · {CONF[f['confidence']]} · {f['location']}"
                                 for f in r["fields"]) or r["note"]
-            print(f"| {path.name} | {GRADE[r['grade']]} | {METHOD_LABEL[r['method']]} | {found} |")
+            print(f"| {path.name} | {GRADE[r['grade']]} | {method_label(r["method"])} | {found} |")
 
 
 if __name__ == "__main__":

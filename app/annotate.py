@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from .api import get_db, iso, require_user
+from .i18n import tr
 from .models import SourceFile, User, utcnow
 from .workspace import get_proposal
 
@@ -22,6 +23,8 @@ FONTS = ["C:/Windows/Fonts/msyh.ttc", "C:/Windows/Fonts/simhei.ttf",
          "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc", "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
          "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"]
 ORANGE, NAVY, WHITE = (194, 65, 12), (21, 32, 58), (255, 255, 255)
+TYPE_LABEL = {"point": lambda: tr("点", "Point"), "area": lambda: tr("区域", "Area"),
+              "device": lambda: tr("设备", "Device"), "text": lambda: tr("文字", "Text")}
 
 
 def page_count(state, f: SourceFile) -> int:
@@ -56,9 +59,10 @@ def base_image(state, f: SourceFile, page: int) -> Path:
 def annotatable(db: Session, state, prop, file_id: int, page: int) -> SourceFile:
     f = db.get(SourceFile, file_id)
     if f is None or f.project_id != prop.project_id:
-        raise HTTPException(404, "文件不存在")
+        raise HTTPException(404, tr("文件不存在", "File not found"))
     if not 1 <= page <= page_count(state, f):
-        raise HTTPException(422, "这个文件不能标注，或页码不对（只能标注 PDF 和 JPG / PNG）")
+        raise HTTPException(422, tr("这个文件不能标注，或页码不对（只能标注 PDF 和 JPG / PNG）",
+                                   "This file cannot be annotated, or the page is wrong (PDF and JPG / PNG only)"))
     return f
 
 
@@ -66,7 +70,7 @@ def annotatable(db: Session, state, prop, file_id: int, page: int) -> SourceFile
 def pages(file_id: int, request: Request, db: Session = Depends(get_db)):
     f = db.get(SourceFile, file_id)
     if f is None:
-        raise HTTPException(404, "文件不存在")
+        raise HTTPException(404, tr("文件不存在", "File not found"))
     return {"pages": page_count(request.app.state, f)}
 
 
@@ -74,7 +78,7 @@ def pages(file_id: int, request: Request, db: Session = Depends(get_db)):
 def page_image(file_id: int, page: int, request: Request, db: Session = Depends(get_db)):
     f = db.get(SourceFile, file_id)
     if f is None or not 1 <= page <= page_count(request.app.state, f):
-        raise HTTPException(404, "页面不存在")
+        raise HTTPException(404, tr("页面不存在", "Page not found"))
     return FileResponse(base_image(request.app.state, f, page))
 
 
@@ -135,11 +139,11 @@ def render_copy(base: Path, body: AnnotationIn, sizes: list, out: Path) -> None:
     unit = max(W, H) / 100
     fs = max(14, int(unit * 1.4))
     font, small = _font(fs), _font(int(fs * 0.85))
-    legend = [f"{i}  {m.label or {'point': '点', 'area': '区域', 'device': '设备', 'text': '文字'}[m.type]}"
+    legend = [f"{i}  {m.label or TYPE_LABEL[m.type]()}"
               + (f" · ≈ {s[0]} × {s[1]} mm" if s else "") + (f" — {m.note}" if m.note else "")
               for i, (m, s) in enumerate(zip(body.marks, sizes), 1)]
     if body.scale:
-        legend.append(f"比例 Scale：两点间距 {body.scale.mm:g} mm")
+        legend.append(tr(f"比例：两点间距 {body.scale.mm:g} mm", f"Scale: {body.scale.mm:g} mm between two points"))
     line_h = int(fs * 1.7)
     canvas = Image.new("RGB", (W, H + line_h * len(legend) + line_h), WHITE)
     canvas.paste(img, (0, 0))
@@ -214,5 +218,5 @@ def save_annotation(proposal_id: int, body: AnnotationIn, request: Request, user
 def annotation_copy(proposal_id: int, file_id: int, page: int, request: Request, db: Session = Depends(get_db)):
     doc = (get_proposal(db, proposal_id).revisions[-1].annotations or {}).get(f"{file_id}:{page}")
     if doc is None:
-        raise HTTPException(404, "还没有标注副本")
+        raise HTTPException(404, tr("还没有标注副本", "No annotated copy yet"))
     return FileResponse(request.app.state.data_dir / doc["copy_path"], filename=doc["copy_name"])
