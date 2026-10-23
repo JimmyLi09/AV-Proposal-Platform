@@ -235,4 +235,27 @@ export type WorkspaceView = {
   product_fed: string[];
   result: RunResult | null;
   boq: ClientBoq | null;
+  drawing: Drawing | null;
+};
+
+// 拼接与线路图（CR-3）
+export type DrawingCabinet = { id: string; row: number; col: number; size: string; w: number; h: number; circuit: number; cable: number; manual: boolean; px: number; watts: number };
+export type Drawing = {
+  width: number;
+  height: number;
+  cols: number;
+  rows: number[];
+  sizes: Record<string, { w: number; h: number; count: number }>;
+  cabinets: DrawingCabinet[];
+  circuits: { no: number; cabinets: number; watts: number; amps: number; over: boolean }[];
+  cables: { no: number; cabinets: number; px: number; over: boolean; path: string[] }[];
+  circuit_cap_w: number;
+  cable_cap_px: number;
+  spare_circuits: number;
+  spare_cables: number;
+  manual: { power: number; data: number };
+  edits: { power: Record<string, number>; data: Record<string, number> };
+  checks: { check: string; text: string }[];
+  blocked: boolean;
+  basis: { item: string; formula: string; result: string; rule: string }[];
 };

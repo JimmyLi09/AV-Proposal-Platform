@@ -1,6 +1,7 @@
 """安装包验收（在 GitHub Actions 的 Windows 机器上，装好之后跑）。
 
-python installer/smoke_test.py fresh <资料目录>      服务能打开，能建项目，上传的样本能读出来，原件只读
+python installer/smoke_test.py fresh <资料目录>      服务能打开，能建项目，上传的样本能读出来，原件只读；
+                                                    算出结果后能导出 BOQ Excel、图纸 DXF 和技术方案 PDF（服务里的 Chromium 能用）
 python installer/smoke_test.py upgraded <资料目录>   再装一次（更新）之后，之前的项目还在
 """
 import stat
@@ -58,6 +59,15 @@ def fresh(c: httpx.Client, data: Path):
         print(f["filename"], f["grade"], f["read_status"], f["read_method"], f["fields_found"], f["read_note"])
         assert f["grade"] == GRADES[f["filename"]], f
         assert f["read_status"] == ("attached" if f["grade"] == "C" else "read"), f
+
+    prop = ok(c.post(f"/api/projects/{pid}/proposals", json={"name": "LED-1 Lobby", "business_line": "LED"})).json()["id"]
+    inputs = {"environment": "indoor", "pixel_pitch_mm": 2.5, "width_mm": 4480, "height_mm": 2560, "installation": "wall",
+              "maintenance": "front", "brightness_required_nits": 600, "viewing_distance_m": [4, 6], "signal_sources": 1}
+    assert ok(c.put(f"/api/proposals/{prop}/inputs", json={"inputs": inputs})).json()["rev"]["status"] == "calculated"
+    for path, magic in (("boq.xlsx", b"PK"), ("drawing.dxf", b"  0"), ("drawing.pdf", b"%PDF-")):
+        body = ok(c.get(f"/api/proposals/{prop}/{path}", timeout=180)).content
+        assert body.startswith(magic), (path, body[:20])
+        print(path, len(body), "bytes")
 
     stored = list((data / "files").rglob("*.*"))
     assert len(stored) == len(GRADES) and not any(p.stat().st_mode & stat.S_IWRITE for p in stored), stored  # 原件只读

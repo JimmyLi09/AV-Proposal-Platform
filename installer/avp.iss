@@ -38,6 +38,7 @@ Name: firewall; Description: "Allow other computers on the company network to co
 ; 更新时先清掉旧的 Python 和界面，避免旧版依赖残留。资料目录不在程序目录里，不受影响。
 Type: filesandordirs; Name: "{app}\python"
 Type: filesandordirs; Name: "{app}\web"
+Type: filesandordirs; Name: "{app}\browsers"
 
 [Files]
 Source: "..\build\avp\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs

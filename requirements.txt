@@ -1,3 +1,4 @@
+# CR-3 加入：playwright（无头 Chromium 打印技术方案 PDF）、pypdf（写 PDF 文件属性）
 # 第 4 步加入：ezdxf、openpyxl、pdfplumber、rapidocr（读文件与文字识别，免费开源，CPU 运行，识别模型随包自带）
 PyYAML==6.0.3
 SQLAlchemy==2.1.4
@@ -10,6 +11,8 @@ opencv-python==5.0.0.93
 openpyxl==3.1.5
 pdfplumber==0.11.10
 pillow==12.3.0
+playwright==1.56.0
+pypdf==6.21.2
 pypdfium2==5.14.0
 python-multipart==0.0.32
 rapidocr-onnxruntime==1.4.4
