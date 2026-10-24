@@ -165,6 +165,7 @@ export function Outcome({ r }: { r: RuleResult }) {
   return (
     <span>
       {r.display} <CheckChip check={r.check} />
+      {r.manual?.length > 0 && <span className="tag st-sample">{t("manual.tag")}</span>}
     </span>
   );
 }

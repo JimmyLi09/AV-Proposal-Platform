@@ -11,6 +11,8 @@ FONT = "-apple-system, 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif"
 def _box(x: float, y: float, node: dict) -> str:
     dashed = ' stroke-dasharray="6 4"' if node["supply"] != "boq" else ""
     qty = node["qty"] if isinstance(node["qty"], str) else f"× {node['qty']}"
+    if node.get("manual"):  # 数量是手动值（CR-5）
+        qty += " · " + tr("手动", "manual")
     return (f'<rect x="{x}" y="{y}" width="{BOX_W}" height="{BOX_H}" rx="10" fill="#FFFFFF" stroke="{NAVY}"'
             f' stroke-width="1.5"{dashed}/>'
             f'<text x="{x + 12}" y="{y + 24}" font-size="13" font-weight="700" fill="{NAVY}">{escape(node["title"])}</text>'
@@ -35,7 +37,7 @@ def concept_svg(d: dict) -> str:
         parts.append(_box(x_of[n], PAD, nodes[n]))
     for link in d["links"]:
         owner = link["supply"] != "boq"
-        text = f"{link['cable']} × {link['qty']}"
+        text = f"{link['cable']} × {link['qty']}" + (" · " + tr("手动", "manual") if link.get("manual") else "")
         note = {"owner": tr("业主提供", "By owner"), "included": tr("随设备附带", "Included")}.get(link["supply"], "")
         if link["from"] in x_of:  # 信号：横向箭头
             x1, x2, y = x_of[link["from"]] + BOX_W, x_of[link["to"]], PAD + BOX_H / 2

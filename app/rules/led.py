@@ -165,6 +165,12 @@ STEPS = {
 }
 
 
+# 推荐页上可以手动覆盖的结果（CR-5）：规则编号 → 结果名
+OVERRIDABLE = {"F4": ["res_x", "res_y"], "F2": ["modules"], "F3": ["cabinets"], "F10": ["spare_modules"],
+               "F5": ["power_kw"], "F6": ["circuits"], "F7": ["power_cables"], "F9": ["data_cables"],
+               "F11": ["controller_qty"], "F12": ["db_boxes"]}
+
+
 # ---- 推荐与 BOQ ----
 
 PRODUCT_INPUTS = ["module_w_mm", "module_h_mm", "cabinet_sizes_mm"]  # 由选定的箱体带出，不用手填
@@ -206,15 +212,16 @@ def catalog(library: dict, cabinet: dict | None) -> dict:
     }
 
 
-def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict) -> list[dict]:
-    """内部明细：数量全部来自规则结果，「数量依据」写规则编号。key 用来对应示意图里的设备。"""
+def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict, manual: set = frozenset()) -> list[dict]:
+    """内部明细：数量全部来自规则结果，「数量依据」写规则编号。key 用来对应示意图里的设备。
+    manual：手动覆盖过的结果名，数量就是这个结果的行标「手动」。"""
     lines = []
     products = {p["id"]: p for p in library["products"]}
 
-    def add(key, item, model, qty, unit, why, rule, included=False):
+    def add(key, item, model, qty, unit, why, rule, included=False, name=None):
         if qty is not None:
             lines.append({"key": key, "item": item, "model": model, "qty": qty, "unit": unit, "why": why,
-                          "rule": rule, "included": included, "manual": False})
+                          "rule": rule, "included": included, "manual": name in manual})
 
     if cabinet:
         m = cabinet["model"]
@@ -222,7 +229,7 @@ def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict) -> list
             add(f"{cabinet['id']}:{w}x{h}", tr("箱体", "LED cabinet") + f" {w} × {h}", m, n, tr("个", "pcs"),
                 (tr("主尺寸，", "main size, ") if i == 0 else "") + "F3", "F3")
         add(f"{cabinet['id']}:module", tr("备用模组", "Spare modules") + f" {cabinet['module_w_mm']} × {cabinet['module_h_mm']}",
-            m, values.get("spare_modules"), tr("块", "pcs"), "F10", "F10")
+            m, values.get("spare_modules"), tr("块", "pcs"), "F10", "F10", name="spare_modules")
         if values.get("cabinets") is not None:
             psu, rx = cabinet.get("psu_per_cabinet") or 1, cabinet.get("rx_per_cabinet") or 1
             inside = tr("箱内", "In cabinet")
@@ -236,7 +243,7 @@ def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict) -> list
     if values.get("controller_id") in products:
         add(values["controller_id"], tr("控制器", "Controller"), products[values["controller_id"]]["model"],
             values["controller_qty"], tr("台", "units"),
-            f"{values['load_mp']:.2f} / {values['capacity_mp']:.2f} MP" + tr("，", ", ") + "F11", "F11")
+            f"{values['load_mp']:.2f} / {values['capacity_mp']:.2f} MP" + tr("，", ", ") + "F11", "F11", name="controller_qty")
     if values.get("processor_id") in products:
         sources = inputs.get("signal_sources") or 1
         add(values["processor_id"], tr("视频处理器（含发送）", "Video processor with sending") if values.get("processor_sending")
@@ -245,13 +252,13 @@ def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict) -> list
     if values.get("circuits") is not None:
         c = values["circuits"]
         add("power_cable", tr("电源线", "Power cable"), "—", values.get("power_cables"), tr("路", "runs"),
-            tr(f"{c} 回路 + 备用，F7", f"{c} circuits + spare, F7"), "F7")
+            tr(f"{c} 回路 + 备用，F7", f"{c} circuits + spare, F7"), "F7", name="power_cables")
         add("db_box", tr("配电箱（含 MCB）", "DB box with MCB"), tr("定制", "Custom"), values.get("db_boxes"), tr("个", "pcs"),
-            tr(f"{c} 回路，F12", f"{c} circuits, F12"), "F12")
+            tr(f"{c} 回路，F12", f"{c} circuits, F12"), "F12", name="db_boxes")
     if values.get("data_runs") is not None:
         r = values["data_runs"]
         add("data_cable", tr("数据线", "Data cable"), "Cat6", values.get("data_cables"), tr("路", "runs"),
-            tr(f"{r} 路 + 备用，F9", f"{r} runs + spare, F9"), "F9")
+            tr(f"{r} 路 + 备用，F9", f"{r} runs + spare, F9"), "F9", name="data_cables")
     if values.get("installation_items"):
         add(f"install:{inputs.get('installation')}", text(values["installation_items"]), "—", 1, tr("套", "set"), "F16", "F16")
     return lines
@@ -316,7 +323,7 @@ def suggest(values: dict, inputs: dict, library: dict) -> list[dict]:
 
 
 def diagram(values: dict, boq_lines: list[dict], inputs: dict, cabinet: dict | None, library: dict,
-            suggestions: list[dict] | None = None) -> dict | None:
+            suggestions: list[dict] | None = None, manual: set = frozenset()) -> dict | None:
     """Level 1 / Level 2 示意图由 BOQ 生成：每台设备、每条线缆都对应 BOQ 行。
     业主提供（supply=owner）或随设备附带（supply=included）的不进 BOQ，会在图上标出来（示例假设，清单 H4）。"""
     if not cabinet or values.get("cabinets") is None:
@@ -376,6 +383,11 @@ def diagram(values: dict, boq_lines: list[dict], inputs: dict, cabinet: dict | N
         links.append({"from": "db_box", "to": "screen", "cable": tr("电源线", "Power cable"),
                       "qty": f"{values['circuits']} + {values['power_cables'] - values['circuits']} " + tr("备用", "spare"),
                       "boq": "power_cable", "supply": "boq"})
+    for key, names in (("controller", {"controller_qty"}), ("screen", {"cabinets"}), ("db_box", {"db_boxes"})):
+        if key in nodes:
+            nodes[key]["manual"] = bool(names & manual)  # 数量是手动值（CR-5）
+    for x in links:
+        x["manual"] = bool({"data_cable": {"data_cables"}, "power_cable": {"circuits", "power_cables"}}.get(x["boq"], set()) & manual)
     keys = {line["key"] for line in boq_lines if line["key"]}
     paren = lambda x: tr(f"（{x}）", f" ({x})")  # noqa: E731
     unmatched = [n["title"] + paren(k) for n in nodes.values() if n["supply"] == "boq" for k in n["boq"] if k not in keys]

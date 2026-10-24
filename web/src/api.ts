@@ -76,7 +76,18 @@ export type Version<T> = {
 };
 export type RuleVersion = Version<RuleContent> & { product_fed: string[]; text: Record<string, string> };
 
-export type ResultLine = { name: string; value: unknown; display: string; unit?: string; expr?: string; when?: string | null; substituted?: string };
+export type ResultLine = {
+  name: string;
+  value: unknown;
+  display: string;
+  unit?: string;
+  expr?: string;
+  when?: string | null;
+  substituted?: string;
+  manual?: boolean; // CR-5：手动覆盖过；规则值在 rule_value / rule_display
+  rule_value?: unknown;
+  rule_display?: string;
+};
 export type RuleResult = {
   id: string;
   title: string;
@@ -89,6 +100,7 @@ export type RuleResult = {
   params: { name: string; label: string; value: number | null; unit: string; status: string }[];
   missing: string[];
   error: string | null;
+  manual: string[];
 };
 export type RunResult = {
   choices: Record<string, number[]>;
@@ -98,6 +110,7 @@ export type RunResult = {
   diagram: Diagram | null;
   suggestions?: Suggestion[];
   library_version?: string;
+  manual?: string[];
 };
 
 // CR-2：产品库里没有够用的型号时，从参考型号表给出的建议型号（未入库，待核对规格书）
@@ -115,8 +128,8 @@ export type Suggestion = {
   remark: string;
 };
 
-export type DiagramNode = { title: string; model: string; qty: number | string; detail: string; boq: string[]; supply: string };
-export type DiagramLink = { from: string; to: string; cable: string; qty: string; boq: string | null; supply: string };
+export type DiagramNode = { title: string; model: string; qty: number | string; detail: string; boq: string[]; supply: string; manual?: boolean };
+export type DiagramLink = { from: string; to: string; cable: string; qty: string; boq: string | null; supply: string; manual?: boolean };
 export type Diagram = {
   chain: string[];
   power: string | null;
@@ -184,6 +197,7 @@ export type ClientBoqRow = {
   by: string | null;
   at: string | null;
   added: boolean;
+  rule_manual: boolean; // 数量取自推荐页手动覆盖过的结果（CR-5）
 };
 export type ClientBoq = {
   group: string;
@@ -238,6 +252,23 @@ export type WorkspaceView = {
   result: RunResult | null;
   boq: ClientBoq | null;
   drawing: Drawing | null;
+  overridable: Record<string, string[]>;
+  overrides: ManualOverride[];
+};
+
+// 推荐结果的手动覆盖（CR-5）：规则值 → 手动值 · 原因 · 修改人 · 时间
+export type ManualOverride = {
+  rule: string;
+  title: string;
+  name: string;
+  unit: string;
+  rule_value: unknown;
+  rule_display: string;
+  value: unknown;
+  display: string;
+  reason: string;
+  by: string;
+  at: string;
 };
 
 // 拼接与线路图（CR-3）
