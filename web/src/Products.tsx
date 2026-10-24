@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { api, FieldDef, LibraryContent, LibraryVersion, Product, send, Version } from "./api";
 import { nextVersion, optionLabel, SizesInput } from "./Calc";
 import { t } from "./i18n";
-import { fmtDate } from "./labels";
+import { fmtDate, LineTabs } from "./labels";
 
-const LINE = "LED";
 const STATUSES = ["preferred", "approved", "retired"];
 const SCENES = ["indoor", "outdoor", "rental"];
 const MAINT = ["front", "rear", "both"];
@@ -19,10 +18,15 @@ export function keySpecs(p: Product) {
   if (p.category === "controller") return t("products.specs.controller", v);
   if (p.category === "processor" && p.sending) return t("products.specs.sending", v);
   if (p.category === "processor") return t("products.specs.processor", v);
+  const pj = { lm: n("lumens") ?? "?", w: n("native_px_w") ?? "?", h: n("native_px_h") ?? "?", watts: n("power_w") ?? "?",
+    throw: n("throw_ratio") ?? "?", fits: ((p.fits as string[] | null) ?? []).join(", ") || "—", outputs: n("outputs") ?? "?" };
+  if (p.category === "projector") return t("products.specs.projector", pj);
+  if (p.category === "lens") return t("products.specs.lens", pj);
+  if (p.category === "blender") return t(p.curved ? "products.specs.blenderCurved" : "products.specs.blender", pj);
   return "";
 }
 
-export default function Products() {
+export default function Products({ line }: { line: string }) {
   const [saved, setSaved] = useState<LibraryVersion | null>(null);
   const [draft, setDraft] = useState<LibraryContent | null>(null);
   const [versions, setVersions] = useState<Version<unknown>[]>([]);
@@ -33,11 +37,11 @@ export default function Products() {
   const [error, setError] = useState("");
 
   async function load() {
-    const v = await api<LibraryVersion>(`/products/${LINE}`);
+    const v = await api<LibraryVersion>(`/products/${line}`);
     setSaved(v);
     setDraft(structuredClone(v.content));
     setEditing(null);
-    setVersions(await api<Version<unknown>[]>(`/products/${LINE}/versions`));
+    setVersions(await api<Version<unknown>[]>(`/products/${line}/versions`));
   }
   useEffect(() => {
     load();
@@ -53,7 +57,9 @@ export default function Products() {
   }
 
   function add(category: string) {
-    const blank: Product = { id: "", category, brand: "", model: "", status: "approved", scenes: ["indoor"], sample: false };
+    const blank: Product = { id: "", category, brand: "", model: "", status: "approved", scenes: [], sample: false };
+    if (saved!.fields[category].some((f) => f.name === "scenes")) blank.scenes = ["indoor"];
+    else delete (blank as Record<string, unknown>).scenes; // 投影产品不按室内外选型
     for (const f of saved!.fields[category]) if (!(f.name in blank)) blank[f.name] = f.type === "text" ? "" : f.type === "maintenance" ? "front" : null;
     const copy = structuredClone(draft!);
     copy.products.push(blank);
@@ -64,7 +70,7 @@ export default function Products() {
   async function save() {
     setError("");
     try {
-      await send("POST", `/products/${LINE}`, { base_id: saved!.id, reason, content: draft });
+      await send("POST", `/products/${line}`, { base_id: saved!.id, reason, content: draft });
       setReason("");
       await load();
     } catch (err) {
@@ -91,8 +97,8 @@ export default function Products() {
       )}
 
       <div className="row">
-        <span className="pill active">LED</span>
-        {["all", "cabinet", "controller", "processor"].map((k) => (
+        <LineTabs page="products" line={line} />
+        {["all", ...Object.keys(saved.fields)].map((k) => (
           <button key={k} className={`pill ${filter === k ? "active" : ""}`} onClick={() => setFilter(k)}>
             {t(`products.filter.${k}`)}
           </button>
@@ -132,7 +138,7 @@ export default function Products() {
                   </td>
                   <td>{saved.categories[p.category]}</td>
                   <td>{keySpecs(p)}</td>
-                  <td>{p.scenes.map(optionLabel).join(t("common.listSep"))}</td>
+                  <td>{p.scenes ? p.scenes.map(optionLabel).join(t("common.listSep")) : "—"}</td>
                   <td>
                     <span className={`tag ps-${p.status}`}>{productStatus(p.status)}</span>
                   </td>
@@ -284,6 +290,9 @@ function Field({ def, value, onChange }: { def: FieldDef; value: unknown; onChan
     case "number":
       return <input type="number" step="any" aria-label={def.label} value={(value as number | null) ?? ""}
         onChange={(e) => onChange(e.target.value === "" ? null : Number(e.target.value))} />;
+    case "ids":
+      return <input aria-label={def.label} value={((value as string[] | null) ?? []).join(", ")}
+        onChange={(e) => onChange(e.target.value.split(",").map((x) => x.trim()).filter(Boolean))} />;
     case "sizes":
       return <SizesInput label={def.label} text={((value as number[][] | null) ?? []).map((s) => s.join("x")).join(", ")} onChange={onChange} />;
     default:

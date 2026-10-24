@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { api, send, TemplateContent, TemplateRow, TemplateVersion, Version } from "./api";
 import { nextVersion } from "./Calc";
 import { t } from "./i18n";
-import { fmtDate } from "./labels";
+import { fmtDate, LineTabs } from "./labels";
 
-const LINE = "LED";
 const isNumber = (s: string) => s.trim() !== "" && !Number.isNaN(Number(s));
 function newKey(rows: TemplateRow[]) {
   let n = rows.length + 1;
@@ -13,7 +12,7 @@ function newKey(rows: TemplateRow[]) {
 }
 
 /** 模板：客户版 BOQ 的默认行。保存时整份另存新版本（第 6 步再加章节、信头和标准条款）。 */
-export default function Templates() {
+export default function Templates({ line }: { line: string }) {
   const [saved, setSaved] = useState<TemplateVersion | null>(null);
   const [draft, setDraft] = useState<TemplateContent | null>(null);
   const [versions, setVersions] = useState<Version<unknown>[]>([]);
@@ -21,10 +20,10 @@ export default function Templates() {
   const [error, setError] = useState("");
 
   async function load() {
-    const v = await api<TemplateVersion>(`/templates/${LINE}`);
+    const v = await api<TemplateVersion>(`/templates/${line}`);
     setSaved(v);
     setDraft(structuredClone(v.content));
-    setVersions(await api<Version<unknown>[]>(`/templates/${LINE}/versions`));
+    setVersions(await api<Version<unknown>[]>(`/templates/${line}/versions`));
   }
   useEffect(() => {
     load();
@@ -45,7 +44,7 @@ export default function Templates() {
     setError("");
     try {
       const clean = rows.map((r) => ({ ...r, specs: r.specs.map((x) => x.trim()).filter(Boolean) }));
-      await send("POST", `/templates/${LINE}`, { base_id: saved!.id, reason, content: { ...draft!, boq: { ...draft!.boq, rows: clean } } });
+      await send("POST", `/templates/${line}`, { base_id: saved!.id, reason, content: { ...draft!, boq: { ...draft!.boq, rows: clean } } });
       setReason("");
       await load();
     } catch (err) {
@@ -57,7 +56,10 @@ export default function Templates() {
     <>
       <div className="page-head">
         <h1>{t("nav.templates")}</h1>
-        <span className="tag">LED · {t("templates.tag", { version: saved.version })}</span>
+        <span className="row tight">
+          <LineTabs page="templates" line={line} />
+          <span className="tag">{t("templates.tag", { version: saved.version })}</span>
+        </span>
       </div>
 
       <section className="card">

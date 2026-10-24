@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { ClientBoq, send, WorkspaceView } from "./api";
 import { t } from "./i18n";
 import { fmtDate } from "./labels";
@@ -38,6 +38,7 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
     }));
   }
 
+  if (boq.readonly) return <ReadonlyBoq view={view} boq={boq} />;
   const rules = boq.rows.filter((r) => !r.added);
   return (
     <>
@@ -193,5 +194,58 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
         </details>
       </section>
     </>
+  );
+}
+
+/** 多面屏（CR-7）：每面一组，固定数量的行在最后的共用组；目前只能看，不能改。 */
+function ReadonlyBoq({ view, boq }: { view: WorkspaceView; boq: ClientBoq }) {
+  return (
+    <section className="card">
+      <h2>{t("ws.tabs.boq")}</h2>
+      <p className="muted">{t("boq.readonly")}</p>
+      <div className="table-wrap">
+        <table className="boq">
+          <thead>
+            <tr>
+              <th>No.</th>
+              <th>{t("boq.description")}</th>
+              <th>{t("diagram.qty")}</th>
+              <th>{t("boq.unit")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="group-row">
+              <td />
+              <td colSpan={3} className="strong">{boq.group}</td>
+            </tr>
+            {boq.rows.map((r, i) => (
+              <Fragment key={r.key}>
+                {r.group && r.group !== boq.rows[i - 1]?.group && (
+                  <tr className="group-row">
+                    <td />
+                    <td colSpan={3}><i>{r.group}</i></td>
+                  </tr>
+                )}
+                <tr>
+                  <td>{r.no}</td>
+                  <td>
+                    <b>{r.title}</b>
+                    {r.specs.map((s) => <div key={s}>- {s}</div>)}
+                    {r.note && <div className="note">*{r.note}</div>}
+                  </td>
+                  <td>{r.qty ?? "—"}</td>
+                  <td>{r.unit}</td>
+                </tr>
+              </Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="row">
+        <a className="btn-outline" href={`/api/proposals/${view.proposal.id}/boq.xlsx`}>
+          {t("boq.export")}
+        </a>
+      </div>
+    </section>
   );
 }

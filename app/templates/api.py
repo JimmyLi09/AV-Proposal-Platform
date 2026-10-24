@@ -17,7 +17,7 @@ def ensure_seed(db: Session) -> None:
     for line in LINE_NAMES:
         if db.scalar(select(TemplateVersion.id).where(TemplateVersion.business_line == line)) is None:
             db.add(TemplateVersion(business_line=line, version="v1.0", content=load_seed(line),
-                                   reason="初始模板：客户版 BOQ 默认行（CR-6）"))
+                                   reason={"LED": "初始模板：客户版 BOQ 默认行（CR-6）"}.get(line, "初始模板：客户版 BOQ 默认行（CR-7）")))
     db.commit()
 
 

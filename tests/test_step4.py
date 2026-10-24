@@ -161,12 +161,14 @@ def test_unconfirmed_fields_cannot_be_calculated(client):
     v = post(client, "fill-from-files")
     assert v["rev"]["inputs"]["width_mm"] == 4500  # 文字层 high
     assert v["rev"]["inputs"]["environment"] == "indoor"  # Excel high 排在 PDF medium 前面
-    assert v["pending"] == ["viewing_distance_m"]  # 照片文字识别 medium
+    # 照片文字识别 medium；屏宽几份文件读到的不一样，即使 PDF 是 high 也要确认（CR-7，Phoenix Sea「正文 vs 图注」）
+    assert v["pending"] == ["width_mm", "viewing_distance_m"] and v["rev"]["input_meta"]["width_mm"]["conflict"]
     assert v["rev"]["status"] == "confirming" and v["result"] is None  # 确认之前不计算
 
     v = post(client, "confirm", {"field": "viewing_distance_m"})
-    assert v["pending"] == [] and v["rev"]["input_meta"]["viewing_distance_m"]["confirmed_by"] == "Jimmy"
-    assert v["result"]["choices"] == {"width_mm": [4480, 4800]}  # 4500 不是模组整数倍，让人选
+    assert v["pending"] == ["width_mm"] and v["rev"]["input_meta"]["viewing_distance_m"]["confirmed_by"] == "Jimmy"
+    v = post(client, "confirm", {"field": "width_mm"})
+    assert v["pending"] == [] and v["result"]["choices"] == {"width_mm": [4480, 4800]}  # 4500 不是模组整数倍，让人选
 
     photo_width = next(c for c in v["candidates"]["width_mm"] if c["filename"] == "Lobby_site_photo.jpg")
     v = post(client, "pick", {"extracted_id": photo_width["id"]})

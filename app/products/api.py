@@ -16,7 +16,7 @@ def ensure_seed(db: Session) -> None:
     for line in FIELDS:
         if db.scalar(select(ProductLibraryVersion.id).where(ProductLibraryVersion.business_line == line)) is None:
             db.add(ProductLibraryVersion(business_line=line, version="v1.0", content=load_seed(line),
-                                         reason="示例产品，清单 D 组填好后替换"))
+                                         reason={"LED": "示例产品，清单 D 组填好后替换"}.get(line, "示例产品，投影清单 v2 填好后替换")))
     db.commit()
 
 

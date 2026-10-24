@@ -1,0 +1,17 @@
+{
+  "business_line": "PJ",
+  "products": [
+    {"id": "PT-BHZ611C", "category": "projector", "brand": "Panasonic", "model": "PT-BHZ611C", "status": "preferred", "sample": true,
+     "datasheet": "", "lumens": 6000, "native_px_w": 1920, "native_px_h": 1200, "power_w": 450, "weight_kg": null, "noise_db": null},
+    {"id": "FL-046", "category": "lens", "brand": "Generic", "model": "Fixed lens 0.46", "status": "approved", "sample": true,
+     "datasheet": "", "throw_ratio": 0.46, "throw_max": null, "shift": "", "fits": []},
+    {"id": "FL-050", "category": "lens", "brand": "Generic", "model": "Fixed lens 0.50", "status": "preferred", "sample": true,
+     "datasheet": "", "throw_ratio": 0.5, "throw_max": null, "shift": "", "fits": ["PT-BHZ611C"]},
+    {"id": "FL-060", "category": "lens", "brand": "Generic", "model": "Fixed lens 0.60", "status": "approved", "sample": true,
+     "datasheet": "", "throw_ratio": 0.6, "throw_max": null, "shift": "", "fits": ["PT-BHZ611C"]},
+    {"id": "FL-080", "category": "lens", "brand": "Generic", "model": "Fixed lens 0.80", "status": "approved", "sample": true,
+     "datasheet": "", "throw_ratio": 0.8, "throw_max": null, "shift": "", "fits": ["PT-BHZ611C"]},
+    {"id": "ZWIN-16", "category": "blender", "brand": "ZWIN", "model": "16ch", "status": "preferred", "sample": true,
+     "datasheet": "", "outputs": 16, "curved": false}
+  ]
+}

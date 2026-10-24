@@ -6,7 +6,7 @@ from pathlib import Path
 
 from ..diagram import concept_svg
 from ..i18n import text, tr, unit
-from . import led
+from . import led, multiface, pj
 from .expr import ExprError, evaluate, fmt, names, num, parse, substitute
 
 SEED = Path(__file__).parent / "seed"
@@ -14,7 +14,12 @@ LINES = {"LED": {"steps": led.STEPS, "precheck": led.size_choices, "recommend": 
                  "product_inputs": led.product_inputs, "catalog": led.catalog, "boq": led.boq,
                  "product_fed": led.PRODUCT_INPUTS, "diagram": led.diagram,
                  "boq_context": led.boq_context, "boq_extra": led.BOQ_EXTRA, "suggest": led.suggest,
-                 "overridable": led.OVERRIDABLE}}
+                 "overridable": led.OVERRIDABLE},
+         "PJ": {"steps": pj.STEPS, "precheck": pj.size_choices, "recommend": pj.recommend,
+                "product_inputs": pj.product_inputs, "catalog": pj.catalog, "boq": pj.boq,
+                "product_fed": pj.PRODUCT_INPUTS, "diagram": pj.diagram,
+                "boq_context": pj.boq_context, "boq_extra": pj.BOQ_EXTRA, "suggest": pj.suggest,
+                "overridable": pj.OVERRIDABLE}}
 STATUSES = ["set", "review", "sample", "empty"]  # 越往后越不确定
 
 
@@ -229,13 +234,17 @@ def _step_display(step: str, outputs: dict) -> str:
         return outputs["controller"] if not outputs["controller_qty"] else f"{_show(outputs['controller_qty'])} × {outputs['controller']}"
     if step == "processor_pick" and outputs:
         return f"{_show(outputs['processor_qty'])} × {outputs['processor']}"
+    if step in pj.STEP_DISPLAY and outputs:
+        return pj.STEP_DISPLAY[step](outputs)
     return ""
 
 
 def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None = None,
               overrides: dict | None = None) -> dict:
     """完整流程：从产品库推荐 → 带出产品参数 → 跑规则 → 内部明细，以及客户版 BOQ 模板要用的值。
-    overrides：这个 Rev 的手动覆盖（CR-5），BOQ、示意图、图纸都用手动值。"""
+    overrides：这个 Rev 的手动覆盖（CR-5），BOQ、示意图、图纸都用手动值。多面屏（CR-7）按面算，见 multiface.py。"""
+    if multiface.is_multi(inputs):
+        return multiface.calculate(content, library, inputs, cabinet_id, run)
     line = LINES[content["business_line"]]
     rec = line["recommend"](inputs, library, cabinet_id)
     out = run(content, {**inputs, **line["product_inputs"](rec["cabinet"])}, line["catalog"](library, rec["cabinet"]),

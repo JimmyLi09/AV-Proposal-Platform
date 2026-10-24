@@ -1,0 +1,20 @@
+{
+  "_note": "试算样本：114 Showroom 的输入（已完工项目，5 × PT-BHZ611C + 国产 0.5 定焦）。投影机像素、流明、功率由产品库里选定的投影机带出。",
+  "input": {
+    "wall_width_mm": 18325,
+    "wall_height_mm": 2700,
+    "available_depth_mm": 3200,
+    "ceiling_height_mm": 3000,
+    "mounting": "ceiling",
+    "mount_height_m": 2.8,
+    "mount_distance_m": 2.24,
+    "ambient_lux": 150,
+    "surface_gain": 1.0,
+    "nearest_viewing_m": 1.5,
+    "signal_run_m": 35,
+    "source_location": "server_room",
+    "central_control": "pjlink",
+    "transport_mode": "by_distance",
+    "server_room_scope": "full"
+  }
+}

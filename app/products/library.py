@@ -16,6 +16,7 @@ COMMON = [
     ("datasheet", "Datasheet 规格书文件名", "text"),
     ("sample", "Sample data 示例数据", "bool"),
 ]
+PJ_COMMON = [f for f in COMMON if f[0] != "scenes"]  # 投影不按室内外选型
 FIELDS = {
     "LED": {
         "cabinet": COMMON + [
@@ -45,8 +46,30 @@ FIELDS = {
             ("max_input_px", "Max input 最大输入分辨率 px", "number"),
         ],
     },
+    # 投影（第 7 步 / CR-7）：镜头单独成为一类产品，写明适配哪几款投影机
+    "PJ": {
+        "projector": PJ_COMMON + [
+            ("lumens", "Brightness 流明 lm", "number"),
+            ("native_px_w", "Native width 横向像素 px", "number"),
+            ("native_px_h", "Native height 纵向像素 px", "number"),
+            ("power_w", "Power 功率 W", "number"),
+            ("weight_kg", "Weight 重量 kg", "number"),
+            ("noise_db", "Noise 噪音 dB", "number"),
+        ],
+        "lens": PJ_COMMON + [
+            ("throw_ratio", "Throw ratio 投射比（变焦填最小）", "number"),
+            ("throw_max", "Throw ratio max 最大投射比（定焦不填）", "number"),
+            ("shift", "Lens shift 镜头位移", "text"),
+            ("fits", "Fits 适配投影机型号", "ids"),
+        ],
+        "blender": PJ_COMMON + [
+            ("outputs", "Outputs 输出路数", "number"),
+            ("curved", "Curved correction 曲面几何校正", "flag"),
+        ],
+    },
 }
-CATEGORY_LABEL = {"cabinet": "Cabinet 箱体", "controller": "Controller 控制器", "processor": "Processor 视频处理器"}
+CATEGORY_LABEL = {"cabinet": "Cabinet 箱体", "controller": "Controller 控制器", "processor": "Processor 视频处理器",
+                  "projector": "Projector 投影机", "lens": "Lens 镜头", "blender": "Blender 融合器"}
 
 
 def _number(v):
@@ -63,6 +86,7 @@ CHECKS = {
     "sizes": lambda v: v is None or (isinstance(v, list) and all(
         isinstance(s, list) and len(s) == 2 and all(_number(x) and x is not None for x in s) for s in v)),
     "maintenance": lambda v: v in ("front", "rear", "both"),
+    "ids": lambda v: v is None or (isinstance(v, list) and all(isinstance(x, str) for x in v)),
 }
 
 
