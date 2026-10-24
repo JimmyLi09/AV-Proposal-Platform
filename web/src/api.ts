@@ -287,6 +287,7 @@ export type WorkspaceView = {
   overrides: ManualOverride[];
   shapes: string[];
   shape_guess: string;
+  similar: Similar[];
 };
 
 // 推荐结果的手动覆盖（CR-5）：规则值 → 手动值 · 原因 · 修改人 · 时间
@@ -324,4 +325,92 @@ export type Drawing = {
   checks: { check: string; text: string }[];
   blocked: boolean;
   basis: { item: string; formula: string; result: string; rule: string }[];
+};
+
+// 资料库（CR-8）
+export type KbFile = { id: number; name: string; rel_path: string; doc_type: string; missing: boolean };
+export type KbRecord = { line: "LED" | "PJ"; shape: string; inputs: Record<string, unknown>; actual: Record<string, number> };
+export type KbOverview = {
+  folder: string;
+  exists: boolean;
+  scan_at: string;
+  types: { key: string; folder: string; enabled: boolean; files: number }[];
+  counts: { files: number; read: number; failed: number; pending: number };
+  last_scan: { at: string; by: number | null; new: number; changed: number; removed: number; failed: number; total: number } | null;
+  progress: { done: number; total: number } | null;
+  failed: (KbFile & { note: string })[];
+};
+export type KbItem = {
+  id: number;
+  kind: "product" | "template" | "project" | "rule";
+  line: "LED" | "PJ";
+  confidence: string;
+  status: "pending" | "adopted" | "rejected";
+  source: KbFile | null;
+  location: string;
+  snippet: string;
+  decided_by: string | null;
+  decided_at: string | null;
+  result: { target: string; version?: string } | null;
+  labels: Record<string, string>;
+  // product
+  model?: string;
+  from_reference?: boolean;
+  fields?: { name: string; label: string; value: number; current: number | null; changed: boolean }[];
+  // template
+  original?: string;
+  row?: { title: string; specs: string[]; qty: number | string; unit: string; source: string };
+  files?: number;
+  // project / rule
+  key?: string;
+  record?: KbRecord;
+  rule_id?: string;
+  rule_title?: string;
+  name?: string;
+  rule_value?: number | null;
+  actual?: number;
+  rules_version?: string;
+};
+export type KbCompare = {
+  rows: { name: string; rule_id: string | null; rule: number | null; actual: number; match: boolean }[];
+  missing: string[];
+  skipped: boolean;
+  rules_version: string;
+};
+export type KbProject = {
+  id: number;
+  key: string;
+  project_no: string | null;
+  record: KbRecord | null;
+  record_version: number;
+  record_by: string | null;
+  record_at: string | null;
+  files: KbFile[];
+  standard: { manual: boolean; list: boolean; by: string | null; at: string | null };
+  labels: Record<string, string>;
+  compare: KbCompare | null;
+};
+export type KbHit = { file: KbFile; project: string | null; location: string; snippet: string };
+export type SimilarReason = { code: string; [k: string]: string | number };
+export type Similar = {
+  id: number;
+  key: string;
+  project_no: string | null;
+  score: number;
+  reasons: SimilarReason[];
+  record: KbRecord;
+  standard: boolean;
+  files: { id: number; name: string }[];
+};
+export type KbReference = {
+  id: number;
+  rule_id: string;
+  name: string;
+  key: string;
+  rule_value: number | null;
+  actual: number;
+  rules_version: string;
+  label: string;
+  decided_by: string | null;
+  decided_at: string | null;
 };

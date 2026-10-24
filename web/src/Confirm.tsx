@@ -2,6 +2,7 @@ import { useState } from "react";
 import { send, WorkspaceView } from "./api";
 import { InputField, optionLabel } from "./Calc";
 import { t } from "./i18n";
+import { SimilarProjects } from "./Knowledge";
 import { fmtDate } from "./labels";
 
 export const conf = (c: string) => t(`confirm.conf.${c}`);
@@ -137,6 +138,7 @@ export default function ConfirmInputs({ view, inputs, setInputs, onApply, error,
         {pending.length > 0 && <span className="warn">{t("confirm.pending", { n: pending.length })}</span>}
         {error && <span className="error">{error}</span>}
       </div>
+      <SimilarProjects list={view.similar} />
     </section>
   );
 }

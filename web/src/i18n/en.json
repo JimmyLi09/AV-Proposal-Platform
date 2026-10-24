@@ -233,6 +233,152 @@
     "weight": "Total weight",
     "width": "Width mm"
   },
+  "kb": {
+    "action": "Action",
+    "actual": "Actual quantities",
+    "adopt": "Accept",
+    "adopted": "Accepted · {target} {version}",
+    "allDone": "All handled",
+    "compare": {
+      "actual": "Actual",
+      "diff": "Differs",
+      "item": "Item",
+      "missing": "The project record lacks: {names}; related quantities cannot be calculated",
+      "rule": "Rule",
+      "ruleValue": "Rules give",
+      "same": "Same",
+      "skipped": "Multi-face project records have no per-face sizes; not compared yet.",
+      "title": "Recalculated with rules {version}, compared with actual quantities"
+    },
+    "decidedIntro": "Items already accepted or rejected; undo returns an item to “to confirm”, and an accepted one is reverted by saving another new version.",
+    "fields": {
+      "environment": "environment",
+      "installation": "installation",
+      "projector": "projector"
+    },
+    "from": "From",
+    "goesTo": "Goes to",
+    "import": {
+      "failed": "{n} files could not be read",
+      "folder": "Folder on server",
+      "last": "Last scan: {at} {time} · {new} new · {changed} changed · {removed} removed · {failed} could not be read",
+      "never": "Not scanned yet",
+      "noFolder": "Folder not found: ask IT to set knowledge_dir in deploy.local.yaml",
+      "note": "Each document type has its own sub-folder; for past projects, one sub-folder per project. Original files are read-only: not moved or renamed. Rescanned automatically every night at {at}; new or changed files are read again.",
+      "scan": "Scan folder",
+      "scanning": "Scanning: {done} of {total} files done",
+      "title": "Import",
+      "types": "Document types to scan"
+    },
+    "intro": "Put past project files, spec sheets, drawings, BOQs and templates in the knowledge base folder. The platform reads them one by one on the company server: extracts text, dimensions and tables and builds a full-text index. All processed locally, no cloud AI.",
+    "item": {
+      "byArea": "Quantity by area (area_m2)",
+      "inFiles": "BOQs with this wording: {n}",
+      "product": "{model} specs",
+      "project": "Past project: {key}",
+      "rule": "Rule reference: {rule}",
+      "ruleDetail": "{key} · {label}: rules give {rule}, actual {actual} (rules {version})",
+      "template": "BOQ wording",
+      "was": "(was {value})",
+      "wasEmpty": "(was empty)"
+    },
+    "kpi": {
+      "failed": "Could not read",
+      "files": "Files",
+      "pending": "To confirm",
+      "read": "Read"
+    },
+    "learned": "Learned",
+    "learnedTitle": "Learned · to confirm",
+    "local": "Local processing · no cloud",
+    "noQty": "What is learned never changes quantities directly",
+    "noQtyText": ": it only gives suggested values, sources and confidence. Anything going into the product library, templates or project records must be accepted by a person and creates a new version; rules are reference only and never changed automatically.",
+    "pendingLeft": "{n} items awaiting your confirmation",
+    "projects": {
+      "fileCount": "{n} files",
+      "files": "Files",
+      "intro": "Each sub-folder of the past-projects folder is one project. Accept its project record under “Learned” first; projects ticked “Completed, use as reference answer” are recalculated with the current rules and compared line by line with the actual quantities. You can also put a standard.txt file in the past-projects folder, one project folder name per line.",
+      "noRecord": "No confirmed project record yet",
+      "none": "No past projects yet: put project folders in the past-projects folder and scan.",
+      "project": "Project",
+      "record": "Project record",
+      "title": "Past projects",
+      "version": "Record v{v}"
+    },
+    "reason": {
+      "area": "Area {mine} / {theirs} ㎡",
+      "pitch_near": "Similar pixel pitch P{mine} / P{theirs}",
+      "pitch_same": "Same pixel pitch P{pitch}",
+      "same": "Same {field}: {value}",
+      "shape": "Same shape: {shape}",
+      "word": "Files mention “{word}”"
+    },
+    "reject": "Reject",
+    "rejected": "Rejected",
+    "search": {
+      "all": "All types",
+      "button": "Search",
+      "hint": "Keywords, e.g. VX1000, curved, HDBaseT",
+      "none": "Not found.",
+      "title": "Search",
+      "type": "Document type"
+    },
+    "show": {
+      "decided": "Decided",
+      "pending": "To confirm"
+    },
+    "similar": {
+      "intro": "Scored by size, screen shape, pixel pitch and keywords in the files; only project records confirmed in the knowledge base are used.",
+      "score": "score {score}",
+      "title": "Similar past projects"
+    },
+    "standard": {
+      "list": "In the reference list file",
+      "tag": "Reference",
+      "tick": "Completed, use as reference answer",
+      "title": "Reference answer"
+    },
+    "target": {
+      "products": "Product library",
+      "project": "Project record",
+      "rules": "Rule reference",
+      "templates": "Templates"
+    },
+    "to": {
+      "product": "Product library · {line} (replaces sample values; new version)",
+      "productAdd": "Product library · {line} (added from the reference table; new version)",
+      "project": "Project records · similar projects, regression comparison",
+      "rule": "Rules · reference only, not changed automatically",
+      "template": "Templates · {line} default BOQ rows (new version)"
+    },
+    "types": {
+      "boq": "BOQs",
+      "drawings": "Drawings",
+      "projects": "Past projects",
+      "specs": "Spec sheets",
+      "templates": "Templates & terms"
+    },
+    "undo": "Undo",
+    "upload": {
+      "button": "Upload",
+      "files": "Choose files",
+      "project": "Project name",
+      "projectHint": "Project name, e.g. 143-Royal Plaza",
+      "title": "Upload files",
+      "type": "Document type"
+    },
+    "used": {
+      "boq": "BOQ wording",
+      "boqText": "Line wording from past BOQs that the template does not have yet becomes a default template row once accepted, with sizes and pixel pitch replaced by rule results.",
+      "product": "Product specs",
+      "productText": "Load, network ports, brightness, power and lumens read from spec sheets replace the sample values in the product library once accepted.",
+      "regression": "Regression comparison",
+      "regressionText": "Completed projects are compared line by line with the rule results; differences are listed as a reference for adjusting coefficients.",
+      "similar": "Similar projects",
+      "similarText": "When confirming inputs, the 3 most similar past projects are listed so you can compare size, screen shape and their solution directly.",
+      "title": "Where it is used"
+    }
+  },
   "lines": {
     "LED": "LED Screen",
     "PJ": "Projection"
@@ -290,6 +436,7 @@
     "use": "Use {value}"
   },
   "nav": {
+    "knowledge": "Knowledge Base",
     "langLabel": "Switch to Chinese",
     "products": "Product Library",
     "projects": "Projects",
@@ -419,6 +566,8 @@
     "formulas": "Formulas",
     "formulasIntro": "Formula rules can have their formulas changed and tiers added (a row is used when its condition holds; the first match from the top wins). Step rules keep their steps in code; only parameters change. Functions: ceil, floor, round, min, max, abs.",
     "intro": "All coefficients and formulas are changed here. Saving creates a new rule version; Revs already issued keep the version they were calculated with.",
+    "kbRef": "{key}: actual {actual}, rule {rule} (rules {version}) · accepted by {by}",
+    "kbRefs": "From the knowledge base (reference only; rules are not changed automatically)",
     "nothingToSave": "Change a value or formula before saving",
     "saveAs": "Save as {version}",
     "step": "Step rule ({step}); the steps are in code.",

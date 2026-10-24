@@ -13,6 +13,7 @@ from .drawing import build as build_drawing
 from .i18n import stored, text, tr, unit, use
 from .models import (ExtractedField, ProductLibraryVersion, Project, Proposal, RuleSetVersion, TemplateVersion, User,
                      utcnow)
+from .knowledge.similar import similar
 from .rules import multiface
 from .rules.engine import LINES, calculate
 from .storage import safe_name
@@ -137,6 +138,7 @@ def view(db: Session, prop: Proposal) -> dict:
         "shapes": multiface.SHAPES[prop.business_line],
         "shape_guess": multiface.guess_shape(prop.business_line, " ".join(
             f.read_text or "" for f in db.get(Project, prop.project_id).files)),
+        "similar": similar(db, prop, rev.inputs or {}),  # 相似以往项目（CR-8）
     }
 
 

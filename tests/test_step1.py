@@ -10,7 +10,7 @@ from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 
 from app.main import create_app
-from app.models import Base
+from app.models import Base, mapped_name
 from app.storage import save_original
 
 
@@ -42,7 +42,7 @@ def upload(client, project_id, name, content):
 def test_migrations_match_models(client):
     engine = create_engine(f"sqlite:///{client.data_dir / 'avp.db'}")
     with engine.connect() as conn:
-        assert compare_metadata(MigrationContext.configure(conn), Base.metadata) == []
+        assert compare_metadata(MigrationContext.configure(conn, opts={"include_name": mapped_name}), Base.metadata) == []
 
 
 def test_writes_need_a_chosen_name(client):
