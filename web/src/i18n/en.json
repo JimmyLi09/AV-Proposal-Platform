@@ -38,6 +38,7 @@
     "item": "Item",
     "manual": "Manual",
     "manualCount": "{n} manual changes; each is listed at review.",
+    "readonly": "Multi-face: one group per face; fixed-quantity lines (e.g. the PC) are in the shared group at the end. Read-only for now.",
     "reason": "reason",
     "reasonHint": "Reason (required)",
     "restore": "Restore",
@@ -176,9 +177,65 @@
     "spare": "Spare",
     "title": "Cabinet & cabling drawing"
   },
+  "faces": {
+    "add": "+ Add face",
+    "addSource": "+ Add a source",
+    "chosen": "Chosen",
+    "cornerType": "corner type",
+    "cornerTypes": {
+      "fold_wall_to_floor": "Wall to floor",
+      "inside_90": "Inside 90°",
+      "outside_corner": "Outside corner"
+    },
+    "corners": "Corners",
+    "depth": "Available depth mm",
+    "face": "Face",
+    "guess": "Guessed from the files: {shape}",
+    "height": "Height mm",
+    "introLed": "First decide whether the screen is a special shape. For multi-face screens (L, U…) enter each face's size, orientation and signal / power input points; a flat screen is entered as before.",
+    "introPj": "A single wall is entered as before; for L, U, curved, ring and wall + floor, enter each face's width, height, available depth and lens height — projector, lens and source are shared.",
+    "kinds": {
+      "elevation": "Elevation",
+      "other": "Other",
+      "plan": "Floor plan",
+      "spec": "Spec table"
+    },
+    "load": "Load on the face",
+    "mountHeight": "Lens height m",
+    "name": "Name",
+    "orientation": "Orientation",
+    "orientations": {
+      "ceiling": "Ceiling",
+      "floor": "Floor",
+      "wall": "Wall"
+    },
+    "overlap": "Which face overlaps",
+    "overlapHint": "e.g. B over A, A net width minus 20 mm",
+    "perFaceLed": "Each face has its own signal and power inputs: data cables, circuits and DB boxes are calculated per face.",
+    "perFacePj": "Projectors are laid out per face, never across a corner; empty height, depth and lens height use the confirmed inputs below.",
+    "power": "Power input",
+    "protection": "Protection (e.g. GOB)",
+    "refCircuits": "Reference circuits (supplier drawing / original design)",
+    "refData": "Reference data cables",
+    "resolution": "Manual fix for the clash",
+    "resolutionHint": "e.g. B lowered 300 mm to stagger heights",
+    "shape": "Shape",
+    "signal": "Signal input",
+    "sourceKind": "Source type",
+    "sourceName": "Source (e.g. floor plan)",
+    "sourceTitle": "Values in each source",
+    "sourceValue": "Value",
+    "sources": "Sources ({n})",
+    "special": "Protection / load",
+    "title": "Shape & faces",
+    "use": "Use this",
+    "useGuess": "Use it",
+    "weight": "Total weight",
+    "width": "Width mm"
+  },
   "lines": {
     "LED": "LED Screen",
-    "PJ": "Projection · single wall"
+    "PJ": "Projection"
   },
   "login": {
     "add": "Add name",
@@ -202,6 +259,36 @@
     "rule": "Rule value",
     "tag": "Manual"
   },
+  "multi": {
+    "area": "Area",
+    "blend": "Blend",
+    "canvas": "Unfolded canvas",
+    "cat6": "CAT6",
+    "checks": "Combined checks",
+    "circuits": "Circuits",
+    "conflicts": "Sources disagree",
+    "conflictsIntro": "The same size differs between sources; nothing is calculated until one is chosen.",
+    "corner": "{pair} first projectors {m} m apart",
+    "data": "Data cables",
+    "dbBoxes": "DB boxes",
+    "faceField": "Face {face} · {field}",
+    "faceRules": "Face {face} rule results",
+    "fits": "Module multiple",
+    "introLed": "Each face is calculated with F1–F16 on its own (each has its own inputs), then S1–S7 check corners, canvas, processor outputs, special faces and source consistency together.",
+    "introPj": "Each face is laid out with P1–P10 on its own; blender, power and cables use the total projector count (P11–P17); P20 checks corner positions, P21 unfolds the canvas, P22 curved / ring correction.",
+    "lens": "Lens · distance",
+    "modules": "Modules",
+    "outputs": "Processor outputs",
+    "pixel": "Pixel size",
+    "power": "Power",
+    "projectors": "Projectors",
+    "px": "Pixels",
+    "size": "Size",
+    "snap": "Not a multiple → {a} / {b}",
+    "spare": "spare",
+    "title": "Multi-face recommendation",
+    "use": "Use {value}"
+  },
   "nav": {
     "langLabel": "Switch to Chinese",
     "products": "Product Library",
@@ -211,15 +298,24 @@
     "templates": "Templates"
   },
   "options": {
+    "avoip": "AVoIP (AV network)",
     "both": "Front or rear",
+    "by_distance": "By distance",
+    "ceiling": "Ceiling",
     "embedded": "Embedded",
     "floor": "Floor stand",
     "front": "Front",
+    "full": "Full: media PC, blender, transmitters, switch",
     "hanging": "Hanging",
     "indoor": "Indoor",
+    "local": "On site",
+    "media_pc_only": "Media PC only",
+    "none": "None",
     "outdoor": "Outdoor",
+    "pjlink": "PJLink",
     "rear": "Rear",
     "rental": "Rental",
+    "server_room": "Server room",
     "wall": "Wall"
   },
   "products": {
@@ -228,9 +324,12 @@
     "done": "Done",
     "filter": {
       "all": "All",
+      "blender": "Blenders",
       "cabinet": "Cabinets",
       "controller": "Controllers",
-      "processor": "Processors"
+      "lens": "Lenses",
+      "processor": "Processors",
+      "projector": "Projectors"
     },
     "id": "ID (cannot change after saving)",
     "idHint": "e.g. IC-25",
@@ -245,9 +344,13 @@
     "sampleWarn": "Products marked Sample data are for testing the workflow; they are replaced once checklist group D is filled in.",
     "saveAs": "Save as library {version}",
     "specs": {
+      "blender": "{outputs} outputs",
+      "blenderCurved": "{outputs} outputs · curved correction",
       "cabinet": "P{pitch} · module {mw} × {mh} · {nits} nits",
       "controller": "{mp} MP · {ports} ports",
+      "lens": "Throw ratio {throw} · fits {fits}",
       "processor": "{inputs} inputs · up to {max} MP",
+      "projector": "{lm} lm · {w} × {h} · {watts} W",
       "sending": "With sending · {mp} MP · {ports} ports · {inputs} inputs"
     },
     "status": {
@@ -326,6 +429,19 @@
     "whenHint": "Condition (when), e.g. pixel_pitch_mm < 2",
     "whenLabel": "{rule} {name} condition {no}"
   },
+  "shape": {
+    "L": "L-shape (inside corner)",
+    "L_wall_floor": "L-shape (wall + floor)",
+    "U": "U-shape (three faces)",
+    "cube": "Cube",
+    "curved": "Curved",
+    "custom": "Custom",
+    "flat": "Flat",
+    "outside_corner": "Outside corner",
+    "ring": "Ring screen",
+    "single": "Single wall",
+    "wall_floor": "Wall + floor"
+  },
   "status": {
     "calculated": "Calculated",
     "confirming": "Awaiting confirmation",
@@ -358,6 +474,7 @@
   },
   "ws": {
     "addToLibrary": "Add to library",
+    "blender": "Blender",
     "blocked": "There are blocking items; export is not possible until they are fixed.",
     "cabinet": "Cabinet",
     "calcIntro": "Every number in the Proposal: the formula as calculated, the parameters used and their status. Click a row to expand.",
@@ -365,15 +482,18 @@
     "checks": "Checks",
     "controller": "Controller",
     "fromLibrary": "Recommendations come only from product library {version}: pixel pitch, environment and maintenance must all match; preferred products come first.",
+    "lens": "Lens",
     "load": "Load",
     "loadPct": "load {pct} %",
     "missing": "Missing inputs: {names}. Fill them in before a cabinet can be chosen from the library.",
     "model": "Model",
     "noDiagram": "Choose a cabinet and calculate the cabinet count before the diagram can be drawn.",
+    "noDiagramMulti": "The multi-face diagram comes next; see the per-face results and the BOQ for now.",
     "noDrawing": "Choose a cabinet and calculate cabinets, circuits and data cables before the drawing can be made.",
     "ports": "Ports",
     "processor": "Processor",
     "project": "Project",
+    "projector": "Projector",
     "suggested": "Suggested models · not in library",
     "suggestedIntro": "No processor / controller in the library has enough load and ports. Below are processors with sending from the reference table; values still need checking against the datasheet. Add one to the library and the proposal recalculates.",
     "tabs": {

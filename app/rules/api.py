@@ -13,13 +13,16 @@ from .expr import ExprError
 router = APIRouter(prefix="/rules")
 
 
+SEED_VERSION = {"LED": "v1.3", "PJ": "v1.5"}  # 投影：P1–P17（v1.4）+ 多面 P18–P22（v1.5，CR-7）
+SEED_REASON = {"LED": "初始版本（平台方案 V1，2026-10-14）", "PJ": "初始版本（投影 P1–P22，CR-7）"}
+
+
 def ensure_seed(db: Session) -> None:
     """每条业务线第一次启动时写入初始规则集（方案 V1 的 v1.3）。"""
     for line in LINES:
         if db.scalar(select(RuleSetVersion.id).where(RuleSetVersion.business_line == line)) is None:
             content, _ = load_seed(line)
-            db.add(RuleSetVersion(business_line=line, version="v1.3", content=content,
-                                  reason="初始版本（平台方案 V1，2026-10-14）"))
+            db.add(RuleSetVersion(business_line=line, version=SEED_VERSION[line], content=content, reason=SEED_REASON[line]))
     db.commit()
 
 

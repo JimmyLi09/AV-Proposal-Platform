@@ -100,6 +100,8 @@ td { padding: 10px 8px; border-bottom: 1px solid var(--line-soft); vertical-alig
 .ck-BLOCK { background: #fde4e4; color: var(--red); }
 .pill { padding: 6px 14px; border-radius: 16px; border: 1px solid var(--line); background: #fff; font-weight: 600; }
 .pill.active { background: var(--navy); color: #fff; border-color: var(--navy); }
+a.pill { color: var(--text); text-decoration: none; }
+a.pill.active { color: #fff; }
 .mono { font-family: ui-monospace, Consolas, monospace; }
 .small { font-size: 12px; }
 .warn { color: #9a4a12; }
@@ -181,6 +183,7 @@ input.manual { background: #FFFBEA; border-color: #E8C96A; }
 .note { font-style: italic; margin-top: 4px; }
 .nowrap { white-space: nowrap; }
 input.wide { min-width: 320px; }
+table.faces input:not(.num) { width: 140px; }
 
 /* 拼接与线路图（CR-3） */
 .drawing-wrap { overflow-x: auto; border: 1px solid #E6E0D6; border-radius: 8px; background: #FFFFFF; }

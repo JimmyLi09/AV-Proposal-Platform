@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import { api, InputDef, Param, RuleContent, RuleVersion, RunResult, send } from "./api";
 import { Choices, InputsForm, nextVersion, ResultsTable, STATUSES, StatusChip } from "./Calc";
 import { t, tOr } from "./i18n";
-import { fmtDate } from "./labels";
+import { fmtDate, LineTabs } from "./labels";
 
-const LINE = "LED";
 
-export default function Rules() {
+export default function Rules({ line }: { line: string }) {
   const [saved, setSaved] = useState<RuleVersion | null>(null);
   const [draft, setDraft] = useState<RuleContent | null>(null);
   const [versions, setVersions] = useState<RuleVersion[]>([]);
@@ -15,15 +14,15 @@ export default function Rules() {
   const [error, setError] = useState("");
 
   async function load() {
-    const v = await api<RuleVersion>(`/rules/${LINE}`);
+    const v = await api<RuleVersion>(`/rules/${line}`);
     setSaved(v);
     setDraft(structuredClone(v.content));
-    setVersions(await api<RuleVersion[]>(`/rules/${LINE}/versions`));
+    setVersions(await api<RuleVersion[]>(`/rules/${line}/versions`));
   }
 
   useEffect(() => {
     load();
-    api<{ input: Record<string, unknown> }>(`/rules/${LINE}/sample`).then((s) => setInputs(s.input));
+    api<{ input: Record<string, unknown> }>(`/rules/${line}/sample`).then((s) => setInputs(s.input));
   }, []);
 
   if (!saved || !draft || !inputs) return null;
@@ -38,7 +37,7 @@ export default function Rules() {
   async function save() {
     setError("");
     try {
-      await send("POST", `/rules/${LINE}`, { base_id: saved!.id, reason, content: draft });
+      await send("POST", `/rules/${line}`, { base_id: saved!.id, reason, content: draft });
       setReason("");
       await load();
     } catch (err) {
@@ -63,7 +62,7 @@ export default function Rules() {
       </div>
 
       <div className="row">
-        <span className="pill active">LED</span>
+        <LineTabs page="rules" line={line} />
         {STATUSES.map((s) => (
           <StatusChip key={s} status={s} />
         ))}
@@ -142,7 +141,7 @@ export default function Rules() {
         ))}
       </section>
 
-      <TryCalc inputs={inputs} setInputs={setInputs} defs={draft.inputs.map((d) => ({ ...d, label: L(d.label), unit: L(d.unit) }))} hidden={saved.product_fed} saved={saved} draft={dirty ? draft : null} />
+      <TryCalc line={line} inputs={inputs} setInputs={setInputs} defs={draft.inputs.map((d) => ({ ...d, label: L(d.label), unit: L(d.unit) }))} hidden={saved.product_fed} saved={saved} draft={dirty ? draft : null} />
 
       <section className="card">
         <h2>{t("versions.title")}</h2>
@@ -211,7 +210,8 @@ function ParamRow({ p, L, changed, onChange }: { p: Param; L: (s?: string) => st
   );
 }
 
-function TryCalc({ inputs, setInputs, defs, hidden, saved, draft }: {
+function TryCalc({ line, inputs, setInputs, defs, hidden, saved, draft }: {
+  line: string;
   inputs: Record<string, unknown>;
   setInputs: (v: Record<string, unknown>) => void;
   defs: InputDef[];
@@ -226,10 +226,10 @@ function TryCalc({ inputs, setInputs, defs, hidden, saved, draft }: {
   useEffect(() => {
     const timer = setTimeout(async () => {
       setError("");
-      setBase(await send<RunResult>("POST", `/rules/${LINE}/run`, { inputs, version_id: saved.id }));
+      setBase(await send<RunResult>("POST", `/rules/${line}/run`, { inputs, version_id: saved.id }));
       if (!draft) return setAfter(null);
       try {
-        setAfter(await send<RunResult>("POST", `/rules/${LINE}/run`, { inputs, content: draft }));
+        setAfter(await send<RunResult>("POST", `/rules/${line}/run`, { inputs, content: draft }));
       } catch (err) {
         setAfter(null);
         setError((err as Error).message);

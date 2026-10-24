@@ -345,5 +345,344 @@
   "Processor 视频处理器": {
     "zh": "视频处理器",
     "en": "Processor"
+  },
+  "Wall width 墙宽": {
+    "zh": "墙宽",
+    "en": "Wall width"
+  },
+  "Wall height 墙高": {
+    "zh": "墙高",
+    "en": "Wall height"
+  },
+  "Available depth 可用进深": {
+    "zh": "可用进深",
+    "en": "Available depth"
+  },
+  "Ceiling height 天花高度": {
+    "zh": "天花高度",
+    "en": "Ceiling height"
+  },
+  "Mounting 安装方式": {
+    "zh": "安装方式",
+    "en": "Mounting"
+  },
+  "Lens height 镜头高度": {
+    "zh": "镜头高度",
+    "en": "Lens height"
+  },
+  "Mount distance 安装距离（镜头前端到墙，不填按最短）": {
+    "zh": "安装距离（镜头前端到墙，不填按最短）",
+    "en": "Mount distance (lens front to wall; shortest if empty)"
+  },
+  "Lens 镜头投射比（不填自动选）": {
+    "zh": "镜头投射比（不填自动选）",
+    "en": "Lens throw ratio (auto if empty)"
+  },
+  "Ambient light 环境光": {
+    "zh": "环境光",
+    "en": "Ambient light"
+  },
+  "Surface gain 幕面增益": {
+    "zh": "幕面增益",
+    "en": "Surface gain"
+  },
+  "Nearest viewing 最近观看距离": {
+    "zh": "最近观看距离",
+    "en": "Nearest viewing"
+  },
+  "Signal run 信号距离（播放源到投影机）": {
+    "zh": "信号距离（播放源到投影机）",
+    "en": "Signal run (source to projector)"
+  },
+  "Source location 播放源位置": {
+    "zh": "播放源位置",
+    "en": "Source location"
+  },
+  "Central control 中控": {
+    "zh": "中控",
+    "en": "Central control"
+  },
+  "Transport 传输方式": {
+    "zh": "传输方式",
+    "en": "Transport"
+  },
+  "Server room power 机房功率口径": {
+    "zh": "机房功率口径",
+    "en": "Server room power"
+  },
+  "Design video lines 原方案视频线（工作线）": {
+    "zh": "原方案视频线（工作线）",
+    "en": "Design video lines (working)"
+  },
+  "Design video cables 原方案视频线（含备用）": {
+    "zh": "原方案视频线（含备用）",
+    "en": "Design video cables (incl. spares)"
+  },
+  "Design control cables 原方案控制线（含备用）": {
+    "zh": "原方案控制线（含备用）",
+    "en": "Design control cables (incl. spares)"
+  },
+  "Native width 投影机横向像素": {
+    "zh": "投影机横向像素",
+    "en": "Native width"
+  },
+  "Native height 投影机纵向像素": {
+    "zh": "投影机纵向像素",
+    "en": "Native height"
+  },
+  "Projector brightness 投影机流明": {
+    "zh": "投影机流明",
+    "en": "Projector brightness"
+  },
+  "Projector power 投影机功率": {
+    "zh": "投影机功率",
+    "en": "Projector power"
+  },
+  "Blend minimum 融合带下限": {
+    "zh": "融合带下限",
+    "en": "Blend minimum"
+  },
+  "Blend maximum 融合带上限": {
+    "zh": "融合带上限",
+    "en": "Blend maximum"
+  },
+  "Target brightness 目标亮度": {
+    "zh": "目标亮度",
+    "en": "Target brightness"
+  },
+  "Derate 亮度折减": {
+    "zh": "亮度折减",
+    "en": "Derate"
+  },
+  "Min. viewing distance 最近观看距离（每 mm 像素）": {
+    "zh": "最近观看距离（每 mm 像素）",
+    "en": "Min. viewing distance (per mm of pixel)"
+  },
+  "Person height 人高": {
+    "zh": "人高",
+    "en": "Person height"
+  },
+  "Corner clearance 转角机位最小间距": {
+    "zh": "转角机位最小间距",
+    "en": "Corner clearance"
+  },
+  "Power margin 功率余量": {
+    "zh": "功率余量",
+    "en": "Power margin"
+  },
+  "HDMI limit HDMI 上限": {
+    "zh": "HDMI 上限",
+    "en": "HDMI limit"
+  },
+  "Fiber above 超过改光纤": {
+    "zh": "超过改光纤",
+    "en": "Fiber above"
+  },
+  "Spare rate 备用比例": {
+    "zh": "备用比例",
+    "en": "Spare rate"
+  },
+  "Spare minimum 备用最少": {
+    "zh": "备用最少",
+    "en": "Spare minimum"
+  },
+  "Media PC 播控电脑": {
+    "zh": "播控电脑",
+    "en": "Media PC"
+  },
+  "Blender 融合器": {
+    "zh": "融合器",
+    "en": "Blender"
+  },
+  "HDBaseT transmitter, each HDBaseT 发送器（每台）": {
+    "zh": "HDBaseT 发送器（每台）",
+    "en": "HDBaseT transmitter, each"
+  },
+  "Control switch 中控交换机": {
+    "zh": "中控交换机",
+    "en": "Control switch"
+  },
+  "UPS power factor UPS 功率因数": {
+    "zh": "UPS 功率因数",
+    "en": "UPS power factor"
+  },
+  "Blending 融合": {
+    "zh": "融合",
+    "en": "Blending"
+  },
+  "Server room 机房": {
+    "zh": "机房",
+    "en": "Server room"
+  },
+  "Single image width 单台画面宽": {
+    "zh": "单台画面宽",
+    "en": "Single image width"
+  },
+  "Lens 选镜头": {
+    "zh": "选镜头",
+    "en": "Lens"
+  },
+  "Actual image 实际画面": {
+    "zh": "实际画面",
+    "en": "Actual image"
+  },
+  "Projector count 台数": {
+    "zh": "台数",
+    "en": "Projector count"
+  },
+  "Blend zone 融合带": {
+    "zh": "融合带",
+    "en": "Blend zone"
+  },
+  "Height coverage 画面高覆盖": {
+    "zh": "画面高覆盖",
+    "en": "Height coverage"
+  },
+  "Blended resolution 拼接分辨率": {
+    "zh": "拼接分辨率",
+    "en": "Blended resolution"
+  },
+  "Pixel size 像素尺寸": {
+    "zh": "像素尺寸",
+    "en": "Pixel size"
+  },
+  "Lumens 单台流明": {
+    "zh": "单台流明",
+    "en": "Lumens"
+  },
+  "Shadow 剖面遮挡": {
+    "zh": "剖面遮挡",
+    "en": "Shadow"
+  },
+  "Power 电源": {
+    "zh": "电源",
+    "en": "Power"
+  },
+  "Content canvas 内容画布": {
+    "zh": "内容画布",
+    "en": "Content canvas"
+  },
+  "Cables 线缆清单": {
+    "zh": "线缆清单",
+    "en": "Cables"
+  },
+  "Power points 电源点": {
+    "zh": "电源点",
+    "en": "Power points"
+  },
+  "Consistency 中控与一致性": {
+    "zh": "中控与一致性",
+    "en": "Consistency"
+  },
+  "墙高 × 投影机长宽比（16:10 为 1.6）。": {
+    "en": "Wall height × projector aspect ratio (16:10 is 1.6)."
+  },
+  "每款可配镜头算最短距离 = 投射比 × 画面宽，取放得进可用进深、投射比最小的（人影少）。": {
+    "en": "For each compatible lens, shortest distance = throw ratio × image width; take the smallest throw ratio that fits the available depth (fewer shadows)."
+  },
+  "定焦镜头：实际画面宽 = 安装距离 ÷ 投射比，高 = 宽 ÷ 长宽比。": {
+    "en": "Fixed lens: actual image width = mount distance ÷ throw ratio; height = width ÷ aspect ratio."
+  },
+  "ceil((墙宽 − 画面宽) ÷ (画面宽 × (1 − 融合下限))) + 1，至少 1 台。": {
+    "en": "ceil((wall width − image width) ÷ (image width × (1 − blend minimum))) + 1, at least 1."
+  },
+  "1 − (墙宽 − 画面宽) ÷ ((台数 − 1) × 画面宽)，要在融合上下限之间。": {
+    "en": "1 − (wall width − image width) ÷ ((count − 1) × image width); must be between the blend limits."
+  },
+  "实际画面高 ≥ 墙高。": {
+    "en": "Actual image height ≥ wall height."
+  },
+  "台数 × 横向像素 − (台数 − 1) × 融合带 × 横向像素。": {
+    "en": "Count × native width − (count − 1) × blend × native width."
+  },
+  "墙宽 ÷ 横向像素；最近观看距离小于像素尺寸 × 每 mm 米数时提示清晰度不够。": {
+    "en": "Wall width ÷ horizontal pixels; a note when the nearest viewing distance is below pixel size × metres per mm."
+  },
+  "目标亮度 × π × 单台画面面积 ÷ 幕面增益 ÷ 折减；投影机流明要不低于此值。": {
+    "en": "Target brightness × π × image area ÷ surface gain ÷ derate; the projector must have at least this many lumens."
+  },
+  "从镜头到画面底边的光线，按人高检查离墙多远以内会挡光。": {
+    "en": "The ray from the lens to the image bottom: how close to the wall a person of the given height casts a shadow."
+  },
+  "2 台及以上必须用融合器，输出路数 ≥ 台数。": {
+    "en": "Two or more projectors need a blender with outputs ≥ count."
+  },
+  "距离 ≤ HDMI 上限用 HDMI；不超过光纤门槛用 HDBaseT；更远用光纤 HDMI；项目有 AV 网络时用 AVoIP。": {
+    "en": "HDMI up to the HDMI limit; HDBaseT up to the fiber threshold; fiber HDMI beyond; AVoIP when the site has an AV network."
+  },
+  "(台数 × 投影机功率 + 机房功率) × (1 + 余量) ÷ 每回路功率，向上取整。": {
+    "en": "(count × projector power + server room power) × (1 + margin) ÷ power per circuit, rounded up."
+  },
+  "画布 = 拼接横向像素 × 纵向像素；时长和场景数由人填。": {
+    "en": "Canvas = blended horizontal × vertical pixels; duration and scenes are filled in by hand."
+  },
+  "视频线 = 台数，控制线（PJLink）= 台数；每类备用 max(最少数, 台数 × 备用比例 向上取整)。": {
+    "en": "Video lines = count, control lines (PJLink) = count; spares per type max(minimum, count × spare rate rounded up)."
+  },
+  "每台投影 1 个 13A 电源点；机房设备功率 × (1 + 余量)；方案 A 预留插座，方案 B UPS。": {
+    "en": "One 13A outlet per projector; server room power × (1 + margin); option A spare outlets, option B a UPS."
+  },
+  "视频线 = 控制线 = 台数；融合器输出 ≥ 台数；和原方案的数量核对；投影只用网络指令待机，不直接断电。": {
+    "en": "Video lines = control lines = count; blender outputs ≥ count; checked against the design's counts; projectors go to standby by network command, never by cutting power."
+  },
+  "Brightness 流明 lm": {
+    "zh": "流明 lm",
+    "en": "Brightness lm"
+  },
+  "Native width 横向像素 px": {
+    "zh": "横向像素 px",
+    "en": "Native width px"
+  },
+  "Native height 纵向像素 px": {
+    "zh": "纵向像素 px",
+    "en": "Native height px"
+  },
+  "Power 功率 W": {
+    "zh": "功率 W",
+    "en": "Power W"
+  },
+  "Weight 重量 kg": {
+    "zh": "重量 kg",
+    "en": "Weight kg"
+  },
+  "Noise 噪音 dB": {
+    "zh": "噪音 dB",
+    "en": "Noise dB"
+  },
+  "Throw ratio 投射比（变焦填最小）": {
+    "zh": "投射比（变焦填最小）",
+    "en": "Throw ratio (min for zoom)"
+  },
+  "Throw ratio max 最大投射比（定焦不填）": {
+    "zh": "最大投射比（定焦不填）",
+    "en": "Throw ratio max (empty for fixed)"
+  },
+  "Lens shift 镜头位移": {
+    "zh": "镜头位移",
+    "en": "Lens shift"
+  },
+  "Fits 适配投影机型号": {
+    "zh": "适配投影机型号",
+    "en": "Fits projectors"
+  },
+  "Outputs 输出路数": {
+    "zh": "输出路数",
+    "en": "Outputs"
+  },
+  "Curved correction 曲面几何校正": {
+    "zh": "曲面几何校正",
+    "en": "Curved geometry correction"
+  },
+  "Projector 投影机": {
+    "zh": "投影机",
+    "en": "Projector"
+  },
+  "Lens 镜头": {
+    "zh": "镜头",
+    "en": "Lens"
+  },
+  "Output width limit 每路输出宽度上限（多面屏 S5）": {
+    "zh": "每路输出宽度上限（多面屏 S5）",
+    "en": "Output width limit (multi-face S5)"
   }
 }

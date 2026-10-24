@@ -13,19 +13,20 @@ export function show(v: unknown): string {
 }
 
 /** 确认输入：每个字段的值、来源、置信度与确认状态。medium / low 的值逐项确认之前不计算。 */
-export default function ConfirmInputs({ view, inputs, setInputs, onApply, error }: {
+export default function ConfirmInputs({ view, inputs, setInputs, onApply, error, hidden = [] }: {
   view: WorkspaceView;
   inputs: Record<string, unknown>;
   setInputs: (v: Record<string, unknown>) => void;
   onApply: (p: Promise<WorkspaceView>) => void;
   error: string;
+  hidden?: string[]; // 多面屏时尺寸在分面里填
 }) {
   const [preview, setPreview] = useState<number | null>(null);
   const id = view.proposal.id;
   const { rev, candidates, pending, files } = view;
   const reading = files.filter((f) => f.read_status === "reading").length;
   const found = Object.values(candidates).reduce((n, c) => n + c.length, 0);
-  const defs = view.input_defs.filter((d) => !view.product_fed.includes(d.name));
+  const defs = view.input_defs.filter((d) => !view.product_fed.includes(d.name) && !hidden.includes(d.name));
   const post = (path: string, body: unknown = {}) => onApply(send<WorkspaceView>("POST", `/proposals/${id}/${path}`, body));
   const previewed = Object.values(candidates).flat().find((c) => c.id === preview);
 

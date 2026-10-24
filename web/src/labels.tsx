@@ -6,6 +6,19 @@ export function lineLabel(line: string) {
   return t(`lines.${line}`);
 }
 
+/** 库类页面（产品库 / 规则 / 模板）顶部的业务线切换。 */
+export function LineTabs({ page, line }: { page: string; line: string }) {
+  return (
+    <span className="row tight" role="tablist" aria-label={t("project.line")}>
+      {LINES.map((l) => (
+        <a key={l} href={`#/${page}/${l}`} className={`pill ${l === line ? "active" : ""}`}>
+          {lineLabel(l)}
+        </a>
+      ))}
+    </span>
+  );
+}
+
 export function StatusTag({ status, rev }: { status: string; rev: number }) {
   return (
     <span className="tag">

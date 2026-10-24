@@ -51,6 +51,7 @@ export default function App() {
   const proposalId = hash.match(/^#\/proposals\/(\d+)/)?.[1];
   const page = hash.startsWith("#/rules") ? "rules" : hash.startsWith("#/products") ? "products"
     : hash.startsWith("#/templates") ? "templates" : "projects";
+  const line = hash.match(/^#\/(?:rules|products|templates)\/(LED|PJ)/)?.[1] ?? "LED"; // 库类页面按业务线分（CR-7）
 
   async function switchName() {
     await api("/session", { method: "DELETE" });
@@ -91,8 +92,9 @@ export default function App() {
           </button>
         </header>
         <main className="main" key={lang /* 换语言后重新载入当前页，服务器按新语言返回 */}>
-          {page === "rules" ? <Rules /> : page === "products" ? <Products /> : page === "templates" ? <Templates />
-            : proposalId ? <Workspace id={Number(proposalId)} />
+          {page === "rules" ? <Rules key={line} line={line} /> : page === "products" ? <Products key={line} line={line} />
+            : page === "templates" ? <Templates key={line} line={line} />
+            : proposalId ? <Workspace key={proposalId} id={Number(proposalId)} />
             : projectId ? <ProjectDetail id={Number(projectId)} /> : <Projects />}
         </main>
       </div>

@@ -38,6 +38,7 @@
     "item": "项目",
     "manual": "手动",
     "manualCount": "已有 {n} 项手动修改，审核时会逐项列出。",
+    "readonly": "多面屏：每面一组，固定数量的行（例如电脑）放在最后的共用组。目前只能看，不能改。",
     "reason": "修改原因",
     "reasonHint": "原因（必填）",
     "restore": "恢复",
@@ -176,9 +177,65 @@
     "spare": "备用",
     "title": "拼接与线路图"
   },
+  "faces": {
+    "add": "+ 加一面",
+    "addSource": "+ 加一份资料",
+    "chosen": "已选定",
+    "cornerType": "转角类型",
+    "cornerTypes": {
+      "fold_wall_to_floor": "墙转地面",
+      "inside_90": "内转角 90°",
+      "outside_corner": "外转角"
+    },
+    "corners": "转角",
+    "depth": "可用进深 mm",
+    "face": "面",
+    "guess": "程序从资料里猜是：{shape}",
+    "height": "高 mm",
+    "introLed": "先判断屏是不是异形。L 形、U 形这类多面屏，每一面单独输入尺寸、朝向和信号 / 电源输入点；平面单屏照原来的方式输入。",
+    "introPj": "单面墙照原来的方式输入；L 形、U 形、弧形、环幕、墙 + 地面，每一面单独输入宽、高、可用进深和镜头高度，投影机、镜头、播放源共用。",
+    "kinds": {
+      "elevation": "立面图",
+      "other": "其它",
+      "plan": "平面图",
+      "spec": "规格表"
+    },
+    "load": "压在上面的东西",
+    "mountHeight": "镜头高度 m",
+    "name": "名称",
+    "orientation": "朝向",
+    "orientations": {
+      "ceiling": "顶面",
+      "floor": "地面",
+      "wall": "墙面"
+    },
+    "overlap": "哪面压哪面",
+    "overlapHint": "例如：B 压 A，A 净宽扣 20 mm",
+    "perFaceLed": "每一面都有自己的信号和电源输入点：数据线、回路、配电箱按面分别算。",
+    "perFacePj": "每面独立排投影机，不跨角投射；空着的高度、进深、镜头高度用下面确认输入里的值。",
+    "power": "电源输入点",
+    "protection": "防护（例如 GOB）",
+    "refCircuits": "参考资料的回路数（供应商图 / 原方案）",
+    "refData": "参考资料的数据线数",
+    "resolution": "机位冲突的人工处理",
+    "resolutionHint": "例如：B 面机位降低 300 mm，错开挂高",
+    "shape": "屏形",
+    "signal": "信号输入点",
+    "sourceKind": "资料类型",
+    "sourceName": "资料（例如平面图）",
+    "sourceTitle": "各份资料的值",
+    "sourceValue": "数值",
+    "sources": "资料来源（{n}）",
+    "special": "防护 / 压在上面",
+    "title": "屏形与分面",
+    "use": "用这个",
+    "useGuess": "用这个",
+    "weight": "总重",
+    "width": "宽 mm"
+  },
   "lines": {
     "LED": "LED 屏",
-    "PJ": "投影 · 单面墙"
+    "PJ": "投影"
   },
   "login": {
     "add": "添加名字",
@@ -202,6 +259,36 @@
     "rule": "规则值",
     "tag": "手动"
   },
+  "multi": {
+    "area": "面积",
+    "blend": "融合带",
+    "canvas": "展开画布",
+    "cat6": "CAT6",
+    "checks": "合并检查",
+    "circuits": "回路",
+    "conflicts": "资料对不上",
+    "conflictsIntro": "同一尺寸在不同资料里不一样，选定一个之前不能计算。",
+    "corner": "{pair} 第 1 台机位相距 {m} m",
+    "data": "数据线",
+    "dbBoxes": "配电箱",
+    "faceField": "{face} 面 · {field}",
+    "faceRules": "{face} 面的规则结果",
+    "fits": "模组整数倍",
+    "introLed": "每一面按 F1–F16 单独算（每面有自己的信号和电源输入点），再按 S1–S7 合起来检查转角、画布、处理器输出、特殊面和资料一致性。",
+    "introPj": "每一面按 P1–P10 单独排投影，再按投影机总数算融合器、电源、线缆（P11–P17）；P20 查转角机位，P21 展开画布，P22 弧形 / 环幕几何校正。",
+    "lens": "镜头 · 距离",
+    "modules": "模组",
+    "outputs": "处理器输出",
+    "pixel": "像素尺寸",
+    "power": "功率",
+    "projectors": "投影机",
+    "px": "像素",
+    "size": "尺寸",
+    "snap": "不是整数倍 → {a} / {b}",
+    "spare": "备品",
+    "title": "多面屏推荐",
+    "use": "用 {value}"
+  },
   "nav": {
     "langLabel": "切换到英文界面",
     "products": "产品库",
@@ -211,15 +298,24 @@
     "templates": "模板"
   },
   "options": {
+    "avoip": "AVoIP（AV 网络）",
     "both": "前后都可",
+    "by_distance": "按距离",
+    "ceiling": "吊顶",
     "embedded": "嵌入",
     "floor": "落地",
     "front": "前维护",
+    "full": "完整：播控、融合器、发送器、交换机",
     "hanging": "吊装",
     "indoor": "室内",
+    "local": "现场",
+    "media_pc_only": "只算播控电脑",
+    "none": "无",
     "outdoor": "户外",
+    "pjlink": "PJLink 网络中控",
     "rear": "后维护",
     "rental": "租赁",
+    "server_room": "机房",
     "wall": "壁挂"
   },
   "products": {
@@ -228,9 +324,12 @@
     "done": "完成",
     "filter": {
       "all": "全部",
+      "blender": "融合器",
       "cabinet": "箱体",
       "controller": "控制器",
-      "processor": "视频处理器"
+      "lens": "镜头",
+      "processor": "视频处理器",
+      "projector": "投影机"
     },
     "id": "编号（保存后不能改）",
     "idHint": "例如 IC-25",
@@ -245,9 +344,13 @@
     "sampleWarn": "标「示例数据」的产品用于测试流程；清单 D 组填好后替换。",
     "saveAs": "另存为产品库 {version}",
     "specs": {
+      "blender": "{outputs} 路输出",
+      "blenderCurved": "{outputs} 路输出 · 曲面校正",
       "cabinet": "P{pitch} · 模组 {mw} × {mh} · {nits} nits",
       "controller": "{mp} MP · {ports} 网口",
+      "lens": "投射比 {throw} · 适配 {fits}",
       "processor": "{inputs} 输入 · 最高 {max} MP",
+      "projector": "{lm} lm · {w} × {h} · {watts} W",
       "sending": "含发送 · {mp} MP · {ports} 网口 · {inputs} 输入"
     },
     "status": {
@@ -326,6 +429,19 @@
     "whenHint": "条件 when，例如 pixel_pitch_mm < 2",
     "whenLabel": "{rule} {name} 条件 {no}"
   },
+  "shape": {
+    "L": "L 形（内转角）",
+    "L_wall_floor": "L 形（墙 + 地面）",
+    "U": "U 形（三面）",
+    "cube": "立方体",
+    "curved": "弧形",
+    "custom": "自定义",
+    "flat": "平面单屏",
+    "outside_corner": "外转角",
+    "ring": "环幕",
+    "single": "单面墙",
+    "wall_floor": "墙 + 地面"
+  },
   "status": {
     "calculated": "已计算",
     "confirming": "待确认",
@@ -358,6 +474,7 @@
   },
   "ws": {
     "addToLibrary": "加入产品库",
+    "blender": "融合器",
     "blocked": "有阻断项，修正之前不能导出。",
     "cabinet": "箱体",
     "calcIntro": "Proposal 里的每个数字：实际计算式、用到的参数，以及参数的状态。点一行展开。",
@@ -365,15 +482,18 @@
     "checks": "校验",
     "controller": "控制器",
     "fromLibrary": "推荐只从产品库 {version} 里选：点间距、使用环境、维护方式都要对得上，首选排在前面。",
+    "lens": "镜头",
     "load": "带载",
     "loadPct": "负载 {pct} %",
     "missing": "缺少输入：{names}，补齐后才能从产品库选箱体。",
     "model": "型号",
     "noDiagram": "先选定箱体并算出箱体数，才能生成示意图。",
+    "noDiagramMulti": "多面屏的示意图下一步做；先看推荐页的按面结果和 BOQ。",
     "noDrawing": "先选定箱体并算出箱体数、回路和网线，才能出图。",
     "ports": "网口",
     "processor": "处理器",
     "project": "项目",
+    "projector": "投影机",
     "suggested": "建议型号 · 未入库",
     "suggestedIntro": "产品库里没有带载、网口都够的处理器 / 控制器。下面是参考型号表里的处理器（含发送），数值待核对规格书；选一款加进产品库后自动重算。",
     "tabs": {

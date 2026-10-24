@@ -111,6 +111,35 @@ export type RunResult = {
   suggestions?: Suggestion[];
   library_version?: string;
   manual?: string[];
+  faces?: FaceResult[]; // 多面屏（CR-7）：每面的规则结果
+  multi?: MultiResult;
+};
+
+// 多面屏（CR-7）
+export type FaceInput = {
+  id: string;
+  name?: string;
+  orientation?: string;
+  width_mm?: number | null;
+  height_mm?: number | null;
+  depth_mm?: number | null;
+  mount_height_m?: number | null;
+  signal_point?: string;
+  power_point?: string;
+  protection?: string;
+  load?: string;
+  width_sources?: SourceValue[];
+  height_sources?: SourceValue[];
+};
+export type SourceValue = { src: string; kind: string; value: number };
+export type CornerInput = { between: [string, string]; type: string; overlap?: string; resolution?: string };
+export type FaceResult = FaceInput & { rules: RuleResult[]; values: Record<string, number>; choices: Record<string, number[]> };
+export type MultiResult = {
+  shape: string;
+  totals: Record<string, number | number[]>;
+  checks: { rule: string; check: string; text: string }[];
+  conflicts: { face: string; field: string; sources: (SourceValue & { fits: boolean; options: number[] })[] }[];
+  corners: { between: [string, string]; distance_m: number; result: string; resolution: string }[];
 };
 
 // CR-2：产品库里没有够用的型号时，从参考型号表给出的建议型号（未入库，待核对规格书）
@@ -156,7 +185,7 @@ export type AnnotationDoc = {
 
 // ---- 产品库、推荐、BOQ ----
 
-export type Product = { id: string; category: string; brand: string; model: string; status: string; scenes: string[]; sample: boolean } & Record<string, unknown>;
+export type Product = { id: string; category: string; brand: string; model: string; status: string; scenes?: string[]; sample: boolean } & Record<string, unknown>;
 export type LibraryContent = { business_line: string; products: Product[] };
 export type FieldDef = { name: string; label: string; type: string };
 export type LibraryVersion = Version<LibraryContent> & {
@@ -198,12 +227,14 @@ export type ClientBoqRow = {
   at: string | null;
   added: boolean;
   rule_manual: boolean; // 数量取自推荐页手动覆盖过的结果（CR-5）
+  group?: string; // 多面屏按面分组（CR-7）
 };
 export type ClientBoq = {
   group: string;
   group_default: string;
   rows: ClientBoqRow[];
   manual: Pick<ClientBoqRow, "no" | "key" | "title" | "rule_qty" | "qty" | "unit" | "reason" | "by" | "at" | "added">[];
+  readonly?: boolean; // 多面屏的 BOQ 目前只能看
 };
 export type TemplateRow = { key: string; title: string; specs: string[]; qty: number | string; unit: string; note?: string; source?: string };
 export type TemplateContent = { business_line: string; boq: { group: string; rows: TemplateRow[] } };
@@ -254,6 +285,8 @@ export type WorkspaceView = {
   drawing: Drawing | null;
   overridable: Record<string, string[]>;
   overrides: ManualOverride[];
+  shapes: string[];
+  shape_guess: string;
 };
 
 // 推荐结果的手动覆盖（CR-5）：规则值 → 手动值 · 原因 · 修改人 · 时间

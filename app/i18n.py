@@ -38,7 +38,12 @@ STORED = {
     "CR-6：V1 不含价格，去掉 GST 参数（升级时自动生成，算式和其它参数不变）":
         "CR-6: V1 has no prices; GST parameter removed (generated on upgrade; formulas and other parameters unchanged)",
     "初始模板：客户版 BOQ 默认行（CR-6）": "Initial template: default client BOQ rows (CR-6)",
+    "初始模板：客户版 BOQ 默认行（CR-7）": "Initial template: default client BOQ rows (CR-7)",
+    "CR-7：多面屏 S5 每路输出宽度上限（升级时自动生成，算式和其它参数不变）":
+        "CR-7: multi-face S5 output width limit (generated on upgrade; formulas and other parameters unchanged)",
+    "初始版本（投影 P1–P22，CR-7）": "Initial version (projection P1–P22, CR-7)",
     "示例产品，清单 D 组填好后替换": "Sample products; to be replaced once checklist group D is filled in",
+    "示例产品，投影清单 v2 填好后替换": "Sample products; to be replaced once projection checklist v2 is filled in",
     "DWG 要在服务器装免费的 ODA File Converter 才能读取，目前只随项目保存":
         "DWG needs the free ODA File Converter on the server; kept with the project for now",
     "这类文件不读取，只随项目保存": "This file type is not read; kept with the project only",

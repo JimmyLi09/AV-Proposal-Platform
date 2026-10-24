@@ -6,11 +6,18 @@ import BoqTab from "./Boq";
 import ConfirmInputs from "./Confirm";
 import DiagramTab from "./Diagram";
 import DrawingTab from "./Drawing";
+import ShapeFaces, { isMulti } from "./Faces";
+import MultiView, { MultiCalc } from "./Multi";
 import { t } from "./i18n";
 import { fmtDate, lineLabel, StatusTag } from "./labels";
 import { productStatus } from "./Products";
 
-const TILES = ["F4", "F2", "F3", "F10", "F5", "F6", "F7", "F9", "F11", "F12"];
+const TILES: Record<string, string[]> = {
+  LED: ["F4", "F2", "F3", "F10", "F5", "F6", "F7", "F9", "F11", "F12"],
+  PJ: ["P2", "P3", "P4", "P5", "P7", "P8", "P9", "P11", "P14", "P12", "P15", "P16"],
+};
+// 多面屏时尺寸在分面里填，确认输入表不再列整屏的尺寸（CR-7）
+const FACE_FIELDS: Record<string, string[]> = { LED: ["width_mm", "height_mm"], PJ: ["wall_width_mm"] };
 
 export default function Workspace({ id }: { id: number }) {
   const [view, setView] = useState<WorkspaceView | null>(null);
@@ -42,8 +49,17 @@ export default function Workspace({ id }: { id: number }) {
 
   if (!view) return error ? <p className="error">{error}</p> : null;
   const { proposal, rev, result } = view;
-  const saveInputs = (cabinet_id: string | null = rev.cabinet_id) =>
-    apply(send<WorkspaceView>("PUT", `/proposals/${id}/inputs`, { inputs, cabinet_id }));
+  const saveInputs = (cabinet_id: string | null = rev.cabinet_id, values = inputs) =>
+    apply(send<WorkspaceView>("PUT", `/proposals/${id}/inputs`, { inputs: values, cabinet_id }));
+  const line = proposal.business_line;
+  const multi = !!result?.multi;
+  const useSource = (face: string, field: string, value: number) => {  // S7：在冲突表里选定一份资料的值
+    const faces = (inputs.faces as { id: string }[]).map((f) => (f.id === face ? { ...f, [field]: value } : f));
+    const next = { ...inputs, faces };
+    setInputs(next);
+    saveInputs(rev.cabinet_id, next);
+  };
+  const tabs = ["rec", "calc", "diagram", "boq", "annotate", ...(line === "LED" && !multi ? ["drawing"] : [])];
 
   return (
     <>
@@ -58,29 +74,32 @@ export default function Workspace({ id }: { id: number }) {
         </p>
       </div>
 
-      <ConfirmInputs view={view} inputs={inputs} setInputs={setInputs} onApply={apply} error={error} />
+      <ShapeFaces view={view} inputs={inputs} setInputs={setInputs} />
+      <ConfirmInputs view={view} inputs={inputs} setInputs={setInputs} onApply={apply} error={error}
+        hidden={isMulti(view, inputs) ? FACE_FIELDS[line] : []} />
       {result && <Choices result={result} onPick={(k, v) => setInputs({ ...inputs, [k]: v })} />}
 
       {result && (
         <>
           <div className="row">
-            {["rec", "calc", "diagram", "boq", "annotate", "drawing"].map((k) => (
+            {tabs.map((k) => (
               <button key={k} className={`pill ${tab === k ? "active" : ""}`} onClick={() => setTab(k)}>
                 {t(`ws.tabs.${k}`)}
               </button>
             ))}
           </div>
-          {tab === "rec" && <Recommendation view={view} onCabinet={(cid) => saveInputs(cid)}
-            onLibrary={() => apply(api<WorkspaceView>(`/proposals/${id}`))} onView={show} />}
+          {tab === "rec" && (multi ? <MultiView view={view} onUse={useSource} />
+            : <Recommendation view={view} onCabinet={(cid) => saveInputs(cid)}
+              onLibrary={() => apply(api<WorkspaceView>(`/proposals/${id}`))} onView={show} />)}
           {tab === "calc" && (
             <section className="card">
               <h2>{t("ws.tabs.calc")}</h2>
               <p className="muted">{t("ws.calcIntro")}</p>
-              <ResultsTable base={result} label={view.rules_version} />
+              {multi ? <MultiCalc view={view} /> : <ResultsTable base={result} label={view.rules_version} />}
             </section>
           )}
           {tab === "diagram" && (result.diagram ? <DiagramTab view={view} diagram={result.diagram} />
-            : <section className="card"><p className="muted">{t("ws.noDiagram")}</p></section>)}
+            : <section className="card"><p className="muted">{t(multi ? "ws.noDiagramMulti" : "ws.noDiagram")}</p></section>)}
           {tab === "boq" && view.boq && <BoqTab view={view} boq={view.boq} onApply={apply} />}
           {tab === "annotate" && <AnnotateTab view={view} onSaved={() => apply(api<WorkspaceView>(`/proposals/${id}`))} />}
           {tab === "drawing" && (view.drawing ? <DrawingTab view={view} drawing={view.drawing} onApply={apply} />
@@ -101,7 +120,8 @@ function Recommendation({ view, onCabinet, onLibrary, onView }: {
   const rec = result.recommendation;
   const byId = Object.fromEntries(result.rules.map((r) => [r.id, r])) as Record<string, RuleResult>;
   const value = (rid: string, name: string) => byId[rid]?.lines.find((l) => l.name === name)?.value as string | undefined;
-  const sample = [rec.cabinet?.sample, ...result.rules.filter((r) => ["F11", "F13"].includes(r.id)).map((r) => r.status === "sample")].some(Boolean);
+  const pj = view.proposal.business_line === "PJ";
+  const sample = [rec.cabinet?.sample, ...result.rules.filter((r) => ["F11", "F13", "P3", "P11"].includes(r.id)).map((r) => r.status === "sample")].some(Boolean);
   const checks = result.rules.filter((r) => r.check);
   const blocked = !!rec.block || checks.some((r) => r.check === "BLOCK");
 
@@ -119,8 +139,8 @@ function Recommendation({ view, onCabinet, onLibrary, onView }: {
         {rec.cabinet && (
           <div className="row">
             <label className="row tight">
-              {t("ws.cabinet")}
-              <select aria-label={t("ws.cabinet")} value={rec.cabinet.id} onChange={(e) => onCabinet(e.target.value)}>
+              {t(pj ? "ws.projector" : "ws.cabinet")}
+              <select aria-label={t(pj ? "ws.projector" : "ws.cabinet")} value={rec.cabinet.id} onChange={(e) => onCabinet(e.target.value)}>
                 {rec.candidates.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.brand} {c.model}
@@ -129,19 +149,29 @@ function Recommendation({ view, onCabinet, onLibrary, onView }: {
                 ))}
               </select>
             </label>
-            <span>
-              · {t("ws.controller")}
-              {t("common.colon")}
-              {value("F11", "controller") ?? "—"} · {t("ws.processor")}
-              {t("common.colon")}
-              {value("F13", "processor") ?? "—"}
-            </span>
+            {pj ? (
+              <span>
+                · {t("ws.lens")}
+                {t("common.colon")}
+                {value("P3", "lens") ?? "—"} · {t("ws.blender")}
+                {t("common.colon")}
+                {value("P11", "blender") ?? "—"}
+              </span>
+            ) : (
+              <span>
+                · {t("ws.controller")}
+                {t("common.colon")}
+                {value("F11", "controller") ?? "—"} · {t("ws.processor")}
+                {t("common.colon")}
+                {value("F13", "processor") ?? "—"}
+              </span>
+            )}
             {sample && <span className="tag st-sample">{t("common.sample")}</span>}
           </div>
         )}
         <p className="muted">{t("ws.fromLibrary", { version: view.library_version })}</p>
         <div className="tiles">
-          {TILES.filter((rid) => byId[rid]).map((rid) => (
+          {TILES[view.proposal.business_line].filter((rid) => byId[rid]).map((rid) => (
             <Tile key={rid} view={view} r={byId[rid]} names={view.overridable[rid] ?? []} onView={onView} />
           ))}
         </div>

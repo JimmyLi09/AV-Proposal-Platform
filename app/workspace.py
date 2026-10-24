@@ -8,11 +8,12 @@ from sqlalchemy.orm import Session
 
 from .api import file_out, get_db, iso, proposal_out, require_user
 from . import drawing_export
-from .boq import build, to_xlsx
+from .boq import build, build_multi, to_xlsx
 from .drawing import build as build_drawing
 from .i18n import stored, text, tr, unit, use
 from .models import (ExtractedField, ProductLibraryVersion, Project, Proposal, RuleSetVersion, TemplateVersion, User,
                      utcnow)
+from .rules import multiface
 from .rules.engine import LINES, calculate
 from .storage import safe_name
 from .templates.content import UNITS
@@ -32,9 +33,17 @@ RANK = {"high": 0, "medium": 1, "low": 2}
 
 
 def pending(rev) -> list[str]:
-    """确认关：从文件读到、置信度为 medium / low、还没人确认的字段。"""
+    """确认关：从文件读到、置信度为 medium / low，或几份文件读到的值不一样（CR-7），还没人确认的字段。"""
     return [k for k, m in (rev.input_meta or {}).items()
-            if m.get("source") == "file" and m.get("confidence") != "high" and not m.get("confirmed_by")]
+            if m.get("source") == "file" and (m.get("confidence") != "high" or m.get("conflict")) and not m.get("confirmed_by")]
+
+
+# 读文件认出的是通用的屏宽 / 屏高；投影方案里对应墙宽 / 墙高
+FIELD_ALIAS = {"PJ": {"width_mm": "wall_width_mm", "height_mm": "wall_height_mm"}}
+
+
+def field_of(prop: Proposal, field: str) -> str:
+    return FIELD_ALIAS.get(prop.business_line, {}).get(field, field)
 
 
 def compute(db: Session, prop: Proposal) -> tuple[dict, dict | None]:
@@ -51,8 +60,13 @@ def compute(db: Session, prop: Proposal) -> tuple[dict, dict | None]:
 def client_boq(db: Session, prop: Proposal, used: dict, result: dict | None, edits: dict | None) -> dict | None:
     if not result or not result["rules"]:
         return None
-    ctx = result["values"] | {"proposal_name": prop.name, "project_name": db.get(Project, prop.project_id).name}
-    return build(used["template"].content, ctx, edits, set(result["manual"]))
+    names = {"proposal_name": prop.name, "project_name": db.get(Project, prop.project_id).name}
+    if result.get("faces") and prop.business_line == "LED":  # 多面屏：每面一组（CR-7）
+        if not result["multi"]["totals"]:
+            return None
+        faces = [(f["id"], f"{f['id']} · {f.get('name') or ''}".strip(" ·"), f["boq_context"] | names) for f in result["faces"]]
+        return build_multi(used["template"].content, faces, tr("共用", "Shared"), result["values"] | names, multiface.POOLED)
+    return build(used["template"].content, result["values"] | names, edits, set(result["manual"]))
 
 
 def candidates(db: Session, prop: Proposal) -> dict[str, list]:
@@ -60,7 +74,7 @@ def candidates(db: Session, prop: Proposal) -> dict[str, list]:
     out: dict[str, list] = {}
     for f in db.get(Project, prop.project_id).files:
         for x in f.extracted:
-            out.setdefault(x.field, []).append(
+            out.setdefault(field_of(prop, x.field), []).append(
                 {"id": x.id, "value": x.value, "confidence": x.confidence, "file_id": f.id, "filename": f.filename,
                  "location": stored(x.location), "snippet": x.snippet, "crop": bool(x.crop_path)})
     for items in out.values():
@@ -74,6 +88,9 @@ def refresh_status(db: Session, prop: Proposal) -> None:
         rev.status = "confirming"
         return
     _, result = compute(db, prop)
+    if result and result.get("multi", {}).get("conflicts"):  # 多面屏 S7：资料对不上，选定前不能计算
+        rev.status = "confirming"
+        return
     complete = result and result["rules"] and not any(r["missing"] or r["error"] for r in result["rules"])
     rev.status = "calculated" if complete else "draft"
 
@@ -117,6 +134,9 @@ def view(db: Session, prop: Proposal) -> dict:
         "drawing": drawing_of(used, result, rev.drawing_edits),
         "overridable": LINES[prop.business_line]["overridable"],
         "overrides": manual_list(rev, result),
+        "shapes": multiface.SHAPES[prop.business_line],
+        "shape_guess": multiface.guess_shape(prop.business_line, " ".join(
+            f.read_text or "" for f in db.get(Project, prop.project_id).files)),
     }
 
 
@@ -148,7 +168,7 @@ class InputsIn(BaseModel):
 
 def allowed_inputs(db: Session, prop: Proposal) -> set[str]:
     rules = latest(db, RuleSetVersion, prop.business_line)
-    return {i["name"] for i in rules.content["inputs"]} - set(LINES[prop.business_line]["product_fed"])
+    return ({i["name"] for i in rules.content["inputs"]} - set(LINES[prop.business_line]["product_fed"])) | multiface.MULTI_KEYS
 
 
 def confirmed_by(user: User) -> dict:
@@ -174,11 +194,13 @@ def save_inputs(proposal_id: int, body: InputsIn, user: User = Depends(require_u
     return view(db, prop)
 
 
-def _use(rev, x: ExtractedField) -> None:
-    rev.inputs = {**(rev.inputs or {}), x.field: x.value}
-    rev.input_meta = {**(rev.input_meta or {}), x.field: {
+def _use(rev, field: str, x: ExtractedField, items: list[dict]) -> None:
+    """用文件里认出的值。几份文件读到的值不一样时标 conflict，即使置信度高也要人确认（CR-7 / Phoenix Sea）。"""
+    rev.inputs = {**(rev.inputs or {}), field: x.value}
+    rev.input_meta = {**(rev.input_meta or {}), field: {
         "source": "file", "confidence": x.confidence, "extracted_id": x.id, "filename": x.source_file.filename,
-        "location": x.location, "snippet": x.snippet, "confirmed_by": None}}
+        "location": x.location, "snippet": x.snippet, "confirmed_by": None,
+        "conflict": len({repr(c["value"]) for c in items}) > 1}}
 
 
 @router.post("/{proposal_id}/fill-from-files")
@@ -189,7 +211,7 @@ def fill_from_files(proposal_id: int, _: User = Depends(require_user), db: Sessi
     allowed = allowed_inputs(db, prop)
     for field, items in candidates(db, prop).items():
         if field in allowed and (rev.inputs or {}).get(field) in (None, "", []):
-            _use(rev, db.get(ExtractedField, items[0]["id"]))
+            _use(rev, field, db.get(ExtractedField, items[0]["id"]), items)
     refresh_status(db, prop)
     db.commit()
     return view(db, prop)
@@ -204,9 +226,10 @@ def pick(proposal_id: int, body: PickIn, _: User = Depends(require_user), db: Se
     """多个文件读到不同的值时，选用其中一个。"""
     prop = get_proposal(db, proposal_id)
     x = db.get(ExtractedField, body.extracted_id)
-    if x is None or x.source_file.project_id != prop.project_id or x.field not in allowed_inputs(db, prop):
+    field = field_of(prop, x.field) if x else None
+    if x is None or x.source_file.project_id != prop.project_id or field not in allowed_inputs(db, prop):
         raise HTTPException(404, tr("候选值不存在", "Candidate value not found"))
-    _use(prop.revisions[-1], x)
+    _use(prop.revisions[-1], field, x, candidates(db, prop)[field])
     refresh_status(db, prop)
     db.commit()
     return view(db, prop)
@@ -298,6 +321,8 @@ def save_boq(proposal_id: int, body: BoqIn, user: User = Depends(require_user), 
     default = client_boq(db, prop, used, result, None)
     if default is None:
         raise HTTPException(409, tr("还没有计算结果，算完才能改 BOQ", "No results yet; calculate before editing the BOQ"))
+    if default.get("readonly"):
+        raise HTTPException(409, tr("多面屏的 BOQ 目前只能看，不能改", "A multi-face BOQ is read-only for now"))
     rules = {r["key"]: r for r in default["rows"]}
     old = rev.boq_edits or {}
     stamp = {"by": user.name, "at": iso(utcnow())}

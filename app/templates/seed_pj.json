@@ -1,0 +1,27 @@
+{
+  "business_line": "PJ",
+  "boq": {
+    "group": "{proposal_name}",
+    "rows": [
+      {"key": "projector", "title": "{projector_model} laser projector",
+       "specs": ["Brightness: {projector_lumens} lm", "Native resolution: {native_px_w} × {native_px_h}",
+                 "Edge-blended image {wall_width_mm} × {wall_height_mm} mm, blended resolution {blended_px_x} × {blended_px_y}"],
+       "qty": "projectors", "unit": "set", "source": "P1 / P2 / P7"},
+      {"key": "lens", "title": "{lens}", "specs": ["Throw ratio {throw_ratio}, mounted {distance_m} m from the wall (lens front)"],
+       "qty": "projectors", "unit": "pcs", "source": "P3 / P4"},
+      {"key": "blender", "title": "Edge blending processor {blender}", "specs": ["{blender_outputs} outputs"],
+       "qty": "blender_qty", "unit": "set", "source": "P11", "when": "blender_qty"},
+      {"key": "media_pc", "title": "Media server PC", "specs": ["Content canvas {canvas_px_x} × {canvas_px_y}"],
+       "qty": 1, "unit": "set", "source": "P13"},
+      {"key": "transmission", "title": "{transport} transmission kit (transmitter + receiver)", "specs": [],
+       "qty": "transport_kits", "unit": "set", "source": "P14", "when": "transport_kits"},
+      {"key": "cabling", "title": "Signal and control cabling",
+       "specs": ["Video {video_lines} + {video_spare} spare ({transport})", "Control CAT6 {control_lines} + {control_spare} spare"],
+       "qty": 1, "unit": "lot", "source": "P14 / P15"},
+      {"key": "mount", "title": "Projector ceiling mount", "specs": [], "qty": "projectors", "unit": "set",
+       "note": "Subject to site survey", "source": "P2"},
+      {"key": "content", "title": "Content production", "specs": ["Canvas {canvas_px_x} × {canvas_px_y} px"],
+       "qty": 1, "unit": "lot", "note": "Duration and number of scenes to be confirmed", "source": "P13"}
+    ]
+  }
+}

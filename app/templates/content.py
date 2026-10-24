@@ -11,7 +11,7 @@ from ..i18n import tr
 
 UNITS = ["sqm", "set", "lot", "pcs"]
 NAME = re.compile(r"\{(\w+)\}")
-LINE_NAMES = ["LED"]
+LINE_NAMES = ["LED", "PJ"]
 CONTEXT = {"proposal_name", "project_name"}  # 除了规则里的名字，模板还能用方案名、项目名
 
 
