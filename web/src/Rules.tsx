@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api, InputDef, Param, RuleContent, RuleVersion, RunResult, send } from "./api";
+import { api, InputDef, KbReference, Param, RuleContent, RuleVersion, RunResult, send } from "./api";
 import { Choices, InputsForm, nextVersion, ResultsTable, STATUSES, StatusChip } from "./Calc";
 import { t, tOr } from "./i18n";
 import { fmtDate, LineTabs } from "./labels";
@@ -10,6 +10,7 @@ export default function Rules({ line }: { line: string }) {
   const [draft, setDraft] = useState<RuleContent | null>(null);
   const [versions, setVersions] = useState<RuleVersion[]>([]);
   const [inputs, setInputs] = useState<Record<string, unknown> | null>(null);
+  const [refs, setRefs] = useState<KbReference[]>([]);
   const [reason, setReason] = useState("");
   const [error, setError] = useState("");
 
@@ -23,6 +24,7 @@ export default function Rules({ line }: { line: string }) {
   useEffect(() => {
     load();
     api<{ input: Record<string, unknown> }>(`/rules/${line}/sample`).then((s) => setInputs(s.input));
+    api<KbReference[]>(`/kb/references/${line}`).then(setRefs);
   }, []);
 
   if (!saved || !draft || !inputs) return null;
@@ -104,6 +106,16 @@ export default function Rules({ line }: { line: string }) {
               </b>
               <span className="muted">{L(rule.note)}</span>
             </div>
+            {refs.some((r) => r.rule_id === rule.id) && (
+              <div className="kb-refs small">
+                <b>{t("rules.kbRefs")}</b>
+                {refs.filter((r) => r.rule_id === rule.id).map((r) => (
+                  <div key={r.id} className="muted">
+                    {r.label} · {t("rules.kbRef", { key: r.key, actual: r.actual, rule: r.rule_value ?? "—", version: r.rules_version, by: r.decided_by ?? "" })}
+                  </div>
+                ))}
+              </div>
+            )}
             {rule.step ? (
               <p className="muted">{t("rules.step", { step: rule.step })}</p>
             ) : (

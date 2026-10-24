@@ -14,6 +14,11 @@ class Base(DeclarativeBase):
     pass
 
 
+def mapped_name(name: str, type_: str, _parent) -> bool:
+    """结构比对时跳过资料库的全文索引（FTS5 虚拟表和它自带的几张表，迁移 0011 用 SQL 建，没有对应的模型）。"""
+    return not (type_ == "table" and name.startswith("kb_fts"))
+
+
 class User(Base):
     """轻账号：只选名字，无密码无权限；用来记录谁做了什么。"""
     __tablename__ = "users"
@@ -176,3 +181,79 @@ class TemplateVersion(Base):
     created_at: Mapped[datetime] = mapped_column(default=utcnow)
 
     author: Mapped[User | None] = relationship()
+
+
+class KbFile(Base):
+    """资料库里的一份文件（CR-8）：原文件在资料库文件夹里，只读不改；这里只记读取结果，文字进全文索引 kb_fts。"""
+    __tablename__ = "kb_files"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    rel_path: Mapped[str] = mapped_column(String(500), unique=True)  # 相对资料库文件夹，用 / 分隔
+    doc_type: Mapped[str] = mapped_column(String(12))  # projects / specs / drawings / boq / templates
+    project_key: Mapped[str | None] = mapped_column(String(200), index=True)  # 以往项目：所在子文件夹名
+    size: Mapped[int]
+    mtime_ns: Mapped[int]
+    sha256: Mapped[str] = mapped_column(String(64))
+    read_status: Mapped[str] = mapped_column(String(10), default="queued")  # queued / read / attached / failed
+    read_method: Mapped[str | None] = mapped_column(String(20))
+    read_note: Mapped[str] = mapped_column(Text, default="")
+    chunks: Mapped[int] = mapped_column(default=0)
+    # 读取时抽出的结构化内容：{line, fields: 认出的字段, boq: Excel 里的 BOQ 行}；规格书参数每次按最新产品库从索引文字再找
+    facts: Mapped[dict | None] = mapped_column(JSON(none_as_null=True))
+    missing: Mapped[bool] = mapped_column(default=False)  # 文件夹里已经没有了（索引已删，记录保留）
+    read_at: Mapped[datetime | None]
+    uploaded_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
+
+
+class KbProject(Base):
+    """以往项目（CR-8）：资料库「以往项目」下的一个子文件夹。record 是人确认过的项目记录，相似项目和回归对比只用它。"""
+    __tablename__ = "kb_projects"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    key: Mapped[str] = mapped_column(String(200), unique=True)  # 子文件夹名
+    project_no: Mapped[str | None] = mapped_column(String(40))  # 文件夹名开头的编号，如 143
+    record: Mapped[dict | None] = mapped_column(JSON(none_as_null=True))  # {line, inputs, actual}；采用「项目记录」后才有
+    record_version: Mapped[int] = mapped_column(default=0)
+    record_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
+    record_at: Mapped[datetime | None]
+    # 「做完、可当标准答案」：页面上勾选，或写在「以往项目」文件夹的标准答案清单里，两者任一即可
+    standard_manual: Mapped[bool] = mapped_column(default=False)
+    standard_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
+    standard_at: Mapped[datetime | None]
+    standard_list: Mapped[bool] = mapped_column(default=False)
+    missing: Mapped[bool] = mapped_column(default=False)
+
+    record_author: Mapped[User | None] = relationship(foreign_keys=[record_by])
+    standard_author: Mapped[User | None] = relationship(foreign_keys=[standard_by])
+
+
+class KbItem(Base):
+    """学到的内容 · 待确认（CR-8）：只是建议，采用后才在目标库生成新版本；不直接改任何数量。"""
+    __tablename__ = "kb_items"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    kind: Mapped[str] = mapped_column(String(10))  # product / template / project / rule
+    business_line: Mapped[str | None] = mapped_column(String(10))
+    fingerprint: Mapped[str] = mapped_column(String(64), index=True)  # 同样的内容复扫时不重复出现
+    payload: Mapped[dict] = mapped_column(JSON)
+    source_file_id: Mapped[int | None] = mapped_column(ForeignKey("kb_files.id"))
+    location: Mapped[str] = mapped_column(String(200), default="")
+    snippet: Mapped[str] = mapped_column(Text, default="")
+    confidence: Mapped[str] = mapped_column(String(6))  # high / medium / low
+    status: Mapped[str] = mapped_column(String(10), default="pending")  # pending / adopted / rejected
+    decided_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
+    decided_at: Mapped[datetime | None]
+    result: Mapped[dict | None] = mapped_column(JSON(none_as_null=True))  # 采用后：目标库新版本、改之前的值（撤销用）
+    created_at: Mapped[datetime] = mapped_column(default=utcnow)
+
+    source_file: Mapped[KbFile | None] = relationship()
+    decider: Mapped[User | None] = relationship()
+
+
+class KbSetting(Base):
+    """资料库设置：勾选的资料类型、上次扫描结果。"""
+    __tablename__ = "kb_settings"
+
+    key: Mapped[str] = mapped_column(String(40), primary_key=True)
+    value: Mapped[dict] = mapped_column(JSON)
+    updated_at: Mapped[datetime] = mapped_column(default=utcnow)

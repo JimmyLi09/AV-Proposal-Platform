@@ -8,3 +8,8 @@ data_dir: ./data
 # DWG 读取：免费的 ODA File Converter 安装路径，例：'C:\Program Files\ODA\ODAFileConverter\ODAFileConverter.exe'
 # 留空 = 没装，DWG 只随项目保存。
 oda_converter: ""
+# 资料库（CR-8）文件夹：以往项目、规格书、图纸、BOQ、模板与条款各放一个子文件夹（第一次启动时自动建好）。
+# 留空 = 资料目录下的 knowledge（例：D:\avp-data\knowledge）。原文件只读，平台不移动、不改名。
+knowledge_dir: ""
+# 每晚自动复扫的时间（服务器本地时间，24 小时制）
+knowledge_scan_at: "02:00"

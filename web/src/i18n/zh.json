@@ -233,6 +233,152 @@
     "weight": "总重",
     "width": "宽 mm"
   },
+  "kb": {
+    "action": "操作",
+    "actual": "实际数量",
+    "adopt": "采用",
+    "adopted": "已采用 · {target} {version}",
+    "allDone": "全部处理完",
+    "compare": {
+      "actual": "实际",
+      "diff": "不一致",
+      "item": "项目",
+      "missing": "项目记录里缺：{names}，相关的数量算不出来",
+      "rule": "规则",
+      "ruleValue": "规则算出",
+      "same": "一致",
+      "skipped": "多面屏的项目记录没有分面尺寸，先不对比。",
+      "title": "规则 {version} 重算，和实际数量对比"
+    },
+    "decidedIntro": "已经采用或不采用的内容；撤销后回到待确认，采用过的会另存一个新版本改回去。",
+    "fields": {
+      "environment": "使用环境",
+      "installation": "安装方式",
+      "projector": "投影机"
+    },
+    "from": "来源",
+    "goesTo": "放进",
+    "import": {
+      "failed": "{n} 个文件读取失败",
+      "folder": "服务器文件夹",
+      "last": "上次扫描：{at} {time} · 新增 {new} · 改过 {changed} · 删除 {removed} · 读取失败 {failed}",
+      "never": "还没有扫描过",
+      "noFolder": "文件夹不存在：请 IT 在 deploy.local.yaml 里设 knowledge_dir",
+      "note": "每类资料放在对应的子文件夹里，以往项目一个子文件夹一个项目。原文件只读，不移动、不改名。每晚 {at} 自动复扫，新增或改过的文件重新读取。",
+      "scan": "扫描文件夹",
+      "scanning": "正在扫描：已处理 {done} / {total} 个文件",
+      "title": "导入资料",
+      "types": "要扫描的资料类型"
+    },
+    "intro": "把以往的项目资料、规格书、图纸、BOQ 和模板放进资料库文件夹。平台在公司服务器上逐份读取：抽出文字、尺寸和表格，建立全文索引。全部在本地处理，不用云端 AI。",
+    "item": {
+      "byArea": "数量按面积（area_m2）",
+      "inFiles": "出现在 {n} 份 BOQ 里",
+      "product": "{model} 规格",
+      "project": "以往项目：{key}",
+      "rule": "规则参考：{rule}",
+      "ruleDetail": "{key} · {label}：规则算出 {rule}，实际 {actual}（规则 {version}）",
+      "template": "BOQ 行写法",
+      "was": "（原 {value}）",
+      "wasEmpty": "（原来没填）"
+    },
+    "kpi": {
+      "failed": "读取失败",
+      "files": "文件",
+      "pending": "待确认",
+      "read": "已读取"
+    },
+    "learned": "学到的内容",
+    "learnedTitle": "学到的内容 · 待确认",
+    "local": "本地处理 · 不联网",
+    "noQty": "学到的内容不会直接改数量",
+    "noQtyText": "：只给建议值、来源和置信度。要进产品库、模板或项目记录，必须有人采用，并生成新版本；规则只作参考，不自动改。",
+    "pendingLeft": "还有 {n} 条等你确认",
+    "projects": {
+      "fileCount": "{n} 个文件",
+      "files": "文件",
+      "intro": "「以往项目」文件夹里一个子文件夹一个项目。项目记录要先在上面「学到的内容」里采用；勾选「做完，可当标准答案」的项目会用当前规则重算，逐条和实际数量对比。也可以在「以往项目」文件夹里放 标准答案.txt（或 standard.txt），每行写一个项目文件夹名。",
+      "noRecord": "还没有确认的项目记录",
+      "none": "还没有以往项目：把项目文件夹放进「以往项目」后扫描。",
+      "project": "项目",
+      "record": "项目记录",
+      "title": "以往项目",
+      "version": "记录 v{v}"
+    },
+    "reason": {
+      "area": "面积 {mine} / {theirs} ㎡",
+      "pitch_near": "点间距接近 P{mine} / P{theirs}",
+      "pitch_same": "点间距相同 P{pitch}",
+      "same": "{field}相同：{value}",
+      "shape": "屏形相同：{shape}",
+      "word": "资料里提到「{word}」"
+    },
+    "reject": "不采用",
+    "rejected": "不采用",
+    "search": {
+      "all": "全部类型",
+      "button": "搜索",
+      "hint": "关键词，例：VX1000、弧形、HDBaseT",
+      "none": "没有找到。",
+      "title": "资料搜索",
+      "type": "资料类型"
+    },
+    "show": {
+      "decided": "已处理",
+      "pending": "待确认"
+    },
+    "similar": {
+      "intro": "按尺寸、屏形、点间距和资料里的关键词打分，只用资料库里人确认过的项目记录。",
+      "score": "{score} 分",
+      "title": "相似以往项目"
+    },
+    "standard": {
+      "list": "在标准答案清单里",
+      "tag": "标准答案",
+      "tick": "做完，可当标准答案",
+      "title": "标准答案"
+    },
+    "target": {
+      "products": "产品库",
+      "project": "项目记录",
+      "rules": "规则参考",
+      "templates": "模板"
+    },
+    "to": {
+      "product": "产品库 · {line}（替换示例值，生成新版本）",
+      "productAdd": "产品库 · {line}（从参考型号表加入，生成新版本）",
+      "project": "项目记录 · 相似项目、回归对比",
+      "rule": "规则 · 只作参考，不自动改",
+      "template": "模板 · {line} BOQ 默认行（生成新版本）"
+    },
+    "types": {
+      "boq": "BOQ",
+      "drawings": "图纸",
+      "projects": "以往项目",
+      "specs": "规格书",
+      "templates": "模板与条款"
+    },
+    "undo": "撤销",
+    "upload": {
+      "button": "上传",
+      "files": "选择文件",
+      "project": "项目名",
+      "projectHint": "项目名，例：143-Royal Plaza",
+      "title": "上传文件",
+      "type": "资料类型"
+    },
+    "used": {
+      "boq": "BOQ 写法",
+      "boqText": "以往 BOQ 里模板还没有的行写法，采用后成为模板的默认行，尺寸和点间距换成规则结果。",
+      "product": "产品参数",
+      "productText": "规格书读出的带载、网口、亮度、功耗、流明，采用后替换产品库里的示例值。",
+      "regression": "回归对比",
+      "regressionText": "做完的项目和规则结果逐条对比，差异列出来，作为调整系数的参考。",
+      "similar": "相似项目",
+      "similarText": "确认输入时列出 3 个最像的以往项目，可以直接对照尺寸、屏形和当时的方案。",
+      "title": "用在哪里"
+    }
+  },
   "lines": {
     "LED": "LED 屏",
     "PJ": "投影"
@@ -290,6 +436,7 @@
     "use": "用 {value}"
   },
   "nav": {
+    "knowledge": "资料库",
     "langLabel": "切换到英文界面",
     "products": "产品库",
     "projects": "项目",
@@ -419,6 +566,8 @@
     "formulas": "算式",
     "formulasIntro": "公式类规则可以改算式，也可以加分档（满足「条件」时用这一行，从上往下取第一条）。步骤类规则的步骤写在代码里，只改参数。可用函数：ceil、floor、round、min、max、abs。",
     "intro": "所有系数和算式都在这里改。保存会生成新的规则版本；已发出的 Rev 保留计算时使用的版本。",
+    "kbRef": "{key}：实际 {actual}，规则 {rule}（规则 {version}）· 采用人 {by}",
+    "kbRefs": "资料库参考（只作参考，不自动改规则）",
     "nothingToSave": "修改任一数值或算式后才能保存",
     "saveAs": "另存为 {version}",
     "step": "步骤类规则（{step}），步骤写在代码里。",

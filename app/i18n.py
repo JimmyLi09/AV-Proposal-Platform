@@ -48,7 +48,17 @@ STORED = {
         "DWG needs the free ODA File Converter on the server; kept with the project for now",
     "这类文件不读取，只随项目保存": "This file type is not read; kept with the project only",
     "未找到尺寸，仅作参考": "No dimensions found; for reference only",
+    "DWG 要在服务器装免费的 ODA File Converter 才能读取": "DWG needs the free ODA File Converter on the server",
+    "这类文件不读取，只能按文件名搜索": "This file type is not read; it can only be found by file name",
 }
+# 系统按固定句式写进数据库的说明（资料库采用 / 撤销的版本原因，CR-8）：整句按句式换，不影响人写的原因
+PATTERNS = [
+    (re.compile(r"资料库 #(\d+)：(加入|更新) (.+)（按规格书 (.+)）"),
+     lambda m: f"Knowledge base #{m[1]}: {'added' if m[2] == '加入' else 'updated'} {m[3]} (from datasheet {m[4]})"),
+    (re.compile(r"资料库 #(\d+)：加入一行（按以往 BOQ (.+)）"),
+     lambda m: f"Knowledge base #{m[1]}: added a row (from past BOQ {m[2]})"),
+    (re.compile(r"撤销资料库 #(\d+)"), lambda m: f"Undid knowledge base #{m[1]}"),
+]
 FRAGMENTS = {"读取失败：": "Read failed: ", "文字识别": "OCR", "尺寸线": "dimension line", "尺寸标注": "dimension",
              "加入建议型号 ": "Added suggested model ",
              "（参考型号表，数值待核对规格书）": " (reference model table; values to be checked against the datasheet)"}
@@ -60,6 +70,9 @@ def stored(text: str | None) -> str:
         return text or ""
     if text in STORED:
         return STORED[text]
+    for pattern, english in PATTERNS:
+        if m := pattern.fullmatch(text):
+            return english(m)
     return _FRAGMENT_RE.sub(lambda m: FRAGMENTS[m[0]], text)
 
 

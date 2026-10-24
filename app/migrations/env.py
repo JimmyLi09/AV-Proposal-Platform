@@ -1,14 +1,15 @@
 from alembic import context
 from sqlalchemy import create_engine
 
-from app.models import Base
+from app.models import Base, mapped_name
 
 config = context.config
 
 
 def run(connection):
     # render_as_batch：SQLite 改表结构要整表重建
-    context.configure(connection=connection, target_metadata=Base.metadata, render_as_batch=True)
+    context.configure(connection=connection, target_metadata=Base.metadata, render_as_batch=True,
+                      include_name=mapped_name)
     with context.begin_transaction():
         context.run_migrations()
 
