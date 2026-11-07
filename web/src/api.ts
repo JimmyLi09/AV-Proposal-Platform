@@ -288,6 +288,44 @@ export type WorkspaceView = {
   shapes: string[];
   shape_guess: string;
   similar: Similar[];
+  // 第 6 步：审核关与 Rev
+  revisions: RevSummary[];
+  viewing_latest: boolean;
+  readonly: boolean;
+  blockers: string[];
+  history: { action: string; by: string; at: string; note: string }[];
+  reviewer: string | null;
+  reviewed_at: string | null;
+  locked: { rules_version: string; library_version: string; template_version: string; files: unknown[] } | null;
+  snapshot_ok: boolean;
+};
+
+/** 看旧 Rev 时，导出和图片链接要带上 Rev 号。 */
+export function revQuery(view: { viewing_latest: boolean; rev: { rev_no: number } }, sep = "?"): string {
+  return view.viewing_latest ? "" : `${sep}rev=${view.rev.rev_no}`;
+}
+
+export type RevSummary = {
+  rev_no: number;
+  status: string;
+  latest: boolean;
+  author: string;
+  created_at: string;
+  reviewer: string | null;
+  reviewed_at: string | null;
+  rules_version: string | null;
+  library_version: string | null;
+  template_version: string | null;
+};
+
+type DiffRow = { item: string; a: string; b: string };
+export type RevCompare = {
+  a: number;
+  b: number;
+  versions: DiffRow[];
+  inputs: DiffRow[];
+  results: (DiffRow & { rule: string; name: string })[];
+  boq: DiffRow[];
 };
 
 // 推荐结果的手动覆盖（CR-5）：规则值 → 手动值 · 原因 · 修改人 · 时间

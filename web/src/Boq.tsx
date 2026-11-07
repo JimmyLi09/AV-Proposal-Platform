@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from "react";
-import { ClientBoq, send, WorkspaceView } from "./api";
+import { ClientBoq, send, WorkspaceView, revQuery } from "./api";
 import { t } from "./i18n";
 import { fmtDate } from "./labels";
 
@@ -152,7 +152,7 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
           {dirty ? (
             <span className="muted">{t("boq.saveFirst")}</span>
           ) : (
-            <a className="btn-outline" href={`/api/proposals/${id}/boq.xlsx`}>
+            <a className="btn-outline" href={`/api/proposals/${id}/boq.xlsx${revQuery(view)}`}>
               {t("boq.export")}
             </a>
           )}
@@ -242,7 +242,7 @@ function ReadonlyBoq({ view, boq }: { view: WorkspaceView; boq: ClientBoq }) {
         </table>
       </div>
       <div className="row">
-        <a className="btn-outline" href={`/api/proposals/${view.proposal.id}/boq.xlsx`}>
+        <a className="btn-outline" href={`/api/proposals/${view.proposal.id}/boq.xlsx${revQuery(view)}`}>
           {t("boq.export")}
         </a>
       </div>

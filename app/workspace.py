@@ -47,15 +47,37 @@ def field_of(prop: Proposal, field: str) -> str:
     return FIELD_ALIAS.get(prop.business_line, {}).get(field, field)
 
 
-def compute(db: Session, prop: Proposal) -> tuple[dict, dict | None]:
-    rev = prop.revisions[-1]
-    rules = latest(db, RuleSetVersion, prop.business_line)
-    library = latest(db, ProductLibraryVersion, prop.business_line)
-    template = latest(db, TemplateVersion, prop.business_line)
+LOCKED = ("review", "approved")  # 审核中、已批准：锁定，不能修改（第 6 步）
+
+
+def used_versions(db: Session, prop: Proposal, rev) -> dict:
+    """计算用的规则、产品库、模板版本：锁定的 Rev 用锁定时的版本（永不跟着新版本变），否则用最新版本。"""
+    if rev.locked:
+        return {"rules": db.get(RuleSetVersion, rev.locked["rules_id"]),
+                "library": db.get(ProductLibraryVersion, rev.locked["library_id"]),
+                "template": db.get(TemplateVersion, rev.locked["template_id"])}
+    return {"rules": latest(db, RuleSetVersion, prop.business_line),
+            "library": latest(db, ProductLibraryVersion, prop.business_line),
+            "template": latest(db, TemplateVersion, prop.business_line)}
+
+
+def compute(db: Session, prop: Proposal, rev=None) -> tuple[dict, dict | None]:
+    rev = rev or prop.revisions[-1]
+    used = used_versions(db, prop, rev)
+    rules, library = used["rules"], used["library"]
     ready = rev.inputs and not pending(rev)  # 未确认的字段不能进入计算
     overrides = {k: o["value"] for k, o in (rev.overrides or {}).items()}  # 手动覆盖（CR-5）
     result = calculate(rules.content, library.content, rev.inputs, rev.cabinet_id, overrides) if ready else None
-    return {"rules": rules, "library": library, "template": template}, result
+    return used, result
+
+
+def editable(prop: Proposal):
+    """只有最新的 Rev、而且不在审核中 / 已批准，才能修改；要改已批准的方案就开新 Rev。"""
+    rev = prop.revisions[-1]
+    if rev.status in LOCKED:
+        raise HTTPException(409, tr(f"Rev {rev.rev_no} 在审核中或已批准，不能修改；要改请退回或开新 Rev",
+                                   f"Rev {rev.rev_no} is in review or approved and cannot be changed; send it back or start a new Rev"))
+    return rev
 
 
 def client_boq(db: Session, prop: Proposal, used: dict, result: dict | None, edits: dict | None) -> dict | None:
@@ -85,6 +107,8 @@ def candidates(db: Session, prop: Proposal) -> dict[str, list]:
 
 def refresh_status(db: Session, prop: Proposal) -> None:
     rev = prop.revisions[-1]
+    if rev.status in LOCKED:
+        return
     if pending(rev):
         rev.status = "confirming"
         return
@@ -112,10 +136,11 @@ def drawing_of(used: dict, result: dict | None, edits: dict | None) -> dict | No
     return d
 
 
-def view(db: Session, prop: Proposal) -> dict:
-    rev = prop.revisions[-1]
-    used, result = compute(db, prop)
-    return {
+def view(db: Session, prop: Proposal, rev=None) -> dict:
+    from .review import review_view
+    rev = rev or prop.revisions[-1]
+    used, result = compute(db, prop, rev)
+    out = {
         "proposal": proposal_out(prop),
         "project": {"id": prop.project_id},
         "rev": {"rev_no": rev.rev_no, "status": rev.status, "inputs": rev.inputs or {}, "cabinet_id": rev.cabinet_id,
@@ -140,6 +165,7 @@ def view(db: Session, prop: Proposal) -> dict:
             f.read_text or "" for f in db.get(Project, prop.project_id).files)),
         "similar": similar(db, prop, rev.inputs or {}),  # 相似以往项目（CR-8）
     }
+    return out | review_view(db, prop, rev, out)
 
 
 def manual_list(rev, result: dict | None) -> list[dict]:
@@ -158,9 +184,19 @@ def manual_list(rev, result: dict | None) -> list[dict]:
     return out
 
 
+def get_rev(prop: Proposal, rev_no: int | None):
+    if rev_no is None:
+        return prop.revisions[-1]
+    rev = next((r for r in prop.revisions if r.rev_no == rev_no), None)
+    if rev is None:
+        raise HTTPException(404, tr(f"没有 Rev {rev_no}", f"Rev {rev_no} not found"))
+    return rev
+
+
 @router.get("/{proposal_id}")
-def read(proposal_id: int, db: Session = Depends(get_db)):
-    return view(db, get_proposal(db, proposal_id))
+def read(proposal_id: int, rev: int | None = None, db: Session = Depends(get_db)):
+    prop = get_proposal(db, proposal_id)
+    return view(db, prop, get_rev(prop, rev))
 
 
 class InputsIn(BaseModel):
@@ -181,7 +217,7 @@ def confirmed_by(user: User) -> dict:
 def save_inputs(proposal_id: int, body: InputsIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """手工录入 / 改值：改过的字段记为手填，等于录入人已确认。"""
     prop = get_proposal(db, proposal_id)
-    rev = prop.revisions[-1]
+    rev = editable(prop)
     if unknown := set(body.inputs) - allowed_inputs(db, prop):
         raise HTTPException(422, tr("不认识的输入：", "Unknown inputs: ") + ", ".join(sorted(unknown)))
     old, meta = rev.inputs or {}, dict(rev.input_meta or {})
@@ -209,7 +245,7 @@ def _use(rev, field: str, x: ExtractedField, items: list[dict]) -> None:
 def fill_from_files(proposal_id: int, _: User = Depends(require_user), db: Session = Depends(get_db)):
     """用文件里认出的值填入还空着的字段（不覆盖已填的值）；medium / low 的要逐项确认。"""
     prop = get_proposal(db, proposal_id)
-    rev = prop.revisions[-1]
+    rev = editable(prop)
     allowed = allowed_inputs(db, prop)
     for field, items in candidates(db, prop).items():
         if field in allowed and (rev.inputs or {}).get(field) in (None, "", []):
@@ -227,6 +263,7 @@ class PickIn(BaseModel):
 def pick(proposal_id: int, body: PickIn, _: User = Depends(require_user), db: Session = Depends(get_db)):
     """多个文件读到不同的值时，选用其中一个。"""
     prop = get_proposal(db, proposal_id)
+    editable(prop)
     x = db.get(ExtractedField, body.extracted_id)
     field = field_of(prop, x.field) if x else None
     if x is None or x.source_file.project_id != prop.project_id or field not in allowed_inputs(db, prop):
@@ -245,7 +282,7 @@ class ConfirmIn(BaseModel):
 def confirm(proposal_id: int, body: ConfirmIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """确认关：逐项确认，记录确认人和时间。"""
     prop = get_proposal(db, proposal_id)
-    rev = prop.revisions[-1]
+    rev = editable(prop)
     meta = dict(rev.input_meta or {})
     if body.field not in meta:
         raise HTTPException(404, tr("这个字段没有待确认的值", "This field has no value awaiting confirmation"))
@@ -290,7 +327,7 @@ class OverridesIn(BaseModel):
 def save_overrides(proposal_id: int, body: OverridesIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """推荐结果手动覆盖（CR-5）：填新值 + 原因（必填）；空值或改回规则值 = 恢复。规则结果本身不改，手动值随 Rev 保存。"""
     prop = get_proposal(db, proposal_id)
-    rev = prop.revisions[-1]
+    rev = editable(prop)
     _, result = compute(db, prop)
     if not result or not result["rules"]:
         raise HTTPException(409, tr("还没有计算结果，算完才能手动修改", "No results yet; calculate before overriding"))
@@ -318,7 +355,7 @@ def save_overrides(proposal_id: int, body: OverridesIn, user: User = Depends(req
 def save_boq(proposal_id: int, body: BoqIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """客户版 BOQ：改描述、规格、数量，或手动添加行。改了数量要写原因，标「手动」；数量改回规则值就恢复。"""
     prop = get_proposal(db, proposal_id)
-    rev = prop.revisions[-1]
+    rev = editable(prop)
     used, result = compute(db, prop)
     default = client_boq(db, prop, used, result, None)
     if default is None:
@@ -367,11 +404,11 @@ def save_boq(proposal_id: int, body: BoqIn, user: User = Depends(require_user), 
 
 
 @router.get("/{proposal_id}/boq.xlsx")
-def export_boq(proposal_id: int, db: Session = Depends(get_db)):
+def export_boq(proposal_id: int, rev: int | None = None, db: Session = Depends(get_db)):
     """导出客户版 BOQ（Excel）。文件属性里写 Rev、规则、产品库、模板版本；没批准的 Rev 标 DRAFT。"""
     prop = get_proposal(db, proposal_id)
-    rev = prop.revisions[-1]
-    used, result = compute(db, prop)
+    rev = get_rev(prop, rev)
+    used, result = compute(db, prop, rev)
     boq = client_boq(db, prop, used, result, rev.boq_edits)
     if boq is None:
         raise HTTPException(409, tr("还没有计算结果，算完才能导出 BOQ", "No results yet; calculate before exporting the BOQ"))
@@ -396,7 +433,7 @@ class DrawingIn(BaseModel):
 def save_drawing(proposal_id: int, body: DrawingIn, _: User = Depends(require_user), db: Session = Depends(get_db)):
     """手动调整回路 / 网线分组（随 Rev 保存）；空的 = 恢复自动。改完立即重新校验，超载的标红、不能批准。"""
     prop = get_proposal(db, proposal_id)
-    rev = prop.revisions[-1]
+    rev = editable(prop)
     used, result = compute(db, prop)
     auto = drawing_of(used, result, None)
     if auto is None:
@@ -414,12 +451,12 @@ def save_drawing(proposal_id: int, body: DrawingIn, _: User = Depends(require_us
     return view(db, prop)
 
 
-def _drawing_export(db: Session, proposal_id: int, lang: str):
+def _drawing_export(db: Session, proposal_id: int, lang: str, rev_no: int | None = None):
     """导出按导出时选的语言（CR-4），图上的校验、计算依据也用这个语言。"""
     prop = get_proposal(db, proposal_id)
-    rev = prop.revisions[-1]
+    rev = get_rev(prop, rev_no)
     with use(lang):
-        used, result = compute(db, prop)
+        used, result = compute(db, prop, rev)
         d = drawing_of(used, result, rev.drawing_edits)
         if d is None:
             raise HTTPException(409, tr("还没有计算结果，算完才能导出图纸", "No results yet; calculate before exporting the drawing"))
@@ -443,38 +480,38 @@ Lang = Literal["zh", "en"]
 
 
 @router.get("/{proposal_id}/drawing.svg")
-def export_drawing_svg(proposal_id: int, lang: Lang = "zh", layers: str | None = None, db: Session = Depends(get_db)):
-    d, meta, base = _drawing_export(db, proposal_id, lang)
+def export_drawing_svg(proposal_id: int, lang: Lang = "zh", rev: int | None = None, layers: str | None = None, db: Session = Depends(get_db)):
+    d, meta, base = _drawing_export(db, proposal_id, lang, rev)
     shown = None if layers is None else [x for x in layers.split(",") if x in drawing_export.LAYERS]
     return _file(drawing_export.svg(d, meta, lang, shown), base.format(kind="Drawing") + ".svg", "image/svg+xml")
 
 
 @router.get("/{proposal_id}/drawing.dxf")
-def export_drawing_dxf(proposal_id: int, lang: Lang = "zh", db: Session = Depends(get_db)):
-    d, meta, base = _drawing_export(db, proposal_id, lang)
+def export_drawing_dxf(proposal_id: int, lang: Lang = "zh", rev: int | None = None, db: Session = Depends(get_db)):
+    d, meta, base = _drawing_export(db, proposal_id, lang, rev)
     return _file(drawing_export.dxf(d, meta, lang), base.format(kind="Drawing") + ".dxf", "application/dxf")
 
 
 @router.get("/{proposal_id}/drawing.dwg")
-def export_drawing_dwg(proposal_id: int, request: Request, lang: Lang = "zh", db: Session = Depends(get_db)):
+def export_drawing_dwg(proposal_id: int, request: Request, lang: Lang = "zh", rev: int | None = None, db: Session = Depends(get_db)):
     oda = request.app.state.oda
     if not drawing_export.oda_available(oda):
         raise HTTPException(409, tr("服务器没有装 ODA File Converter，只能导出 DXF；装 ODA 后可导出 DWG",
                                    "ODA File Converter is not installed on the server; DXF only. Install ODA to export DWG"))
-    d, meta, base = _drawing_export(db, proposal_id, lang)
+    d, meta, base = _drawing_export(db, proposal_id, lang, rev)
     return _file(drawing_export.dwg(drawing_export.dxf(d, meta, lang), oda), base.format(kind="Drawing") + ".dwg",
                  "application/acad")
 
 
 @router.get("/{proposal_id}/cabinets.xlsx")
-def export_cabinets(proposal_id: int, lang: Lang = "zh", db: Session = Depends(get_db)):
-    d, meta, base = _drawing_export(db, proposal_id, lang)
+def export_cabinets(proposal_id: int, lang: Lang = "zh", rev: int | None = None, db: Session = Depends(get_db)):
+    d, meta, base = _drawing_export(db, proposal_id, lang, rev)
     return _file(drawing_export.cabinets_xlsx(d, meta, lang), base.format(kind="Cabinets").replace("_DRAFT", "") + ".xlsx",
                  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 
 @router.get("/{proposal_id}/drawing.pdf")
-def export_drawing_pdf(proposal_id: int, lang: Lang = "zh", db: Session = Depends(get_db)):
-    d, meta, base = _drawing_export(db, proposal_id, lang)
+def export_drawing_pdf(proposal_id: int, lang: Lang = "zh", rev: int | None = None, db: Session = Depends(get_db)):
+    d, meta, base = _drawing_export(db, proposal_id, lang, rev)
     kind = "技术方案" if lang == "zh" else "Technical"
     return _file(drawing_export.pdf(d, meta, d["basis"], lang), base.format(kind=kind) + ".pdf", "application/pdf")

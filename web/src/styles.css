@@ -213,3 +213,6 @@ ul.hits li { padding: 6px 0; border-bottom: 1px solid var(--line); }
 .similar h3 { margin: 0; font-size: 15px; }
 a.file-link { display: inline-block; margin-right: 10px; }
 .kb-refs { margin: 4px 0 6px; padding: 6px 10px; background: #fdf1e6; border-radius: 8px; }
+
+/* 第 6 步：锁定的 Rev 用 fieldset 整块禁用输入和按钮，外观不变 */
+.plain-fieldset { border: 0; margin: 0; padding: 0; min-width: 0; display: contents; }

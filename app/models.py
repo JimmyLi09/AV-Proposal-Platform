@@ -131,8 +131,11 @@ class Revision(Base):
     input_meta: Mapped[dict | None] = mapped_column(JSON)
     # 第 5 步：PDF / JPG 标注，{"文件id:页码": {marks, scale, 标注副本路径…}}（见 app/annotate.py）
     annotations: Mapped[dict | None] = mapped_column(JSON)
+    # 第 6 步：审核记录 [{action: submit|approve|send_back|created, by, at, note}]
+    history: Mapped[list | None] = mapped_column(JSON)
 
     author: Mapped[User] = relationship(foreign_keys=[author_id])
+    reviewer: Mapped[User | None] = relationship(foreign_keys=[reviewer_id])
 
 
 class RuleSetVersion(Base):

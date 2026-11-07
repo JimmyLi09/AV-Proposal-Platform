@@ -559,6 +559,44 @@
     "proposals": "Proposals",
     "title": "Projects"
   },
+  "review": {
+    "actions": {
+      "approve": "Approved",
+      "created": "Created",
+      "send_back": "Sent back",
+      "submit": "Submitted"
+    },
+    "approve": "Approve",
+    "approvedBy": "Approved by {name} · {date}",
+    "approvedHint": "Approved; official exports are available. To change anything, start a new Rev.",
+    "author": "Author",
+    "blockers": "Before submitting for review, fix:",
+    "compare": "Compare",
+    "compareGo": "Compare",
+    "diff": {
+      "boq": "BOQ",
+      "inputs": "Inputs",
+      "results": "Results",
+      "versions": "Versions"
+    },
+    "history": "History",
+    "item": "Item",
+    "lockedVersions": "Locked: rules {rules} · product library {library} · template {template}. Later versions do not change this Rev.",
+    "newRev": "Start a new Rev",
+    "notLocked": "Not locked (latest versions)",
+    "note": "Review note (required to send back)",
+    "open": "Open",
+    "ready": "No blocking issues. You can submit for review; the Rev is then locked.",
+    "reviewer": "Reviewer",
+    "revisions": "Revs and comparison",
+    "same": "The two Revs are the same.",
+    "sendBack": "Send back",
+    "sendBackHint": "You may review your own Rev; sending back unlocks it for changes.",
+    "snapshotChanged": "Warning: recalculating with the locked versions gives a different result from when it was locked (the software changed). Please tell the developers.",
+    "submit": "Submit for review",
+    "title": "Review",
+    "versions": "Locked versions"
+  },
   "rules": {
     "addTier": "+ Add tier",
     "draftError": "The changed rules have an error: {error}",
@@ -592,9 +630,11 @@
     "wall_floor": "Wall + floor"
   },
   "status": {
+    "approved": "Approved",
     "calculated": "Calculated",
     "confirming": "Awaiting confirmation",
-    "draft": "Draft"
+    "draft": "Draft",
+    "review": "In review"
   },
   "templates": {
     "boq": "BOQ default lines",
@@ -623,6 +663,7 @@
   },
   "ws": {
     "addToLibrary": "Add to library",
+    "backLatest": "Back to the latest Rev",
     "blender": "Blender",
     "blocked": "There are blocking items; export is not possible until they are fixed.",
     "cabinet": "Cabinet",
@@ -634,11 +675,13 @@
     "lens": "Lens",
     "load": "Load",
     "loadPct": "load {pct} %",
+    "lockedNote": "This Rev is in review or approved and cannot be changed; send it back or start a new Rev under Review & export.",
     "missing": "Missing inputs: {names}. Fill them in before a cabinet can be chosen from the library.",
     "model": "Model",
     "noDiagram": "Choose a cabinet and calculate the cabinet count before the diagram can be drawn.",
     "noDiagramMulti": "The multi-face diagram comes next; see the per-face results and the BOQ for now.",
     "noDrawing": "Choose a cabinet and calculate cabinets, circuits and data cables before the drawing can be made.",
+    "oldRev": "Viewing Rev {rev} (read-only).",
     "ports": "Ports",
     "processor": "Processor",
     "project": "Project",
@@ -651,7 +694,8 @@
       "calc": "Calculations",
       "diagram": "Diagram",
       "drawing": "Drawing",
-      "rec": "Recommendation"
+      "rec": "Recommendation",
+      "review": "Review & export"
     },
     "verdict": "Verdict",
     "versions": "Calculated with rules {rules}, product library {library}, template {template}"

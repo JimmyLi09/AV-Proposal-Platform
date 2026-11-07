@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from .api import get_db, iso, require_user
 from .i18n import tr
 from .models import SourceFile, User, utcnow
-from .workspace import get_proposal
+from .workspace import editable, get_proposal, get_rev
 
 router = APIRouter()
 IMAGE_TYPES = {"jpg", "jpeg", "png"}
@@ -187,7 +187,7 @@ def save_annotation(proposal_id: int, body: AnnotationIn, request: Request, user
                     db: Session = Depends(get_db)):
     state = request.app.state
     prop = get_proposal(db, proposal_id)
-    rev = prop.revisions[-1]
+    rev = editable(prop)
     f = annotatable(db, state, prop, body.file_id, body.page)
     key = f"{f.id}:{body.page}"
     docs = dict(rev.annotations or {})
@@ -215,8 +215,9 @@ def save_annotation(proposal_id: int, body: AnnotationIn, request: Request, user
 
 
 @router.get("/proposals/{proposal_id}/annotations/{file_id}/{page}/copy")
-def annotation_copy(proposal_id: int, file_id: int, page: int, request: Request, db: Session = Depends(get_db)):
-    doc = (get_proposal(db, proposal_id).revisions[-1].annotations or {}).get(f"{file_id}:{page}")
+def annotation_copy(proposal_id: int, file_id: int, page: int, request: Request, rev: int | None = None,
+                    db: Session = Depends(get_db)):
+    doc = (get_rev(get_proposal(db, proposal_id), rev).annotations or {}).get(f"{file_id}:{page}")
     if doc is None:
         raise HTTPException(404, tr("还没有标注副本", "No annotated copy yet"))
     return FileResponse(request.app.state.data_dir / doc["copy_path"], filename=doc["copy_name"])

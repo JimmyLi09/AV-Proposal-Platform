@@ -7,6 +7,7 @@ import ConfirmInputs from "./Confirm";
 import DiagramTab from "./Diagram";
 import DrawingTab from "./Drawing";
 import ShapeFaces, { isMulti } from "./Faces";
+import ReviewTab from "./Review";
 import MultiView, { MultiCalc } from "./Multi";
 import { t } from "./i18n";
 import { fmtDate, lineLabel, StatusTag } from "./labels";
@@ -24,6 +25,8 @@ export default function Workspace({ id }: { id: number }) {
   const [inputs, setInputs] = useState<Record<string, unknown>>({});
   const [tab, setTab] = useState("rec");
   const [error, setError] = useState("");
+  const [revNo, setRevNo] = useState<number | null>(null); // null = 最新的 Rev；旧 Rev 只读
+  const path = `/proposals/${id}${revNo === null ? "" : `?rev=${revNo}`}`;
 
   function show(v: WorkspaceView) {
     setView(v);
@@ -38,14 +41,14 @@ export default function Workspace({ id }: { id: number }) {
     }
   }
   useEffect(() => {
-    apply(api<WorkspaceView>(`/proposals/${id}`));
-  }, [id]);
+    apply(api<WorkspaceView>(path));
+  }, [path]);
   const reading = view?.files.some((f) => f.read_status === "reading");
   useEffect(() => {  // 文件还在读取（提取中）时每 1.5 秒刷新一次
     if (!reading) return;
-    const timer = setTimeout(() => api<WorkspaceView>(`/proposals/${id}`).then(setView), 1500);
+    const timer = setTimeout(() => api<WorkspaceView>(path).then(setView), 1500);
     return () => clearTimeout(timer);
-  }, [reading, view, id]);
+  }, [reading, view, path]);
 
   if (!view) return error ? <p className="error">{error}</p> : null;
   const { proposal, rev, result } = view;
@@ -59,7 +62,9 @@ export default function Workspace({ id }: { id: number }) {
     setInputs(next);
     saveInputs(rev.cabinet_id, next);
   };
-  const tabs = ["rec", "calc", "diagram", "boq", "annotate", ...(line === "LED" && !multi ? ["drawing"] : [])];
+  const tabs = ["rec", "calc", "diagram", "boq", "annotate", ...(line === "LED" && !multi ? ["drawing"] : []), "review"];
+  const readonly = view.readonly;
+  const openRev = (n: number | null) => (n === revNo ? apply(api<WorkspaceView>(path)) : setRevNo(n));
 
   return (
     <>
@@ -72,12 +77,21 @@ export default function Workspace({ id }: { id: number }) {
           <StatusTag status={rev.status} rev={rev.rev_no} /> ·{" "}
           {t("ws.versions", { rules: view.rules_version, library: view.library_version, template: view.template_version })}
         </p>
+        {!view.viewing_latest && (
+          <p className="warn">
+            {t("ws.oldRev", { rev: rev.rev_no })}{" "}
+            <button className="btn-link" onClick={() => setRevNo(null)}>{t("ws.backLatest")}</button>
+          </p>
+        )}
+        {view.viewing_latest && readonly && <p className="warn">{t("ws.lockedNote")}</p>}
       </div>
 
-      <ShapeFaces view={view} inputs={inputs} setInputs={setInputs} />
-      <ConfirmInputs view={view} inputs={inputs} setInputs={setInputs} onApply={apply} error={error}
-        hidden={isMulti(view, inputs) ? FACE_FIELDS[line] : []} />
-      {result && <Choices result={result} onPick={(k, v) => setInputs({ ...inputs, [k]: v })} />}
+      <fieldset className="plain-fieldset" disabled={readonly}>
+        <ShapeFaces view={view} inputs={inputs} setInputs={setInputs} />
+        <ConfirmInputs view={view} inputs={inputs} setInputs={setInputs} onApply={apply} error={error}
+          hidden={isMulti(view, inputs) ? FACE_FIELDS[line] : []} />
+        {result && <Choices result={result} onPick={(k, v) => setInputs({ ...inputs, [k]: v })} />}
+      </fieldset>
 
       {result && (
         <>
@@ -88,6 +102,7 @@ export default function Workspace({ id }: { id: number }) {
               </button>
             ))}
           </div>
+          <fieldset className="plain-fieldset" disabled={readonly && tab !== "review"}>
           {tab === "rec" && (multi ? <MultiView view={view} onUse={useSource} />
             : <Recommendation view={view} onCabinet={(cid) => saveInputs(cid)}
               onLibrary={() => apply(api<WorkspaceView>(`/proposals/${id}`))} onView={show} />)}
@@ -104,6 +119,8 @@ export default function Workspace({ id }: { id: number }) {
           {tab === "annotate" && <AnnotateTab view={view} onSaved={() => apply(api<WorkspaceView>(`/proposals/${id}`))} />}
           {tab === "drawing" && (view.drawing ? <DrawingTab view={view} drawing={view.drawing} onApply={apply} />
             : <section className="card"><p className="muted">{t("ws.noDrawing")}</p></section>)}
+          {tab === "review" && <ReviewTab view={view} onApply={apply} onOpenRev={openRev} />}
+          </fieldset>
         </>
       )}
     </>
@@ -206,7 +223,7 @@ function Recommendation({ view, onCabinet, onLibrary, onView }: {
 }
 
 /** 推荐页顶部：已有几项手动修改，逐项列出规则值 → 手动值 · 原因 · 修改人 · 时间（审核时同样列出）。 */
-function ManualList({ items }: { items: ManualOverride[] }) {
+export function ManualList({ items }: { items: ManualOverride[] }) {
   return (
     <details className="warn manual-list">
       <summary>{t("manual.count", { n: items.length })}</summary>
