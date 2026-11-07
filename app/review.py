@@ -4,16 +4,20 @@
 审核中、已批准都不能修改；批准可以自审，记录审核人和时间；退回要写原因，解锁回到已计算；
 已批准的 Rev 要改就开新 Rev。锁定的 Rev 永远用锁定时的版本，不跟着新的规则、产品库、模板变。
 """
+import hashlib
 import json
+from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
+from . import proposal_doc
 from . import workspace as ws
-from .api import get_db, iso, require_user
+from .api import current_user, get_db, iso, require_user
 from .i18n import current, tr
-from .models import Proposal, Revision, User, utcnow
+from .models import Project, Proposal, Revision, User, utcnow
+from .storage import safe_name
 
 router = APIRouter(prefix="/proposals")
 
@@ -209,3 +213,48 @@ def compare(proposal_id: int, a: int, b: int, db: Session = Depends(get_db)):
         if show(x) != show(y):
             boq.append({"item": (x or y)["title"], "a": show(x), "b": show(y)})
     return {"a": a, "b": b, "versions": versions, "inputs": inputs, "results": results, "boq": boq}
+
+
+# ---- 方案文档输出：PDF、Word、JPG Boards ----
+
+FORMATS = {
+    "pdf": ("Proposal", "pdf", "application/pdf", proposal_doc.pdf),
+    "docx": ("Proposal", "docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", proposal_doc.docx),
+    "boards": ("Boards", "zip", "application/zip", proposal_doc.boards),
+}
+
+
+def export_file(db: Session, request: Request, prop: Proposal, rev: Revision, kind: str, lang: str, render,
+                user: User | None):
+    """没批准：每次按当前内容生成草稿（带 DRAFT）。已批准：第一次导出时生成并存进资料目录，记进 Rev 锁定的「生成的文件」，
+    之后同一个 Rev、同一种格式和语言一律给这一份，永不重新生成。"""
+    label, ext, media, _ = FORMATS.get(kind, (kind, kind, "application/octet-stream", None))
+    project = db.get(Project, prop.project_id)
+    approved = rev.status == "approved"
+    name = (f"{safe_name(project.name)}_{safe_name(prop.name)}_{label}_{lang.upper()}_Rev{rev.rev_no}"
+            f"{'' if approved else '_DRAFT'}.{ext}")
+    data_dir = request.app.state.data_dir
+    if approved:
+        hit = next((f for f in rev.locked.get("files") or [] if f["kind"] == kind and f["lang"] == lang), None)
+        if hit and (data_dir / hit["path"]).exists():
+            return ws._file((data_dir / hit["path"]).read_bytes(), hit["name"], media)
+    data = render()
+    if approved:
+        rel = f"derived/proposals/{prop.id}/rev{rev.rev_no}/{name}"
+        (data_dir / rel).parent.mkdir(parents=True, exist_ok=True)
+        (data_dir / rel).write_bytes(data)
+        entry = {"kind": kind, "lang": lang, "name": name, "path": rel, "sha256": hashlib.sha256(data).hexdigest(),
+                 "size": len(data), "by": user.name if user else None, "at": iso(utcnow())}
+        rev.locked = {**rev.locked, "files": [*(rev.locked.get("files") or []), entry]}
+        db.commit()
+    return ws._file(data, name, media)
+
+
+@router.get("/{proposal_id}/proposal.{fmt}")
+def export_proposal(proposal_id: int, fmt: Literal["pdf", "docx", "boards"], request: Request,
+                    lang: Literal["zh", "en"] = "zh", rev: int | None = None,
+                    user: User | None = Depends(current_user), db: Session = Depends(get_db)):
+    prop = ws.get_proposal(db, proposal_id)
+    r = ws.get_rev(prop, rev)
+    doc = proposal_doc.content(db, prop, r, lang, request.app.state.data_dir)
+    return export_file(db, request, prop, r, fmt, lang, lambda: FORMATS[fmt][3](doc), user)

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { api, RevCompare, send, WorkspaceView } from "./api";
+import { api, RevCompare, revQuery, send, WorkspaceView } from "./api";
 import { t, tOr } from "./i18n";
 import { fmtDate, StatusTag } from "./labels";
 import { ManualList } from "./Workspace";
@@ -87,6 +87,7 @@ export default function ReviewTab({ view, onApply, onOpenRev }: {
         )}
       </section>
 
+      <Exports view={view} />
       <Revisions view={view} onOpenRev={onOpenRev} />
     </>
   );
@@ -173,5 +174,48 @@ function CompareTable({ cmp }: { cmp: RevCompare }) {
         ])}
       </tbody>
     </table>
+  );
+}
+
+type LockedFile = { kind: string; lang: string; name: string; by: string | null; at: string };
+
+/** 方案输出：PDF、Word、JPG Boards。没批准的是带 DRAFT 的草稿；批准后第一次导出的文件存档，之后给同一份。 */
+function Exports({ view }: { view: WorkspaceView }) {
+  const approved = view.rev.status === "approved";
+  const base = `/api/proposals/${view.proposal.id}`;
+  const link = (fmt: string, lang: string) => `${base}/proposal.${fmt}?lang=${lang}${revQuery(view, "&")}`;
+  const files = (view.locked?.files ?? []) as LockedFile[];
+  return (
+    <section className="card">
+      <h2>{t("review.exports")}</h2>
+      <p className={approved ? "muted" : "warn"}>{t(approved ? "review.official" : "review.draftOnly")}</p>
+      <table>
+        <tbody>
+          {(["pdf", "docx", "boards"] as const).map((fmt) => (
+            <tr key={fmt}>
+              <td>{t(`review.formats.${fmt}`)}</td>
+              <td className="row tight">
+                <a className="btn-outline" href={link(fmt, "zh")}>{t("review.langZh")}</a>
+                <a className="btn-outline" href={link(fmt, "en")}>{t("review.langEn")}</a>
+              </td>
+            </tr>
+          ))}
+          <tr>
+            <td>{t("review.formats.boq")}</td>
+            <td><a className="btn-outline" href={`${base}/boq.xlsx${revQuery(view)}`}>Excel</a></td>
+          </tr>
+        </tbody>
+      </table>
+      {files.length > 0 && (
+        <>
+          <h3>{t("review.lockedFiles")}</h3>
+          <ul className="plain">
+            {files.map((f) => (
+              <li key={f.name}>{f.name} · {f.by ?? "—"} · {fmtDate(f.at)}</li>
+            ))}
+          </ul>
+        </>
+      )}
+    </section>
   );
 }
