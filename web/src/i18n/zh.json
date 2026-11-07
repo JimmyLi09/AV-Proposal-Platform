@@ -559,6 +559,44 @@
     "proposals": "方案",
     "title": "项目"
   },
+  "review": {
+    "actions": {
+      "approve": "批准",
+      "created": "新建",
+      "send_back": "退回",
+      "submit": "提交审核"
+    },
+    "approve": "批准",
+    "approvedBy": "批准：{name} · {date}",
+    "approvedHint": "已批准，可以正式导出。要改内容请开新 Rev。",
+    "author": "作者",
+    "blockers": "提交审核前要先处理：",
+    "compare": "对比",
+    "compareGo": "对比",
+    "diff": {
+      "boq": "BOQ",
+      "inputs": "输入",
+      "results": "计算结果",
+      "versions": "版本"
+    },
+    "history": "审核记录",
+    "item": "项目",
+    "lockedVersions": "已锁定：规则 {rules} · 产品库 {library} · 模板 {template}。之后的新版本不会改变这个 Rev。",
+    "newRev": "开新 Rev",
+    "notLocked": "未锁定（用最新版本）",
+    "note": "审核意见（退回时必填）",
+    "open": "查看",
+    "ready": "没有阻断项，可以提交审核。提交后这个 Rev 锁定，不能再改。",
+    "reviewer": "审核人",
+    "revisions": "Rev 列表与对比",
+    "same": "两个 Rev 没有区别。",
+    "sendBack": "退回",
+    "sendBackHint": "可以自审；退回后回到已计算，可以继续改。",
+    "snapshotChanged": "注意：用锁定的版本重算，结果和锁定时不一样（程序更新过）。请告诉开发。",
+    "submit": "提交审核",
+    "title": "审核",
+    "versions": "锁定的版本"
+  },
   "rules": {
     "addTier": "+ 加分档",
     "draftError": "修改后的规则有误：{error}",
@@ -592,9 +630,11 @@
     "wall_floor": "墙 + 地面"
   },
   "status": {
+    "approved": "已批准",
     "calculated": "已计算",
     "confirming": "待确认",
-    "draft": "草稿"
+    "draft": "草稿",
+    "review": "审核中"
   },
   "templates": {
     "boq": "BOQ 默认行",
@@ -623,6 +663,7 @@
   },
   "ws": {
     "addToLibrary": "加入产品库",
+    "backLatest": "回到最新的 Rev",
     "blender": "融合器",
     "blocked": "有阻断项，修正之前不能导出。",
     "cabinet": "箱体",
@@ -634,11 +675,13 @@
     "lens": "镜头",
     "load": "带载",
     "loadPct": "负载 {pct} %",
+    "lockedNote": "这个 Rev 在审核中或已批准，不能修改；在「审核导出」里退回或开新 Rev。",
     "missing": "缺少输入：{names}，补齐后才能从产品库选箱体。",
     "model": "型号",
     "noDiagram": "先选定箱体并算出箱体数，才能生成示意图。",
     "noDiagramMulti": "多面屏的示意图下一步做；先看推荐页的按面结果和 BOQ。",
     "noDrawing": "先选定箱体并算出箱体数、回路和网线，才能出图。",
+    "oldRev": "正在看 Rev {rev}（只读）。",
     "ports": "网口",
     "processor": "处理器",
     "project": "项目",
@@ -651,7 +694,8 @@
       "calc": "计算依据",
       "diagram": "示意图",
       "drawing": "图纸",
-      "rec": "推荐"
+      "rec": "推荐",
+      "review": "审核导出"
     },
     "verdict": "结论",
     "versions": "按规则 {rules}、产品库 {library}、模板 {template} 计算"

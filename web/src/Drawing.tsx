@@ -1,5 +1,5 @@
 import { MouseEvent, useEffect, useState } from "react";
-import { api, Drawing, send, WorkspaceView } from "./api";
+import { api, Drawing, send, WorkspaceView, revQuery } from "./api";
 import { CheckChip } from "./Calc";
 import { lang, t } from "./i18n";
 
@@ -17,7 +17,7 @@ export default function DrawingTab({ view, drawing: d, onApply }: { view: Worksp
     api<{ dwg: boolean }>("/capabilities").then((c) => setDwg(c.dwg));
   }, []);
   useEffect(() => {
-    fetch(`/api/proposals/${id}/drawing.svg?lang=${lang()}`).then((r) => r.text()).then(setSvg); // 页面上的图跟界面语言
+    fetch(`/api/proposals/${id}/drawing.svg?lang=${lang()}${revQuery(view, "&")}`).then((r) => r.text()).then(setSvg); // 页面上的图跟界面语言
   }, [id, d]);
 
   function click(e: MouseEvent) {
@@ -34,7 +34,7 @@ export default function DrawingTab({ view, drawing: d, onApply }: { view: Worksp
     onApply(send<WorkspaceView>("PUT", `/proposals/${id}/drawing`, {}));
   };
   const over = d.circuits.filter((c) => c.over).length + d.cables.filter((c) => c.over).length;
-  const file = (path: string) => `/api/proposals/${id}/${path}`;
+  const file = (path: string) => `/api/proposals/${id}/${path}${revQuery(view, path.includes("?") ? "&" : "?")}`;
 
   return (
     <>

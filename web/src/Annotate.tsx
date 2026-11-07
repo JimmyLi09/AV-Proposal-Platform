@@ -1,5 +1,5 @@
 import { MouseEvent, useEffect, useRef, useState } from "react";
-import { AnnotationDoc, api, Mark, Scale, send, WorkspaceView } from "./api";
+import { AnnotationDoc, api, Mark, Scale, send, WorkspaceView, revQuery } from "./api";
 import { t } from "./i18n";
 
 type Tool = "point" | "area" | "device" | "text" | "scale";
@@ -178,7 +178,7 @@ export default function AnnotateTab({ view, onSaved }: { view: WorkspaceView; on
           {saved && (
             <p className="small">
               {t("annotate.saved")}
-              <a href={`/api/proposals/${view.proposal.id}/annotations/${fileId}/${page}/copy`}>{saved.copy_name}</a>
+              <a href={`/api/proposals/${view.proposal.id}/annotations/${fileId}/${page}/copy${revQuery(view)}`}>{saved.copy_name}</a>
               <br />
               <span className="muted">
                 {t("annotate.untouched", { file: file.filename })} · {saved.updated_by}
