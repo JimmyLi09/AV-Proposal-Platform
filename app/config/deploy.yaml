@@ -13,3 +13,6 @@ oda_converter: ""
 knowledge_dir: ""
 # 每晚自动复扫的时间（服务器本地时间，24 小时制）
 knowledge_scan_at: "02:00"
+# 方案演示稿（PPT）的公司母版：.potx 或 .pptx 的完整路径，例：'D:\avp-data\templates\Audax.potx'。
+# 留空 = 用内置的 Audax 配色版式。
+deck_template: ""

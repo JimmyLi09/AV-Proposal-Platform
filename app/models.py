@@ -133,6 +133,8 @@ class Revision(Base):
     annotations: Mapped[dict | None] = mapped_column(JSON)
     # 第 6 步：审核记录 [{action: submit|approve|send_back|created, by, at, note}]
     history: Mapped[list | None] = mapped_column(JSON)
+    # 方案演示稿（第 6 步）：{cover: {title, project, project_no, client, location, date}, off: [勾掉的页]}
+    deck: Mapped[dict | None] = mapped_column(JSON)
 
     author: Mapped[User] = relationship(foreign_keys=[author_id])
     reviewer: Mapped[User | None] = relationship(foreign_keys=[reviewer_id])

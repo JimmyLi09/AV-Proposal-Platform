@@ -12,16 +12,16 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from . import proposal_doc
+from . import deck, proposal_doc
 from . import workspace as ws
 from .api import current_user, get_db, iso, require_user
-from .i18n import current, tr
+from .i18n import current, tr, use
 from .models import Project, Proposal, Revision, User, utcnow
 from .storage import safe_name
 
 router = APIRouter(prefix="/proposals")
 
-COPIED = ("inputs", "input_meta", "cabinet_id", "boq_edits", "drawing_edits", "overrides", "annotations")
+COPIED = ("inputs", "input_meta", "cabinet_id", "boq_edits", "drawing_edits", "overrides", "annotations", "deck")
 
 
 def _log(rev: Revision, action: str, user: User, note: str = "") -> None:
@@ -93,6 +93,8 @@ def review_view(db: Session, prop: Proposal, rev: Revision, out: dict) -> dict:
         "locked": {k: rev.locked[k] for k in ("rules_version", "library_version", "template_version", "files")}
         if rev.locked else None,
         "snapshot_ok": snap_ok,
+        "deck": deck.settings_view(prop.business_line, deck.sections_of(out), rev.deck,
+                                   deck.cover_defaults(db.get(Project, prop.project_id), prop, rev)),
     }
 
 
@@ -221,6 +223,7 @@ FORMATS = {
     "pdf": ("Proposal", "pdf", "application/pdf", proposal_doc.pdf),
     "docx": ("Proposal", "docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", proposal_doc.docx),
     "boards": ("Boards", "zip", "application/zip", proposal_doc.boards),
+    "pptx": ("Deck", "pptx", "application/vnd.openxmlformats-officedocument.presentationml.presentation", None),
 }
 
 
@@ -248,6 +251,42 @@ def export_file(db: Session, request: Request, prop: Proposal, rev: Revision, ki
         rev.locked = {**rev.locked, "files": [*(rev.locked.get("files") or []), entry]}
         db.commit()
     return ws._file(data, name, media)
+
+
+class DeckIn(BaseModel):
+    cover: dict[Literal[tuple(deck.COVER_FIELDS)], str] = {}
+    off: list[str] = Field(default_factory=list, max_length=20)
+
+
+@router.put("/{proposal_id}/deck")
+def save_deck(proposal_id: int, body: DeckIn, _: User = Depends(require_user), db: Session = Depends(get_db)):
+    """演示稿设置随 Rev 保存：封面字段（空 = 用默认值）和勾掉的页；封面和最后一页不能勾掉。"""
+    prop = ws.get_proposal(db, proposal_id)
+    rev = ws.editable(prop)
+    if bad := set(body.off) & deck.FIXED or set(body.off) - set(deck.SLIDES[prop.business_line]):
+        raise HTTPException(422, tr("这些页不能勾掉：", "These slides cannot be left out: ") + ", ".join(sorted(bad)))
+    cover = {k: v.strip()[:200] for k, v in body.cover.items() if v.strip()}
+    rev.deck = {"cover": cover, "off": sorted(set(body.off))} if cover or body.off else None
+    db.commit()
+    return ws.view(db, prop, rev)
+
+
+@router.get("/{proposal_id}/proposal.pptx")
+def export_deck(proposal_id: int, request: Request, lang: Literal["zh", "en", "bi"] = "en", rev: int | None = None,
+                user: User | None = Depends(current_user), db: Session = Depends(get_db)):
+    """方案演示稿 PPT（16:9，原生文本框和表格）。lang = bi：中英双语（英文为主，标题带中文）。"""
+    prop = ws.get_proposal(db, proposal_id)
+    r = ws.get_rev(prop, rev)
+    data_dir = request.app.state.data_dir
+    doc = proposal_doc.content(db, prop, r, "en" if lang == "bi" else lang, data_dir)
+    other = proposal_doc.content(db, prop, r, "zh", data_dir) if lang == "bi" else None
+    with use("en" if lang == "bi" else lang):
+        project = db.get(Project, prop.project_id)
+        settings = deck.settings_view(prop.business_line, {s["key"] for s in doc["sections"]}, r.deck,
+                                      deck.cover_defaults(project, prop, r))
+    render = lambda: deck.build(doc, other, prop.business_line, settings, lang, r.author.name,  # noqa: E731
+                                request.app.state.deck_template, lambda svg: proposal_doc._pngs([svg])[0])
+    return export_file(db, request, prop, r, "pptx", lang, render, user)
 
 
 @router.get("/{proposal_id}/proposal.{fmt}")

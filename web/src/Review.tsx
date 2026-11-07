@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { api, RevCompare, revQuery, send, WorkspaceView } from "./api";
+import { api, DeckSettings, RevCompare, revQuery, send, WorkspaceView } from "./api";
 import { t, tOr } from "./i18n";
 import { fmtDate, StatusTag } from "./labels";
 import { ManualList } from "./Workspace";
@@ -88,6 +88,7 @@ export default function ReviewTab({ view, onApply, onOpenRev }: {
       </section>
 
       <Exports view={view} />
+      <Deck view={view} onApply={onApply} />
       <Revisions view={view} onOpenRev={onOpenRev} />
     </>
   );
@@ -201,6 +202,14 @@ function Exports({ view }: { view: WorkspaceView }) {
             </tr>
           ))}
           <tr>
+            <td>{t("review.formats.pptx")}</td>
+            <td className="row tight">
+              <a className="btn-outline" href={link("pptx", "en")}>{t("review.langEn")}</a>
+              <a className="btn-outline" href={link("pptx", "zh")}>{t("review.langZh")}</a>
+              <a className="btn-outline" href={link("pptx", "bi")}>{t("review.langBi")}</a>
+            </td>
+          </tr>
+          <tr>
             <td>{t("review.formats.boq")}</td>
             <td><a className="btn-outline" href={`${base}/boq.xlsx${revQuery(view)}`}>Excel</a></td>
           </tr>
@@ -216,6 +225,42 @@ function Exports({ view }: { view: WorkspaceView }) {
           </ul>
         </>
       )}
+    </section>
+  );
+}
+
+const COVER = ["title", "project", "project_no", "client", "location", "date"];
+
+/** 演示稿设置：封面字段（空 = 用默认值）和要出的页；随 Rev 保存，锁定后只读。 */
+function Deck({ view, onApply }: { view: WorkspaceView; onApply: (p: Promise<WorkspaceView>) => Promise<void> }) {
+  const d: DeckSettings = view.deck;
+  const [cover, setCover] = useState<Record<string, string>>(() =>
+    Object.fromEntries(COVER.map((k) => [k, d.cover[k] !== d.cover_defaults[k] ? d.cover[k] : ""])));
+  const [off, setOff] = useState<string[]>(d.slides.filter((s) => !s.included).map((s) => s.key));
+  const save = () => onApply(send<WorkspaceView>("PUT", `/proposals/${view.proposal.id}/deck`, { cover, off }));
+  return (
+    <section className="card">
+      <h2>{t("review.deck")}</h2>
+      <p className="muted">{t("review.deckIntro")}</p>
+      <div className="form">
+        {COVER.map((k) => (
+          <label key={k}>
+            {t(`review.cover.${k}`)}
+            <input value={cover[k]} placeholder={d.cover_defaults[k]} disabled={view.readonly}
+              onChange={(e) => setCover({ ...cover, [k]: e.target.value })} />
+          </label>
+        ))}
+      </div>
+      <div className="row">
+        {d.slides.map((s, i) => (
+          <label key={s.key} className="row tight">
+            <input type="checkbox" checked={!off.includes(s.key)} disabled={s.fixed || view.readonly}
+              onChange={(e) => setOff(e.target.checked ? off.filter((x) => x !== s.key) : [...off, s.key])} />
+            {i + 1}. {s.title}
+          </label>
+        ))}
+      </div>
+      {!view.readonly && <button className="btn-primary" onClick={save}>{t("common.save")}</button>}
     </section>
   );
 }
