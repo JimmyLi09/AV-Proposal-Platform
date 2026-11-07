@@ -46,6 +46,7 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
 
     app.state.data_dir = data_dir
     app.state.oda = cfg.get("oda_converter") or None
+    app.state.deck_template = Path(cfg["deck_template"]) if cfg.get("deck_template") else None
     app.state.kb_dir = Path(cfg.get("knowledge_dir") or data_dir / "knowledge").resolve()
     app.state.kb_lock, app.state.kb_progress = threading.Lock(), None
     scan_at = str(cfg.get("knowledge_scan_at") or "")

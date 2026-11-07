@@ -573,6 +573,16 @@
     "blockers": "提交审核前要先处理：",
     "compare": "对比",
     "compareGo": "对比",
+    "cover": {
+      "client": "客户",
+      "date": "日期",
+      "location": "地点",
+      "project": "项目名",
+      "project_no": "项目编号",
+      "title": "标题"
+    },
+    "deck": "演示稿设置",
+    "deckIntro": "封面字段空着就用项目里的值；封面和最后一页固定，其余可以勾掉。设置随 Rev 保存，提交审核后不能改。导出的 PPT 里文字和表格都能直接改，图是图片，可以整张换。",
     "diff": {
       "boq": "BOQ",
       "inputs": "输入",
@@ -585,10 +595,12 @@
       "boards": "JPG Boards（ZIP）",
       "boq": "BOQ",
       "docx": "方案 Word（可编辑）",
-      "pdf": "方案 PDF"
+      "pdf": "方案 PDF",
+      "pptx": "方案演示稿 PPT（可编辑）"
     },
     "history": "审核记录",
     "item": "项目",
+    "langBi": "中英双语",
     "langEn": "英文",
     "langZh": "中文",
     "lockedFiles": "已存档的正式文件",

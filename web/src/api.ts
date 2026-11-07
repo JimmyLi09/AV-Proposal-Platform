@@ -298,6 +298,13 @@ export type WorkspaceView = {
   reviewed_at: string | null;
   locked: { rules_version: string; library_version: string; template_version: string; files: unknown[] } | null;
   snapshot_ok: boolean;
+  deck: DeckSettings;
+};
+
+export type DeckSettings = {
+  slides: { key: string; title: string; fixed: boolean; included: boolean }[];
+  cover: Record<string, string>;
+  cover_defaults: Record<string, string>;
 };
 
 /** 看旧 Rev 时，导出和图片链接要带上 Rev 号。 */

@@ -573,6 +573,16 @@
     "blockers": "Before submitting for review, fix:",
     "compare": "Compare",
     "compareGo": "Compare",
+    "cover": {
+      "client": "Client",
+      "date": "Date",
+      "location": "Location",
+      "project": "Project",
+      "project_no": "Project no.",
+      "title": "Title"
+    },
+    "deck": "Deck settings",
+    "deckIntro": "Empty cover fields use the project values; the cover and last slide are fixed, the rest can be left out. Settings are saved with the Rev and locked on submission. Text and tables in the exported PPT are editable; diagrams are pictures you can replace.",
     "diff": {
       "boq": "BOQ",
       "inputs": "Inputs",
@@ -585,10 +595,12 @@
       "boards": "JPG Boards (ZIP)",
       "boq": "BOQ",
       "docx": "Proposal Word (editable)",
-      "pdf": "Proposal PDF"
+      "pdf": "Proposal PDF",
+      "pptx": "Proposal deck PPT (editable)"
     },
     "history": "History",
     "item": "Item",
+    "langBi": "Bilingual",
     "langEn": "English",
     "langZh": "Chinese",
     "lockedFiles": "Archived official files",
