@@ -150,7 +150,7 @@ def circuits(view):
     return next(ln["value"] for r in view["result"]["rules"] for ln in r["lines"] if ln["name"] == "circuits")
 
 
-def test_changing_a_parameter_saves_a_new_rule_version_and_the_proposal_follows(client):
+def test_changing_a_parameter_saves_a_new_rule_version_and_the_proposal_follows_after_upgrade(client):
     v = client.put(f"{client.base}/inputs", json={"inputs": SAMPLE["input"]}).json()
     assert circuits(v) == 4 and v["rules_version"] == "v1.3"
     rules = client.get("/api/rules/LED").json()
@@ -158,7 +158,10 @@ def test_changing_a_parameter_saves_a_new_rule_version_and_the_proposal_follows(
     next(p for p in content["params"] if p["name"] == "load_factor")["value"] = 0.4  # 8 A 可用 → 每回路 8 箱
     r = client.post("/api/rules/LED", json={"base_id": rules["id"], "reason": "按旧项目实测", "content": content})
     assert r.status_code == 201 and r.json()["version"] == "v1.4"
+    # 建项时绑定了 v1.3（CR-9）：库更新不自动跟着变，提示可以升级；手动升级后按 v1.4 算
     v = client.get(client.base).json()
+    assert v["rules_version"] == "v1.3" and circuits(v) == 4 and v["flow"]["upgrades"] == {"rules": "v1.4"}
+    v = client.post(f"{client.base}/upgrade", json={"parts": ["rules"]}).json()
     f6 = next(x for x in v["result"]["rules"] if x["id"] == "F6")
     assert v["rules_version"] == "v1.4" and circuits(v) == 5 and f6["display"] == "5（带载 5 / 串接 4，取大）"
     old = client.post("/api/rules/LED/run", json={"inputs": SAMPLE["input"], "version_id": rules["id"]}).json()

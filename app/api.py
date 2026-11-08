@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 from .extract.jobs import read_files
 from .extract.run import method_label
 from .i18n import LANGS, stored, tr
-from .models import ExtractedField, Project, Proposal, Revision, SourceFile, User
+from .models import ExtractedField, Project, Proposal, Revision, SourceFile, User, utcnow
 from .storage import original_name, safe_name, save_original
 
 router = APIRouter()
@@ -57,13 +57,15 @@ def proposal_out(p: Proposal) -> dict:
     return {
         "id": p.id, "name": p.name, "business_line": p.business_line, "mode": p.mode,
         "rev_no": rev.rev_no, "status": rev.status, "author": rev.author.name, "created_at": iso(p.created_at),
+        "reached": p.reached,
     }
 
 
 def project_out(p: Project) -> dict:
     return {
         "id": p.id, "name": p.name, "client": p.client, "project_no": p.project_no,
-        "location": p.location, "notes": p.notes, "owner": user_out(p.owner), "created_at": iso(p.created_at),
+        "location": p.location, "delivery": p.delivery, "notes": p.notes, "owner": user_out(p.owner),
+        "created_at": iso(p.created_at),
         "files": [file_out(f) for f in p.files],
         "proposals": [proposal_out(x) for x in p.proposals],
     }
@@ -155,8 +157,11 @@ class ProjectIn(Stripped):
     client: str = Field(min_length=1, max_length=200)
     project_no: str | None = Field(None, max_length=40)
     location: str = Field("", max_length=200)
+    delivery: str = Field("", max_length=40)
     notes: str = ""
     owner_id: int | None = None
+    # CR-9 · 01 立项询价：建项时一起建第一个方案（选业务线），绑定当时最新的规则 / 产品库 / 模板版本
+    business_line: Literal["LED", "PJ"] | None = None
 
 
 class ProjectPatch(Stripped):
@@ -164,6 +169,7 @@ class ProjectPatch(Stripped):
     client: str | None = Field(None, min_length=1, max_length=200)
     project_no: str | None = Field(None, max_length=40)
     location: str | None = Field(None, max_length=200)
+    delivery: str | None = Field(None, max_length=40)
     notes: str | None = None
     owner_id: int | None = None
 
@@ -183,10 +189,14 @@ def list_projects(db: Session = Depends(get_db)):
 def create_project(body: ProjectIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
     owner_id = body.owner_id or user.id
     check_owner(db, owner_id)
-    p = Project(**body.model_dump(exclude={"project_no", "owner_id"}), project_no=body.project_no or None,
+    p = Project(**body.model_dump(exclude={"project_no", "owner_id", "business_line"}), project_no=body.project_no or None,
                 owner_id=owner_id, created_by=user.id)
     db.add(p)
+    if body.business_line:
+        db.flush()
+        new_proposal(db, p, body.business_line, None, user)
     db.commit()
+    db.refresh(p)
     return project_out(p)
 
 
@@ -268,16 +278,26 @@ def download_file(file_id: int, request: Request, db: Session = Depends(get_db))
 # ---- Proposal 与 Rev ----
 
 class ProposalIn(Stripped):
-    name: str = Field(min_length=1, max_length=200)
+    name: str | None = Field(None, max_length=200)  # 空 = LED-1、PJ-2 …
     business_line: Literal["LED", "PJ"]
+
+
+def new_proposal(db: Session, project: Project, line: str, name: str | None, user: User) -> Proposal:
+    """新方案从 v1 草稿开始（CR-9：保存为正式版本才算 v1），绑定当时最新的规则、产品库、模板版本。"""
+    from .workspace import bind_latest
+    if not name:
+        n = sum(1 for x in project.proposals if x.business_line == line) + 1
+        name = f"{line}-{n}"
+    prop = Proposal(project_id=project.id, name=name, business_line=line, created_by=user.id,
+                    reached=1, updated_at=utcnow(), editor=user)
+    prop.revisions.append(Revision(rev_no=1, author_id=user.id, **bind_latest(db, line)))
+    db.add(prop)
+    return prop
 
 
 @router.post("/projects/{project_id}/proposals", status_code=201)
 def create_proposal(project_id: int, body: ProposalIn, user: User = Depends(require_user),
                     db: Session = Depends(get_db)):
-    p = get_project(db, project_id)
-    prop = Proposal(project_id=p.id, name=body.name, business_line=body.business_line, created_by=user.id)
-    prop.revisions.append(Revision(rev_no=0, author_id=user.id))
-    db.add(prop)
+    prop = new_proposal(db, get_project(db, project_id), body.business_line, body.name, user)
     db.commit()
     return proposal_out(prop)

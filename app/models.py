@@ -38,6 +38,7 @@ class Project(Base):
     client: Mapped[str] = mapped_column(String(200))
     project_no: Mapped[str | None] = mapped_column(String(40))  # Project Platform 编号，可后补
     location: Mapped[str] = mapped_column(String(200), default="")
+    delivery: Mapped[str] = mapped_column(String(40), default="", server_default="")  # 期望交付（CR-9，01 立项询价）
     notes: Mapped[str] = mapped_column(Text, default="")
     owner_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
     created_by: Mapped[int] = mapped_column(ForeignKey("users.id"))
@@ -100,7 +101,13 @@ class Proposal(Base):
     mode: Mapped[str] = mapped_column(String(1), default="A")  # 档位：V1 只有 A Light
     created_by: Mapped[int] = mapped_column(ForeignKey("users.id"))
     created_at: Mapped[datetime] = mapped_column(default=utcnow)
+    # CR-9 方案流程：走到过的最远一步（0 = 01 立项 … 4 = 07 审批），点「下一步」时往前推
+    reached: Mapped[int] = mapped_column(default=1, server_default="1")
+    updated_at: Mapped[datetime | None]  # 最近一次改动（自动保存）的时间和人，工作台「最近更新」
+    # 用户 id；不加数据库外键：SQLite 加外键要重建整张表，升级时有 Rev 引用这张表会失败
+    updated_by: Mapped[int | None] = mapped_column()
 
+    editor: Mapped[User | None] = relationship(primaryjoin="Proposal.updated_by == User.id", foreign_keys=[updated_by])
     revisions: Mapped[list["Revision"]] = relationship(order_by="Revision.rev_no")
 
 
@@ -135,9 +142,19 @@ class Revision(Base):
     history: Mapped[list | None] = mapped_column(JSON)
     # 方案演示稿（第 6 步）：{cover: {title, project, project_no, client, location, date}, off: [勾掉的页]}
     deck: Mapped[dict | None] = mapped_column(JSON)
+    # CR-9：正式版本。空 = 草稿（自动保存都写在最新的草稿 Rev 上）；保存为正式版本后内容不再改，再改就自动开下一个草稿
+    saved_at: Mapped[datetime | None]
+    saved_by: Mapped[int | None] = mapped_column()  # 用户 id（不加数据库外键，同 Proposal.updated_by）
+    # 05 方案配置用的输入：{inputs, input_meta}，在 04 点「下一步」或「重新带入」时从确认后的输入带过来；空 = 直接用 inputs
+    pulled: Mapped[dict | None] = mapped_column(JSON)
+    # 建项时绑定的规则、产品库、模板版本（CR-9）；之后库更新不影响，手动升级才换。空 = 用最新版本
+    rules_id: Mapped[int | None]
+    library_id: Mapped[int | None]
+    template_id: Mapped[int | None]
 
     author: Mapped[User] = relationship(foreign_keys=[author_id])
     reviewer: Mapped[User | None] = relationship(foreign_keys=[reviewer_id])
+    saver: Mapped[User | None] = relationship(primaryjoin="Revision.saved_by == User.id", foreign_keys=[saved_by])
 
 
 class RuleSetVersion(Base):

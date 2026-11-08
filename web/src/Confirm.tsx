@@ -132,9 +132,7 @@ export default function ConfirmInputs({ view, inputs, setInputs, onApply, error,
         </div>
       )}
       <div className="row">
-        <button className="btn-primary" onClick={() => onApply(send<WorkspaceView>("PUT", `/proposals/${id}/inputs`, { inputs, cabinet_id: rev.cabinet_id }))}>
-          {t("confirm.save")}
-        </button>
+        <span className="muted small">{t("confirm.autosave")}</span>
         {pending.length > 0 && <span className="warn">{t("confirm.pending", { n: pending.length })}</span>}
         {error && <span className="error">{error}</span>}
       </div>

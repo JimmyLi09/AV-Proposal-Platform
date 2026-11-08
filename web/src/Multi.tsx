@@ -33,44 +33,7 @@ export default function MultiView({ view, onUse }: { view: WorkspaceView; onUse:
 
   return (
     <>
-      {m.conflicts.length > 0 && (
-        <section className="card">
-          <h2>{t("multi.conflicts")}</h2>
-          <p className="warn">{t("multi.conflictsIntro")}</p>
-          {m.conflicts.map((c) => (
-            <div key={`${c.face}${c.field}`} className="table-wrap">
-              <table>
-                <thead>
-                  <tr>
-                    <th>{t("multi.faceField", { face: c.face, field: t(c.field === "width_mm" ? "faces.width" : "faces.height") })}</th>
-                    <th>{t("faces.sourceKind")}</th>
-                    <th>{t("faces.sourceValue")}</th>
-                    <th>{t("multi.fits")}</th>
-                    <th />
-                  </tr>
-                </thead>
-                <tbody>
-                  {c.sources.map((s, i) => (
-                    <tr key={i}>
-                      <td>{s.src}</td>
-                      <td>{t(`faces.kinds.${s.kind}`)}</td>
-                      <td>{s.value}</td>
-                      <td>{s.fits ? "✓" : t("multi.snap", { a: s.options[0], b: s.options[1] })}</td>
-                      <td className="nowrap">
-                        {(s.fits ? [s.value] : s.options).map((x) => (
-                          <button key={x} className="btn-outline small" onClick={() => onUse(c.face, c.field, x)}>
-                            {t("multi.use", { value: x })}
-                          </button>
-                        ))}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          ))}
-        </section>
-      )}
+      <Conflicts view={view} onUse={onUse} />
 
       <section className="card">
         <h2>
@@ -200,5 +163,49 @@ export function MultiCalc({ view }: { view: WorkspaceView }) {
         </details>
       ))}
     </>
+  );
+}
+
+/** S7：同一面的尺寸几份资料对不上（例如平面图 5600、立面图 5760），列出各份资料的值，选定一个才能往下走（02–04）。 */
+export function Conflicts({ view, onUse }: { view: WorkspaceView; onUse: (face: string, field: string, value: number) => void }) {
+  const m = view.result?.multi;
+  if (!m || m.conflicts.length === 0) return null;
+  return (
+    <section className="card">
+      <h2>{t("multi.conflicts")}</h2>
+      <p className="warn">{t("multi.conflictsIntro")}</p>
+      {m.conflicts.map((c) => (
+        <div key={`${c.face}${c.field}`} className="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>{t("multi.faceField", { face: c.face, field: t(c.field === "width_mm" ? "faces.width" : "faces.height") })}</th>
+                <th>{t("faces.sourceKind")}</th>
+                <th>{t("faces.sourceValue")}</th>
+                <th>{t("multi.fits")}</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {c.sources.map((s, i) => (
+                <tr key={i}>
+                  <td>{s.src}</td>
+                  <td>{t(`faces.kinds.${s.kind}`)}</td>
+                  <td>{s.value}</td>
+                  <td>{s.fits ? "✓" : t("multi.snap", { a: s.options[0], b: s.options[1] })}</td>
+                  <td className="nowrap">
+                    {(s.fits ? [s.value] : s.options).map((x) => (
+                      <button key={x} className="btn-outline small" onClick={() => onUse(c.face, c.field, x)}>
+                        {t("multi.use", { value: x })}
+                      </button>
+                    ))}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
+    </section>
   );
 }

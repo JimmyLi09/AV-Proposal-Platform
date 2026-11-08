@@ -90,7 +90,7 @@ def test_annotated_copy_is_saved_and_original_untouched(client):
     r = annotate(client, body)
     assert r.status_code == 200, r.text
     doc = r.json()["annotations"][f"{photo}:1"]
-    assert doc["copy_name"] == "Lobby_site_photo_annotated_Rev0.jpg" and doc["updated_by"] == "Jimmy"
+    assert doc["copy_name"] == "Lobby_site_photo_annotated_Rev1.jpg" and doc["updated_by"] == "Jimmy"
     w_mm, h_mm = doc["marks"][0]["size_mm"]
     assert w_mm == 4480 and h_mm == round(0.2 * doc["height"] / (0.4 * doc["width"]) * 4480)
 
@@ -101,7 +101,7 @@ def test_annotated_copy_is_saved_and_original_untouched(client):
     assert stored.read_bytes() == before  # 原件没被改
 
     r = annotate(client, {"file_id": pdf, "page": 2, "marks": [{"type": "point", "x": 0.5, "y": 0.5}]})
-    assert r.json()["annotations"][f"{pdf}:2"]["copy_name"] == "Lobby_Elevation_RevB_p2_annotated_Rev0.jpg"
+    assert r.json()["annotations"][f"{pdf}:2"]["copy_name"] == "Lobby_Elevation_RevB_p2_annotated_Rev1.jpg"
 
     view = client.get(f"/api/proposals/{client.proposal}").json()
     assert set(view["rev"]["annotations"]) == {f"{photo}:1", f"{pdf}:2"}

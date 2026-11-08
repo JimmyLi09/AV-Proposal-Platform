@@ -1,4 +1,9 @@
-"""Proposal 工作页：确认输入（确认关）→ 产品库推荐 → 规则计算 → 客户版 BOQ（不含价格）。"""
+"""Proposal 工作页：确认输入（确认关）→ 产品库推荐 → 规则计算 → 客户版 BOQ（不含价格）。
+
+CR-9 起：编辑都自动存在最新的草稿 Rev 上（不生成新 Rev）；保存为正式版本后内容不再改，再改就自动开下一个草稿；
+05 方案配置用 04 带过来的输入（pulled）；规则、产品库、模板用建项时绑定的版本，手动升级才换（见 app/flow.py）。
+"""
+import copy
 from typing import Literal
 from urllib.parse import quote
 
@@ -6,13 +11,13 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from .api import file_out, get_db, iso, proposal_out, require_user
+from .api import current_user, file_out, get_db, iso, proposal_out, require_user
 from . import drawing_export
 from .boq import build, build_multi, to_xlsx
 from .drawing import build as build_drawing
 from .i18n import stored, text, tr, unit, use
-from .models import (ExtractedField, ProductLibraryVersion, Project, Proposal, RuleSetVersion, TemplateVersion, User,
-                     utcnow)
+from .models import (ExtractedField, ProductLibraryVersion, Project, Proposal, Revision, RuleSetVersion, TemplateVersion,
+                     User, utcnow)
 from .knowledge.similar import similar
 from .rules import multiface
 from .rules.engine import LINES, calculate
@@ -47,36 +52,68 @@ def field_of(prop: Proposal, field: str) -> str:
     return FIELD_ALIAS.get(prop.business_line, {}).get(field, field)
 
 
-LOCKED = ("review", "approved")  # 审核中、已批准：锁定，不能修改（第 6 步）
+LOCKED = ("review", "approved")  # 审核中、已批准：锁定（第 6 步）
+VERSIONED = {"rules": (RuleSetVersion, "rules_id"), "library": (ProductLibraryVersion, "library_id"),
+             "template": (TemplateVersion, "template_id")}
+# 一个版本的内容：开下一个草稿时整份复制；草稿和正式版本比的也是这些
+COPIED = ("inputs", "input_meta", "cabinet_id", "boq_edits", "drawing_edits", "overrides", "annotations", "deck", "pulled",
+          "rules_id", "library_id", "template_id")
 
 
 def used_versions(db: Session, prop: Proposal, rev) -> dict:
-    """计算用的规则、产品库、模板版本：锁定的 Rev 用锁定时的版本（永不跟着新版本变），否则用最新版本。"""
+    """计算用的规则、产品库、模板版本：锁定的 Rev 用锁定时的版本（永不跟着新版本变），
+    否则用建项时绑定的版本（CR-9，手动升级才换）；没有绑定的（老数据）用最新版本。"""
     if rev.locked:
         return {"rules": db.get(RuleSetVersion, rev.locked["rules_id"]),
                 "library": db.get(ProductLibraryVersion, rev.locked["library_id"]),
                 "template": db.get(TemplateVersion, rev.locked["template_id"])}
-    return {"rules": latest(db, RuleSetVersion, prop.business_line),
-            "library": latest(db, ProductLibraryVersion, prop.business_line),
-            "template": latest(db, TemplateVersion, prop.business_line)}
+    return {part: db.get(model, getattr(rev, col)) if getattr(rev, col) else latest(db, model, prop.business_line)
+            for part, (model, col) in VERSIONED.items()}
+
+
+def bind_latest(db: Session, line: str) -> dict:
+    """建项时绑定当时最新的规则、产品库、模板版本。"""
+    return {col: latest(db, model, line).id for model, col in VERSIONED.values()}
+
+
+def calc_inputs(rev) -> tuple[dict | None, bool]:
+    """05 方案配置用的输入：04 带过来的（pulled）；还没带过的直接用确认后的输入，未确认的字段不能进入计算。"""
+    if rev.pulled:
+        return rev.pulled["inputs"], bool(rev.pulled["inputs"])
+    return rev.inputs, bool(rev.inputs) and not pending(rev)
 
 
 def compute(db: Session, prop: Proposal, rev=None) -> tuple[dict, dict | None]:
     rev = rev or prop.revisions[-1]
     used = used_versions(db, prop, rev)
     rules, library = used["rules"], used["library"]
-    ready = rev.inputs and not pending(rev)  # 未确认的字段不能进入计算
+    inputs, ready = calc_inputs(rev)
     overrides = {k: o["value"] for k, o in (rev.overrides or {}).items()}  # 手动覆盖（CR-5）
-    result = calculate(rules.content, library.content, rev.inputs, rev.cabinet_id, overrides) if ready else None
+    result = calculate(rules.content, library.content, inputs, rev.cabinet_id, overrides) if ready else None
     return used, result
 
 
-def editable(prop: Proposal):
-    """只有最新的 Rev、而且不在审核中 / 已批准，才能修改；要改已批准的方案就开新 Rev。"""
-    rev = prop.revisions[-1]
-    if rev.status in LOCKED:
-        raise HTTPException(409, tr(f"Rev {rev.rev_no} 在审核中或已批准，不能修改；要改请退回或开新 Rev",
-                                   f"Rev {rev.rev_no} is in review or approved and cannot be changed; send it back or start a new Rev"))
+def _log(rev: Revision, action: str, user: User, note="") -> None:
+    rev.history = [*(rev.history or []), {"action": action, "by": user.name, "at": iso(utcnow()), "note": note}]
+
+
+def editable(db: Session, prop: Proposal, user: User) -> Revision:
+    """要改的 Rev（CR-9）：最新的是草稿就改它；最新的是正式版本（已保存、审核中、已批准、已退回）就自动开下一个草稿，
+    复制全部内容，正式版本不变。记下最近更新的人和时间。"""
+    prop.updated_at, prop.editor = utcnow(), user
+    base = prop.revisions[-1]
+    if base.saved_at is None:
+        return base
+    rev = Revision(proposal_id=prop.id, rev_no=base.rev_no + 1, author_id=user.id,
+                   **{k: copy.deepcopy(getattr(base, k)) for k in COPIED})
+    _log(rev, "created", user, {"zh": f"从 v{base.rev_no} 自动开草稿", "en": f"Draft opened from v{base.rev_no}"})
+    if base.status in LOCKED or (base.history or [{}])[-1].get("action") == "send_back":
+        prop.reached = min(prop.reached, 3)  # 提交过的版本再改：要回 05 / 06 保存新版本再提交
+    db.add(rev)
+    db.flush()
+    db.refresh(prop)
+    refresh_status(db, prop)
+    db.info["opened"] = rev.rev_no  # 顶栏提示「已自动开 vN 草稿」
     return rev
 
 
@@ -105,14 +142,14 @@ def candidates(db: Session, prop: Proposal) -> dict[str, list]:
     return out
 
 
-def refresh_status(db: Session, prop: Proposal) -> None:
-    rev = prop.revisions[-1]
+def refresh_status(db: Session, prop: Proposal, rev=None) -> None:
+    rev = rev or prop.revisions[-1]
     if rev.status in LOCKED:
         return
-    if pending(rev):
+    if pending(rev) and not rev.pulled:
         rev.status = "confirming"
         return
-    _, result = compute(db, prop)
+    _, result = compute(db, prop, rev)
     if result and result.get("multi", {}).get("conflicts"):  # 多面屏 S7：资料对不上，选定前不能计算
         rev.status = "confirming"
         return
@@ -138,12 +175,13 @@ def drawing_of(used: dict, result: dict | None, edits: dict | None) -> dict | No
 
 
 def view(db: Session, prop: Proposal, rev=None) -> dict:
+    from .flow import flow_view, project_brief
     from .review import review_view
     rev = rev or prop.revisions[-1]
     used, result = compute(db, prop, rev)
     out = {
         "proposal": proposal_out(prop),
-        "project": {"id": prop.project_id},
+        "project": project_brief(db, prop),
         "rev": {"rev_no": rev.rev_no, "status": rev.status, "inputs": rev.inputs or {}, "cabinet_id": rev.cabinet_id,
                 "input_meta": {k: m | ({"location": stored(m["location"])} if m.get("location") else {})
                                for k, m in (rev.input_meta or {}).items()},
@@ -166,7 +204,8 @@ def view(db: Session, prop: Proposal, rev=None) -> dict:
             f.read_text or "" for f in db.get(Project, prop.project_id).files)),
         "similar": similar(db, prop, rev.inputs or {}),  # 相似以往项目（CR-8）
     }
-    return out | review_view(db, prop, rev, out)
+    out |= review_view(db, prop, rev, out)
+    return out | flow_view(db, prop, rev, out)
 
 
 def manual_list(rev, result: dict | None) -> list[dict]:
@@ -206,7 +245,7 @@ class InputsIn(BaseModel):
 
 
 def allowed_inputs(db: Session, prop: Proposal) -> set[str]:
-    rules = latest(db, RuleSetVersion, prop.business_line)
+    rules = used_versions(db, prop, prop.revisions[-1])["rules"]
     return ({i["name"] for i in rules.content["inputs"]} - set(LINES[prop.business_line]["product_fed"])) | multiface.MULTI_KEYS
 
 
@@ -218,7 +257,7 @@ def confirmed_by(user: User) -> dict:
 def save_inputs(proposal_id: int, body: InputsIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """手工录入 / 改值：改过的字段记为手填，等于录入人已确认。"""
     prop = get_proposal(db, proposal_id)
-    rev = editable(prop)
+    rev = editable(db, prop, user)
     if unknown := set(body.inputs) - allowed_inputs(db, prop):
         raise HTTPException(422, tr("不认识的输入：", "Unknown inputs: ") + ", ".join(sorted(unknown)))
     old, meta = rev.inputs or {}, dict(rev.input_meta or {})
@@ -243,10 +282,10 @@ def _use(rev, field: str, x: ExtractedField, items: list[dict]) -> None:
 
 
 @router.post("/{proposal_id}/fill-from-files")
-def fill_from_files(proposal_id: int, _: User = Depends(require_user), db: Session = Depends(get_db)):
+def fill_from_files(proposal_id: int, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """用文件里认出的值填入还空着的字段（不覆盖已填的值）；medium / low 的要逐项确认。"""
     prop = get_proposal(db, proposal_id)
-    rev = editable(prop)
+    rev = editable(db, prop, user)
     allowed = allowed_inputs(db, prop)
     for field, items in candidates(db, prop).items():
         if field in allowed and (rev.inputs or {}).get(field) in (None, "", []):
@@ -261,15 +300,15 @@ class PickIn(BaseModel):
 
 
 @router.post("/{proposal_id}/pick")
-def pick(proposal_id: int, body: PickIn, _: User = Depends(require_user), db: Session = Depends(get_db)):
+def pick(proposal_id: int, body: PickIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """多个文件读到不同的值时，选用其中一个。"""
     prop = get_proposal(db, proposal_id)
-    editable(prop)
+    rev = editable(db, prop, user)
     x = db.get(ExtractedField, body.extracted_id)
     field = field_of(prop, x.field) if x else None
     if x is None or x.source_file.project_id != prop.project_id or field not in allowed_inputs(db, prop):
         raise HTTPException(404, tr("候选值不存在", "Candidate value not found"))
-    _use(prop.revisions[-1], field, x, candidates(db, prop)[field])
+    _use(rev, field, x, candidates(db, prop)[field])
     refresh_status(db, prop)
     db.commit()
     return view(db, prop)
@@ -283,7 +322,7 @@ class ConfirmIn(BaseModel):
 def confirm(proposal_id: int, body: ConfirmIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """确认关：逐项确认，记录确认人和时间。"""
     prop = get_proposal(db, proposal_id)
-    rev = editable(prop)
+    rev = editable(db, prop, user)
     meta = dict(rev.input_meta or {})
     if body.field not in meta:
         raise HTTPException(404, tr("这个字段没有待确认的值", "This field has no value awaiting confirmation"))
@@ -328,7 +367,7 @@ class OverridesIn(BaseModel):
 def save_overrides(proposal_id: int, body: OverridesIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """推荐结果手动覆盖（CR-5）：填新值 + 原因（必填）；空值或改回规则值 = 恢复。规则结果本身不改，手动值随 Rev 保存。"""
     prop = get_proposal(db, proposal_id)
-    rev = editable(prop)
+    rev = editable(db, prop, user)
     _, result = compute(db, prop)
     if not result or not result["rules"]:
         raise HTTPException(409, tr("还没有计算结果，算完才能手动修改", "No results yet; calculate before overriding"))
@@ -356,7 +395,7 @@ def save_overrides(proposal_id: int, body: OverridesIn, user: User = Depends(req
 def save_boq(proposal_id: int, body: BoqIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """客户版 BOQ：改描述、规格、数量，或手动添加行。改了数量要写原因，标「手动」；数量改回规则值就恢复。"""
     prop = get_proposal(db, proposal_id)
-    rev = editable(prop)
+    rev = editable(db, prop, user)
     used, result = compute(db, prop)
     default = client_boq(db, prop, used, result, None)
     if default is None:
@@ -405,8 +444,11 @@ def save_boq(proposal_id: int, body: BoqIn, user: User = Depends(require_user), 
 
 
 @router.get("/{proposal_id}/boq.xlsx")
-def export_boq(proposal_id: int, rev: int | None = None, db: Session = Depends(get_db)):
-    """导出客户版 BOQ（Excel）。文件属性里写 Rev、规则、产品库、模板版本；没批准的 Rev 标 DRAFT。"""
+def export_boq(proposal_id: int, request: Request, rev: int | None = None, user: User | None = Depends(current_user),
+               db: Session = Depends(get_db)):
+    """导出客户版 BOQ（Excel）。文件属性里写 Rev、规则、产品库、模板版本；没批准的 Rev 标 DRAFT。
+    已批准的第一次导出存档，之后给同一份（CR-9 · 07）。"""
+    from .review import export_file
     prop = get_proposal(db, proposal_id)
     rev = get_rev(prop, rev)
     used, result = compute(db, prop, rev)
@@ -420,7 +462,8 @@ def export_boq(proposal_id: int, rev: int | None = None, db: Session = Depends(g
     meta = {"title": f"Bill of Quantities · {prop.name}",
             "subtitle": " · ".join(x for x in (project.name, project.client, project.project_no) if x), "stamp": stamp}
     name = f"{safe_name(project.name)}_{safe_name(prop.name)}_BOQ_Rev{rev.rev_no}.xlsx"
-    return _file(to_xlsx(boq, meta), name, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    return export_file(db, request, prop, rev, "boq", "en", lambda: to_xlsx(boq, meta), user, name,
+                       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
 
 
 # ---- 拼接与线路图（CR-3） ----
@@ -431,10 +474,10 @@ class DrawingIn(BaseModel):
 
 
 @router.put("/{proposal_id}/drawing")
-def save_drawing(proposal_id: int, body: DrawingIn, _: User = Depends(require_user), db: Session = Depends(get_db)):
+def save_drawing(proposal_id: int, body: DrawingIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """手动调整回路 / 网线分组（随 Rev 保存）；空的 = 恢复自动。改完立即重新校验，超载的标红、不能批准。"""
     prop = get_proposal(db, proposal_id)
-    rev = editable(prop)
+    rev = editable(db, prop, user)
     used, result = compute(db, prop)
     auto = drawing_of(used, result, None)
     if auto is None:
@@ -495,9 +538,15 @@ def export_wiring_svg(proposal_id: int, lang: Lang = "zh", rev: int | None = Non
 
 
 @router.get("/{proposal_id}/drawing.dxf")
-def export_drawing_dxf(proposal_id: int, lang: Lang = "zh", rev: int | None = None, db: Session = Depends(get_db)):
+def export_drawing_dxf(proposal_id: int, request: Request, lang: Lang = "zh", rev: int | None = None,
+                       user: User | None = Depends(current_user), db: Session = Depends(get_db)):
+    """拼接与线路图 DXF。已批准的第一次导出存档，之后给同一份（CR-9 · 07）。"""
+    from .review import export_file
     d, meta, base = _drawing_export(db, proposal_id, lang, rev)
-    return _file(drawing_export.dxf(d, meta, lang), base.format(kind="Drawing") + ".dxf", "application/dxf")
+    prop = get_proposal(db, proposal_id)
+    return export_file(db, request, prop, get_rev(prop, rev), "dxf", lang,
+                       lambda: drawing_export.dxf(d, meta, lang), user,
+                       base.format(kind="Drawing") + ".dxf", "application/dxf")
 
 
 @router.get("/{proposal_id}/drawing.dwg")

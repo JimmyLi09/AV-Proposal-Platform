@@ -2,7 +2,10 @@
 
 提交审核时锁定 6 样东西（确认后的输入、规则版本、产品库版本、BOQ 快照、模板版本、生成的文件），
 审核中、已批准都不能修改；批准可以自审，记录审核人和时间；退回要写原因，解锁回到已计算；
-已批准的 Rev 要改就开新 Rev。锁定的 Rev 永远用锁定时的版本，不跟着新的规则、产品库、模板变。
+锁定的 Rev 永远用锁定时的版本，不跟着新的规则、产品库、模板变。
+
+CR-9：只有正式版本能提交（草稿先在 05 / 06 保存为正式版本）；再次提交会替换还在等待的那条提交；
+提交过的版本再改，自动开下一个草稿（app/workspace.py · editable），不再需要「开新 Rev」。
 """
 import hashlib
 import json
@@ -20,18 +23,13 @@ from .models import Project, Proposal, Revision, User, utcnow
 from .storage import safe_name
 
 router = APIRouter(prefix="/proposals")
-
-COPIED = ("inputs", "input_meta", "cabinet_id", "boq_edits", "drawing_edits", "overrides", "annotations", "deck")
-
-
-def _log(rev: Revision, action: str, user: User, note: str = "") -> None:
-    rev.history = [*(rev.history or []), {"action": action, "by": user.name, "at": iso(utcnow()), "note": note}]
+_log = ws._log
 
 
-def blockers(rev: Revision, out: dict) -> list[str]:
-    """提交审核前必须清掉的问题。"""
+def blockers(rev: Revision, out: dict, inputs: bool = True) -> list[str]:
+    """提交审核前必须清掉的问题。inputs = False：不算 04 的待确认字段（05 → 06 的关卡，见 app/flow.py）。"""
     items = []
-    if out["pending"]:
+    if inputs and out["pending"]:
         items.append(tr(f"还有 {len(out['pending'])} 个字段待确认", f"{len(out['pending'])} fields still need confirming"))
     result = out["result"]
     if rev.status not in ("calculated", *ws.LOCKED) or not result:
@@ -68,8 +66,11 @@ def snapshot(db: Session, prop: Proposal, rev: Revision, out: dict) -> dict:
 
 
 def rev_out(rev: Revision, latest: bool) -> dict:
+    from .flow import returned, version_label_of
     L = rev.locked or {}
-    return {"rev_no": rev.rev_no, "status": rev.status, "latest": latest,
+    return {"rev_no": rev.rev_no, "status": rev.status, "latest": latest, "draft": rev.saved_at is None,
+            "label": f"v{rev.rev_no}" + tr("（草稿）", " (draft)") if rev.saved_at is None else version_label_of(rev),
+            "returned": returned(rev), "saved_by": rev.saver.name if rev.saver else None, "saved_at": iso(rev.saved_at),
             "author": rev.author.name, "created_at": iso(rev.created_at),
             "reviewer": rev.reviewer.name if rev.reviewer else None, "reviewed_at": iso(rev.reviewed_at),
             "rules_version": L.get("rules_version"), "library_version": L.get("library_version"),
@@ -84,7 +85,7 @@ def review_view(db: Session, prop: Proposal, rev: Revision, out: dict) -> dict:
     return {
         "revisions": [rev_out(r, r is prop.revisions[-1]) for r in reversed(prop.revisions)],
         "viewing_latest": latest,
-        "readonly": not latest or rev.status in ws.LOCKED,
+        "readonly": not latest,  # 最新的正式版本也能改：一改就自动开下一个草稿（CR-9）
         "blockers": [] if rev.status in ws.LOCKED else blockers(rev, out),
         "history": [h | {"note": h["note"].get(current(), h["note"]["zh"]) if isinstance(h["note"], dict) else h["note"]}
                     for h in rev.history or []],
@@ -104,24 +105,42 @@ class NoteIn(BaseModel):
 
 @router.post("/{proposal_id}/submit")
 def submit(proposal_id: int, user: User = Depends(require_user), db: Session = Depends(get_db)):
-    """提交审核：没有待确认字段、没有阻断项才能提交；提交时锁定。"""
+    """提交审核：只有正式版本能提交（草稿先在 05 / 06 保存）；没有待确认字段、没有阻断项才能提交；提交时锁定。
+    还有别的版本在等审批的，这次提交替换它（CR-9）。"""
+    from .flow import formal, is_dirty
     prop = ws.get_proposal(db, proposal_id)
-    rev = ws.editable(prop)
-    ws.refresh_status(db, prop)
+    rev = prop.revisions[-1]
+    if rev.saved_at is None:
+        if is_dirty(prop) or formal(prop, rev) is None:
+            raise HTTPException(409, tr("当前是草稿。先回 05 或 06 点「下一步」保存为正式版本，才能提交",
+                                       "This is a draft. Go back to 05 or 06 and click Next to save an official version before submitting"))
+        db.delete(rev)  # 和正式版本一样的草稿：不留，提交那个正式版本
+        db.flush()
+        db.refresh(prop)
+        rev = prop.revisions[-1]
+    if rev.status in ws.LOCKED:
+        raise HTTPException(409, tr(f"v{rev.rev_no} 已经提交过", f"v{rev.rev_no} has already been submitted"))
+    ws.refresh_status(db, prop, rev)
     out = ws.view(db, prop, rev)
     if items := blockers(rev, out):
         raise HTTPException(409, tr("还不能提交审核：", "Cannot submit for review yet: ") + "；".join(items))
+    for old in prop.revisions:
+        if old.status == "review":  # 再次提交替换还在等待的那条
+            old.locked, old.status = None, "draft"
+            _log(old, "replaced", user, {"zh": f"被 v{rev.rev_no} 替换", "en": f"Replaced by v{rev.rev_no}"})
+            ws.refresh_status(db, prop, old)
     rev.locked = snapshot(db, prop, rev, out)
     rev.status = "review"
     _log(rev, "submit", user)
+    prop.reached, prop.updated_at, prop.editor = 4, utcnow(), user
     db.commit()
     return ws.view(db, prop, rev)
 
 
 def _in_review(prop: Proposal) -> Revision:
-    rev = prop.revisions[-1]
-    if rev.status != "review":
-        raise HTTPException(409, tr("这个 Rev 不在审核中", "This Rev is not in review"))
+    rev = next((r for r in prop.revisions if r.status == "review"), None)
+    if rev is None:
+        raise HTTPException(409, tr("没有在等审批的版本", "No version is waiting for approval"))
     return rev
 
 
@@ -132,6 +151,7 @@ def approve(proposal_id: int, body: NoteIn, user: User = Depends(require_user), 
     rev = _in_review(prop)
     rev.status, rev.reviewer_id, rev.reviewed_at = "approved", user.id, utcnow()
     _log(rev, "approve", user, body.note.strip())
+    prop.updated_at, prop.editor = utcnow(), user
     db.commit()
     return ws.view(db, prop, rev)
 
@@ -145,26 +165,8 @@ def send_back(proposal_id: int, body: NoteIn, user: User = Depends(require_user)
     rev = _in_review(prop)
     rev.locked, rev.status = None, "draft"
     _log(rev, "send_back", user, body.note.strip())
-    ws.refresh_status(db, prop)
-    db.commit()
-    return ws.view(db, prop, rev)
-
-
-@router.post("/{proposal_id}/revisions", status_code=201)
-def new_revision(proposal_id: int, user: User = Depends(require_user), db: Session = Depends(get_db)):
-    """从已批准的 Rev 开新 Rev：复制输入、手动修改、BOQ / 图纸调整和标注，按最新版本重新计算。"""
-    prop = ws.get_proposal(db, proposal_id)
-    base = prop.revisions[-1]
-    if base.status != "approved":
-        raise HTTPException(409, tr("只有已批准的 Rev 才能开新 Rev；现在这个 Rev 还可以直接改",
-                                   "A new Rev starts from an approved Rev; this Rev can still be edited directly"))
-    rev = Revision(proposal_id=prop.id, rev_no=base.rev_no + 1, author_id=user.id,
-                   **{k: getattr(base, k) for k in COPIED})
-    db.add(rev)
-    _log(rev, "created", user, {"zh": f"从 Rev {base.rev_no} 开新 Rev", "en": f"Started from Rev {base.rev_no}"})
-    db.flush()
-    db.refresh(prop)
-    ws.refresh_status(db, prop)
+    ws.refresh_status(db, prop, rev)
+    prop.reached, prop.updated_at, prop.editor = min(prop.reached, 3), utcnow(), user  # 改完在 05 / 06 保存新版本再提交
     db.commit()
     return ws.view(db, prop, rev)
 
@@ -228,14 +230,15 @@ FORMATS = {
 
 
 def export_file(db: Session, request: Request, prop: Proposal, rev: Revision, kind: str, lang: str, render,
-                user: User | None):
+                user: User | None, name: str | None = None, media: str | None = None):
     """没批准：每次按当前内容生成草稿（带 DRAFT）。已批准：第一次导出时生成并存进资料目录，记进 Rev 锁定的「生成的文件」，
-    之后同一个 Rev、同一种格式和语言一律给这一份，永不重新生成。"""
-    label, ext, media, _ = FORMATS.get(kind, (kind, kind, "application/octet-stream", None))
+    之后同一个 Rev、同一种格式和语言一律给这一份，永不重新生成。BOQ Excel、DXF 自己定文件名（name）。"""
+    label, ext, default_media, _ = FORMATS.get(kind, (kind, kind, "application/octet-stream", None))
+    media = media or default_media
     project = db.get(Project, prop.project_id)
     approved = rev.status == "approved"
-    name = (f"{safe_name(project.name)}_{safe_name(prop.name)}_{label}_{lang.upper()}_Rev{rev.rev_no}"
-            f"{'' if approved else '_DRAFT'}.{ext}")
+    name = name or (f"{safe_name(project.name)}_{safe_name(prop.name)}_{label}_{lang.upper()}_Rev{rev.rev_no}"
+                    f"{'' if approved else '_DRAFT'}.{ext}")
     data_dir = request.app.state.data_dir
     if approved:
         hit = next((f for f in rev.locked.get("files") or [] if f["kind"] == kind and f["lang"] == lang), None)
@@ -259,10 +262,10 @@ class DeckIn(BaseModel):
 
 
 @router.put("/{proposal_id}/deck")
-def save_deck(proposal_id: int, body: DeckIn, _: User = Depends(require_user), db: Session = Depends(get_db)):
+def save_deck(proposal_id: int, body: DeckIn, user: User = Depends(require_user), db: Session = Depends(get_db)):
     """演示稿设置随 Rev 保存：封面字段（空 = 用默认值）和勾掉的页；封面和最后一页不能勾掉。"""
     prop = ws.get_proposal(db, proposal_id)
-    rev = ws.editable(prop)
+    rev = ws.editable(db, prop, user)
     if bad := set(body.off) & deck.FIXED or set(body.off) - set(deck.SLIDES[prop.business_line]):
         raise HTTPException(422, tr("这些页不能勾掉：", "These slides cannot be left out: ") + ", ".join(sorted(bad)))
     cover = {k: v.strip()[:200] for k, v in body.cover.items() if v.strip()}

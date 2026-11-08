@@ -1,153 +1,65 @@
-import { useEffect, useState } from "react";
-import { api, ManualOverride, RuleResult, send, Suggestion, WorkspaceView } from "./api";
-import { CheckChip, Choices, Outcome, ResultsTable, StatusChip } from "./Calc";
-import AnnotateTab from "./Annotate";
-import BoqTab from "./Boq";
-import ConfirmInputs from "./Confirm";
-import DiagramTab from "./Diagram";
-import DrawingTab from "./Drawing";
-import ShapeFaces, { isMulti } from "./Faces";
-import ReviewTab from "./Review";
+import { useState } from "react";
+import { ManualOverride, RuleResult, send, Suggestion, WorkspaceView } from "./api";
+import { CheckChip, Outcome, ResultsTable, StatusChip } from "./Calc";
+import { show as showValue } from "./Confirm";
 import MultiView, { MultiCalc } from "./Multi";
 import { LoadBudget, WiringDiagram } from "./Wiring";
 import { t } from "./i18n";
-import { fmtDate, lineLabel, StatusTag } from "./labels";
+import { fmtDate } from "./labels";
 import { productStatus } from "./Products";
 
 const TILES: Record<string, string[]> = {
   LED: ["F4", "F2", "F3", "F10", "F5", "F6", "F7", "F9", "F11", "F12"],
   PJ: ["P2", "P3", "P4", "P5", "P7", "P8", "P9", "P11", "P14", "P12", "P15", "P16"],
 };
-// 多面屏时尺寸在分面里填，确认输入表不再列整屏的尺寸（CR-7）
-const FACE_FIELDS: Record<string, string[]> = { LED: ["width_mm", "height_mm"], PJ: ["wall_width_mm"] };
 
-export default function Workspace({ id }: { id: number }) {
-  const [view, setView] = useState<WorkspaceView | null>(null);
-  const [inputs, setInputs] = useState<Record<string, unknown>>({});
-  const [tab, setTab] = useState("rec");
-  const [error, setError] = useState("");
-  const [revNo, setRevNo] = useState<number | null>(null); // null = 最新的 Rev；旧 Rev 只读
-  const path = `/proposals/${id}${revNo === null ? "" : `?rev=${revNo}`}`;
-
-  function show(v: WorkspaceView) {
-    setView(v);
-    setInputs(v.rev.inputs);
-  }
-  async function apply(p: Promise<WorkspaceView>) {
-    setError("");
-    try {
-      show(await p);
-    } catch (err) {
-      setError((err as Error).message);
-    }
-  }
-  useEffect(() => {
-    apply(api<WorkspaceView>(path));
-  }, [path]);
-  const reading = view?.files.some((f) => f.read_status === "reading");
-  useEffect(() => {  // 文件还在读取（提取中）时每 1.5 秒刷新一次
-    if (!reading) return;
-    const timer = setTimeout(() => api<WorkspaceView>(path).then(setView), 1500);
-    return () => clearTimeout(timer);
-  }, [reading, view, path]);
-
-  if (!view) return error ? <p className="error">{error}</p> : null;
-  const { proposal, rev, result } = view;
-  const saveInputs = (cabinet_id: string | null = rev.cabinet_id, values = inputs) =>
-    apply(send<WorkspaceView>("PUT", `/proposals/${id}/inputs`, { inputs: values, cabinet_id }));
-  const line = proposal.business_line;
-  const multi = !!result?.multi;
-  const useSource = (face: string, field: string, value: number) => {  // S7：在冲突表里选定一份资料的值
-    const faces = (inputs.faces as { id: string }[]).map((f) => (f.id === face ? { ...f, [field]: value } : f));
-    const next = { ...inputs, faces };
-    setInputs(next);
-    saveInputs(rev.cabinet_id, next);
-  };
-  // 步骤顺序（CR-12）：推荐 → 计算依据 → 示意图 → 图纸与标注（图纸、标注两个子页签）→ 工程量清单 → 审核导出
-  const hasDrawing = line === "LED" && !multi;
-  const sheets = hasDrawing ? ["drawing", "annotate"] : ["annotate"];
-  const tabs = ["rec", "calc", "diagram", "sheets", "boq", "review"];
-  const topOf = (k: string) => (sheets.includes(k) ? "sheets" : k);
-  const prevOf: Record<string, string> = { calc: "rec", diagram: "calc", drawing: "rec", annotate: hasDrawing ? "drawing" : "diagram",
-    boq: "annotate", review: "boq" };
-  const nextOf: Record<string, string> = { rec: "calc", calc: "diagram", diagram: sheets[0], drawing: "annotate", annotate: "boq",
-    boq: "review" };
-  // W1 / 图纸有超载时，图纸之后的「下一步」变灰，旁边写原因
-  const overloaded = view.drawing ? view.drawing.circuits.filter((c) => c.over).length + view.drawing.cables.filter((c) => c.over).length : 0;
-  const stop = overloaded && ["drawing", "annotate", "boq"].includes(tab) ? t("ws.nav.overloaded", { n: overloaded }) : "";
-  const readonly = view.readonly;
-  const openRev = (n: number | null) => (n === revNo ? apply(api<WorkspaceView>(path)) : setRevNo(n));
-
+// 05 方案配置（CR-9）：来自 04 确认的输入；推荐结果卡片（手动改要写原因）、带载预算、接线图；计算依据收在下面。
+// 04 的确认值改了，顶部提示「图纸校核有更新，是否重新带入？」，不静默覆盖。
+export default function DesignPage({ view, apply, onCabinet, onUse }: {
+  view: WorkspaceView;
+  apply: (p: Promise<WorkspaceView>) => Promise<boolean>;
+  onCabinet: (id: string) => void;
+  onUse: (face: string, field: string, value: number) => void; // 多面屏 S7：选定一份资料的值（改的是 04 的输入）
+}) {
+  const result = view.result;
+  const id = view.proposal.id;
+  const { pull } = view.flow;
+  // 05 正在用的输入：04 改过还没带进来的，用带进来时的值
+  const used = { ...view.rev.inputs, ...Object.fromEntries(pull.changed.map((c) => [c.name, c.from])) };
+  const post = (path: string, body: unknown = {}) => apply(send<WorkspaceView>("POST", `/proposals/${id}/${path}`, body));
   return (
     <>
-      <div>
-        <a href={`#/projects/${view.project.id}`}>← {t("ws.project")}</a>
-        <h1>
-          {proposal.name} <span className="sub">{lineLabel(proposal.business_line)}</span>
-        </h1>
-        <p className="muted">
-          <StatusTag status={rev.status} rev={rev.rev_no} /> ·{" "}
-          {t("ws.versions", { rules: view.rules_version, library: view.library_version, template: view.template_version })}
-        </p>
-        {!view.viewing_latest && (
-          <p className="warn">
-            {t("ws.oldRev", { rev: rev.rev_no })}{" "}
-            <button className="btn-link" onClick={() => setRevNo(null)}>{t("ws.backLatest")}</button>
-          </p>
-        )}
-        {view.viewing_latest && readonly && <p className="warn">{t("ws.lockedNote")}</p>}
-      </div>
-
-      <fieldset className="plain-fieldset" disabled={readonly}>
-        <ShapeFaces view={view} inputs={inputs} setInputs={setInputs} />
-        <ConfirmInputs view={view} inputs={inputs} setInputs={setInputs} onApply={apply} error={error}
-          hidden={isMulti(view, inputs) ? FACE_FIELDS[line] : []} />
-        {result && <Choices result={result} onPick={(k, v) => setInputs({ ...inputs, [k]: v })} />}
-      </fieldset>
-
-      {result && (
-        <>
-          <div className="row">
-            {tabs.map((k) => (
-              <button key={k} className={`pill ${topOf(tab) === k ? "active" : ""}`} onClick={() => setTab(k === "sheets" ? sheets[0] : k)}>
-                {k === "sheets" && !hasDrawing ? t("ws.tabs.annotate") : t(`ws.tabs.${k}`)}
-              </button>
-            ))}
+      <section className="card from-04">
+        <span className="tag ck-PASS">{t("flow.from04")}</span>{" "}
+        <span className="muted">{view.input_defs.filter((d) => ["pixel_pitch_mm", "width_mm", "height_mm", "viewing_distance_m"]
+          .includes(d.name) && used[d.name] !== undefined).map((d) => `${d.label} ${showValue(used[d.name])}`).join(" · ")}</span>
+        {pull.changed.length > 0 && !view.readonly && (
+          <div className="warn pull">
+            {t("flow.pullAsk", { what: pull.changed.map((c) => `${c.label} ${showValue(c.to)}`).join(t("common.listSep")) })}
+            {pull.ready ? (
+              <span className="row tight">
+                <button className="btn-primary small" onClick={() => post("pull")}>{t("flow.pull")}</button>
+                <button className="btn-outline small" onClick={() => post("keep")}>{t("flow.keep")}</button>
+              </span>
+            ) : <span className="small"> {t("flow.pullLater")}</span>}
           </div>
-          {topOf(tab) === "sheets" && hasDrawing && (
-            <div className="row tight subtabs">
-              {sheets.map((k) => (
-                <button key={k} className={`pill small ${tab === k ? "active" : ""}`} onClick={() => setTab(k)}>
-                  {t(`ws.tabs.${k}`)}
-                </button>
-              ))}
-            </div>
-          )}
-          <fieldset className="plain-fieldset" disabled={readonly && tab !== "review"}>
-          {tab === "rec" && (multi ? <MultiView view={view} onUse={useSource} />
-            : <>
-              <Recommendation view={view} onCabinet={(cid) => saveInputs(cid)}
-                onLibrary={() => apply(api<WorkspaceView>(`/proposals/${id}`))} onView={show} />
-              {line === "LED" && <LoadBudget view={view} />}
-              {view.drawing && <WiringDiagram view={view} drawing={view.drawing} />}
-            </>)}
-          {tab === "calc" && (
-            <section className="card">
-              <h2>{t("ws.tabs.calc")}</h2>
-              <p className="muted">{t("ws.calcIntro")}</p>
-              {multi ? <MultiCalc view={view} /> : <ResultsTable base={result} label={view.rules_version} />}
-            </section>
-          )}
-          {tab === "diagram" && (result.diagram ? <DiagramTab view={view} diagram={result.diagram} />
-            : <section className="card"><p className="muted">{t(multi ? "ws.noDiagramMulti" : "ws.noDiagram")}</p></section>)}
-          {tab === "boq" && view.boq && <BoqTab view={view} boq={view.boq} onApply={apply} />}
-          {tab === "annotate" && <AnnotateTab view={view} onSaved={() => apply(api<WorkspaceView>(`/proposals/${id}`))} />}
-          {tab === "drawing" && (view.drawing ? <DrawingTab view={view} drawing={view.drawing} onApply={apply} />
-            : <section className="card"><p className="muted">{t("ws.noDrawing")}</p></section>)}
-          {tab === "review" && <ReviewTab view={view} onApply={apply} onOpenRev={openRev} />}
-          </fieldset>
-          <StepNav prev={prevOf[tab]} next={nextOf[tab]} stop={stop} onGo={(k) => { setTab(k); window.scrollTo(0, 0); }} />
-        </>
+        )}
+      </section>
+      {!result ? <section className="card"><p className="muted">{t("flow.noResult")}</p></section>
+        : result.multi ? <MultiView view={view} onUse={onUse} />
+        : (
+          <>
+            <Recommendation view={view} onCabinet={onCabinet} onLibrary={() => post("upgrade", { parts: ["library"] })}
+              onView={(v) => apply(Promise.resolve(v))} />
+            {view.proposal.business_line === "LED" && <LoadBudget view={view} onRules={() => post("upgrade", { parts: ["rules"] })} />}
+            {view.drawing && <WiringDiagram view={view} drawing={view.drawing} />}
+          </>
+        )}
+      {result && (
+        <details className="card">
+          <summary><b>{t("ws.tabs.calc")}</b> <span className="muted small">{t("ws.calcIntro")}</span></summary>
+          {result.multi ? <MultiCalc view={view} /> : <ResultsTable base={result} label={view.rules_version} />}
+        </details>
       )}
     </>
   );
@@ -345,7 +257,7 @@ function Suggestions({ items, onAdded }: { items: Suggestion[]; onAdded: () => v
     setError("");
     try {
       await send("POST", "/products/LED/reference", { id });
-      onAdded();
+      onAdded(); // 再把这个方案的产品库升级到刚生成的版本（建项时绑定的版本不会自己变，CR-9）
     } catch (err) {
       setError((err as Error).message);
     }
@@ -396,25 +308,5 @@ function Suggestions({ items, onAdded }: { items: Suggestion[]; onAdded: () => v
       </div>
       {error && <p className="error">{error}</p>}
     </section>
-  );
-}
-
-/** 每个页签底部的「← 返回：上一步 / 下一步：下一步 →」（CR-12）。不能往下走时「下一步」变灰，左边写原因。 */
-function StepNav({ prev, next, stop, onGo }: { prev?: string; next?: string; stop: string; onGo: (k: string) => void }) {
-  return (
-    <div className="row step-nav">
-      {prev && (
-        <button className="btn-outline" onClick={() => onGo(prev)}>
-          {t("ws.nav.back", { name: t(`ws.tabs.${prev}`) })}
-        </button>
-      )}
-      <span className="grow" />
-      {next && stop && <span className="warn small">🔒 {stop}</span>}
-      {next && (
-        <button className="btn-primary" disabled={!!stop} onClick={() => onGo(next)}>
-          {t("ws.nav.next", { name: t(`ws.tabs.${next}`) })}
-        </button>
-      )}
-    </div>
   );
 }

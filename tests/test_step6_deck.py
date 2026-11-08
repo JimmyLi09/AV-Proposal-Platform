@@ -8,7 +8,7 @@ from fastapi.testclient import TestClient
 from pptx import Presentation
 from pptx.util import Emu
 
-from conftest import count_grouping
+from conftest import count_grouping, official
 from app.main import create_app
 from app.rules.engine import load_seed
 
@@ -55,7 +55,7 @@ def test_draft_deck_is_16_9_with_editable_text_and_tables(client):
     assert "Proposal · LED-1 Lobby" in cover and any("143-Royal Plaza LED · 143" in t for t in cover)
     for i, slide in enumerate(prs.slides, 1):
         t = texts(slide)
-        assert "DRAFT" in t and str(i) in t and any(x.startswith("Confidential · Rev 0") for x in t)
+        assert "DRAFT" in t and str(i) in t and any(x.startswith("Confidential · Rev 1") for x in t)
     boq = texts(prs.slides[6])
     assert "Quantities and BOQ" in boq and any(x.startswith("P2.5 Indoor LED screen on wall") for x in boq)
     assert any(sh.has_table for sh in prs.slides[2].shapes)  # 配置是原生表格
@@ -70,8 +70,11 @@ def test_cover_and_slides_are_saved_with_the_rev(client):
     assert v["cover"]["title"] == "Lobby LED Wall" and not next(s for s in v["slides"] if s["key"] == "risks")["included"]
     prs, _ = deck(client)
     assert len(prs.slides) == 7 and "Lobby LED Wall" in texts(prs.slides[0])
+    official(client, client.base)
     client.post(f"{client.base}/submit")
-    assert client.put(f"{client.base}/deck", json={}).status_code == 409  # 锁定后不能改
+    v = client.put(f"{client.base}/deck", json={}).json()  # 提交后再改：自动开 v2 草稿，v1 不变（CR-9）
+    assert v["rev"]["rev_no"] == 2 and v["flow"]["opened"] == 2 and v["deck"]["cover"]["title"] != "Lobby LED Wall"
+    assert client.get(f"{client.base}?rev=1").json()["deck"]["cover"]["title"] == "Lobby LED Wall"
 
 
 def test_chinese_and_bilingual(client):
@@ -82,6 +85,7 @@ def test_chinese_and_bilingual(client):
 
 
 def test_approved_deck_has_no_watermark_and_is_archived(client):
+    official(client, client.base)
     client.post(f"{client.base}/submit")
     client.post(f"{client.base}/approve", json={})
     prs, r = deck(client)
