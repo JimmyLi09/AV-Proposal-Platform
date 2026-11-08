@@ -15,7 +15,7 @@
       "expand": "fill",
       "h": 1100,
       "is_interactive": true,
-      "title": "5 · Annotation Editor（新增）",
+      "title": "4 · 图纸与标注 → 标注",
       "w": 1440,
       "x": 4560,
       "y": 1440
@@ -60,7 +60,7 @@
       "expand": "fill",
       "h": 1100,
       "is_interactive": true,
-      "title": "4 · BOQ 工程量清单（不含价格 · 1023 改）",
+      "title": "5 · BOQ 工程量清单（不含价格）",
       "w": 1440,
       "x": 3040,
       "y": 1440
@@ -267,7 +267,7 @@
       "expand": "fill",
       "h": 1500,
       "is_interactive": true,
-      "title": "CR-3 · Drawing 拼接与线路图 + CAD 导出（新增）",
+      "title": "4 · 图纸与标注 → 图纸（拼接与线路图）",
       "w": 1440,
       "x": 3040,
       "y": 11560
@@ -298,6 +298,24 @@
       "w": 1440,
       "x": 3040,
       "y": 13240
+    },
+    "WorkbenchV2.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "v2 · AV 工作台（对齐 PM Platform）",
+      "w": 1440,
+      "x": 0,
+      "y": 15040
+    },
+    "FlowV2.dc.html": {
+      "expand": "fill",
+      "h": 1100,
+      "is_interactive": true,
+      "title": "v2 · 方案流程 01 → 07（一个页面走完）",
+      "w": 1440,
+      "x": 1520,
+      "y": 15040
     }
   },
   "createdOnFiles": {
@@ -306,7 +324,7 @@
   },
   "designSystems": [],
   "launch": {
-    "file": "Main.dc.html",
+    "file": "WorkbenchV2.dc.html",
     "view": "focused"
   },
   "notes": {
@@ -465,9 +483,34 @@
       "fill": "orange",
       "size": 24,
       "text": "1023 反馈要看的：\n\n· 第 4 步改为 BOQ（不含价格）：按区域分组，每行带规格，数量 + 单位；可切 GMC U 形示例。\n· 投影：New Proposal 选投影后先到「屏形与分面」，有转角 L、U 形、弧形、环幕、墙 + 地面。多面推荐页每面单独排投影，转角两侧机位冲突会阻断，宽度可直接改。\n· LED 屏形新增「外转角」。\n· 资料库：导入以往资料，本地读取；学到的内容要人确认才进产品库 / 模板。"
+    },
+    "sv2": {
+      "fill": "orange",
+      "size": 24,
+      "w": 420,
+      "x": 3040,
+      "y": 15080,
+      "text": "简化流程 v2（只做原型，未改代码）：\n\n· 原来 8 个标签页 → 5 步：01 立项 → 02–04 图纸·解析·校核 → 05 方案 → 06 图纸与 BOQ → 07 审批与导出，和 PM Platform 的 AV 模块一样。\n· 顶部步骤条：✓ / 当前 / 草稿 / 🔒+原因；底部「上一步 / 下一步」，不能走时写原因。\n· 编辑自动存草稿；05、06 点下一步才存正式版 vN。\n· 谁都能批，可以自审；批准后再改自动开 vN+1 草稿。\n· 07 语言选一次，6 种文件一排按钮。\n· 售前接洽没有编号也能做，之后转为正式项目。"
+    },
+    "t10": {
+      "x": 0,
+      "y": 14790,
+      "text": "1107 简化流程 v2：和 PM Platform 的 AV 流程对齐（只做原型）",
+      "kind": "title1",
+      "maxW": 6000
+    },
+    "s12": {
+      "x": 6080,
+      "y": 11560,
+      "w": 420,
+      "fill": "blue",
+      "size": 24,
+      "text": "1108 步骤调整：\n\n· 新顺序：1 项目与文件 → 2 确认输入 → 3 推荐 → 4 图纸与标注 → 5 工程量清单 → 6 审核导出。\n· 图纸、标注从「推荐」的子页移到第 4 步，两个子页签切换。\n· 图纸页底部加「返回：推荐 / 下一步：标注」，标注页「返回：图纸 / 下一步：工程量清单」。\n· 图纸校验改用 17 A、≤ 10 箱、655,360 px。"
     }
   },
   "order": [
+    "WorkbenchV2.dc.html",
+    "FlowV2.dc.html",
     "Main.dc.html",
     "NewProposal.dc.html",
     "ShapeLED.dc.html",
