@@ -684,5 +684,119 @@
   "Output width limit 每路输出宽度上限（多面屏 S5）": {
     "zh": "每路输出宽度上限（多面屏 S5）",
     "en": "Output width limit (multi-face S5)"
+  },
+  "MCB rating (single phase) 空开（单相）": {
+    "zh": "空开（单相）",
+    "en": "MCB rating (single phase)"
+  },
+  "Load budget 带载预算": {
+    "zh": "带载预算",
+    "en": "Load budget"
+  },
+  "Mains voltage 市电电压": {
+    "zh": "市电电压",
+    "en": "Mains voltage"
+  },
+  "Continuous load factor 持续负载系数": {
+    "zh": "持续负载系数",
+    "en": "Continuous load factor"
+  },
+  "Power cable size 电源线线径": {
+    "zh": "电源线线径",
+    "en": "Power cable size"
+  },
+  "Max cabinets per power chain 每条电源线最多串接箱体": {
+    "zh": "每条电源线最多串接箱体",
+    "en": "Max cabinets per power chain"
+  },
+  "Pixels per network port 每网口带载": {
+    "zh": "每网口带载",
+    "en": "Pixels per network port"
+  },
+  "Data grouping 网线分组": {
+    "zh": "网线分组",
+    "en": "Data grouping"
+  },
+  "Ampacity 1.5 mm² 1.5 mm² 载流": {
+    "zh": "1.5 mm² 载流",
+    "en": "Ampacity 1.5 mm²"
+  },
+  "Ampacity 2.5 mm² 2.5 mm² 载流": {
+    "zh": "2.5 mm² 载流",
+    "en": "Ampacity 2.5 mm²"
+  },
+  "Ampacity 4 mm² 4 mm² 载流": {
+    "zh": "4 mm² 载流",
+    "en": "Ampacity 4 mm²"
+  },
+  "Cable ampacity 线径载流": {
+    "zh": "线径载流",
+    "en": "Cable ampacity"
+  },
+  "Wiring direction 接线方向": {
+    "zh": "接线方向",
+    "en": "Wiring direction"
+  },
+  "Wiring 接线": {
+    "zh": "接线",
+    "en": "Wiring"
+  },
+  "Power routing 电源走线": {
+    "zh": "电源走线",
+    "en": "Power routing"
+  },
+  "Data routing 网线走线": {
+    "zh": "网线走线",
+    "en": "Data routing"
+  },
+  "Wiring layout 接线布置": {
+    "zh": "接线布置",
+    "en": "Wiring layout"
+  },
+  "Max per cabinet 每箱最大电流 A / 功率 W": {
+    "zh": "每箱最大电流 A / 功率 W",
+    "en": "Max per cabinet: current A / power W"
+  },
+  "公司标准（Jimmy）": {
+    "en": "Company standard (Jimmy)"
+  },
+  "新加坡市电": {
+    "en": "Singapore mains"
+  },
+  "Jimmy：先用 0.85，可以参考以前的数据": {
+    "en": "Jimmy: use 0.85 for now; past projects can be used as a reference"
+  },
+  "Thailand P1.8 接线图（3 × 2.5 mm²）": {
+    "en": "Thailand P1.8 wiring diagram (3 × 2.5 mm²)"
+  },
+  "Jimmy：按电源带载和箱体尺寸，最多 10–12 个，取 10": {
+    "en": "Jimmy: 10–12 at most depending on PSU load and cabinet size; 10 used"
+  },
+  "厂家标称 655,360 = 1024 × 640（Absen 资料）；按公式 1000 Mbps × 93.6% ÷ 60 Hz ÷ 24 bit ≈ 650,000，MCTRL700 规格书约 650,000": {
+    "en": "Manufacturer rating 655,360 = 1024 × 640 (Absen); the formula 1000 Mbps × 93.6% ÷ 60 Hz ÷ 24 bit gives ≈ 650,000, the MCTRL700 datasheet about 650,000"
+  },
+  "默认按行整行（公司接线图做法，Thailand P1.8）；待 Jimmy 确认": {
+    "en": "Default: whole rows (company wiring practice, Thailand P1.8); to be confirmed by Jimmy"
+  },
+  "示例值，待公司用线的实际载流量": {
+    "en": "Sample value; to be replaced with the ampacity of the company's cable"
+  },
+  "公司接线图按行（Thailand P1.8）": {
+    "en": "Company wiring diagrams go by row (Thailand P1.8)"
+  },
+  "Σ（各尺寸箱体数 × 每箱最大功率）÷ 1000，箱体数来自 F3、每箱最大功率来自产品库；产品没有每箱最大功率时，退回按面积 × 每平米功耗。": {
+    "en": "Σ (cabinets of each size × max power per cabinet) ÷ 1000; cabinet counts from F3, max power from the product library. Without per-cabinet max power the area × W/㎡ method is used."
+  },
+  "每回路额定电流取空开和线径载流的小者，乘持续负载系数得可用电流；按最大单箱电流算每回路能带几箱（带载），再按每条电源线最多串接几箱（串接），两者取大。": {
+    "en": "Rated current per circuit = the smaller of MCB and cable ampacity; × continuous load factor = usable current. Cabinets per circuit by the largest cabinet current (load), and by the max cabinets per power chain (chain); the larger circuit count is used."
+  },
+  "{circuits}（带载 {circuits_by_load} / 串接 {circuits_by_chain}，取大）": {
+    "en": "{circuits} (load {circuits_by_load} / chain {circuits_by_chain}, the larger)"
+  },
+  "电源从最下一行靠配电箱一侧开始，按走线顺序把箱体连续平均分成 F6 的回路数；网线从最上一行靠发送卡一侧开始，按行整行或按箱数装。逐组检查电流、串接箱数和像素。": {
+    "en": "Power starts at the bottom row on the DB box side and splits the cabinets along the route into the F6 circuits as evenly as possible; data starts at the top row on the sending card side, by whole rows or by cabinet count. Each group is checked for current, cabinets in the chain and pixels."
+  },
+  "按箱数最少要 ⌈总像素 ÷ 每网口带载⌉ 路；按行整行时用 W1 从上往下装整行的路数。再加备用。": {
+    "en": "By cabinet count at least ⌈total pixels ÷ pixels per port⌉ runs; by whole rows, the runs W1 needs filling rows from the top. Plus spare."
   }
 }

@@ -80,7 +80,7 @@ def main():
         ["Training for operators", 1, "lot"],
         ["Receiving card", 12, "pcs"],
         ["Supply and install metal frame structure (3200 × 1760 mm)", 5.63, "sqm"]])
-    # 以往项目：143（标准答案，BOQ 里回路写成 4 路，和规则 3 路不一样）、GMC（U 形）、114（投影）
+    # 以往项目：143（标准答案，BOQ 里网线是 4 + 1，规则默认按行整行是 5 + 1）、GMC（U 形）、114（投影）
     pdf(OUT / "以往项目" / "143-Royal Plaza" / "143_Elevation.pdf", [
         ["143 ROYAL PLAZA LOBBY", "INDOOR LED WALL, PIXEL PITCH P2.5", "LED SCREEN 4480 (W) x 2560 (H)",
          "WALL MOUNT, FRONT MAINTENANCE", "BRIGHTNESS 600 NITS", "VIEWING DISTANCE 4-6M"]])

@@ -12,6 +12,7 @@ from alembic.config import Config
 from fastapi.testclient import TestClient
 from openpyxl import load_workbook
 
+from conftest import count_content, count_grouping
 from app.boq import build
 from app.db import MIGRATIONS, make_engine, migrate
 from app.main import create_app
@@ -19,7 +20,8 @@ from app.products.library import load_seed as load_library
 from app.rules.engine import calculate, load_seed, value_names
 from app.templates.content import TemplateError, load_seed as load_template, validate
 
-RULES, SAMPLE = load_seed("LED")
+SEED, SAMPLE = load_seed("LED")
+RULES = count_content(SEED)  # 网线按箱数：Royal 3 个网口，SC-4 够用（见 conftest）
 LIBRARY = load_library("LED")
 TEMPLATE = load_template("LED")
 GOLDEN = json.loads((Path(__file__).parent / "fixtures" / "regression_cases.json").read_text(encoding="utf-8"))
@@ -43,8 +45,8 @@ def test_143_client_boq_has_the_7_golden_lines():
                             "Overall screen resolution: 1792 × 1024", "Aspect ratio: 7:4",
                             "Spares: 12 modules, 1 power supply, 1 receiving card"]
     assert boq["rows"][3]["note"] == "Client may provide"
-    assert boq["rows"][4]["specs"] == ["DB box with MCB × 3 circuits",
-                                       "Power cables 3 + 1 spare, data cables CAT6 4 + 1 spare"]
+    assert boq["rows"][4]["specs"] == ["DB box with MCB × 4 circuits",
+                                       "Power cables 4 + 1 spare, data cables CAT6 3 + 1 spare"]
     assert boq["group"] == "LED-1 Lobby" and boq["manual"] == []
 
 
@@ -73,6 +75,7 @@ def test_rule_set_and_library_have_no_price_fields():
 @pytest.fixture
 def client(tmp_path):
     with TestClient(create_app(tmp_path)) as c:
+        count_grouping(c.app)  # 网线按箱数：Royal 3 个网口，SC-4 够用（见 conftest）
         user = c.post("/api/users", json={"name": "Jimmy", "role": "PM"}).json()
         c.post("/api/session", json={"user_id": user["id"]})
         pid = c.post("/api/projects", json={"name": "143-Royal Plaza LED", "client": "Royal Plaza"}).json()["id"]

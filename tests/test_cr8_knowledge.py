@@ -146,20 +146,21 @@ def test_project_records_reference_projects_and_rule_comparison(c):
     project = next(p for p in c.get("/api/kb/projects").json() if p["key"] == "143-Royal Plaza")
     assert project["record_version"] == 1 and project["record_by"] == "Jimmy"
     compare = {r["name"]: (r["rule_id"], r["rule"], r["actual"], r["match"]) for r in project["compare"]["rows"]}
-    assert compare == {"area_m2": ("F1", 11.4688, 11.47, True), "circuits": ("F6", 3, 4, False),
-                       "power_cables": ("F7", 4, 5, False), "data_runs": ("F9", 4, 4, True),
-                       "data_cables": ("F9", 5, 5, True), "controller_qty": ("F11", 1, 1, True),
+    # CR-10 起回路、电源线和 143 做出来的一致；网线默认按行整行 5 + 1，143 实际是 4 + 1；F11 按行要 5 口、示例控制器不够
+    assert compare == {"area_m2": ("F1", 11.4688, 11.47, True), "circuits": ("F6", 4, 4, True),
+                       "power_cables": ("F7", 5, 5, True), "data_runs": ("F9", 5, 4, False),
+                       "data_cables": ("F9", 6, 5, False), "controller_qty": ("F11", None, 1, False),
                        "spare_modules": ("F10", 12, 12, True)}
     diffs = {i["name"]: (i["rule_id"], i["rule_value"], i["actual"]) for i in items(c, "rule")}
-    assert diffs == {"circuits": ("F6", 3, 4), "power_cables": ("F7", 4, 5)}
+    assert diffs == {"data_runs": ("F9", 5, 4), "data_cables": ("F9", 6, 5)}  # 规则算不出的（F11）不列
 
     # 规则参考只记录，不改规则
-    f6 = next(i for i in items(c, "rule") if i["name"] == "circuits")
-    assert (f6["source"]["name"], f6["location"]) == ("143_BOQ.xlsx", "BOQ!11")  # 来源写到 BOQ 的第几行
-    c.post(f"/api/kb/items/{f6['id']}/adopt")
+    f9 = next(i for i in items(c, "rule") if i["name"] == "data_runs")
+    assert (f9["source"]["name"], f9["location"]) == ("143_BOQ.xlsx", "BOQ!11")  # 来源写到 BOQ 的第几行
+    c.post(f"/api/kb/items/{f9['id']}/adopt")
     assert versions(c)["rules/LED"] == rules_before
     refs = c.get("/api/kb/references/LED").json()
-    assert [(r["rule_id"], r["key"], r["rule_value"], r["actual"]) for r in refs] == [("F6", "143-Royal Plaza", 3, 4)]
+    assert [(r["rule_id"], r["key"], r["rule_value"], r["actual"]) for r in refs] == [("F9", "143-Royal Plaza", 5, 4)]
 
     # 页面上勾选标准答案：U 形的多面屏记录先不对比
     gmc = next(p for p in c.get("/api/kb/projects").json() if p["key"] == "GMC Virtual Office")

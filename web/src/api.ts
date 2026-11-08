@@ -62,7 +62,16 @@ export function send<T>(method: string, path: string, body: unknown): Promise<T>
 export type Case = { when?: string | null; expr: string };
 export type RuleOutput = { name: string; unit?: string; decimals?: number; cases: Case[] };
 export type Rule = { id: string; title: string; note?: string; step?: string; check?: boolean; outputs?: RuleOutput[] };
-export type Param = { name: string; group: string; label: string; unit: string; value: number | null; status: string };
+export type Param = {
+  name: string;
+  group: string;
+  label: string;
+  unit: string;
+  value: number | string | null;
+  status: string;
+  options?: (number | string)[]; // 选项类参数（例如网线分组 rows / count，CR-10）
+  source?: string; // 参数来源（规格书、公司标准、示例值……）
+};
 export type InputDef = { name: string; label: string; unit?: string; type: "number" | "choice" | "range" | "sizes"; options?: string[] };
 export type RuleContent = { business_line: string; inputs: InputDef[]; params: Param[]; rules: Rule[] };
 
@@ -359,10 +368,15 @@ export type Drawing = {
   rows: number[];
   sizes: Record<string, { w: number; h: number; count: number }>;
   cabinets: DrawingCabinet[];
-  circuits: { no: number; cabinets: number; watts: number; amps: number; over: boolean }[];
+  circuits: { no: number; cabinets: number; watts: number; amps: number; over: boolean; over_a: boolean; over_chain: boolean }[];
   cables: { no: number; cabinets: number; px: number; over: boolean; path: string[] }[];
-  circuit_cap_w: number;
+  circuit_cap_a: number; // 每回路可用电流（F6，CR-10）
+  chain_max: number; // 每条电源线最多串接箱体
   cable_cap_px: number;
+  power_jumpers: number;
+  power_jumper_m: number;
+  data_jumpers: number;
+  data_jumper_m: number;
   spare_circuits: number;
   spare_cables: number;
   manual: { power: number; data: number };

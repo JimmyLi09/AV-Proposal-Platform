@@ -43,7 +43,7 @@ def display_text(content: dict) -> dict[str, str]:
     """规则集里标签、分组、标题、说明、单位在当前界面语言下的写法（CR-4）。规则页按这个显示，保存时内容原样不变。"""
     out = {}
     for item in content["inputs"] + content["params"] + content["rules"]:
-        for key in ("label", "group", "title", "note"):
+        for key in ("label", "group", "title", "note", "source"):
             if item.get(key):
                 out[item[key]] = text(item[key])
     for item in content["inputs"] + content["params"] + [o for r in content["rules"] for o in r.get("outputs", [])]:
@@ -87,7 +87,11 @@ def validate(content: dict, base: dict) -> None:
     for p in content["params"]:
         if p["status"] not in STATUSES:
             raise ExprError(tr(f"参数 {p['name']} 的状态不对", f"Parameter {p['name']}: invalid status"))
-        if p["value"] is not None and (isinstance(p["value"], bool) or not isinstance(p["value"], (int, float))):
+        if p.get("options") is not None:  # 选项类参数（例如网线分组 rows / count，CR-10）
+            if p["value"] not in p["options"]:
+                raise ExprError(tr(f"参数 {p['name']} 只能选：", f"Parameter {p['name']} must be one of: ")
+                                + " / ".join(map(str, p["options"])))
+        elif p["value"] is not None and (isinstance(p["value"], bool) or not isinstance(p["value"], (int, float))):
             raise ExprError(tr(f"参数 {p['name']} 要填数字", f"Parameter {p['name']} must be a number"))
     known = {i["name"] for i in content["inputs"]} | {p["name"] for p in content["params"]}
     steps = LINES[content["business_line"]]["steps"]
@@ -207,9 +211,11 @@ def _run_rule(rule, ctx, status, params, catalog, steps, overrides) -> dict:
             last = result["lines"][-1]
             if rule.get("check"):
                 result["check"] = last["value"]
-            template = rule.get("display")
+            template = text(rule.get("display"))
             byname = {line["name"]: line["display"] for line in result["lines"]}
-            result["display"] = (re.sub(r"\{(\w+)\}", lambda m: byname.get(m[1], m[0]), template) if template
+            # 主结果（最后一个）手动改过时直接显示手动值：模板里的说明（例如 F6「带载 3 / 串接 4，取大」）是按规则值写的
+            result["display"] = (re.sub(r"\{(\w+)\}", lambda m: byname.get(m[1], m[0]), template)
+                                 if template and not last.get("manual")
                                  else f"{last['display']} {last.get('unit', '')}".strip())
             result["trace"] = tr("；", "; ").join(f"{ln['substituted']} = {ln.get('rule_display', ln['display'])}{_manual_trace(ln)}"
                                                   for ln in result["lines"])
@@ -232,6 +238,9 @@ def _step_display(step: str, outputs: dict) -> str:
         return tr(f"{_show(outputs['cabinets'])} 个（{outputs['layout']}）", f"{_show(outputs['cabinets'])} ({outputs['layout']})")
     if step == "controller_pick" and outputs:
         return outputs["controller"] if not outputs["controller_qty"] else f"{_show(outputs['controller_qty'])} × {outputs['controller']}"
+    if step == "wiring_layout" and outputs:
+        power, data = (" / ".join(map(str, outputs[k])) for k in ("power_group_sizes", "data_group_sizes"))
+        return tr(f"电源 {power} · 网线 {data}", f"Power {power} · data {data}")
     if step == "processor_pick" and outputs:
         return f"{_show(outputs['processor_qty'])} × {outputs['processor']}"
     if step in pj.STEP_DISPLAY and outputs:

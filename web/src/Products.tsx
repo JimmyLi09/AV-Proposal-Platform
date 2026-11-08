@@ -228,9 +228,14 @@ function ProductForm({ product, fields, isNew, onChange, onRemove, onDone }: {
         </label>
       )}
       {fields.map((f) => (
-        <label key={f.name}>
+        <label key={f.name} className={f.type === "ratings" ? "wide" : ""}>
           {f.label}
-          <Field def={f} value={product[f.name]} onChange={(v) => set(f.name, v)} />
+          {f.type === "ratings" ? (
+            <RatingsInput sizes={(product.cabinet_sizes_mm as number[][] | null) ?? []} value={product[f.name] as Ratings | null}
+              onChange={(v) => set(f.name, v)} />
+          ) : (
+            <Field def={f} value={product[f.name]} onChange={(v) => set(f.name, v)} />
+          )}
         </label>
       ))}
       <div className="row wide">
@@ -298,4 +303,36 @@ function Field({ def, value, onChange }: { def: FieldDef; value: unknown; onChan
     default:
       return <input aria-label={def.label} value={(value as string) ?? ""} onChange={(e) => onChange(e.target.value)} />;
   }
+}
+
+type Ratings = Record<string, { a: number | null; w: number | null; sample: boolean }>;
+
+/** 箱体每种尺寸的最大电流 / 功率（CR-10，规格书）：F5 按 Σ 箱数 × 最大功率，F6 按最大单箱电流算每回路带几箱。 */
+function RatingsInput({ sizes, value, onChange }: { sizes: number[][]; value: Ratings | null; onChange: (v: Ratings) => void }) {
+  const all = value ?? {};
+  const set = (key: string, patch: Partial<Ratings[string]>) =>
+    onChange({ ...all, [key]: { ...(all[key] ?? { a: null, w: null, sample: true }), ...patch } });
+  const num = (s: string) => (s === "" ? null : Number(s));
+  if (!sizes.length) return <span className="muted small">{t("products.ratings.noSizes")}</span>;
+  return (
+    <span className="ratings">
+      {sizes.map(([w, h]) => {
+        const key = `${w}x${h}`;
+        const r = all[key] ?? { a: null, w: null, sample: true };
+        return (
+          <span key={key} className={`row tight ${r.sample ? "st-sample" : ""}`}>
+            <b>{w} × {h}</b>
+            <input type="number" step="any" className="num" aria-label={t("products.ratings.amps", { size: key })} value={r.a ?? ""}
+              onChange={(e) => set(key, { a: num(e.target.value) })} /> A
+            <input type="number" step="any" className="num" aria-label={t("products.ratings.watts", { size: key })} value={r.w ?? ""}
+              onChange={(e) => set(key, { w: num(e.target.value) })} /> W
+            <label className="row tight check">
+              <input type="checkbox" checked={r.sample} onChange={(e) => set(key, { sample: e.target.checked })} />
+              {t("products.ratings.sample")}
+            </label>
+          </span>
+        );
+      })}
+    </span>
+  );
 }

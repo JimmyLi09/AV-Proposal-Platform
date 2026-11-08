@@ -12,7 +12,10 @@ from app.rules import multiface
 from app.rules.engine import calculate, load_seed
 
 CASES = json.loads((Path(__file__).parent / "fixtures" / "regression_cases.json").read_text(encoding="utf-8"))
-LED_RULES, LED_SAMPLE = load_seed("LED")
+_, LED_SAMPLE = load_seed("LED")
+# GMC / Digital Cube 的金标准是按规则集 v1.4 算的（功率按面积、每回路 2.5 kW、每根网线 560,000 px）。CR-10 改了这三条算法，
+# 这两个用例还没按新算法重新定金标准（待 Jimmy 确认），所以多面屏的 LED 测试用 CR-10 之前的规则集（多面屏的 S1–S7 不受影响）
+LED_RULES = json.loads((Path(__file__).parent / "fixtures" / "rules_led_v1_5.json").read_text(encoding="utf-8"))
 PJ_RULES, PJ_SAMPLE = load_seed("PJ")
 
 

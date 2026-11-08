@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, InputDef, KbReference, Param, RuleContent, RuleVersion, RunResult, send } from "./api";
-import { Choices, InputsForm, nextVersion, ResultsTable, STATUSES, StatusChip } from "./Calc";
+import { Choices, InputsForm, nextVersion, optionLabel, ResultsTable, STATUSES, StatusChip } from "./Calc";
 import { t, tOr } from "./i18n";
 import { fmtDate, LineTabs } from "./labels";
 
@@ -203,10 +203,24 @@ export default function Rules({ line }: { line: string }) {
 function ParamRow({ p, L, changed, onChange }: { p: Param; L: (s?: string) => string; changed: boolean; onChange: (p: Param) => void }) {
   return (
     <tr className={changed ? "changed" : ""}>
-      <td>{L(p.label)}</td>
       <td>
-        <input type="number" step="any" aria-label={L(p.label)} className="num" value={p.value ?? ""}
-          onChange={(e) => onChange({ ...p, value: e.target.value === "" ? null : Number(e.target.value) })} />{" "}
+        {L(p.label)}
+        {p.source && <div className={`small ${p.status === "set" ? "muted" : "warn"}`}>{L(p.source)}</div>}
+      </td>
+      <td>
+        {p.options ? (
+          <select aria-label={L(p.label)} value={String(p.value)}
+            onChange={(e) => onChange({ ...p, value: p.options!.find((o) => String(o) === e.target.value) ?? null })}>
+            {p.options.map((o) => (
+              <option key={String(o)} value={String(o)}>
+                {typeof o === "string" ? optionLabel(o) : o}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input type="number" step="any" aria-label={L(p.label)} className="num" value={p.value ?? ""}
+            onChange={(e) => onChange({ ...p, value: e.target.value === "" ? null : Number(e.target.value) })} />
+        )}{" "}
         <span className="muted">{L(p.unit)}</span>
       </td>
       <td>

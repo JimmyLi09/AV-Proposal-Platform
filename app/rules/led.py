@@ -4,6 +4,7 @@ from decimal import Decimal
 
 from ..i18n import text, tr
 from ..products.library import active, load_reference, name
+from . import wiring
 from .expr import fmt
 
 
@@ -51,14 +52,62 @@ def cabinet_layout(ctx: dict, catalog: dict) -> dict:
     cols = ctx["width_mm"] / w
     used = [(c, h) for c, (_, h) in zip(counts, sizes) if c]
     total = cols * sum(counts)
+    outputs = {
+        "cabinets": total,
+        "layout": " + ".join(f"{_n(cols * c)} x {_n(w)}x{_n(h)}" for c, h in used),
+        "cabinet_counts": [[w, h, cols * c] for c, h in used],
+    }
+    trace = (f"cols {_n(cols)} × {_n(w)} · rows " + " + ".join(f"{c} × {_n(h)}" for c, h in used)
+             + " → " + " + ".join(_n(cols * c) for c, _ in used))
+    # CR-10：每种箱体尺寸的最大功率 / 电流（产品库）。F5 用 Σ 箱数 × 最大功率，F6 用最大的单箱电流
+    ratings = (catalog.get("cabinet") or {}).get("max") or {}
+    rated = [(cols * c, ratings.get(wiring.size_key(w, h)) or {}) for c, h in used]
+    outputs["cabinets_w"] = (sum((n * Decimal(str(r["w"])) for n, r in rated), Decimal(0))
+                             if all(r.get("w") for _, r in rated) else Decimal(0))
+    if all(r.get("a") for _, r in rated):
+        outputs["cabinet_max_a"] = max(Decimal(str(r["a"])) for _, r in rated)
+        trace += f" · Σ {_n(outputs['cabinets_w'])} W · max {_n(outputs['cabinet_max_a'])} A"
+    return {"outputs": outputs, "trace": trace, "sample": any(r.get("sample") for _, r in rated)}
+
+
+ROUTES = {"S": lambda: tr("S 形", "S path"), "straight": lambda: tr("直走", "straight")}
+GROUPING = {"rows": lambda: tr("按行整行", "whole rows"), "count": lambda: tr("按箱数", "by cabinet count")}
+
+
+def wiring_layout(ctx: dict, catalog: dict) -> dict:
+    """W1 接线布置（CR-10 / CR-11）：电源按 F6 回路数连续平均分组，网线按行整行或按箱数装；逐组检查带载。"""
+    ratings = (catalog.get("cabinet") or {}).get("max") or {}
+    p = wiring.plan(ctx["width_mm"], ctx["cabinet_counts"], ctx["pixel_pitch_mm"], ratings, ctx["circuits"], ctx)
+    usable, chain, cap = ctx["usable_a"], ctx["chain_max"], ctx["px_per_data_cable"]
+    problems = []
+    for g in p["power"]:
+        if g["over_a"]:
+            problems.append(tr(f"回路 {g['no']} 电流 {_n(g['amps'])} A > 可用 {_n(usable)} A",
+                               f"Circuit {g['no']}: {_n(g['amps'])} A > usable {_n(usable)} A"))
+        if g["over_chain"]:
+            problems.append(tr(f"回路 {g['no']} 串接 {len(g['cabinets'])} 箱 > 上限 {_n(chain)}",
+                               f"Circuit {g['no']}: {len(g['cabinets'])} cabinets in a chain > limit {_n(chain)}"))
+    for g in p["data"]:
+        if g["over"]:
+            problems.append(tr(f"网口 {g['no']} {fmt(g['px'])} px > {fmt(cap)} px",
+                               f"Port {g['no']}: {fmt(g['px'])} px > {fmt(cap)} px"))
+    power, data = [len(g["cabinets"]) for g in p["power"]], [len(g["cabinets"]) for g in p["data"]]
+    sizes = lambda xs: " / ".join(map(str, xs))  # noqa: E731
+    trace = tr(
+        f"电源 {ROUTES[ctx['power_route']]()}：{sizes(power)} 箱，跳线 {p['power_jumpers']} 根 ≈ "
+        f"{wiring.metres(p['power_jumper_mm'])} m；网线{GROUPING[ctx['data_grouping']]()}、{ROUTES[ctx['data_route']]()}："
+        f"{sizes(data)} 箱，跳线 {p['data_jumpers']} 根 ≈ {wiring.metres(p['data_jumper_mm'])} m",
+        f"Power {ROUTES[ctx['power_route']]()}: {sizes(power)} cabinets, {p['power_jumpers']} jumpers ≈ "
+        f"{wiring.metres(p['power_jumper_mm'])} m; data by {GROUPING[ctx['data_grouping']]()}, {ROUTES[ctx['data_route']]()}: "
+        f"{sizes(data)} cabinets, {p['data_jumpers']} jumpers ≈ {wiring.metres(p['data_jumper_mm'])} m")
     return {
-        "outputs": {
-            "cabinets": total,
-            "layout": " + ".join(f"{_n(cols * c)} x {_n(w)}x{_n(h)}" for c, h in used),
-            "cabinet_counts": [[w, h, cols * c] for c, h in used],
-        },
-        "trace": f"cols {_n(cols)} × {_n(w)} · rows " + " + ".join(f"{c} × {_n(h)}" for c, h in used)
-                 + " → " + " + ".join(_n(cols * c) for c, _ in used),
+        "outputs": {"power_group_sizes": power, "data_group_sizes": data, "wiring_data_runs": Decimal(len(data)),
+                    "power_jumpers": Decimal(p["power_jumpers"]), "power_jumper_m": wiring.metres(p["power_jumper_mm"]),
+                    "data_jumpers": Decimal(p["data_jumpers"]), "data_jumper_m": wiring.metres(p["data_jumper_mm"])},
+        "check": "BLOCK" if problems else "PASS",
+        "note": tr("；", "; ").join(problems),
+        "trace": trace,
+        "sample": any((ratings.get(c["size"]) or {}).get("sample") for c in p["cells"]),
     }
 
 
@@ -157,7 +206,12 @@ def processor_pick(ctx: dict, catalog: dict) -> dict:
 # 步骤名 → (函数, 需要的名称, 产出的名称)
 STEPS = {
     "cabinet_layout": (cabinet_layout, ["width_mm", "height_mm", "cabinet_sizes_mm"],
-                       ["cabinets", "layout", "cabinet_counts"]),
+                       ["cabinets", "layout", "cabinet_counts", "cabinets_w", "cabinet_max_a"]),
+    "wiring_layout": (wiring_layout, ["width_mm", "pixel_pitch_mm", "cabinet_counts", "circuits", "usable_a", "chain_max",
+                                      "px_per_data_cable", "data_grouping", "wiring_orientation", "power_route",
+                                      "data_route"],
+                      ["power_group_sizes", "data_group_sizes", "wiring_data_runs", "power_jumpers", "power_jumper_m",
+                       "data_jumpers", "data_jumper_m"]),
     "controller_pick": (controller_pick, ["total_pixels", "data_runs"],
                         ["controller", "controller_id", "controller_qty", "load_mp", "capacity_mp", "ports_used", "ports"]),
     "processor_pick": (processor_pick, ["total_pixels", "data_runs"],
@@ -200,7 +254,7 @@ def catalog(library: dict, cabinet: dict | None) -> dict:
     """规则引擎用到的产品：选定的箱体，以及按首选顺序排好的控制器、视频处理器。"""
     return {
         "cabinet": {"model": name(cabinet), "brightness_nits": cabinet.get("brightness_nits"),
-                    "sample": cabinet.get("sample", False)} if cabinet else {},
+                    "sample": cabinet.get("sample", False), "max": cabinet.get("cabinet_max") or {}} if cabinet else {},
         "controllers": [{"id": c["id"], "model": name(c), "capacity_px": c["capacity_px"], "ports": c["ports"],
                          "sample": c.get("sample", False)}
                         for c in active(library, "controller") if c.get("capacity_px") and c.get("ports")],

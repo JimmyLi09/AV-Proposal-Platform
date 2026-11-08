@@ -1,7 +1,7 @@
 {
   "_note": "Golden cases. The rules engine must reproduce every 'expect' value. Values marked sample:true come from sample constants and will change when Jimmy fills the checklists — update the fixture together with the constant, never silently.",
   "led_royal_plaza": {
-    "source": "143-Royal Plaza LED-1 (prototype example, numbers corrected 2026-10)",
+    "source": "143-Royal Plaza LED-1 (prototype example, numbers corrected 2026-10); CR-10 load budget 2026-11-08 (former cr10_expect merged into expect)",
     "rules_version": "v1.3",
     "input": {
       "environment": "indoor",
@@ -33,12 +33,35 @@
     },
     "constants": {
       "w_per_m2_indoor": 500,
-      "circuit_kw": 2.5,
-      "px_per_data_cable": 560000,
+      "px_per_data_cable": 655360,
       "spare_module_ratio": 0.05,
       "spare_module_min": 2,
       "circuits_per_db_box": 4,
-      "viewing_m_per_mm": 1.0
+      "viewing_m_per_mm": 1.0,
+      "mcb_a": 20,
+      "mains_v": 230,
+      "load_factor": 0.85,
+      "power_cable_mm2": 2.5,
+      "cable_ampacity_a": {
+        "1.5": 16,
+        "2.5": 20,
+        "4": 27
+      },
+      "cable_ampacity_sample": true,
+      "chain_max": 10,
+      "cabinet_max": {
+        "640x480": {
+          "a": 0.96,
+          "w": 120
+        },
+        "640x640": {
+          "a": 0.96,
+          "w": 200
+        }
+      },
+      "wiring_orientation": "row",
+      "power_route": "S",
+      "data_route": "straight"
     },
     "expect": {
       "F1_area_m2": 11.47,
@@ -53,65 +76,6 @@
         1792,
         1024
       ],
-      "F5_power_kw": 5.73,
-      "F6_circuits": 3,
-      "F7_power_cables": 4,
-      "F9_data_cables": 5,
-      "F10_spare_modules": 12,
-      "F11_controller": {
-        "model": "Sample SC-4",
-        "qty": 1,
-        "load_mp": 1.84,
-        "capacity_mp": 2.3,
-        "ports_used": 4,
-        "ports": 4,
-        "check": "PASS",
-        "note": "all ports used, spare cable has no spare port"
-      },
-      "F12_db_box": 1,
-      "F14_viewing_check": "PASS",
-      "F15_brightness_check": {
-        "result": "PASS",
-        "sample": true
-      }
-    },
-    "size_snapping_case": {
-      "input_width_mm": 4500,
-      "expect_options_mm": [
-        4480,
-        4800
-      ],
-      "expect_error": false
-    },
-    "cr10_expect": {
-      "_note": "CR-10/11 (2026-11-08). When CR-10 lands, these replace expect.F5_power_kw / F6_circuits / F7_power_cables / F9_data_cables / F11 and constants.circuit_kw / px_per_data_cable. Cabinet values from G:\\Works\\LED Projects\\Specs spec sheets.",
-      "constants": {
-        "mcb_a": 20,
-        "mains_v": 230,
-        "load_factor": 0.85,
-        "power_cable_mm2": 2.5,
-        "cable_ampacity_a": {
-          "1.5": 16,
-          "2.5": 20,
-          "4": 27
-        },
-        "cable_ampacity_sample": true,
-        "chain_max": 10,
-        "px_per_data_cable": 655360,
-        "cabinet_max": {
-          "640x480": {
-            "a": 0.96,
-            "w": 120
-          },
-          "640x640": {
-            "a": 0.96,
-            "w": 200
-          }
-        },
-        "wiring_orientation": "row",
-        "power_route": "S",
-        "data_route": "straight"
-      },
       "F5_power_kw": 4.76,
       "F6_trace": {
         "rated_a": 20,
@@ -122,7 +86,6 @@
       },
       "F6_circuits": 4,
       "F7_power_cables": 5,
-      "F12_db_box": 1,
       "W1_power_groups_cabinets": [
         9,
         9,
@@ -168,6 +131,24 @@
           }
         }
       },
+      "F10_spare_modules": 12,
+      "F12_db_box": 1,
+      "F14_viewing_check": "PASS",
+      "F15_brightness_check": {
+        "result": "PASS",
+        "sample": true
+      }
+    },
+    "size_snapping_case": {
+      "input_width_mm": 4500,
+      "expect_options_mm": [
+        4480,
+        4800
+      ],
+      "expect_error": false
+    },
+    "data_grouping_default": {
+      "value": "rows",
       "pending": "data_grouping default (rows vs count) to be confirmed by Jimmy; seed default = rows"
     }
   },
