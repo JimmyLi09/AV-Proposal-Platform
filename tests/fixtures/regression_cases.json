@@ -656,7 +656,7 @@
     }
   },
   "led_royal_plaza_boq": {
-    "source": "CR-6 client BOQ format for 143-Royal Plaza",
+    "source": "CR-6 client BOQ format for 143-Royal Plaza; CR-13 (2026-11-08): Power distribution and cabling spec lines from W1 / F6 / F7 / F9",
     "expect_lines": [
       [
         "P2.5 Indoor LED screen on wall 4480 × 2560 mm",
@@ -702,7 +702,15 @@
       "Aspect ratio",
       "Spares"
     ],
-    "no_prices": true
+    "no_prices": true,
+    "data_grouping": "count (SC-4 passes so the 7 golden lines hold; with the default rows F11 blocks, see led_royal_plaza)",
+    "power_cabling_specs": [
+      "DB box with 20 A single-phase MCB × 4 circuits",
+      "3-core 2.5 mm² power cable × 5 (4 + 1 spare)",
+      "Power jumper cables between cabinets × 31 (≈ 19.3 m)",
+      "CAT6 data cable × 4 (3 + 1 spare)",
+      "Data jumper cables between cabinets × 32 (≈ 35.3 m)"
+    ]
   },
   "led_wiring_28_cabinets": {
     "source": "CR-11 prototype FlowV2 05 (2026-11-08): 4480 × 2560, P2.5, all 640×640 cabinets (7 × 4)",
@@ -794,7 +802,14 @@
         "ports_used": 4,
         "ports": 4,
         "check": "PASS"
-      }
+      },
+      "boq_power_cabling_specs": [
+        "DB box with 20 A single-phase MCB × 3 circuits",
+        "3-core 2.5 mm² power cable × 4 (3 + 1 spare)",
+        "Power jumper cables between cabinets × 25 (≈ 16.0 m)",
+        "CAT6 data cable × 5 (4 + 1 spare)",
+        "Data jumper cables between cabinets × 24 (≈ 15.4 m)"
+      ]
     },
     "behaviour": [
       {

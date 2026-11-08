@@ -183,6 +183,8 @@ def calculate_led(content: dict, library: dict, inputs: dict, cabinet_id: str | 
          "power_kw": float(total("power_kw")), "circuits": int(total("circuits")),
          "power_cables": int(total("power_cables")), "db_boxes": int(total("db_boxes")),
          "data_runs": int(total("data_runs")), "data_cables": int(total("data_cables")),
+         "power_jumpers": int(total("power_jumpers")), "power_jumper_m": float(total("power_jumper_m")),
+         "data_jumpers": int(total("data_jumpers")), "data_jumper_m": float(total("data_jumper_m")),
          "spare_modules": spares.get("spare_modules"), "spare_psu": spares.get("spare_psu"),
          "spare_rx_cards": spares.get("spare_rx_cards"), "processor_outputs": len(faces)}
     out["multi"]["totals"] = t
@@ -266,9 +268,11 @@ def calculate_led(content: dict, library: dict, inputs: dict, cabinet_id: str | 
     rows.append(_row("S7", tr("资料一致性", "Source consistency"),
                      tr(f"{len(s7)} 条提示", f"{len(s7)} notes") if s7 else tr("一致", "Consistent"), _worst(s7) or "PASS"))
     out["rules"] = rows
-    out["values"] = L.boq_context({k: v for k, v in t.items() if not isinstance(v, list)}, cab, common | pinputs)
+    params = {p["name"]: p["value"] for p in content["params"] if p["name"] in L.BOQ_EXTRA}  # 空开、线径（CR-13）
+    out["values"] = L.boq_context({k: v for k, v in t.items() if not isinstance(v, list)}, cab, common | pinputs | params)
     for f in out["faces"]:  # 客户版 BOQ 按面分组用
-        f["boq_context"] = L.boq_context(f["values"], cab, common | {"width_mm": f["width_mm"], "height_mm": f["height_mm"]})
+        f["boq_context"] = L.boq_context(f["values"], cab, common | params | {"width_mm": f["width_mm"],
+                                                                              "height_mm": f["height_mm"]})
     out["boq"] = _led_boq(out["faces"], cab, library, spares)
     return out
 

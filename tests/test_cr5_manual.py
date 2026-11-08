@@ -75,8 +75,11 @@ def test_override_needs_a_reason_and_is_listed_for_review(client):
     assert m["at"]
     # 客户版 BOQ 用手动值
     cabling = next(r for r in v["boq"]["rows"] if r["key"] == "power_cabling")
-    assert cabling["specs"] == ["DB box with MCB × 5 circuits",
-                                "Power cables 5 + 1 spare, data cables CAT6 3 + 1 spare"]
+    assert cabling["specs"] == ["DB box with 20 A single-phase MCB × 5 circuits",
+                                "3-core 2.5 mm² power cable × 6 (5 + 1 spare)",
+                                "Power jumper cables between cabinets × 30 (≈ 19.2 m)",  # W1 按手动 5 路分组（CR-13）
+                                "CAT6 data cable × 4 (3 + 1 spare)",
+                                "Data jumper cables between cabinets × 32 (≈ 35.3 m)"]
     # 示意图、图纸用手动值并标手动；W1 按手动回路数分组，图上就是 5 路（CR-11）
     power = next(x for x in v["result"]["diagram"]["links"] if x["boq"] == "power_cable")
     assert power["qty"] == "5 + 1 备用" and power["manual"]

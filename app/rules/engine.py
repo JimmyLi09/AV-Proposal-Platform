@@ -39,6 +39,12 @@ def value_names(content: dict) -> set[str]:
     return out | set(line["boq_extra"])
 
 
+def boq_params(content: dict) -> dict:
+    """客户版 BOQ 要写的规则参数（例如 LED 的空开 A 数、电源线线径，CR-13）。"""
+    extra = LINES[content["business_line"]]["boq_extra"]
+    return {p["name"]: p["value"] for p in content["params"] if p["name"] in extra}
+
+
 def display_text(content: dict) -> dict[str, str]:
     """规则集里标签、分组、标题、说明、单位在当前界面语言下的写法（CR-4）。规则页按这个显示，保存时内容原样不变。"""
     out = {}
@@ -264,7 +270,7 @@ def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None
     out["manual"] = sorted(manual)
     out["recommendation"] = rec
     out["boq"] = line["boq"](values, rec["cabinet"], inputs, library, manual)
-    out["values"] = line["boq_context"](values, rec["cabinet"], inputs)
+    out["values"] = line["boq_context"](values, rec["cabinet"], inputs | boq_params(content))
     out["suggestions"] = line["suggest"](values, inputs, library)
     out["diagram"] = line["diagram"](values, out["boq"], inputs, rec["cabinet"], library, out["suggestions"], manual)
     if out["diagram"]:
