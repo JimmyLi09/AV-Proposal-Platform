@@ -740,6 +740,11 @@
     "lockedNote": "这个 Rev 在审核中或已批准，不能修改；在「审核导出」里退回或开新 Rev。",
     "missing": "缺少输入：{names}，补齐后才能从产品库选箱体。",
     "model": "型号",
+    "nav": {
+      "back": "← 返回：{name}",
+      "next": "下一步：{name} →",
+      "overloaded": "{n} 个回路 / 网线超出带载，先加回路或改参数"
+    },
     "noDiagram": "先选定箱体并算出箱体数，才能生成示意图。",
     "noDiagramMulti": "多面屏的示意图下一步做；先看推荐页的按面结果和 BOQ。",
     "noDrawing": "先选定箱体并算出箱体数、回路和网线，才能出图。",
@@ -757,7 +762,8 @@
       "diagram": "示意图",
       "drawing": "图纸",
       "rec": "推荐",
-      "review": "审核导出"
+      "review": "审核导出",
+      "sheets": "图纸与标注"
     },
     "verdict": "结论",
     "versions": "按规则 {rules}、产品库 {library}、模板 {template} 计算"

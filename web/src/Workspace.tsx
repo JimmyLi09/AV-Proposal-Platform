@@ -63,7 +63,18 @@ export default function Workspace({ id }: { id: number }) {
     setInputs(next);
     saveInputs(rev.cabinet_id, next);
   };
-  const tabs = ["rec", "calc", "diagram", "boq", "annotate", ...(line === "LED" && !multi ? ["drawing"] : []), "review"];
+  // 步骤顺序（CR-12）：推荐 → 计算依据 → 示意图 → 图纸与标注（图纸、标注两个子页签）→ 工程量清单 → 审核导出
+  const hasDrawing = line === "LED" && !multi;
+  const sheets = hasDrawing ? ["drawing", "annotate"] : ["annotate"];
+  const tabs = ["rec", "calc", "diagram", "sheets", "boq", "review"];
+  const topOf = (k: string) => (sheets.includes(k) ? "sheets" : k);
+  const prevOf: Record<string, string> = { calc: "rec", diagram: "calc", drawing: "rec", annotate: hasDrawing ? "drawing" : "diagram",
+    boq: "annotate", review: "boq" };
+  const nextOf: Record<string, string> = { rec: "calc", calc: "diagram", diagram: sheets[0], drawing: "annotate", annotate: "boq",
+    boq: "review" };
+  // W1 / 图纸有超载时，图纸之后的「下一步」变灰，旁边写原因
+  const overloaded = view.drawing ? view.drawing.circuits.filter((c) => c.over).length + view.drawing.cables.filter((c) => c.over).length : 0;
+  const stop = overloaded && ["drawing", "annotate", "boq"].includes(tab) ? t("ws.nav.overloaded", { n: overloaded }) : "";
   const readonly = view.readonly;
   const openRev = (n: number | null) => (n === revNo ? apply(api<WorkspaceView>(path)) : setRevNo(n));
 
@@ -98,11 +109,20 @@ export default function Workspace({ id }: { id: number }) {
         <>
           <div className="row">
             {tabs.map((k) => (
-              <button key={k} className={`pill ${tab === k ? "active" : ""}`} onClick={() => setTab(k)}>
-                {t(`ws.tabs.${k}`)}
+              <button key={k} className={`pill ${topOf(tab) === k ? "active" : ""}`} onClick={() => setTab(k === "sheets" ? sheets[0] : k)}>
+                {k === "sheets" && !hasDrawing ? t("ws.tabs.annotate") : t(`ws.tabs.${k}`)}
               </button>
             ))}
           </div>
+          {topOf(tab) === "sheets" && hasDrawing && (
+            <div className="row tight subtabs">
+              {sheets.map((k) => (
+                <button key={k} className={`pill small ${tab === k ? "active" : ""}`} onClick={() => setTab(k)}>
+                  {t(`ws.tabs.${k}`)}
+                </button>
+              ))}
+            </div>
+          )}
           <fieldset className="plain-fieldset" disabled={readonly && tab !== "review"}>
           {tab === "rec" && (multi ? <MultiView view={view} onUse={useSource} />
             : <>
@@ -126,6 +146,7 @@ export default function Workspace({ id }: { id: number }) {
             : <section className="card"><p className="muted">{t("ws.noDrawing")}</p></section>)}
           {tab === "review" && <ReviewTab view={view} onApply={apply} onOpenRev={openRev} />}
           </fieldset>
+          <StepNav prev={prevOf[tab]} next={nextOf[tab]} stop={stop} onGo={(k) => { setTab(k); window.scrollTo(0, 0); }} />
         </>
       )}
     </>
@@ -375,5 +396,25 @@ function Suggestions({ items, onAdded }: { items: Suggestion[]; onAdded: () => v
       </div>
       {error && <p className="error">{error}</p>}
     </section>
+  );
+}
+
+/** 每个页签底部的「← 返回：上一步 / 下一步：下一步 →」（CR-12）。不能往下走时「下一步」变灰，左边写原因。 */
+function StepNav({ prev, next, stop, onGo }: { prev?: string; next?: string; stop: string; onGo: (k: string) => void }) {
+  return (
+    <div className="row step-nav">
+      {prev && (
+        <button className="btn-outline" onClick={() => onGo(prev)}>
+          {t("ws.nav.back", { name: t(`ws.tabs.${prev}`) })}
+        </button>
+      )}
+      <span className="grow" />
+      {next && stop && <span className="warn small">🔒 {stop}</span>}
+      {next && (
+        <button className="btn-primary" disabled={!!stop} onClick={() => onGo(next)}>
+          {t("ws.nav.next", { name: t(`ws.tabs.${next}`) })}
+        </button>
+      )}
+    </div>
   );
 }
