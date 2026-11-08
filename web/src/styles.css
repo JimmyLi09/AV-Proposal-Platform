@@ -225,3 +225,8 @@ a.file-link { display: inline-block; margin-right: 10px; }
 .budget-rule .manual { color: #9a4a12; }
 .wiring-wrap svg { max-width: 100%; height: auto; }
 .wiring-wrap.hide-power .layer-power, .wiring-wrap.hide-data .layer-data { display: none; }
+
+/* 步骤顺序与底部按钮（CR-12） */
+.subtabs { margin: -4px 0 8px 12px; }
+.pill.small { padding: 3px 10px; font-size: 13px; }
+.step-nav { margin: 12px 0 24px; padding-top: 12px; border-top: 1px solid var(--line); }
