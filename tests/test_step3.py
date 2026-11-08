@@ -153,6 +153,8 @@ def test_library_edit_makes_new_version_and_controller_block(client):
     r = client.post("/api/products/LED", json={"base_id": lib["id"], "reason": "按规格书更正带载", "content": content})
     assert r.status_code == 201 and r.json()["version"] == "v1.1"
     v = client.get(f"/api/proposals/{client.proposal}").json()
+    assert v["library_version"] == "v1.0" and v["flow"]["upgrades"] == {"library": "v1.1"}  # 建项时绑定（CR-9），手动升级
+    v = client.post(f"/api/proposals/{client.proposal}/upgrade", json={"parts": ["library"]}).json()
     assert v["library_version"] == "v1.1"
     assert rules_by_id(v["result"])["F11"]["check"] == "BLOCK"
 

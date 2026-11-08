@@ -26,3 +26,10 @@ def count_content(content: dict) -> dict:
     content = copy.deepcopy(content)
     next(p for p in content["params"] if p["name"] == "data_grouping")["value"] = "count"
     return content
+
+
+def official(client, base: str, step: str = "05") -> dict:
+    """CR-9：在 05（或 06）点「下一步」，把草稿保存为正式版本（只有正式版本能提交审批）。"""
+    r = client.post(f"{base}/next", json={"step": step, "save": True})
+    assert r.status_code == 200, r.text
+    return r.json()

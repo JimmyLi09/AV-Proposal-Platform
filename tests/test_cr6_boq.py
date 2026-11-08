@@ -141,10 +141,10 @@ def test_add_line_is_numbered_and_listed_as_manual(client):
 def test_boq_excel_export(client):
     save(client, {"rows": {"power_cabling": {"qty": 2, "reason": "两个配电点"}}})
     r = client.get(f"/api/proposals/{client.proposal}/boq.xlsx")
-    assert r.status_code == 200 and "BOQ_Rev0.xlsx" in r.headers["content-disposition"]
+    assert r.status_code == 200 and "BOQ_Rev1.xlsx" in r.headers["content-disposition"]
     wb = load_workbook(io.BytesIO(r.content))
     rows = list(wb["BOQ"].iter_rows(values_only=True))
-    assert rows[2][0] == "DRAFT · Rev 0 · Rules v1.3 · Product library v1.0 · Template v1.0"
+    assert rows[2][0] == "DRAFT · Rev 1 · Rules v1.3 · Product library v1.0 · Template v1.0"
     assert rows[4] == ("No.", "Description", "Qty", "Unit")
     assert rows[5][1] == "LED-1 Lobby"
     items = [r for r in rows[6:] if r[0]]
@@ -164,6 +164,8 @@ def test_template_edit_makes_new_version_used_by_boq(client):
     r = client.post("/api/templates/LED", json={"base_id": t["id"], "reason": "改成播放电脑", "content": content})
     assert r.status_code == 201 and r.json()["version"] == "v1.1"
     v = client.get(f"/api/proposals/{client.proposal}").json()
+    assert v["template_version"] == "v1.0" and v["flow"]["upgrades"] == {"template": "v1.1"}  # 建项时绑定（CR-9）
+    v = client.post(f"/api/proposals/{client.proposal}/upgrade", json={"parts": ["template"]}).json()
     assert v["template_version"] == "v1.1" and v["boq"]["rows"][3]["title"] == "Media player PC"
 
     assert client.post("/api/templates/LED", json={"base_id": t["id"], "reason": "x", "content": content}).status_code == 409

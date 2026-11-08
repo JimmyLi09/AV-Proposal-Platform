@@ -102,7 +102,7 @@ def test_manual_adjustment_is_saved_with_the_rev_and_reset(client):
 
 def test_dxf_layers_units_and_measurable_dimensions(client):
     r = get(client, "drawing.dxf")
-    assert "Drawing_Rev0_DRAFT.dxf" in r.headers["content-disposition"]
+    assert "Drawing_Rev1_DRAFT.dxf" in r.headers["content-disposition"]
     doc = ezdxf.read(io.StringIO(r.content.decode("utf-8")))
     assert doc.header["$INSUNITS"] == 4  # mm，1:1
     layers = {l.dxf.name for l in doc.layers}
@@ -124,11 +124,11 @@ def test_svg_excel_and_pdf_exports(client):
     rows = list(wb["Cabinets"].iter_rows(values_only=True))
     assert rows[3][:6] == ("ID", "Size 尺寸", "Circuit 回路", "Data cable 网线", "Row 行", "Column 列")
     assert len(rows) == 4 + 35 and rows[4][:6] == ("R1C1", "A 640 × 480", 1, 5, 1, 1)  # 最下一行是第 5 根网线
-    assert wb.properties.keywords == "Rev 0 · 规则 v1.3 · 产品库 v1.0 · DRAFT"
+    assert wb.properties.keywords == "Rev 1 · 规则 v1.3 · 产品库 v1.0 · DRAFT"
     en = load_workbook(io.BytesIO(get(client, "cabinets.xlsx?lang=en").content))
-    assert en.properties.keywords == "Rev 0 · Rules v1.3 · Product library v1.0 · DRAFT"
-    for lang, name, stamp in (("zh", "%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88", "Rev 0 · 规则 v1.3 · 产品库 v1.0 · DRAFT"),
-                              ("en", "Technical", "Rev 0 · Rules v1.3 · Product library v1.0 · DRAFT")):
+    assert en.properties.keywords == "Rev 1 · Rules v1.3 · Product library v1.0 · DRAFT"
+    for lang, name, stamp in (("zh", "%E6%8A%80%E6%9C%AF%E6%96%B9%E6%A1%88", "Rev 1 · 规则 v1.3 · 产品库 v1.0 · DRAFT"),
+                              ("en", "Technical", "Rev 1 · Rules v1.3 · Product library v1.0 · DRAFT")):
         r = get(client, f"drawing.pdf?lang={lang}")
         assert r.content[:5] == b"%PDF-" and name in r.headers["content-disposition"]
         meta = PdfReader(io.BytesIO(r.content)).metadata
@@ -161,5 +161,5 @@ def test_dwg_is_converted_from_the_dxf_when_oda_is_installed(tmp_path):
         c.put(f"/api/proposals/{prop}/inputs", json={"inputs": SAMPLE["input"]})
         assert c.get("/api/capabilities").json() == {"dwg": True}
         r = c.get(f"/api/proposals/{prop}/drawing.dwg")
-        assert r.status_code == 200 and "Drawing_Rev0_DRAFT.dwg" in r.headers["content-disposition"]
+        assert r.status_code == 200 and "Drawing_Rev1_DRAFT.dwg" in r.headers["content-disposition"]
         assert b"AVP-CABINET" in r.content

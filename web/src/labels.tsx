@@ -31,6 +31,12 @@ export function fmtDate(iso: string) {
   return new Date(iso).toLocaleDateString(lang() === "zh" ? "zh-CN" : "en-GB", { day: "numeric", month: "short", year: "numeric" });
 }
 
+/** 日期 + 时间（工作台和顶栏的「最近更新」）。 */
+export function fmtDateTime(iso: string) {
+  return new Date(iso).toLocaleString(lang() === "zh" ? "zh-CN" : "en-GB",
+    { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+}
+
 export function fmtSize(bytes: number) {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;

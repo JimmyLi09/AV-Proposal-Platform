@@ -119,7 +119,8 @@ def test_add_suggested_model_to_library_then_recalculate(client):
     assert added["sample"] is True and added["sending"] is True
     assert client.post("/api/products/LED/reference", json={"id": "VX1000"}).status_code == 409
     assert client.post("/api/products/LED/reference", json={"id": "nope"}).status_code == 404
-    v = client.get(f"/api/proposals/{client.proposal}").json()
+    # 在 05 点「加进产品库」后页面接着升级这个方案的产品库（建项时绑定的版本不会自己变，CR-9）
+    v = client.post(f"/api/proposals/{client.proposal}/upgrade", json={"parts": ["library"]}).json()
     assert v["library_version"] == "v1.1" and v["result"]["suggestions"] == []
     rules = {x["id"]: x for x in v["result"]["rules"]}
     assert rules["F13"]["display"] == "1 × NovaStar VX1000"

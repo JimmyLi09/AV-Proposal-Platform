@@ -120,14 +120,15 @@ def test_windows_path_in_filename_stays_inside_data_dir(client):
     assert any(s.name == "_CON.pdf" for s in stored)
 
 
-def test_new_proposal_starts_at_rev0_draft(client):
+def test_new_proposal_starts_at_a_v1_draft(client):
+    """CR-9：新方案从 v1 草稿开始，在 05 / 06 保存为正式版本才算 v1。"""
     login(client)
     p = new_project(client)
     r = client.post(f"/api/projects/{p['id']}/proposals", json={"name": "LED-1 Lobby", "business_line": "LED"})
     assert r.status_code == 201
     assert r.json() | {"id": 0, "created_at": ""} == {
         "id": 0, "name": "LED-1 Lobby", "business_line": "LED", "mode": "A",
-        "rev_no": 0, "status": "draft", "author": "Jimmy", "created_at": "",
+        "rev_no": 1, "status": "draft", "author": "Jimmy", "created_at": "", "reached": 1,
     }
     bad = client.post(f"/api/projects/{p['id']}/proposals", json={"name": "X", "business_line": "CCTV"})
     assert bad.status_code == 422

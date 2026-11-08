@@ -187,7 +187,7 @@ def save_annotation(proposal_id: int, body: AnnotationIn, request: Request, user
                     db: Session = Depends(get_db)):
     state = request.app.state
     prop = get_proposal(db, proposal_id)
-    rev = editable(prop)
+    rev = editable(db, prop, user)
     f = annotatable(db, state, prop, body.file_id, body.page)
     key = f"{f.id}:{body.page}"
     docs = dict(rev.annotations or {})

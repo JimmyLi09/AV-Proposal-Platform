@@ -236,6 +236,7 @@ def _run_rule(rule, ctx, status, params, catalog, steps, overrides) -> dict:
     result["params"] = [{"name": n, "label": text(params[n]["label"]), "value": params[n]["value"],
                          "unit": unit(params[n]["unit"]), "status": params[n]["status"],
                          "source": text(params[n].get("source", ""))}
+                        | ({"options": params[n]["options"]} if params[n].get("options") else {})  # 方案配置页可直接改（CR-9）
                         for n in sorted(used) if n in params]
     return result
 

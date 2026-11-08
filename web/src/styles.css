@@ -227,6 +227,38 @@ a.file-link { display: inline-block; margin-right: 10px; }
 .wiring-wrap.hide-power .layer-power, .wiring-wrap.hide-data .layer-data { display: none; }
 
 /* 步骤顺序与底部按钮（CR-12） */
-.subtabs { margin: -4px 0 8px 12px; }
 .pill.small { padding: 3px 10px; font-size: 13px; }
 .step-nav { margin: 12px 0 24px; padding-top: 12px; border-top: 1px solid var(--line); }
+
+/* AV 工作台与方案流程 01 → 07（CR-9） */
+.stages { display: flex; flex-wrap: wrap; gap: 10px; }
+.stage-card {
+  flex: 1 1 160px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left;
+  padding: 10px 14px; border-radius: 10px; border: 1px solid var(--line); background: #fff; cursor: pointer;
+}
+.stage-card b { font-size: 22px; color: var(--navy); }
+.stage-card.active { background: #eaf0fa; border: 2px solid var(--blue); }
+.bar { display: flex; gap: 3px; min-width: 120px; }
+.bar span { flex: 1; height: 8px; border-radius: 4px; background: var(--line); }
+.bar span.done { background: #2e7d4f; }
+.bar span.now { background: var(--blue); }
+.ok { color: #2e7d4f; }
+.flow-top { display: flex; flex-direction: column; gap: 4px; }
+.steps { display: flex; flex-wrap: wrap; gap: 8px; }
+.step {
+  flex: 1 1 150px; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left;
+  padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: #fff; color: var(--text); cursor: pointer;
+}
+.step.st-done span { color: #2e7d4f; }
+.step.st-draft { background: #fffbea; border-color: #e8c96a; color: #6b4e00; }
+.step.st-pending span { color: #9a4a12; }
+.step.st-lock { background: var(--chip); color: #9a9385; border: 1px dashed #d9cfbf; cursor: not-allowed; }
+.step.current { background: var(--navy); color: #fff; border-color: var(--navy); }
+.step.current span { color: #fff; }
+.from-04 { padding: 10px 14px; }
+.from-04 .pull { margin-top: 8px; padding: 8px 10px; border-radius: 6px; background: #fff4d6; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.budget li input.num, .budget li select { height: 28px; width: 96px; }
+.modal-back { position: fixed; inset: 0; background: rgba(21, 32, 58, 0.35); display: flex; align-items: center; justify-content: center; z-index: 10; }
+.modal { max-width: 460px; margin: 16px; }
+details.card > summary { cursor: pointer; }
+a.btn-primary, a.btn-outline { display: inline-flex; align-items: center; text-decoration: none; }

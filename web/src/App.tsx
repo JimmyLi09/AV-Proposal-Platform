@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { api, send, User } from "./api";
+import Flow from "./Flow";
 import { Lang, lang as currentLang, setLang, t } from "./i18n";
+import { NewIntake } from "./Intake";
 import Knowledge from "./Knowledge";
 import Login, { roleLabel } from "./Login";
-import ProjectDetail from "./ProjectDetail";
-import Projects from "./Projects";
 import Products from "./Products";
 import Rules from "./Rules";
 import Templates from "./Templates";
-import Workspace from "./Workspace";
+import Workbench from "./Workbench";
 
 function useHash() {
   const [hash, setHash] = useState(location.hash);
@@ -48,8 +48,9 @@ export default function App() {
     setUser(await send<User>("PUT", "/session/lang", { lang: next }));
   }
 
-  const projectId = hash.match(/^#\/projects\/(\d+)/)?.[1];
-  const proposalId = hash.match(/^#\/proposals\/(\d+)/)?.[1];
+  // 方案流程（CR-9）：#/proposals/{id}/{01 | 02-04 | 05 | 06 | 07}，步骤写进 URL，浏览器后退键能用
+  const flow = hash.match(/^#\/proposals\/(\d+)(?:\/([\w-]+))?/);
+  const intake = hash.match(/^#\/new(\/lead)?$/);
   const page = hash.startsWith("#/rules") ? "rules" : hash.startsWith("#/products") ? "products"
     : hash.startsWith("#/templates") ? "templates" : hash.startsWith("#/knowledge") ? "knowledge" : "projects";
   const line = hash.match(/^#\/(?:rules|products|templates)\/(LED|PJ)/)?.[1] ?? "LED"; // 库类页面按业务线分（CR-7）
@@ -99,8 +100,8 @@ export default function App() {
           {page === "rules" ? <Rules key={line} line={line} /> : page === "products" ? <Products key={line} line={line} />
             : page === "templates" ? <Templates key={line} line={line} />
             : page === "knowledge" ? <Knowledge />
-            : proposalId ? <Workspace key={proposalId} id={Number(proposalId)} />
-            : projectId ? <ProjectDetail id={Number(projectId)} /> : <Projects />}
+            : flow ? <Flow key={flow[1]} id={Number(flow[1])} step={flow[2] ?? null} />
+            : intake ? <NewIntake key={hash} lead={!!intake[1]} /> : <Workbench />}
         </main>
       </div>
     </div>

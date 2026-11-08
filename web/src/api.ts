@@ -26,6 +26,7 @@ export type Proposal = {
   status: string;
   author: string;
   created_at: string;
+  reached: number;
 };
 
 export type Project = {
@@ -34,6 +35,7 @@ export type Project = {
   client: string;
   project_no: string | null;
   location: string;
+  delivery: string;
   notes: string;
   owner: User;
   created_at: string;
@@ -41,7 +43,55 @@ export type Project = {
   proposals: Proposal[];
 };
 
-export type ProjectRow = Omit<Project, "files"> & { file_count: number };
+// ---- CR-9：AV 工作台与方案流程 01 → 07 ----
+
+export const STEPS = ["01", "02-04", "05", "06", "07"] as const;
+export type StepKey = (typeof STEPS)[number];
+
+export type WorkbenchRow = {
+  id: number;
+  project_id: number;
+  name: string;
+  project_no: string | null;
+  client: string;
+  lead: boolean;
+  line: "LED" | "PJ";
+  line_label: string;
+  stage: number; // 0 = 01 立项中 … 4 = 07 待审批，5 = 已批准
+  version: string;
+  updated_at: string;
+  updated_by: string | null;
+};
+export type Workbench = { counts: number[]; rows: WorkbenchRow[] };
+
+export type FlowStep = { key: StepKey; state: "done" | "draft" | "pending" | "lock" | "todo"; note: string; why: string };
+export type Flow = {
+  steps: FlowStep[];
+  gates: Record<StepKey, string>; // 这一步点「下一步」走不了的原因（空 = 可以走）
+  reached: number;
+  stage: number;
+  dirty: boolean; // 草稿和最近的正式版本不一样
+  draft: boolean;
+  version: string;
+  next_version: string;
+  formal: number | null;
+  opened: number | null; // 这次修改自动开了 vN 草稿
+  pull: { changed: { name: string; label: string; from: unknown; to: unknown }[]; ready: boolean };
+  upgrades: Partial<Record<"rules" | "library" | "template", string>>;
+  line_label: string;
+  updated: { at: string; by: string | null };
+};
+
+export type ProjectBrief = {
+  id: number;
+  name: string;
+  client: string;
+  project_no: string | null;
+  location: string;
+  delivery: string;
+  notes: string;
+  proposals: { id: number; name: string; business_line: "LED" | "PJ"; line_label: string; version: string }[];
+};
 
 export async function api<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`/api${path}`, { ...init, headers: { ...init?.headers, "X-Lang": lang() } });
@@ -106,7 +156,8 @@ export type RuleResult = {
   trace: string;
   check: string | null;
   status: string;
-  params: { name: string; label: string; value: number | string | null; unit: string; status: string; source?: string }[];
+  params: { name: string; label: string; value: number | string | null; unit: string; status: string; source?: string;
+    options?: (number | string)[] }[];
   missing: string[];
   error: string | null;
   manual: string[];
@@ -272,7 +323,8 @@ export type Candidate = {
 
 export type WorkspaceView = {
   proposal: Proposal;
-  project: { id: number };
+  project: ProjectBrief;
+  flow: Flow;
   rev: {
     rev_no: number;
     status: string;
@@ -325,6 +377,11 @@ export type RevSummary = {
   rev_no: number;
   status: string;
   latest: boolean;
+  draft: boolean; // CR-9：还没保存为正式版本
+  label: string; // v2（草稿）/ v1 已批准 …
+  returned: boolean;
+  saved_by: string | null;
+  saved_at: string | null;
   author: string;
   created_at: string;
   reviewer: string | null;

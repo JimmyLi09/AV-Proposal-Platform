@@ -26,6 +26,15 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
   useEffect(() => setDraft(draftOf(boq)), [boq]);
   const id = view.proposal.id;
   const dirty = JSON.stringify(draft) !== JSON.stringify(draftOf(boq));
+  // 改了数量要写原因、手动添加的行要有名称，齐了才自动保存（CR-9：停止编辑约 1.2 秒后）
+  const ruleQty = Object.fromEntries(boq.rows.map((r) => [r.key, qtyText(r.rule_qty)]));
+  const missingReason = Object.entries(draft.rows).some(([k, r]) => r.qty !== ruleQty[k] && r.qty !== "" && !r.reason.trim());
+  const ready = dirty && !view.readonly && !missingReason && draft.added.every((a) => a.title.trim());
+  useEffect(() => {
+    if (!ready) return;
+    const timer = setTimeout(save, 1200);
+    return () => clearTimeout(timer);
+  }, [draft, ready]);
   const setRow = (key: string, patch: Partial<RowDraft>) => setDraft({ ...draft, rows: { ...draft.rows, [key]: { ...draft.rows[key], ...patch } } });
   const setAdded = (i: number, patch: Partial<AddedDraft>) => setDraft({ ...draft, added: draft.added.map((a, j) => (j === i ? { ...a, ...patch } : a)) });
 
@@ -146,11 +155,8 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
           <button className="btn-outline" onClick={() => setDraft({ ...draft, added: [...draft.added, { key: null, title: "", specs: "", qty: "1", unit: "lot" }] })}>
             {t("boq.addLine")}
           </button>
-          <button className="btn-primary" disabled={!dirty} onClick={save}>
-            {t("common.save")}
-          </button>
           {dirty ? (
-            <span className="muted">{t("boq.saveFirst")}</span>
+            <span className={missingReason ? "warn" : "muted"}>{t(missingReason ? "boq.needReason" : "boq.saving")}</span>
           ) : (
             <a className="btn-outline" href={`/api/proposals/${id}/boq.xlsx${revQuery(view)}`}>
               {t("boq.export")}
