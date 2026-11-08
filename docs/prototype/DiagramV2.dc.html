@@ -51,8 +51,6 @@ a:hover{color:#15203A}
 <a href="Workspace.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">推荐</span><span class="en">Recommendation</span></a>
 <a href="Calculations.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">计算依据</span><span class="en">Calculations</span></a>
 <a href="DiagramV2.dc.html" style="padding: 10px 2px; border-bottom: 3px solid #15203A; color: #15203A; font-weight: 700; text-decoration: none"><span class="zh">示意图</span><span class="en">Diagram</span></a>
-<a href="Annotate.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">标注</span><span class="en">Annotate</span></a>
-<a href="Drawing.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">图纸</span><span class="en">Drawing</span> <span style="padding: 0 6px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-size: 10.5px; font-weight: 700">NEW</span></a>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
@@ -218,7 +216,7 @@ __bi(t) {
     out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
     return out;
   }
-  static get __D() { return {"推荐":"Recommended","余量大，可带多块屏":"Ample headroom, can drive multiple screens","带载约":"Load approx.","口 ·":"ports ·","口":"ports","负载":"Load","· 余量偏小":"· Low headroom","口，剩":"ports, remaining","Sample SP-4 × 1 · 4K 输入":"Sample SP-4 × 1 · 4K input","7 + 1 备用":"7 + 1 spare","+ 1 备用":"+ 1 spare","5 + 1 备用":"5 + 1 spare","产品库里没有一体机，按 F13 + F11 原逻辑配两台。":"No all-in-one unit in product library; configure two units per original F13 + F11 logic.","有":"Yes","台":" units","× 1 · 负载":"× 1 · Load","处理器（待选）":"Processor (to be selected)","待选":"To be selected","Processor· 待选":"Processor· to be selected","F11 发送控制器：已包含在处理器里，BOQ 不再单列控制器。":"F11 Sending controller: included in the processor, no separate controller line in BOQ.","NOTE：负载超过 90 %，余量偏小。":"NOTE: load above 90 %, low headroom.","选一个建议型号并加入产品库后，才能出正式 BOQ。":"Pick a suggested model and add it to the product library before a formal BOQ can be issued."}; }
+  static get __D() { return {"推荐":"Recommended","余量大，可带多块屏":"Ample headroom, can drive multiple screens","带载约":"Load approx.","口 ·":"ports ·","口":"ports","负载":"Load","· 余量偏小":"· Low headroom","口，剩":"ports, remaining","Sample SP-4 × 1 · 4K 输入":"Sample SP-4 × 1 · 4K input","7 + 1 备用":"7 + 1 spare","+ 1 备用":"+ 1 spare","5 + 1 备用":"5 + 1 spare","产品库里没有一体机，按 F13 + F11 原逻辑配两台。":"No all-in-one unit in product library; configure two units per original F13 + F11 logic.","有":"Yes","台":" units","× 1 · 负载":"× 1 · Load","处理器（待选）":"Processor (to be selected)","待选":"To be selected","Processor· 待选":"Processor· to be selected","F11 发送控制器：已包含在处理器里，BOQ 不再单列控制器。":"F11 Sending controller: included in the processor, no separate controller line in BOQ.","控制器":"Controller","NOTE：负载超过 90 %，余量偏小。":"NOTE: load above 90 %, low headroom.","选一个建议型号并加入产品库后，才能出正式 BOQ。":"Pick a suggested model and add it to the product library before a formal BOQ can be issued."}; }
   static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
 
   __rv() {

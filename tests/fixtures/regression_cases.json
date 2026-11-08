@@ -82,6 +82,93 @@
         4800
       ],
       "expect_error": false
+    },
+    "cr10_expect": {
+      "_note": "CR-10/11 (2026-11-08). When CR-10 lands, these replace expect.F5_power_kw / F6_circuits / F7_power_cables / F9_data_cables / F11 and constants.circuit_kw / px_per_data_cable. Cabinet values from G:\\Works\\LED Projects\\Specs spec sheets.",
+      "constants": {
+        "mcb_a": 20,
+        "mains_v": 230,
+        "load_factor": 0.85,
+        "power_cable_mm2": 2.5,
+        "cable_ampacity_a": {
+          "1.5": 16,
+          "2.5": 20,
+          "4": 27
+        },
+        "cable_ampacity_sample": true,
+        "chain_max": 10,
+        "px_per_data_cable": 655360,
+        "cabinet_max": {
+          "640x480": {
+            "a": 0.96,
+            "w": 120
+          },
+          "640x640": {
+            "a": 0.96,
+            "w": 200
+          }
+        },
+        "wiring_orientation": "row",
+        "power_route": "S",
+        "data_route": "straight"
+      },
+      "F5_power_kw": 4.76,
+      "F6_trace": {
+        "rated_a": 20,
+        "usable_a": 17.0,
+        "cab_per_circuit": 17,
+        "by_load": 3,
+        "by_chain": 4
+      },
+      "F6_circuits": 4,
+      "F7_power_cables": 5,
+      "F12_db_box": 1,
+      "W1_power_groups_cabinets": [
+        9,
+        9,
+        9,
+        8
+      ],
+      "W1_power_jumpers": 31,
+      "F9_by_mode": {
+        "rows": {
+          "data_runs": 5,
+          "data_cables": 6,
+          "row_px": [
+            344064,
+            344064,
+            344064,
+            344064,
+            458752
+          ],
+          "W1_data_groups_cabinets": [
+            7,
+            7,
+            7,
+            7,
+            7
+          ],
+          "data_jumpers": 30,
+          "F11": {
+            "check": "BLOCK",
+            "reason": "SC-4 has 4 ports, 5 runs needed",
+            "suggest": "VX600"
+          }
+        },
+        "count": {
+          "data_runs": 3,
+          "data_cables": 4,
+          "F11": {
+            "model": "Sample SC-4",
+            "ports_used": 3,
+            "ports": 4,
+            "load_mp": 1.84,
+            "capacity_mp": 2.3,
+            "check": "PASS"
+          }
+        }
+      },
+      "pending": "data_grouping default (rows vs count) to be confirmed by Jimmy; seed default = rows"
     }
   },
   "projection_114": {
@@ -635,5 +722,128 @@
       "Spares"
     ],
     "no_prices": true
+  },
+  "led_wiring_28_cabinets": {
+    "source": "CR-11 prototype FlowV2 05 (2026-11-08): 4480 × 2560, P2.5, all 640×640 cabinets (7 × 4)",
+    "input": {
+      "pixel_pitch_mm": 2.5,
+      "width_mm": 4480,
+      "height_mm": 2560,
+      "cabinet_sizes_mm": [
+        [
+          640,
+          640
+        ]
+      ],
+      "layout": "7 columns × 4 rows of 640×640"
+    },
+    "constants": {
+      "mcb_a": 20,
+      "mains_v": 230,
+      "load_factor": 0.85,
+      "power_cable_mm2": 2.5,
+      "cable_ampacity_a": {
+        "1.5": 16,
+        "2.5": 20,
+        "4": 27
+      },
+      "cable_ampacity_sample": true,
+      "chain_max": 10,
+      "px_per_data_cable": 655360,
+      "cabinet_max": {
+        "640x480": {
+          "a": 0.96,
+          "w": 120
+        },
+        "640x640": {
+          "a": 0.96,
+          "w": 200
+        }
+      },
+      "wiring_orientation": "row",
+      "power_route": "S",
+      "data_route": "straight"
+    },
+    "expect": {
+      "F5_power_kw": 5.6,
+      "F6_trace": {
+        "usable_a": 17.0,
+        "cab_per_circuit": 17,
+        "by_load": 2,
+        "by_chain": 3
+      },
+      "F6_circuits": 3,
+      "F7_power_cables": 4,
+      "W1_power_groups_cabinets": [
+        10,
+        9,
+        9
+      ],
+      "W1_power_group_current_a": [
+        9.6,
+        8.64,
+        8.64
+      ],
+      "W1_power_jumpers": 25,
+      "W1_power_jumper_m": 16.0,
+      "F9_rows": {
+        "data_runs": 4,
+        "data_cables": 5,
+        "W1_data_groups_cabinets": [
+          7,
+          7,
+          7,
+          7
+        ],
+        "group_px": [
+          458752,
+          458752,
+          458752,
+          458752
+        ],
+        "data_jumpers": 24,
+        "data_jumper_m": 15.4
+      },
+      "F9_count": {
+        "data_runs": 3,
+        "data_cables": 4
+      },
+      "F11": {
+        "model": "Sample SC-4",
+        "ports_used": 4,
+        "ports": 4,
+        "check": "PASS"
+      }
+    },
+    "behaviour": [
+      {
+        "change": "chain_max = 6",
+        "expect": {
+          "F6_circuits": 5
+        }
+      },
+      {
+        "change": "F6 manual = 2 with reason",
+        "expect": {
+          "W1_power_groups_cabinets": [
+            14,
+            14
+          ],
+          "blocked": true,
+          "reason": "group exceeds chain_max 10"
+        }
+      },
+      {
+        "change": "power_cable_mm2 = 1.5 (16 A)",
+        "expect": {
+          "F6_trace": {
+            "usable_a": 13.6,
+            "cab_per_circuit": 14
+          },
+          "F6_circuits": 3
+        }
+      }
+    ],
+    "_note": "Jumper length: sum of centre-to-centre distances between consecutive cabinets in each group (640 mm pitch), plus return runs for straight routing; rounded to 0.1 m."
   }
 }

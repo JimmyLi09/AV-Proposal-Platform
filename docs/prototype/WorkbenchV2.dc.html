@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<title>AV Proposal Platform · AV 工作台</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#F5F2EC}
+a{color:#2C5AA0}
+a:hover{color:#15203A}
+[data-lang="zh"] .en{display:none !important}
+[data-lang="en"] .zh{display:none !important}
+</style>
+</helmet>
+<div data-lang="{{lang}}" style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F5F2EC; color: #1F2430; font-family: -apple-system, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; font-size: 13px; line-height: 1.5">
+
+<nav aria-label="Main menu" style="flex: 1 1 220px; box-sizing: border-box; background: #FFFFFF; border-right: 1px solid #E6E0D6; padding: 18px 12px; display: flex; flex-direction: column; gap: 2px">
+<div style="padding: 0 10px 18px"><div style="font-size: 18px; font-weight: 800; letter-spacing: 3px; color: #15203A">AUDAX</div><div style="font-size: 10.5px; letter-spacing: 0.1em; color: #6B6558">AV PROPOSAL PLATFORM</div></div>
+<a href="WorkbenchV2.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; background: #15203A; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="en">Workbench</span><span class="zh">AV 工作台</span></a>
+<a href="FlowV2.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Proposal flow</span><span class="zh">方案流程 01–07</span></a>
+<div style="height: 1px; background: #EFEBE4; margin: 10px 8px"></div>
+<div style="padding: 4px 12px; font-size: 11px; letter-spacing: 0.08em; color: #6B6558"><span class="zh">资料</span><span class="en">LIBRARY</span></div>
+<a href="Products.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Product Library</span><span class="zh">产品库</span></a>
+<a href="Rules.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Rules Engine</span><span class="zh">规则引擎</span></a>
+<a href="Templates.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Templates</span><span class="zh">模板</span></a>
+<a href="Knowledge.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Knowledge Base</span><span class="zh">资料库</span></a>
+<a href="Settings.dc.html" style="display: block; padding: 10px 12px; border-radius: 8px; font-size: 13.5px; color: #3B3A36; text-decoration: none"><span class="en">Settings</span><span class="zh">设置</span></a>
+<div style="flex: 1; min-height: 24px"></div>
+<div style="margin: 0 8px; padding: 10px 12px; border-radius: 8px; background: #F1EEE8; font-size: 11.5px; color: #6B6558; line-height: 1.6"><span class="zh">简化流程 v2：步骤和 PM Platform 的 AV 模块对齐（01 立项 → 02–04 图纸 → 05 方案 → 06 BOQ → 07 审批）。</span><span class="en">Simplified flow v2: steps aligned with the PM Platform AV module (01 Inquiry → 02–04 Drawings → 05 Design → 06 BOQ → 07 Approval).</span></div>
+</nav>
+
+<div style="flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column">
+<header style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 28px; background: #FFFFFF; border-bottom: 1px solid #E6E0D6">
+<input type="search" aria-label="Search 搜索" placeholder="{{__s.ph}}" style="flex: 1 1 240px; max-width: 420px; height: 38px; box-sizing: border-box; padding: 0 12px; border: 1px solid #E6E0D6; border-radius: 8px; background: #FAF8F4; font: inherit">
+<div style="flex: 1"></div>
+<button type="button" onClick="{{toggleLang}}" aria-label="Switch language 切换语言" title="Switch language 切换语言" style="height: 30px; min-width: 52px; padding: 0 10px; border-radius: 15px; border: 1px solid #15203A; background: #FFFFFF; color: #15203A; font: inherit; font-size: 12px; font-weight: 700; cursor: pointer">{{langBtn}}</button>
+<span style="font-size: 13px"><b>Jimmy</b> <span style="color: #6B6558">· PM</span></span>
+</header>
+<main style="flex: 1; padding: 22px 28px 40px; display: flex; flex-direction: column; gap: 16px">
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px">
+<div style="flex: 1 1 320px"><h1 style="margin: 0; font-size: 22px; color: #15203A"><span class="zh">工作台</span><span class="en">AV</span></h1><div style="color: #6B6558; margin-top: 2px"><span class="zh">每个项目走同一条线：01 立项 → 02–04 图纸 → 05 方案 → 06 图纸与 BOQ → 07 审批与导出</span><span class="en">Every project follows one line: 01 Inquiry → 02–04 Drawings → 05 Design → 06 Drawings & BOQ → 07 Approval & export</span></div></div>
+<a href="FlowV2.dc.html" style="height: 38px; display: inline-flex; align-items: center; padding: 0 16px; border-radius: 8px; background: #15203A; color: #FFFFFF; font-weight: 700; text-decoration: none"><span class="zh">＋ 新建项目</span><span class="en">＋ New project</span></a>
+<button type="button" onClick="{{addLead}}" style="height: 38px; padding: 0 14px; border-radius: 8px; border: 1px solid #D9CFBF; background: #FFFFFF; font: inherit; cursor: pointer"><span class="zh">＋ 售前接洽（无编号）</span><span class="en">＋ Pre-sales lead (no no.)</span></button>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<sc-for list="{{stages}}" as="st" hint-placeholder-count="5">
+<button type="button" onClick="{{st.on}}" style="{{st.style}}"><div style="font-size: 12px; color: #6B6558">{{st.code}} · {{st.label}}</div><div style="font-size: 26px; font-weight: 800; color: #15203A">{{st.n}}</div></button>
+</sc-for>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
+<span style="color: #6B6558">{{filterText}}</span>
+<sc-if value="{{filtered}}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{clear}}" style="height: 28px; padding: 0 10px; border-radius: 14px; border: 1px solid #D9CFBF; background: #FFFFFF; font: inherit; font-size: 12px; cursor: pointer"><span class="zh">清除筛选 ×</span><span class="en">Clear filter ×</span></button></sc-if>
+</div>
+
+<div style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 10px; overflow-x: auto">
+<table style="width: 100%; border-collapse: collapse; min-width: 860px">
+<thead><tr style="background: #FAF8F4; text-align: left; color: #6B6558; font-size: 12px">
+<th style="padding: 10px 14px"><span class="zh">项目</span><span class="en">Project</span></th><th style="padding: 10px 8px"><span class="zh">业务线</span><span class="en">Business line</span></th><th style="padding: 10px 8px; width: 260px"><span class="zh">进度</span><span class="en">Progress</span></th><th style="padding: 10px 8px"><span class="zh">当前</span><span class="en">Current</span></th><th style="padding: 10px 8px"><span class="zh">版本</span><span class="en">Version</span></th><th style="padding: 10px 8px"><span class="zh">最近更新</span><span class="en">Last updated</span></th><th style="padding: 10px 14px"></th>
+</tr></thead>
+<tbody>
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="7">
+<tr style="border-top: 1px solid #EFEBE4">
+<td style="padding: 10px 14px"><div style="font-weight: 700">{{r.name}}</div><div style="font-size: 12px; color: #6B6558">{{r.no}} · {{r.client}}<sc-if value="{{r.lead}}" hint-placeholder-val="{{ false }}"> <span style="padding: 1px 6px; border-radius: 4px; background: #FFF4D6; color: #6B4E00; font-size: 11px"><span class="zh">售前</span><span class="en">Pre-sales</span></span></sc-if></div></td>
+<td style="padding: 10px 8px">{{r.line}}</td>
+<td style="padding: 10px 8px"><div style="display: flex; gap: 3px"><sc-for list="{{r.bar}}" as="b" hint-placeholder-count="5"><div title="{{b.t}}" style="{{b.style}}"></div></sc-for></div></td>
+<td style="padding: 10px 8px"><span style="{{r.tagStyle}}">{{r.now}}</span></td>
+<td style="padding: 10px 8px">{{r.ver}}</td>
+<td style="padding: 10px 8px; color: #6B6558">{{r.upd}}</td>
+<td style="padding: 10px 14px; text-align: right"><sc-if value="{{r.lead}}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{r.convert}}" style="height: 30px; padding: 0 10px; margin-right: 6px; border-radius: 6px; border: 1px solid #D9CFBF; background: #FFFFFF; font: inherit; font-size: 12px; cursor: pointer"><span class="zh">转为正式项目</span><span class="en">Convert to project</span></button></sc-if><a href="FlowV2.dc.html" style="font-weight: 600"><span class="zh">继续 ›</span><span class="en">Continue ›</span></a></td>
+</tr>
+</sc-for>
+</tbody>
+</table>
+</div>
+
+<sc-if value="{{msg}}" hint-placeholder-val="{{ false }}"><div style="padding: 10px 14px; border-radius: 8px; background: #E8F3EC; color: #1E5B36">{{msg}}</div></sc-if>
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<div style="flex: 1 1 300px; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 10px; padding: 14px 16px"><b><span class="zh">和 PM Platform 对齐的地方</span><span class="en">Aligned with PM Platform</span></b><ul style="margin: 6px 0 0; padding-left: 18px; color: #3B3A36; line-height: 1.8"><li><span class="zh">同样的 5 段进度条和阶段计数</span><span class="en">Same 5-segment progress bar and stage counters</span></li><li><span class="zh">售前接洽可以没有项目编号，之后「转为正式项目」</span><span class="en">Pre-sales leads need no project no.; use "Convert to project" later</span></li><li><span class="zh">项目编号只用来关联，两边数据库分开</span><span class="en">Project no. is only a link; the databases stay separate</span></li></ul></div>
+<div style="flex: 1 1 300px; background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 10px; padding: 14px 16px"><b><span class="zh">和 PM Platform 不同的地方</span><span class="en">Different from PM Platform</span></b><ul style="margin: 6px 0 0; padding-left: 18px; color: #3B3A36; line-height: 1.8"><li><span class="zh">06 是图纸与 BOQ，不算成本、不含价格</span><span class="en">06 is drawings & BOQ: no cost, no prices</span></li><li><span class="zh">谁都能批，可以自审</span><span class="en">Anyone can approve; self-review allowed</span></li><li><span class="zh">07 直接出 PDF / Word / PPT / JPG / Excel / DXF</span><span class="en">07 exports PDF / Word / PPT / JPG / Excel / DXF directly</span></li></ul></div>
+</div>
+</main>
+</div>
+</div>
+</x-dc>
+
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1100}}'>
+class Component extends DCLogic {
+  componentDidMount() {
+    try { const l = window.localStorage.getItem('avp-lang'); if (l === 'en' || l === 'zh') this.setState({ __lang: l }); } catch (e) {}
+    try { this.__onStore = (e) => { if (e.key === 'avp-lang' && (e.newValue === 'en' || e.newValue === 'zh')) this.setState({ __lang: e.newValue }); }; window.addEventListener('storage', this.__onStore); } catch (e) {}
+  }
+  componentWillUnmount() { try { window.removeEventListener('storage', this.__onStore); } catch (e) {} }
+  // Shared bilingual splitter. biSplit(text) -> [zh, en] or null.
+__bi(t) {
+  if (!/[㐀-鿿]/.test(t) || !/[A-Za-z]/.test(t)) return null;
+  const src = t.replace(/&amp;/g, '\u0001');
+  const re = /[㐀-鿿豈-﫿　-〿＀-￯]+|\{\{[^}]*\}\}|[A-Za-z][A-Za-z0-9'’\-\.;+]*:?|\s+|./g;
+  const tk = src.match(re) || [];
+  const kind = (x) => /^[㐀-鿿豈-﫿　-〿＀-￯]/.test(x) ? 'C' : /^\s+$/.test(x) ? 'S' : /^\{\{/.test(x) ? 'H' : /^[A-Za-z]/.test(x) ? 'W' : 'O';
+  const K = tk.map(kind);
+  const isIdeo = (x) => /^[㐀-鿿豈-﫿「（]/.test(x);
+  const acr = (x) => /^[A-Z0-9][A-Z0-9\-\.]+$/.test(x) || /^[A-Z][a-z]+[A-Z][A-Za-z0-9]*$/.test(x) || /^[A-Z]{2,}[a-z][A-Za-z0-9]*$/.test(x);
+  const inRunO = (x) => /^[0-9\/×%,\.\-+()~–≥≤=→]$/.test(x);
+  const runs = [];
+  let i = 0;
+  while (i < tk.length) {
+    if (K[i] === 'C' && isIdeo(tk[i])) {
+      let last = i, j = i + 1;
+      while (j < tk.length) {
+        const k = K[j];
+        if (k === 'C') { last = j; j++; continue; }
+        if (k === 'S' || k === 'H' || (k === 'O' && inRunO(tk[j])) || (k === 'W' && acr(tk[j]))) { j++; continue; }
+        break;
+      }
+      // trailing acronyms: include if followed by end or arrow/dot/paren
+      let e = last;
+      let m = last + 1, sawW = false;
+      while (m < tk.length && (K[m] === 'S' || (K[m] === 'W' && acr(tk[m])) || tk[m] === '/')) { if (K[m] === 'W') { sawW = true; e2 = m; } m++; }
+      var e2;
+      if (sawW && (m >= tk.length || /^[→·)）]$/.test(tk[m]))) e = e2;
+      runs.push([i, e]);
+      i = e + 1;
+      continue;
+    }
+    i++;
+  }
+  const dropEn = new Set(), dropZh = new Set();
+  let pairs = 0;
+  for (const [a, b] of runs) {
+    let p = a - 1, start = -1;
+    while (p >= 0) {
+      if (K[p] === 'S' || tk[p] === '\u0001' || tk[p] === '&' || tk[p] === '/') { p--; continue; }
+      if (K[p] === 'W' && /^[A-Za-z][A-Za-z'’\-]*:?$/.test(tk[p]) && !dropZh.has(p) && !/^(mm|m|cm|kW|W|kVA|V|A|nits|px|MP|Jimmy|Rev|sample)$/.test(tk[p])) { start = p; p--; continue; }
+      break;
+    }
+    if (start < 0) continue;
+    if (tk.slice(start, a).every((x, q) => K[start + q] !== 'W' || /^[A-Za-z]$/.test(x))) continue;
+    while (K[start] === 'S' || tk[start] === '\u0001' || tk[start] === '&' || tk[start] === '/') start++;
+    pairs++;
+    let endPhrase = a - 1; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--;
+    let runStart = a;
+    if (acr(tk[endPhrase]) && endPhrase > start && tk.slice(start, endPhrase).includes(tk[endPhrase])) { runStart = endPhrase; endPhrase--; while (endPhrase > start && K[endPhrase] === 'S') endPhrase--; }
+    for (let q = start; q <= endPhrase; q++) dropZh.add(q);
+    for (let q = endPhrase + 1; q <= b; q++) dropEn.add(q);
+    for (let q = endPhrase + 1; q < runStart; q++) dropZh.add(q);
+  }
+  if (!pairs) return null;
+  const build = (drop) => tk.filter((_, q) => !drop.has(q)).join('').replace(/\u0001/g, '&amp;').replace(/[ ]{2,}/g, ' ').replace(/\( /g, '(').replace(/ \)/g, ')').replace(/^ +| +$/g, (m0) => m0);
+  let zh = build(dropZh), en = build(dropEn);
+  // keep original outer whitespace
+  const lead = (t.match(/^\s*/) || [''])[0], trail = (t.match(/\s*$/) || [''])[0];
+  zh = lead + zh.trim() + trail; en = lead + en.trim() + trail;
+  if (zh === en) return null;
+  return [zh, en];
+}
+  __tr(v, lang) {
+    if (typeof v === 'string') {
+      if (!/[\u3400-\u9fff]/.test(v)) return v;
+      const p = this.__bi(v);
+      if (lang === 'zh') return p ? p[0] : v;
+      let en = p ? p[1] : v;
+      const D = Component.__D;
+      if (/[\u3400-\u9fff]/.test(en)) for (const k of Component.__DK) if (en.indexOf(k) >= 0) en = en.split(k).join(D[k]);
+      return en;
+    }
+    if (Array.isArray(v)) return v.map((x) => this.__tr(x, lang));
+    if (v && typeof v === 'object' && Object.getPrototypeOf(v) === Object.prototype) { const o = {}; for (const k in v) o[k] = this.__tr(v[k], lang); return o; }
+    return v;
+  }
+  renderVals() {
+    const lang = (this.state && this.state.__lang) || 'zh';
+    const out = this.__tr(this.__rv(), lang);
+    const S = {"ph":["搜索项目、方案、产品","Search projects, proposals, products"]};
+    const s = {}; for (const k in S) s[k] = lang === 'zh' ? S[k][0] : S[k][1];
+    out.__s = s;
+    out.lang = lang;
+    out.langBtn = lang === 'zh' ? 'EN' : '中文';
+    out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
+    return out;
+  }
+  static get __D() { return {"立项中":"Inquiry","待图纸校核":"Drawing check","待方案配置":"Design","方案配置":"Design","待图纸与 BOQ":"Drawings & BOQ","图纸与 BOQ":"Drawings & BOQ","与":" and ","待审批":"Pending approval","v2（草稿）":"v2 (draft)","（草稿）":" (draft)","今天 19:40 · Jimmy":"Today 19:40 · Jimmy","多面 LED":"Multi-face LED","今天 16:12 · PD":"Today 16:12 · PD","投影":"Projection","v3 待审批":"v3 pending approval","昨天 18:05 · Jimmy":"Yesterday 18:05 · Jimmy","昨天 11:30 · PD":"Yesterday 11:30 · PD","v4 已批准":"v4 approved","已批准":"Approved","新售前接洽":"New pre-sales lead","售前":"Pre-sales","待填":"TBD","刚刚 · Jimmy":"Just now · Jimmy","01 立项":"01 Inquiry","02–04 图纸":"02–04 Drawings","05 方案":"05 Design","06 图纸与 BOQ":"06 Drawings & BOQ","07 审批":"07 Approval","已转为正式项目":"Converted to project","转为正式项目":"Convert to project","项目":"Project","，售前记录和上传的文件一并带过去。":"; the lead record and uploaded files carry over.","筛选：":"Filter: ","个项目":" projects","全部":"All","已新建售前接洽记录，没有项目编号也能先上传图纸、做方案。":"Pre-sales lead created: you can upload drawings and design without a project no.","有":"Yes"}; }
+  static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
+
+  __rv() {
+    const s = this.state || {};
+    const f = s.f === undefined ? -1 : s.f, conv = s.conv || {}, leads = s.leads || 0;
+    const ST = [['01', '立项中'], ['02–04', '待图纸校核'], ['05', '待方案配置'], ['06', '待图纸与 BOQ'], ['07', '待审批']];
+    const P = [
+      { name: '143-Royal Plaza', no: 'P-2026-143', client: 'Royal Plaza', line: 'LED', st: 2, ver: 'v2（草稿）', upd: '今天 19:40 · Jimmy' },
+      { name: 'GMC Virtual Office', no: 'P-2026-151', client: 'GMC', line: '多面 LED', st: 1, ver: 'v1', upd: '今天 16:12 · PD' },
+      { name: '114 Showroom', no: 'P-2026-114', client: 'Showroom', line: '投影', st: 4, ver: 'v3 待审批', upd: '昨天 18:05 · Jimmy' },
+      { name: 'Digital Cube', no: 'P-2026-158', client: 'Digital Cube', line: '多面 LED', st: 3, ver: 'v1', upd: '昨天 11:30 · PD' },
+      { name: '147-Senja Close', no: 'P-2026-147', client: 'Senja', line: '投影', st: 1, ver: '—', upd: '11-05 · Jimmy' },
+      { name: 'Phoenix Sea Office', no: '—', client: 'Phoenix Sea', line: '投影', st: 0, ver: '—', upd: '11-04 · Sales', lead: true, key: 'ps' },
+      { name: 'Marina Meeting Room', no: 'P-2026-133', client: 'Marina', line: 'LED', st: 5, ver: 'v4 已批准', upd: '11-02 · Jimmy' }
+    ];
+    for (let i = 0; i < leads; i++) P.push({ name: '新售前接洽 ' + (i + 1), no: '—', client: '待填', line: '—', st: 0, ver: '—', upd: '刚刚 · Jimmy', lead: true, key: 'n' + i });
+    P.forEach((p) => { if (p.lead && conv[p.key]) { p.lead = false; p.no = conv[p.key]; } });
+    const counts = ST.map((_, i) => P.filter((p) => p.st === i).length);
+    const card = (on) => 'flex: 1 1 160px; text-align: left; padding: 10px 14px; border-radius: 10px; cursor: pointer; font: inherit; background: ' + (on ? '#EAF0FA' : '#FFFFFF') + '; border: ' + (on ? '2px solid #2C5AA0' : '1px solid #E6E0D6');
+    const stages = ST.map((x, i) => ({ code: x[0], label: x[1], n: counts[i], style: card(f === i), on: () => this.setState({ f: f === i ? -1 : i }) }));
+    const NOW = ['01 立项', '02–04 图纸', '05 方案', '06 图纸与 BOQ', '07 审批', '已批准'];
+    const rows = P.filter((p) => f < 0 || p.st === f).map((p) => ({
+      name: p.name, no: p.no, client: p.client, line: p.line, ver: p.ver, upd: p.upd, lead: !!p.lead, now: NOW[p.st],
+      tagStyle: 'padding: 2px 8px; border-radius: 10px; font-size: 12px; background: ' + (p.st === 5 ? '#E8F3EC; color: #1E5B36' : p.st === 4 ? '#FFF4D6; color: #6B4E00' : '#EEF1F6; color: #15203A'),
+      bar: [0, 1, 2, 3, 4].map((i) => ({ t: ST[i][0], style: 'flex: 1; height: 8px; border-radius: 4px; background: ' + (i < p.st ? '#2E7D4F' : i === p.st ? '#2C5AA0' : '#E6E0D6') })),
+      convert: () => { const n = Object.assign({}, conv); n[p.key] = 'P-2026-16' + Object.keys(conv).length; this.setState({ conv: n, msg: '已转为正式项目 ' + n[p.key] + '，售前记录和上传的文件一并带过去。' }); }
+    }));
+    return {
+      stages, rows, filtered: f >= 0, filterText: f >= 0 ? '筛选：' + ST[f][1] + ' · ' + rows.length + ' 个项目' : '全部 ' + P.length + ' 个项目',
+      clear: () => this.setState({ f: -1 }), msg: s.msg || '',
+      addLead: () => this.setState({ leads: leads + 1, msg: '已新建售前接洽记录，没有项目编号也能先上传图纸、做方案。' })
+    };
+  }
+}
+</script>
+</body>
+</html>

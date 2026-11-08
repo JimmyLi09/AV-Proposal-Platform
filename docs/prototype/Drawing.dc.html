@@ -47,12 +47,18 @@ a:hover{color:#15203A}
 <main style="box-sizing: border-box; width: 100%; max-width: 1260px; padding: 24px 28px 48px; display: flex; flex-direction: column; gap: 16px">
 <div><div style="font-size: 12px; color: #6B6558">{{projLine}} · <span style="padding: 1px 8px; border-radius: 10px; background: #E8EEF8; color: #2C5AA0; font-weight: 600"><span class="zh">CR-3 新增</span><span class="en">CR-3 added</span></span></div><h1 style="margin: 0; font-size: 24px; color: #15203A"><span class="en">Drawing</span><span class="zh">拼接与线路图</span></h1><p style="margin: 2px 0 0; color: #6B6558"><span class="zh">由 F3 箱体排布、F6 / F7 电源回路、F9 网线自动生成，可导出 DXF / DWG。</span><span class="en">Auto-generated from F3 cabinet layout, F6 / F7 power circuits and F9 data cables; exportable as DXF / DWG.</span></p></div>
 
+<nav aria-label="Proposal steps" style="display: flex; flex-wrap: wrap; gap: 6px">
+<a href="NewProposal.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">1 项目与文件</span><span class="en">1 Project &amp; Files</span></a>
+<a href="Confirm.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">2 确认输入</span><span class="en">2 Confirm Inputs</span></a>
+<a href="Workspace.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #BFDCCD; background: #E6F2EC; color: #2F7A5B; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">3 推荐</span><span class="en">3 Recommendation</span></a>
+<a href="Drawing.dc.html" style="padding: 7px 12px; border-radius: 16px; background: #15203A; color: #FFFFFF; font-weight: 600; font-size: 12.5px; text-decoration: none"><span class="zh">4 图纸与标注</span><span class="en">4 Drawings &amp; Annotate</span></a>
+<a href="Cost.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">5 工程量清单</span><span class="en">5 BOQ</span></a>
+<a href="Preview.dc.html" style="padding: 7px 12px; border-radius: 16px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #6B6558; font-size: 12.5px; text-decoration: none"><span class="zh">6 审核导出</span><span class="en">6 Review &amp; Export</span></a>
+</nav>
+
 <div style="display: flex; flex-wrap: wrap; gap: 22px; border-bottom: 1px solid #E6E0D6">
-<a href="Workspace.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">推荐</span><span class="en">Recommendation</span></a>
-<a href="Calculations.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">计算依据</span><span class="en">Calculations</span></a>
-<a href="DiagramV2.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">示意图</span><span class="en">Diagram</span></a>
-<a href="Annotate.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">标注</span><span class="en">Annotate</span></a>
 <a href="Drawing.dc.html" style="padding: 10px 2px; border-bottom: 3px solid #15203A; color: #15203A; font-weight: 700; text-decoration: none"><span class="zh">图纸</span><span class="en">Drawing</span></a>
+<a href="Annotate.dc.html" style="padding: 10px 2px; border-bottom: 3px solid transparent; color: #6B6558; text-decoration: none"><span class="zh">标注</span><span class="en">Annotate</span></a>
 </div>
 
 <div style="display: flex; flex-wrap: wrap; gap: 8px; align-items: center">
@@ -128,13 +134,13 @@ a:hover{color:#15203A}
 
 <div style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 8px; font-size: 15px"><span class="en">Power circuits</span><span class="zh">电源回路 · ≤ 2.5 kW</span></h2>
+<h2 style="margin: 0 0 8px; font-size: 15px"><span class="en">Power circuits</span><span class="zh">电源回路 · ≤ 17 A（3.91 kW）· ≤ 10 箱</span></h2>
 <sc-for list="{{circuits}}" as="c" hint-placeholder-count="6">
 <div style="{{c.style}}"><span style="{{c.dot}}"></span><span style="flex: 1">{{c.name}}</span><span>{{c.text}}</span></div>
 </sc-for>
 </section>
 <section style="background: #FFFFFF; border: 1px solid #E6E0D6; border-radius: 12px; padding: 16px 18px">
-<h2 style="margin: 0 0 8px; font-size: 15px"><span class="en">Data cables</span><span class="zh">网线 · ≤ 560,000 px</span></h2>
+<h2 style="margin: 0 0 8px; font-size: 15px"><span class="en">Data cables</span><span class="zh">网线 · ≤ 655,360 px</span></h2>
 <sc-for list="{{cables}}" as="c" hint-placeholder-count="7">
 <div style="{{c.style}}"><span style="{{c.dot}}"></span><span style="flex: 1">{{c.name}}</span><span>{{c.text}}</span></div>
 </sc-for>
@@ -164,6 +170,10 @@ a:hover{color:#15203A}
 </table>
 </div>
 </section>
+<div style="display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px">
+<a href="Workspace.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 18px; border-radius: 8px; border: 1px solid #E6E0D6; background: #FFFFFF; color: #1F2430; font-weight: 600; text-decoration: none"><span class="zh">← 返回：推荐</span><span class="en">← Back: Recommendation</span></a>
+<a href="Annotate.dc.html" style="display: inline-flex; align-items: center; height: 42px; padding: 0 20px; border-radius: 8px; background: #C2410C; color: #FFFFFF; font-weight: 600; text-decoration: none"><span class="zh">下一步：标注 →</span><span class="en">Next: Annotate →</span></a>
+</div>
 </main>
 </div>
 </div>
@@ -263,7 +273,7 @@ __bi(t) {
     out.toggleLang = () => { const n = lang === 'zh' ? 'en' : 'zh'; try { window.localStorage.setItem('avp-lang', n); } catch (e) {} this.setState({ __lang: n }); };
     return out;
   }
-  static get __D() { return {"回路":"Circuit","箱 ·":"cabinets ·","· 超载":"· Overloaded","预留 Spare":"Spare","网线":"Data cable","箱体编号 IDs":"Cabinet IDs","箱体尺寸 Sizes":"Cabinet sizes","电源 Power":"Power","网线 Data":"Data cable","尺寸线 Dims":"Dims","说明栏 Notes":"Notes","LED-1_Drawing_Rev0_DRAFT.svg · 和页面上显示的一样":"LED-1_Drawing_Rev0_DRAFT.svg · same as shown on page","页":"Page","LED-1_Drawing_Rev0_DRAFT.dxf · 单位 mm · 1:1 · 图层 AVP-CABINET / AVP-CABINET-ID / AVP-POWER / AVP-DATA / AVP-DIM / AVP-NOTE · 尺寸为 DIMENSION 实体":"LED-1_Drawing_Rev0_DRAFT.dxf · units mm · 1:1 · layers AVP-CABINET / AVP-CABINET-ID / AVP-POWER / AVP-DATA / AVP-DIM / AVP-NOTE · dimensions as DIMENSION entities","单位 mm":"Unit mm","行：编号、尺寸、回路、网线、行、列":"Rows: ID, size, circuit, data cable, row, column","行":"rows","LED-1_技术方案_Rev0_DRAFT.pdf · 图纸 + 说明栏 + 计算依据":"LED-1_Technical_Proposal_Rev0_DRAFT.pdf · drawing + notes panel + calculation basis","列；":"columns;","㎡ × 500 W/㎡（示例值）":"㎡ × 500 W/㎡ (sample value)","；每":"; per","列一路":"columns per circuit","+ 1 预留":"+ 1 reserved","；按列蛇形分组":"; grouped in serpentine by column","+ 1 备用":"+ 1 spare","点箱体，把它换到下一个回路；改完立即重新校验每个回路的功率。":"Click a cabinet to move it to the next circuit; each circuit's power is rechecked immediately.","点箱体，把它换到下一根网线；改完立即重新校验每根网线的带载。":"Click a cabinet to move it to the next data cable; each data cable's load is rechecked immediately.","有":"Yes","处超载，已标红。这个 Rev 不能批准，改回或点「恢复自动」。":" overloaded, marked red. This Rev cannot be approved; revert or click \"Restore auto\".","处超载，已标红。这个 Rev":"overloads, marked in red. This Rev","校验通过：每个回路 ≤ 2.5 kW，每根网线 ≤ 560,000 px。手动调整随 Rev 保存，锁定后只读。":"Check passed: each circuit ≤ 2.5 kW, each data cable ≤ 560,000 px. Manual adjustments are saved with the Rev and read-only after locking.","校验通过：每个回路 ≤ 2.5 kW，每根网线 ≤ 560,000 px。手动调整随 Rev":"Check passed: each circuit ≤ 2.5 kW, each data cable ≤ 560,000 px. Manual adjustments follow the Rev","未批准的 Rev 导出带 DRAFT 水印；文件属性写入 Rev、规则版本和产品库版本。服务器未装 ODA File Converter，暂时只能出 DXF。":"Unapproved Revs export with a DRAFT watermark; file properties include Rev, rules version and product library version. ODA File Converter is not installed on the server, so only DXF for now."}; }
+  static get __D() { return {"回路":"Circuit","箱 ·":"cabinets ·","· 超载":"· Overloaded","预留 Spare":"Spare","网线":"Data","箱体编号 IDs":"Cabinet IDs","箱体尺寸 Sizes":"Cabinet sizes","电源 Power":"Power","网线 Data":"Data cable","尺寸线 Dims":"Dims","说明栏 Notes":"Notes","LED-1_Drawing_Rev0_DRAFT.svg · 和页面上显示的一样":"LED-1_Drawing_Rev0_DRAFT.svg · same as shown on page","页":"Page","LED-1_Drawing_Rev0_DRAFT.dxf · 单位 mm · 1:1 · 图层 AVP-CABINET / AVP-CABINET-ID / AVP-POWER / AVP-DATA / AVP-DIM / AVP-NOTE · 尺寸为 DIMENSION 实体":"LED-1_Drawing_Rev0_DRAFT.dxf · units mm · 1:1 · layers AVP-CABINET / AVP-CABINET-ID / AVP-POWER / AVP-DATA / AVP-DIM / AVP-NOTE · dimensions as DIMENSION entities","单位 mm":"Unit mm","行：编号、尺寸、回路、网线、行、列":"Rows: ID, size, circuit, data cable, row, column","行":"rows","LED-1_技术方案_Rev0_DRAFT.pdf · 图纸 + 说明栏 + 计算依据":"LED-1_Technical_Proposal_Rev0_DRAFT.pdf · drawing + notes panel + calculation basis","列；":"columns;","㎡ × 500 W/㎡（示例值）":"㎡ × 500 W/㎡ (sample value)","；每":"; per","列一路":"columns per circuit","+ 1 预留":"+ 1 reserved","；按列蛇形分组":"; grouped in serpentine by column","+ 1 备用":"+ 1 spare","点箱体，把它换到下一个回路；改完立即重新校验每个回路的功率。":"Click a cabinet to move it to the next circuit; each circuit's power is rechecked immediately.","点箱体，把它换到下一根网线；改完立即重新校验每根网线的带载。":"Click a cabinet to move it to the next data cable; each data cable's load is rechecked immediately.","有":"Yes","处超载，已标红。这个 Rev 不能批准，改回或点「恢复自动」。":" overloaded, marked red. This Rev cannot be approved; revert or click \"Restore auto\".","处超载，已标红。这个 Rev":"overloads, marked in red. This Rev","校验通过：每个回路 ≤ 17 A 且 ≤ 10 箱，每根网线 ≤ 655,360 px。手动调整随 Rev 保存，锁定后只读。":"Check passed: each circuit ≤ 17 A and ≤ 10 cabinets, each data cable ≤ 655,360 px. Manual changes are saved with the Rev and read-only once locked.","未批准的 Rev 导出带 DRAFT 水印；文件属性写入 Rev、规则版本和产品库版本。服务器未装 ODA File Converter，暂时只能出 DXF。":"Unapproved Revs export with a DRAFT watermark; file properties include Rev, rules version and product library version. ODA File Converter is not installed on the server, so only DXF for now."}; }
   static get __DK() { return Object.keys(Component.__D).sort((a, b) => b.length - a.length); }
 
   __rv() {
@@ -271,12 +281,12 @@ __bi(t) {
     const L = Object.assign({ id: true, size: true, dim: true, pow: true, data: true, note: true }, s.L || {});
     const mode = s.mode || null;
     const po = s.po || {}, dov = s.dov || {};
-    const cap = 560000, cirCap = 2500;
+    const cap = 655360, cirCap = 3910, chainMax = 10; // 20 A × 0.85 × 230 V；串接 ≤ 10 箱
     const exK = s.ex || 'royal';
     const P = exK === 'royal' ? { name: '143-Royal Plaza · LED-1 Lobby', line: '143-Royal Plaza LED · LED-1 Lobby · 4480 × 2560 · P2.5 · Rev 1', W: 4480, H: 2560, COLS: 7, rowsH: [480, 480, 480, 480, 640] } : { name: 'Trial 试用样例 · LED-1', line: 'Trial 试用样例 · LED-1 · 6400 × 3520 · P2.5 · Rev 0', W: 6400, H: 3520, COLS: 10, rowsH: [480, 480, 480, 480, 480, 480, 640] };
     const COLS = P.COLS, rowsH = P.rowsH, NR = rowsH.length;
     const colW = rowsH.reduce((x, h) => x + (h === 640 ? 204.8 : 153.6), 0);
-    const perCir = Math.floor(2500 / colW), nCir = Math.ceil(COLS / perCir);
+    const perCir = Math.max(1, Math.min(Math.floor(cirCap / colW), Math.floor(chainMax / NR))), nCir = Math.ceil(COLS / perCir);
     const cirCol = ['#2C5AA0', '#2F7A5B', '#C2410C', '#7A4FA0', '#A0782C'];
     const dataCol = ['#D1495B', '#2E86AB', '#3B8B5A', '#E59F2B', '#6D597A', '#1F7A8C', '#8C5A1F'];
     const NUM = '①②③④⑤⑥⑦⑧⑨⑩';
@@ -323,7 +333,7 @@ __bi(t) {
     const row = (bad) => 'display: flex; align-items: center; gap: 8px; padding: 6px 4px; border-bottom: 1px solid #EFEBE4; font-size: 12.5px; ' + (bad ? 'background: #FBE4E0; color: #A23A2A; font-weight: 700' : '');
     const dot = (col) => 'width: 10px; height: 10px; border-radius: 50%; background: ' + col;
     let bad = 0;
-    const circuits = cirW.map((w, i) => { const over = w > cirCap; if (over) bad++; return { name: '回路 ' + (i + 1), text: cirN[i] + ' 箱 · ' + Math.round(w) + ' W · ' + (w / 230).toFixed(1) + ' A' + (over ? ' · 超载' : ''), style: row(over), dot: dot(cirCol[i]) }; });
+    const circuits = cirW.map((w, i) => { const over = w > cirCap || cirN[i] > chainMax; if (over) bad++; return { name: '回路 ' + (i + 1), text: cirN[i] + ' 箱 · ' + Math.round(w) + ' W · ' + (w / 230).toFixed(1) + ' A' + (over ? ' · 超载' : ''), style: row(over), dot: dot(cirCol[i]) }; });
     circuits.push({ name: '回路 ' + (nCir + 1), text: '预留 Spare', style: row(false) + '; color: #6B6558', dot: dot('#B5AC9C') });
     const cables = dPx.map((p, i) => { const over = p > cap; if (over) bad++; return { name: '网线 ' + NUM[i], text: dN[i] + ' 箱 · ' + p.toLocaleString() + ' px' + (over ? ' · 超载' : ''), style: row(over), dot: dot(dataCol[i]) }; });
     cables.push({ name: '网线 ' + NUM[nData], text: 'FOR SPARE 备用', style: row(false) + '; color: #6B6558', dot: dot('#B5AC9C') });
@@ -366,7 +376,7 @@ __bi(t) {
       inMode: !!mode,
       modeHint: mode === 'power' ? '点箱体，把它换到下一个回路；改完立即重新校验每个回路的功率。' : '点箱体，把它换到下一根网线；改完立即重新校验每根网线的带载。',
       chkBg: bad ? '#FBE4E0' : '#E6F2EC', chkFg: bad ? '#A23A2A' : '#2F7A5B',
-      chkText: bad ? '有 ' + bad + ' 处超载，已标红。这个 Rev 不能批准，改回或点「恢复自动」。' : '校验通过：每个回路 ≤ 2.5 kW，每根网线 ≤ 560,000 px。手动调整随 Rev 保存，锁定后只读。',
+      chkText: bad ? '有 ' + bad + ' 处超载，已标红。这个 Rev 不能批准，改回或点「恢复自动」。' : '校验通过：每个回路 ≤ 17 A 且 ≤ 10 箱，每根网线 ≤ 655,360 px。手动调整随 Rev 保存，锁定后只读。',
       exportMsg: s.exMsg || '未批准的 Rev 导出带 DRAFT 水印；文件属性写入 Rev、规则版本和产品库版本。服务器未装 ODA File Converter，暂时只能出 DXF。'
     };
   }
