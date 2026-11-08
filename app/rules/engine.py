@@ -228,7 +228,8 @@ def _run_rule(rule, ctx, status, params, catalog, steps, overrides) -> dict:
     for line in result["lines"]:
         status[line["name"]] = result["status"]  # 下游规则继承不确定程度
     result["params"] = [{"name": n, "label": text(params[n]["label"]), "value": params[n]["value"],
-                         "unit": unit(params[n]["unit"]), "status": params[n]["status"]}
+                         "unit": unit(params[n]["unit"]), "status": params[n]["status"],
+                         "source": text(params[n].get("source", ""))}
                         for n in sorted(used) if n in params]
     return result
 

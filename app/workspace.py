@@ -487,6 +487,13 @@ def export_drawing_svg(proposal_id: int, lang: Lang = "zh", rev: int | None = No
     return _file(drawing_export.svg(d, meta, lang, shown), base.format(kind="Drawing") + ".svg", "image/svg+xml")
 
 
+@router.get("/{proposal_id}/wiring.svg")
+def export_wiring_svg(proposal_id: int, lang: Lang = "zh", rev: int | None = None, db: Session = Depends(get_db)):
+    """方案配置页的接线示意图（CR-11），和图纸、DXF、BOQ 用同一份 W1 结果。"""
+    d, _, base = _drawing_export(db, proposal_id, lang, rev)
+    return _file(drawing_export.wiring_svg(d, lang), base.format(kind="Wiring") + ".svg", "image/svg+xml")
+
+
 @router.get("/{proposal_id}/drawing.dxf")
 def export_drawing_dxf(proposal_id: int, lang: Lang = "zh", rev: int | None = None, db: Session = Depends(get_db)):
     d, meta, base = _drawing_export(db, proposal_id, lang, rev)

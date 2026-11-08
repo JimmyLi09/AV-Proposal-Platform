@@ -60,7 +60,7 @@ def build(values: dict, inputs: dict, params: dict, edits: dict | None = None, m
         amps = sum((c["_a"] for c in members), Decimal(0))
         jumper = wiring.jumper_mm([c["_cell"] for c in members])
         power_mm += jumper
-        circuits.append({"no": no, "cabinets": len(members), "watts": round(float(watts)),
+        circuits.append({"no": no, "cabinets": len(members), "path": [c["id"] for c in members], "watts": round(float(watts)),
                          "amps": float(amps.quantize(Decimal("0.01"), ROUND_HALF_UP)),
                          "over_a": amps > usable, "over_chain": len(members) > chain,
                          "over": amps > usable or len(members) > chain})

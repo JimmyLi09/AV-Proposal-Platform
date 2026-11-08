@@ -106,7 +106,7 @@ export type RuleResult = {
   trace: string;
   check: string | null;
   status: string;
-  params: { name: string; label: string; value: number | null; unit: string; status: string }[];
+  params: { name: string; label: string; value: number | string | null; unit: string; status: string; source?: string }[];
   missing: string[];
   error: string | null;
   manual: string[];

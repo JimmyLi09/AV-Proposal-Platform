@@ -168,6 +168,78 @@ def svg(d: dict, meta: dict, lang: str = "zh", layers: list[str] | None = None) 
     return "".join(out)
 
 
+WIRING_TEXT = {
+    "zh": {"sender": "发送卡", "db": "配电箱", "circuit": "回路", "port": "网口", "box": "箱"},
+    "en": {"sender": "Sending card", "db": "DB box", "circuit": "Circuit", "port": "Port", "box": "cab."},
+}
+DATA_BLUE = "#2E6FD8"
+
+
+def wiring_svg(d: dict, lang: str = "zh") -> str:
+    """方案配置页（05）的接线示意图（CR-11），和图纸用同一份 W1 结果：箱体格子；电源每路一种颜色、虚线，从左下的配电箱
+    接到这一路的第一箱再按走线顺序串下去；网线蓝色实线，从左上的发送卡开始。回路标签在屏幕下方、网口标签在屏幕上方，
+    平均分布不重叠。电源、网线分别在 layer-power / layer-data 里，页面上可以只看其中一种。超载的组标红。"""
+    t = WIRING_TEXT[lang]
+    W, H = d["width"], d["height"]
+    s = min(760 / W, 340 / H)
+    left, top = 150, 70
+    sw, sh = W * s, H * s
+    X = lambda x: left + x * s  # noqa: E731
+    Y = lambda y: top + (H - y) * s  # noqa: E731
+    cab = {c["id"]: c for c in d["cabinets"]}
+    center = lambda cid: (X(cab[cid]["x"] + cab[cid]["w"] / 2), Y(cab[cid]["y"] + cab[cid]["h"] / 2))  # noqa: E731
+    width, height = left + sw + 30, top + sh + 66
+    out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" width="{width:.0f}" '
+           f'height="{height:.0f}" font-family="{FONT}">',
+           f'<rect width="{width:.0f}" height="{height:.0f}" fill="#fff"/>']
+    for c in d["cabinets"]:
+        out.append(f'<rect x="{X(c["x"]):.1f}" y="{Y(c["y"] + c["h"]):.1f}" width="{c["w"] * s:.1f}" '
+                   f'height="{c["h"] * s:.1f}" fill="#F7F4EE" stroke="#CFC6B8"/>')
+    sender, db = (12, top - 4), (12, top + sh - 32)
+    out.append(f'<g class="layer-data"><rect x="{sender[0]}" y="{sender[1]}" width="112" height="36" rx="6" fill="#EAF1FC" '
+               f'stroke="{DATA_BLUE}"/><text x="{sender[0] + 56}" y="{sender[1] + 22}" font-size="12" text-anchor="middle" '
+               f'fill="{NAVY}">{escape(t["sender"])}</text></g>')
+    out.append(f'<g class="layer-power"><rect x="{db[0]}" y="{db[1]}" width="112" height="36" rx="6" fill="#FDF1E6" '
+               f'stroke="#C2410C"/><text x="{db[0] + 56}" y="{db[1] + 22}" font-size="12" text-anchor="middle" '
+               f'fill="{NAVY}">{escape(t["db"])}</text></g>')
+
+    def run(cls, path, color, start, dashed, no, label, sub, slot, n, above, shift):
+        """shift：电源线往下、网线往上各偏几像素，两种线并排走，不互相遮住。"""
+        pts = [start] + [(x, y + shift) for x, y in map(center, path)]
+        dash = ' stroke-dasharray="6 4"' if dashed else ""
+        g = [f'<g class="{cls}">',
+             f'<polyline points="{" ".join(f"{x:.1f},{y:.1f}" for x, y in pts)}" fill="none" stroke="{color}" '
+             f'stroke-width="1.8"{dash}/>']
+        fx, fy = center(path[0])
+        bx, by = fx + (10 if shift > 0 else -10), fy + shift * 2
+        g.append(f'<circle cx="{bx:.1f}" cy="{by:.1f}" r="8" fill="{color}"/>'
+                 f'<text x="{bx:.1f}" y="{by + 4:.1f}" font-size="10" font-weight="700" text-anchor="middle" fill="#fff">{no}</text>')
+        lx = left + sw * (slot + 0.5) / n  # 平均分布在屏幕上方 / 下方，每个标签两行，不超过自己那一格
+        ly = top - 30 if above else top + sh + 22
+        g.append(f'<text x="{lx:.1f}" y="{ly:.1f}" font-size="11" text-anchor="middle" fill="{color}" font-weight="600">'
+                 f'{escape(label)}</text>'
+                 f'<text x="{lx:.1f}" y="{ly + 14:.1f}" font-size="10" text-anchor="middle" fill="{MUTED}">{escape(sub)}</text>')
+        g.append("</g>")
+        return g
+
+    n = len(d["circuits"])
+    for i, c in enumerate(d["circuits"]):
+        if not c["path"]:
+            continue
+        color = RED if c["over"] else CIRCUIT_COLORS[(c["no"] - 1) % len(CIRCUIT_COLORS)]
+        out += run("layer-power", c["path"], color, (db[0] + 112, db[1] + 18), True, c["no"],
+                   f'{t["circuit"]} {c["no"]} · {c["cabinets"]} {t["box"]}', f'{c["amps"]} A', i, n, False, 5)
+    n = len(d["cables"])
+    for i, c in enumerate(d["cables"]):
+        if not c["path"]:
+            continue
+        color = RED if c["over"] else DATA_BLUE
+        out += run("layer-data", c["path"], color, (sender[0] + 112, sender[1] + 18), False, _circled(c["no"]),
+                   f'{t["port"]} {_circled(c["no"])} · {c["cabinets"]} {t["box"]}', f'{c["px"]:,} px', i, n, True, -5)
+    out.append("</svg>")
+    return "".join(out)
+
+
 def dxf(d: dict, meta: dict, lang: str = "zh") -> bytes:
     """单位 mm，1:1；每样东西一个图层；尺寸用 DIMENSION 实体，在 AutoCAD 里可以直接量、直接改。"""
     import ezdxf

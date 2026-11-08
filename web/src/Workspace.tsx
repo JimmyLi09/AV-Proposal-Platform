@@ -9,6 +9,7 @@ import DrawingTab from "./Drawing";
 import ShapeFaces, { isMulti } from "./Faces";
 import ReviewTab from "./Review";
 import MultiView, { MultiCalc } from "./Multi";
+import { LoadBudget, WiringDiagram } from "./Wiring";
 import { t } from "./i18n";
 import { fmtDate, lineLabel, StatusTag } from "./labels";
 import { productStatus } from "./Products";
@@ -104,8 +105,12 @@ export default function Workspace({ id }: { id: number }) {
           </div>
           <fieldset className="plain-fieldset" disabled={readonly && tab !== "review"}>
           {tab === "rec" && (multi ? <MultiView view={view} onUse={useSource} />
-            : <Recommendation view={view} onCabinet={(cid) => saveInputs(cid)}
-              onLibrary={() => apply(api<WorkspaceView>(`/proposals/${id}`))} onView={show} />)}
+            : <>
+              <Recommendation view={view} onCabinet={(cid) => saveInputs(cid)}
+                onLibrary={() => apply(api<WorkspaceView>(`/proposals/${id}`))} onView={show} />
+              {line === "LED" && <LoadBudget view={view} />}
+              {view.drawing && <WiringDiagram view={view} drawing={view.drawing} />}
+            </>)}
           {tab === "calc" && (
             <section className="card">
               <h2>{t("ws.tabs.calc")}</h2>

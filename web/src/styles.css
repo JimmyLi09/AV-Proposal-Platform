@@ -216,3 +216,12 @@ a.file-link { display: inline-block; margin-right: 10px; }
 
 /* 第 6 步：锁定的 Rev 用 fieldset 整块禁用输入和按钮，外观不变 */
 .plain-fieldset { border: 0; margin: 0; padding: 0; min-width: 0; display: contents; }
+
+/* 带载预算与接线示意图（CR-10 / CR-11） */
+.budget li { padding: 4px 0; border-bottom: 1px solid var(--line); }
+.budget li.param-set b { color: #2f7a5b; }
+.budget li.param-open b { color: #9a4a12; }
+.budget-rule { margin-bottom: 10px; }
+.budget-rule .manual { color: #9a4a12; }
+.wiring-wrap svg { max-width: 100%; height: auto; }
+.wiring-wrap.hide-power .layer-power, .wiring-wrap.hide-data .layer-data { display: none; }
