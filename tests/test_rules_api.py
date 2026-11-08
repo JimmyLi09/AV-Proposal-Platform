@@ -35,12 +35,13 @@ def with_param(content, name, value):
 
 def test_seeded_v13_runs_with_expandable_formulas(client):
     v = client.get("/api/rules/LED").json()
-    assert v["version"] == "v1.3" and len(v["content"]["rules"]) == 16
+    assert v["version"] == "v1.3" and len(v["content"]["rules"]) == 17  # F1–F16 + W1 接线布置（CR-10）
     out = client.post("/api/rules/LED/run", json={"inputs": sample(client)}).json()
     f9 = rule(out, "F9")
-    assert f9["display"] == "5 根"
-    assert f9["trace"] == "ceil(1,835,008 / 560,000) = 4；4 + 1 = 5"
-    assert [p["name"] for p in f9["params"]] == ["px_per_data_cable", "spare_data_cables"]
+    assert f9["display"] == "6 根"
+    # 按箱数最少 3 路；默认按行整行，用 W1 的 5 路
+    assert f9["trace"] == "ceil(1,835,008 / 655,360) = 3；5 = 5；5 + 1 = 6"
+    assert [p["name"] for p in f9["params"]] == ["data_grouping", "px_per_data_cable", "spare_data_cables"]
 
 
 def test_save_creates_new_version_and_keeps_old(client):
@@ -56,7 +57,7 @@ def test_save_creates_new_version_and_keeps_old(client):
     latest = client.post("/api/rules/LED/run", json={"inputs": inputs}).json()
     old = client.post("/api/rules/LED/run", json={"inputs": inputs, "version_id": v13["id"]}).json()
     assert rule(latest, "F9")["display"] == "4 根"
-    assert rule(old, "F9")["display"] == "5 根"  # 旧版本原样保留
+    assert rule(old, "F9")["display"] == "6 根"  # 旧版本原样保留
     assert [x["version"] for x in client.get("/api/rules/LED/versions").json()] == ["v1.4", "v1.3"]
     assert client.get(f"/api/rules/LED/versions/{v13['id']}").json()["content"] == v13["content"]
 
@@ -71,7 +72,7 @@ def test_try_unsaved_changes_without_saving(client):
 
 def test_save_rejections(client):
     v13 = client.get("/api/rules/LED").json()
-    changed = with_param(v13["content"], "circuit_kw", 3)
+    changed = with_param(v13["content"], "chain_max", 12)
     body = {"base_id": v13["id"], "reason": "test", "content": changed}
     assert client.post("/api/rules/LED", json=body).status_code == 401  # 要先选名字
 
@@ -80,6 +81,8 @@ def test_save_rejections(client):
     bad["rules"][0]["outputs"][0]["cases"][0]["expr"] = "__import__('os').system('x')"
     assert client.post("/api/rules/LED", json=body | {"content": bad}).status_code == 422
     assert client.post("/api/rules/LED", json=body | {"content": v13["content"]}).status_code == 422  # 没有修改
+    bad = with_param(v13["content"], "data_grouping", "diagonal")  # 选项类参数只能选给定的值
+    assert client.post("/api/rules/LED", json=body | {"content": bad}).status_code == 422
     assert client.post("/api/rules/LED", json=body).status_code == 201
     assert client.post("/api/rules/LED", json=body).status_code == 409  # 基于旧版本
     assert len(client.get("/api/rules/LED/versions").json()) == 2
@@ -89,7 +92,7 @@ def test_restart_keeps_versions_and_does_not_reseed(client):
     login(client)
     v13 = client.get("/api/rules/LED").json()
     client.post("/api/rules/LED", json={"base_id": v13["id"], "reason": "x",
-                                        "content": with_param(v13["content"], "circuit_kw", 3)})
+                                        "content": with_param(v13["content"], "chain_max", 12)})
     with TestClient(create_app(client.data_dir)) as again:
         assert [x["version"] for x in again.get("/api/rules/LED/versions").json()] == ["v1.4", "v1.3"]
 

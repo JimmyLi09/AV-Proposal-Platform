@@ -6,11 +6,13 @@ import pytest
 from fastapi.testclient import TestClient
 from pypdf import PdfReader
 
+from conftest import count_content, count_grouping
 from app.main import create_app
 from app.products.library import load_seed as load_library
 from app.rules.engine import calculate, load_seed
 
-RULES, SAMPLE = load_seed("LED")
+SEED, SAMPLE = load_seed("LED")
+RULES = count_content(SEED)  # 网线按箱数：Royal 3 个网口，SC-4 够用（见 conftest）
 LIBRARY = load_library("LED")
 
 
@@ -23,18 +25,20 @@ def line(out, name):
 
 
 def test_manual_value_replaces_the_rule_value_and_flows_downstream():
-    out = calculate(RULES, LIBRARY, SAMPLE["input"], overrides={"circuits": 4})
+    out = calculate(RULES, LIBRARY, SAMPLE["input"], overrides={"circuits": 5})
     f6 = line(out, "circuits")
-    assert (f6["rule_value"], f6["value"], f6["manual"]) == (3, 4, True)
+    assert (f6["rule_value"], f6["value"], f6["manual"]) == (4, 5, True)
     assert rule(out, "F6")["manual"] == ["circuits"] and out["manual"] == ["circuits"]
-    assert rule(out, "F6")["trace"] == "ceil(5.7344 / 2.5) = 3 → 手动 4"
-    assert line(out, "power_cables")["value"] == 5 and rule(out, "F7")["trace"] == "4 + 1 = 5"  # 下游按手动值算
+    assert rule(out, "F6")["trace"].endswith("max(3, 4) = 4 → 手动 5")
+    assert rule(out, "F6")["display"] == "5 路"  # 「带载 / 串接，取大」是按规则值写的，手动时只显示手动值
+    assert line(out, "power_cables")["value"] == 6 and rule(out, "F7")["trace"] == "5 + 1 = 6"  # 下游按手动值算
+    assert line(out, "power_group_sizes")["value"] == [7, 7, 7, 7, 7]  # W1 按手动回路数分组
     assert "manual" not in line(out, "power_cables")
     boq = {x["key"]: x for x in out["boq"]}
-    assert boq["power_cable"]["qty"] == 5 and not boq["power_cable"]["manual"]  # 由手动值算出来的，不算手动
+    assert boq["power_cable"]["qty"] == 6 and not boq["power_cable"]["manual"]  # 由手动值算出来的，不算手动
     assert out["values"]["power_spares"] == 1
     plain = calculate(RULES, LIBRARY, SAMPLE["input"])
-    assert line(plain, "circuits")["value"] == 3 and plain["manual"] == []  # 不带覆盖时还是规则值
+    assert line(plain, "circuits")["value"] == 4 and plain["manual"] == []  # 不带覆盖时还是规则值
 
 
 def test_step_rule_output_can_be_overridden():
@@ -47,6 +51,7 @@ def test_step_rule_output_can_be_overridden():
 @pytest.fixture
 def client(tmp_path):
     with TestClient(create_app(tmp_path)) as c:
+        count_grouping(c.app)  # 网线按箱数：Royal 3 个网口，SC-4 够用（见 conftest）
         user = c.post("/api/users", json={"name": "Jimmy", "role": "PM"}).json()
         c.post("/api/session", json={"user_id": user["id"]})
         pid = c.post("/api/projects", json={"name": "143-Royal Plaza LED", "client": "Royal Plaza"}).json()["id"]
@@ -60,35 +65,35 @@ def put(client, values, reason=""):
 
 
 def test_override_needs_a_reason_and_is_listed_for_review(client):
-    r = put(client, {"circuits": 4})
+    r = put(client, {"circuits": 5})
     assert r.status_code == 422 and r.json()["detail"] == "手动修改要写原因"
     assert put(client, {"area_m2": 12}, "x").status_code == 422  # 只能改推荐页卡片上的结果
     assert put(client, {"circuits": -1}, "x").status_code == 422
-    v = put(client, {"circuits": 4}, "现场要求每列独立回路").json()
+    v = put(client, {"circuits": 5}, "现场要求每列独立回路").json()
     [m] = v["overrides"]
-    assert (m["rule"], m["rule_value"], m["value"], m["reason"], m["by"]) == ("F6", 3, 4, "现场要求每列独立回路", "Jimmy")
+    assert (m["rule"], m["rule_value"], m["value"], m["reason"], m["by"]) == ("F6", 4, 5, "现场要求每列独立回路", "Jimmy")
     assert m["at"]
     # 客户版 BOQ 用手动值
     cabling = next(r for r in v["boq"]["rows"] if r["key"] == "power_cabling")
-    assert cabling["specs"] == ["DB box with MCB × 4 circuits",
-                                "Power cables 4 + 1 spare, data cables CAT6 4 + 1 spare"]
-    # 示意图、图纸用手动值并标手动
+    assert cabling["specs"] == ["DB box with MCB × 5 circuits",
+                                "Power cables 5 + 1 spare, data cables CAT6 3 + 1 spare"]
+    # 示意图、图纸用手动值并标手动；W1 按手动回路数分组，图上就是 5 路（CR-11）
     power = next(x for x in v["result"]["diagram"]["links"] if x["boq"] == "power_cable")
-    assert power["qty"] == "4 + 1 备用" and power["manual"]
+    assert power["qty"] == "5 + 1 备用" and power["manual"]
     d = v["drawing"]
-    assert next(b for b in d["basis"] if b["rule"] == "F6")["result"] == "4 路（手动）"
-    assert {"check": "NOTE", "text": "图上整列分组是 3 路，F6 手动值是 4 路"} in d["checks"]
+    assert next(b for b in d["basis"] if b["rule"] == "F6")["result"] == "5 路（手动）"
+    assert len(d["circuits"]) == 5 and d["checks"] == []
 
 
 def test_manual_value_is_in_the_exported_pdf_and_restore_goes_back(client):
-    put(client, {"circuits": 4}, "site request")
+    put(client, {"circuits": 5}, "site request")
     pdf = client.get(f"/api/proposals/{client.proposal}/drawing.pdf?lang=en")
     text = " ".join(p.extract_text() for p in PdfReader(io.BytesIO(pdf.content)).pages)
-    assert "4 (manual)" in text
+    assert "5 (manual)" in text
     v = put(client, {"circuits": None}).json()  # 恢复，不用写原因
-    assert v["overrides"] == [] and line(v["result"], "circuits")["value"] == 3
-    put(client, {"circuits": 4}, "site request")
-    v = put(client, {"circuits": 3}, "改回").json()  # 改回规则值 = 恢复
+    assert v["overrides"] == [] and line(v["result"], "circuits")["value"] == 4
+    put(client, {"circuits": 5}, "site request")
+    v = put(client, {"circuits": 4}, "改回").json()  # 改回规则值 = 恢复
     assert v["overrides"] == [] and v["drawing"]["checks"] == []
 
 

@@ -200,7 +200,7 @@ def calculate_led(content: dict, library: dict, inputs: dict, cabinet_id: str | 
                         f"{t['circuits']} circuits · {t['data_cables']} data cables · {t['db_boxes']} DB boxes"),
                      _worst(_rule_checks(checks, "S3")), tr("回路、配电箱、数据线按面算；同型号备品按整屏合计",
                                                          "Circuits, DB boxes and data cables per face; spares pooled for the whole screen"),
-                     trace=" + ".join(f"{f['id']} {f['values']['circuits']}" for f in out["faces"]) + f" = {t['circuits']}",
+                     trace=" + ".join(f"{f['id']} {f['values'].get('circuits', '—')}" for f in out["faces"]) + f" = {t['circuits']}",
                      missing=[f"{f['id']} · {r['id']}" for f in out["faces"] for r in f["rules"] if r["missing"] or r["error"]]))
 
     # S4 转角：点间距一致；内角要确认哪面压哪面；外转角用转角箱体或 45° 切角模组

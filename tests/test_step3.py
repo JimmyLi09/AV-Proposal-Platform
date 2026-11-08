@@ -4,12 +4,14 @@ import copy
 import pytest
 from fastapi.testclient import TestClient
 
+from conftest import count_content, count_grouping
 from app.main import create_app
 from app.products.library import LibraryError, load_seed as load_library, validate
 from app.rules import led
 from app.rules.engine import calculate, load_seed
 
-RULES, SAMPLE = load_seed("LED")
+SEED, SAMPLE = load_seed("LED")
+RULES = count_content(SEED)  # 网线按箱数：Royal 3 个网口，SC-4 够用（见 conftest）
 LIBRARY = load_library("LED")
 INPUT = SAMPLE["input"]  # 143-Royal Plaza LED-1
 
@@ -102,9 +104,9 @@ def test_boq_quantities_come_from_rules():
         ("备用接收卡", "IC-25"): (1, "F8"),
         ("控制器", "SC-4"): (1, "1.84 / 2.30 MP，F11"),
         ("视频处理器", "SP-1"): (1, "1 路信号源，F13"),
-        ("电源线", "—"): (4, "3 回路 + 备用，F7"),
-        ("配电箱（含 MCB）", "定制"): (1, "3 回路，F12"),
-        ("数据线", "Cat6"): (5, "4 路 + 备用，F9"),
+        ("电源线", "—"): (5, "4 回路 + 备用，F7"),
+        ("配电箱（含 MCB）", "定制"): (1, "4 回路，F12"),
+        ("数据线", "Cat6"): (4, "3 路 + 备用，F9"),
         ("墙面支架 1 套（不含钢结构）", "—"): (1, "F16"),
     }
 
@@ -114,6 +116,7 @@ def test_boq_quantities_come_from_rules():
 @pytest.fixture
 def client(tmp_path):
     with TestClient(create_app(tmp_path)) as c:
+        count_grouping(c.app)  # 网线按箱数：Royal 3 个网口，SC-4 够用（见 conftest）
         user = c.post("/api/users", json={"name": "Jimmy", "role": "PM"}).json()
         c.post("/api/session", json={"user_id": user["id"]})
         pid = c.post("/api/projects", json={"name": "143-Royal Plaza LED", "client": "Royal Plaza"}).json()["id"]

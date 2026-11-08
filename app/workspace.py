@@ -120,7 +120,7 @@ def refresh_status(db: Session, prop: Proposal) -> None:
     rev.status = "calculated" if complete else "draft"
 
 
-BASIS_RULES = ["F3", "F4", "F5", "F6", "F7", "F9"]
+BASIS_RULES = ["F3", "F4", "F5", "F6", "F7", "W1", "F9"]
 
 
 def drawing_of(used: dict, result: dict | None, edits: dict | None) -> dict | None:
@@ -128,7 +128,8 @@ def drawing_of(used: dict, result: dict | None, edits: dict | None) -> dict | No
     if not result or not result["rules"]:
         return None
     params = {p["name"]: p["value"] for p in used["rules"].content["params"]}
-    d = build_drawing(result["values"], result["values"], params, edits, set(result["manual"]))
+    cabinet = (result.get("recommendation") or {}).get("cabinet") or {}
+    d = build_drawing(result["values"], result["values"], params, edits, set(result["manual"]), cabinet.get("cabinet_max"))
     if d:
         d["basis"] = [{"item": r["title"], "formula": r["trace"], "rule": r["id"],
                        "result": r["display"] + (tr("（手动）", " (manual)") if r["manual"] else "")}

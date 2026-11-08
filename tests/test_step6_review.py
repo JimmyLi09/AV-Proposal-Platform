@@ -5,6 +5,7 @@ import copy
 import pytest
 from fastapi.testclient import TestClient
 
+from conftest import count_grouping
 from app.main import create_app
 from app.rules.engine import load_seed
 
@@ -14,6 +15,7 @@ _, SAMPLE = load_seed("LED")
 @pytest.fixture
 def client(tmp_path):
     with TestClient(create_app(tmp_path)) as c:
+        count_grouping(c.app)  # 网线按箱数：Royal 3 个网口，SC-4 够用（见 conftest）
         user = c.post("/api/users", json={"name": "Jimmy", "role": "PM"}).json()
         c.post("/api/session", json={"user_id": user["id"]})
         pid = c.post("/api/projects", json={"name": "143-Royal Plaza LED", "client": "Royal Plaza"}).json()["id"]
@@ -55,7 +57,7 @@ def test_submit_locks_the_rev_and_blocks_every_edit(client):
 
 def test_blocked_rev_cannot_be_submitted(client):
     calculated(client)
-    client.put(f"{client.base}/drawing", json={"power": {"R1C7": 1, "R2C7": 1}, "data": {}})  # 回路 1 超载
+    client.put(f"{client.base}/drawing", json={"power": {"R3C1": 1, "R3C2": 1}, "data": {}})  # 回路 1 串 11 箱，超过上限
     v = client.get(client.base).json()
     assert any("超载" in b for b in v["blockers"])
     r = client.post(f"{client.base}/submit")
@@ -88,15 +90,15 @@ def test_locked_rev_keeps_its_versions_and_new_rev_uses_the_latest(client):
     client.post(f"{client.base}/submit")
     client.post(f"{client.base}/approve", json={})
 
-    # 批准之后规则另存新版本（每根数据线带载改大）：已批准的 Rev 0 不变
+    # 批准之后规则另存新版本（每条电源线最多串接 6 箱）：已批准的 Rev 0 不变
     rules = client.get("/api/rules/LED").json()
     content = copy.deepcopy(rules["content"])
-    next(p for p in content["params"] if p["name"] == "px_per_data_cable")["value"] = 716800
+    next(p for p in content["params"] if p["name"] == "chain_max")["value"] = 6
     assert client.post("/api/rules/LED", json={"base_id": rules["id"], "reason": "test", "content": content}).status_code == 201
 
     assert client.post(f"{client.base}/revisions").status_code == 201
     old = client.get(f"{client.base}?rev=0").json()  # 第一个 Rev 是 Rev 0
-    assert old["rules_version"] == "v1.3" and tile(old, "data_cables") == 5 and old["snapshot_ok"]
+    assert old["rules_version"] == "v1.3" and tile(old, "circuits") == 4 and old["snapshot_ok"]
     assert old["readonly"] and not old["viewing_latest"]
 
     new = client.get(client.base).json()
@@ -107,7 +109,7 @@ def test_locked_rev_keeps_its_versions_and_new_rev_uses_the_latest(client):
     cmp = client.get(f"{client.base}/compare?a=0&b=1").json()
     assert {"item": "规则", "a": "v1.3", "b": "v1.4"} in cmp["versions"]
     assert cmp["inputs"] == []
-    assert any(x["name"] == "data_cables" and x["a"].startswith("5") and x["b"].startswith("4") for x in cmp["results"])
+    assert any(x["name"] == "circuits" and x["a"].startswith("4") and x["b"].startswith("6") for x in cmp["results"])
     assert any(x["a"] != x["b"] for x in cmp["boq"])
 
     assert client.post(f"{client.base}/revisions").status_code == 409  # Rev 1 还没批准

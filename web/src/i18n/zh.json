@@ -145,6 +145,7 @@
     "boxes": "{n} 箱",
     "cable": "网线 {no}",
     "cables": "网线",
+    "chainMax": "最多串接 {n} 箱",
     "circuit": "回路 {no}",
     "circuits": "电源回路",
     "dwgHint": "装 ODA 后可导出 DWG",
@@ -156,6 +157,7 @@
     "hintData": "点箱体，把它换到下一根网线；改完立即重新校验每根网线的带载。",
     "hintPower": "点箱体，把它换到下一个回路；改完立即重新校验每个回路的功率。",
     "intro": "由 F3 箱体排布、F6 / F7 电源回路、F9 网线自动生成，可导出 DXF / DWG。编号从左下角 R1C1 开始，网线起点在左侧。",
+    "jumpers": "箱间跳线 {n} 根 ≈ {m} m",
     "layer": {
       "data": "网线",
       "dim": "尺寸线",
@@ -167,8 +169,9 @@
     "layers": "图层",
     "manualCount": "已手动调整 {n} 个箱体，随 Rev 保存。",
     "noOda": "服务器没有装 ODA File Converter，装好后可导出 DWG。",
-    "ok": "校验通过：每个回路 ≤ {kw} kW，每根网线 ≤ {px} px。",
+    "ok": "校验通过：每个回路 ≤ {a} A、最多串接 {chain} 箱，每根网线 ≤ {px} px。",
     "over": "有 {n} 处超载，已标红。这个 Rev 不能批准，改回或点「恢复自动」。",
+    "overChain": "超过串接上限",
     "overload": "超载",
     "pdfEn": "PDF 英文",
     "pdfZh": "PDF 中文",
@@ -445,10 +448,13 @@
     "templates": "模板"
   },
   "options": {
+    "S": "S 形",
     "avoip": "AVoIP（AV 网络）",
     "both": "前后都可",
     "by_distance": "按距离",
     "ceiling": "吊顶",
+    "col": "按列",
+    "count": "按箱数",
     "embedded": "嵌入",
     "floor": "落地",
     "front": "前维护",
@@ -462,7 +468,10 @@
     "pjlink": "PJLink 网络中控",
     "rear": "后维护",
     "rental": "租赁",
+    "row": "按行",
+    "rows": "按行整行",
     "server_room": "机房",
+    "straight": "直走",
     "wall": "壁挂"
   },
   "products": {
@@ -486,6 +495,12 @@
     "newProduct": "新产品",
     "nothingToSave": "修改产品后才能保存",
     "preferredOnly": "仅首选",
+    "ratings": {
+      "amps": "{size} 最大电流",
+      "noSizes": "先填箱体尺寸",
+      "sample": "示例值",
+      "watts": "{size} 最大功率"
+    },
     "retireHint": "不用的产品请改为「已停用」，旧版本仍保留。",
     "sample": "示例数据",
     "sampleWarn": "标「示例数据」的产品用于测试流程；清单 D 组填好后替换。",

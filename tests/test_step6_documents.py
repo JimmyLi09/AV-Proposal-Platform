@@ -8,6 +8,7 @@ from docx import Document
 from fastapi.testclient import TestClient
 from pypdf import PdfReader
 
+from conftest import count_grouping
 from app.main import create_app
 from app.rules.engine import load_seed
 
@@ -17,6 +18,7 @@ _, SAMPLE = load_seed("LED")
 @pytest.fixture
 def client(tmp_path):
     with TestClient(create_app(tmp_path)) as c:
+        count_grouping(c.app)  # 网线按箱数：Royal 3 个网口，SC-4 够用（见 conftest）
         user = c.post("/api/users", json={"name": "Jimmy", "role": "PM"}).json()
         c.post("/api/session", json={"user_id": user["id"]})
         pid = c.post("/api/projects", json={"name": "143-Royal Plaza LED", "client": "Royal Plaza", "location": "Lobby"}).json()["id"]

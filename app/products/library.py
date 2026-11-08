@@ -26,6 +26,8 @@ FIELDS = {
             ("cabinet_sizes_mm", "Cabinet sizes 箱体尺寸 mm（第一个为主尺寸）", "sizes"),
             ("brightness_nits", "Brightness 亮度 nits", "number"),
             ("max_power_w_m2", "Max power 最大功耗 W/㎡", "number"),
+            # CR-10：每种箱体尺寸的最大电流 / 功率（规格书），{"640x480": {"a": 0.96, "w": 120, "sample": false}}
+            ("cabinet_max", "Max per cabinet 每箱最大电流 A / 功率 W", "ratings"),
             ("ip", "IP rating 防护等级", "text"),
             ("weight_kg", "Weight 重量 kg / cabinet 箱体", "number"),
             ("maintenance", "Maintenance 维护方式", "maintenance"),
@@ -87,6 +89,9 @@ CHECKS = {
         isinstance(s, list) and len(s) == 2 and all(_number(x) and x is not None for x in s) for s in v)),
     "maintenance": lambda v: v in ("front", "rear", "both"),
     "ids": lambda v: v is None or (isinstance(v, list) and all(isinstance(x, str) for x in v)),
+    "ratings": lambda v: v is None or (isinstance(v, dict) and all(
+        isinstance(k, str) and isinstance(r, dict) and _number(r.get("a")) and _number(r.get("w"))
+        and isinstance(r.get("sample", False), bool) for k, r in v.items())),
 }
 
 

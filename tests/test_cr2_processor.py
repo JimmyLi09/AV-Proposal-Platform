@@ -5,13 +5,16 @@ import copy
 import pytest
 from fastapi.testclient import TestClient
 
+from conftest import count_content
 from app.boq import build
 from app.main import create_app
 from app.products.library import load_reference, load_seed as load_library
 from app.rules.engine import calculate, load_seed
 from app.templates.content import load_seed as load_template
 
-RULES, SAMPLE = load_seed("LED")
+SEED, SAMPLE = load_seed("LED")
+RULES = count_content(SEED)  # Royal 的用例按箱数：3 个网口，SC-4、VX400 都够（见 conftest）
+# 6400 × 3520 的例子用默认的按行整行：7 行，每行一根网线（最上一行 10 × 65,536 = 655,360 px 正好装满）
 LIBRARY = load_library("LED")
 EXAMPLE = {"environment": "indoor", "pixel_pitch_mm": 2.5, "width_mm": 6400, "height_mm": 3520,
            "installation": "wall", "maintenance": "front", "brightness_required_nits": 650,
@@ -33,7 +36,7 @@ def with_reference(library, *ids):
 
 
 def test_example_without_suitable_products_suggests_vx1000_and_vx16s():
-    out = calculate(RULES, LIBRARY, EXAMPLE)
+    out = calculate(SEED, LIBRARY, EXAMPLE)
     r = by_id(out)
     assert value(r["F4"], "total_pixels") == 3_604_480 and value(r["F9"], "data_runs") == 7  # 3.60 MP，7 路 + 1 备用
     assert r["F11"]["check"] == "BLOCK" and "processor_id" not in {x["name"] for x in r["F13"]["lines"]}
@@ -47,7 +50,7 @@ def test_example_without_suitable_products_suggests_vx1000_and_vx16s():
 
 
 def test_example_after_adding_vx1000_uses_it_and_has_no_controller_line():
-    out = calculate(RULES, with_reference(LIBRARY, "VX1000"), EXAMPLE)
+    out = calculate(SEED, with_reference(LIBRARY, "VX1000"), EXAMPLE)
     r = by_id(out)
     assert value(r["F13"], "processor") == "NovaStar VX1000" and value(r["F13"], "processor_sending") is True
     assert "55 %" in r["F13"]["trace"] and "7 路 ≤ 10 口" in r["F13"]["trace"]

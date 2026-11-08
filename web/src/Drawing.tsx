@@ -68,7 +68,7 @@ export default function DrawingTab({ view, drawing: d, onApply }: { view: Worksp
         <p className={over ? "error-banner" : "ok-banner"}>
           {over
             ? t("drawing.over", { n: over })
-            : t("drawing.ok", { kw: d.circuit_cap_w / 1000, px: d.cable_cap_px.toLocaleString() })
+            : t("drawing.ok", { a: d.circuit_cap_a, chain: d.chain_max, px: d.cable_cap_px.toLocaleString() })
               + (d.manual.power + d.manual.data ? t("drawing.manualCount", { n: d.manual.power + d.manual.data }) : "")}
         </p>
         {d.checks.filter((c) => c.check === "NOTE").map((c, i) => (
@@ -83,18 +83,20 @@ export default function DrawingTab({ view, drawing: d, onApply }: { view: Worksp
       <div className="grid2">
         <section className="card">
           <h3>
-            {t("drawing.circuits")} · ≤ {d.circuit_cap_w / 1000} kW
+            {t("drawing.circuits")} · ≤ {d.circuit_cap_a} A · {t("drawing.chainMax", { n: d.chain_max })}
           </h3>
           <ul className="plain">
             {d.circuits.map((c) => (
               <li key={c.no} className={c.over ? "error" : ""}>
                 {t("drawing.circuit", { no: c.no })} · {t("drawing.boxes", { n: c.cabinets })} · {c.watts} W · {c.amps} A
-                {c.over ? ` · ${t("drawing.overload")}` : ""}
+                {c.over_a ? ` · ${t("drawing.overload")}` : ""}
+                {c.over_chain ? ` · ${t("drawing.overChain")}` : ""}
               </li>
             ))}
             <li className="muted">
               {t("drawing.circuit", { no: d.circuits.length + 1 })} · {t("drawing.reserved")}
             </li>
+            <li className="muted">{t("drawing.jumpers", { n: d.power_jumpers, m: d.power_jumper_m })}</li>
           </ul>
         </section>
         <section className="card">
@@ -111,6 +113,7 @@ export default function DrawingTab({ view, drawing: d, onApply }: { view: Worksp
             <li className="muted">
               {t("drawing.cable", { no: circled(d.cables.length + 1) })} · FOR SPARE · {t("drawing.spare")}
             </li>
+            <li className="muted">{t("drawing.jumpers", { n: d.data_jumpers, m: d.data_jumper_m })}</li>
           </ul>
         </section>
       </div>

@@ -76,16 +76,18 @@ def gmc_inputs():
 def test_multiface_led_proposal(tmp_path):
     c = start(tmp_path, "LED")
     v = put_inputs(c, gmc_inputs())
-    # 示例箱体 640 宽：B 面 8000 拼不出（F3 阻断），用到箱体数的 F8 缺数，方案停在草稿；其它数量照样按面算出
-    assert v["rev"]["status"] == "draft" and "B · F8" in next(r for r in v["result"]["rules"] if r["id"] == "S3")["missing"]
-    assert [f["id"] for f in v["result"]["faces"]] == ["A", "B", "C"] and v["result"]["multi"]["totals"]["circuits"] == 17
+    # 示例箱体 640 宽：B 面 8000 拼不出（F3 阻断），用到箱体数的规则（CR-10 起功率、回路、接线都按箱体算）缺数，方案停在草稿；
+    # A、C 面照样按面算出：各 72 箱、8 路回路（串接上限 10 决定）
+    missing = next(r for r in v["result"]["rules"] if r["id"] == "S3")["missing"]
+    assert v["rev"]["status"] == "draft" and {"B · F6", "B · F8"} <= set(missing)
+    assert [f["id"] for f in v["result"]["faces"]] == ["A", "B", "C"] and v["result"]["multi"]["totals"]["circuits"] == 16
     boq = v["boq"]
     assert boq["readonly"] and [r["group"] for r in boq["rows"]][:1] == ["A · Left"]
     assert {r["group"] for r in boq["rows"]} == {"A · Left", "B · Main", "C · Right", "共用"}
     # 同型号备品按整屏合计（S3）：不在每面重复，只在共用组出一行；共用组的线缆备用数按面加总
     shared = [r for r in boq["rows"] if r["group"] == "共用"]
     assert shared[-1]["title"] == "Spares: 80 modules, 3 power supply, 3 receiving card"
-    assert "Power cables 17 + 3 spare, data cables CAT6 24 + 3 spare" in shared[1]["specs"]
+    assert "Power cables 16 + 2 spare, data cables CAT6 16 + 2 spare" in shared[1]["specs"]
     assert not any(s.startswith("Spares") for r in boq["rows"] if r["group"] != "共用" for s in r["specs"])
     assert c.put(f"/api/proposals/{c.proposal}/boq", json={"rows": {}}).status_code == 409
     rows = list(load_workbook(io.BytesIO(c.get(f"/api/proposals/{c.proposal}/boq.xlsx").content)).active.iter_rows(values_only=True))

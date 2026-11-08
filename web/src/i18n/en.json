@@ -145,6 +145,7 @@
     "boxes": "{n} cabinets",
     "cable": "Data cable {no}",
     "cables": "Data cables",
+    "chainMax": "max {n} cabinets per chain",
     "circuit": "Circuit {no}",
     "circuits": "Power circuits",
     "dwgHint": "Install ODA to export DWG",
@@ -156,6 +157,7 @@
     "hintData": "Click a cabinet to move it to the next data cable; each cable's load is checked again right away.",
     "hintPower": "Click a cabinet to move it to the next circuit; each circuit's power is checked again right away.",
     "intro": "Generated from the F3 cabinet layout, F6 / F7 power circuits and F9 data cables; exports to DXF / DWG. Numbering starts at R1C1 bottom-left; data cables start on the left.",
+    "jumpers": "{n} jumpers between cabinets ≈ {m} m",
     "layer": {
       "data": "Data",
       "dim": "Dims",
@@ -167,8 +169,9 @@
     "layers": "Layers",
     "manualCount": "{n} cabinets adjusted manually, saved with the Rev.",
     "noOda": "ODA File Converter is not installed on the server; install it to export DWG.",
-    "ok": "Checks pass: each circuit ≤ {kw} kW, each data cable ≤ {px} px. ",
+    "ok": "Checks pass: each circuit ≤ {a} A and at most {chain} cabinets in a chain; each data cable ≤ {px} px.",
     "over": "{n} overloads, marked red. This Rev cannot be approved; change them back or click Reset to auto.",
+    "overChain": "over the chain limit",
     "overload": "overload",
     "pdfEn": "PDF English",
     "pdfZh": "PDF Chinese",
@@ -445,10 +448,13 @@
     "templates": "Templates"
   },
   "options": {
+    "S": "S path",
     "avoip": "AVoIP (AV network)",
     "both": "Front or rear",
     "by_distance": "By distance",
     "ceiling": "Ceiling",
+    "col": "By column",
+    "count": "By cabinet count",
     "embedded": "Embedded",
     "floor": "Floor stand",
     "front": "Front",
@@ -462,7 +468,10 @@
     "pjlink": "PJLink",
     "rear": "Rear",
     "rental": "Rental",
+    "row": "By row",
+    "rows": "Whole rows",
     "server_room": "Server room",
+    "straight": "Straight",
     "wall": "Wall"
   },
   "products": {
@@ -486,6 +495,12 @@
     "newProduct": "New product",
     "nothingToSave": "Change a product before saving",
     "preferredOnly": "Preferred only",
+    "ratings": {
+      "amps": "{size} max current",
+      "noSizes": "Fill in the cabinet sizes first",
+      "sample": "Sample value",
+      "watts": "{size} max power"
+    },
     "retireHint": "Set products no longer used to Retired; older versions are kept.",
     "sample": "Sample data",
     "sampleWarn": "Products marked Sample data are for testing the workflow; they are replaced once checklist group D is filled in.",
