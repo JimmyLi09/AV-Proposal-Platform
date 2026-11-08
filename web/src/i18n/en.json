@@ -700,6 +700,29 @@
     "unsaved": "Unsaved changes",
     "version": "Version"
   },
+  "wiring": {
+    "budgetIntro": "First how many cabinets each circuit and each port can carry, then the number of circuits and ports, then the wiring. Green parameters come from datasheets or company standards; yellow ones are to be confirmed or sample values.",
+    "budgetTitle": "Load budget",
+    "calc": "Calculation",
+    "dataSummary": "Data cables {runs} + {spare} spare · {n} data jumpers between cabinets ≈ {m} m · ports used {runs} / {ports}",
+    "editParams": "Change parameters in the Rules Engine (saves a new rule version) →",
+    "from": {
+      "data_runs_count": "By cabinet count",
+      "wiring_data_runs": "W1 whole rows"
+    },
+    "manual": "manual {v}",
+    "missing": "Missing: {names}",
+    "params": "Parameters",
+    "powerSummary": "Power cables {circuits} + {spare} spare · {n} power jumpers between cabinets ≈ {m} m",
+    "routes": "Routing: {orientation} · power {power} · data {data}, {grouping}",
+    "show": {
+      "both": "Power + data",
+      "data": "Data only",
+      "power": "Power only"
+    },
+    "synced": "The drawing, DXF and BOQ all use this wiring.",
+    "title": "Wiring diagram"
+  },
   "ws": {
     "addToLibrary": "Add to library",
     "backLatest": "Back to the latest Rev",

@@ -700,6 +700,29 @@
     "unsaved": "未保存修改",
     "version": "版本"
   },
+  "wiring": {
+    "budgetIntro": "先算每回路、每网口能带几个箱体，再定回路数和网口数，最后排线。绿色的参数来自规格书或公司标准，黄色的待确认或是示例值。",
+    "budgetTitle": "带载预算",
+    "calc": "计算",
+    "dataSummary": "网线 {runs} + {spare} 备用 · 箱间网线跳线 {n} 根 ≈ {m} m · 网口用 {runs} / {ports}",
+    "editParams": "在规则引擎里改参数（另存新的规则版本）→",
+    "from": {
+      "data_runs_count": "按箱数",
+      "wiring_data_runs": "W1 按行整行"
+    },
+    "manual": "手动 {v}",
+    "missing": "缺少：{names}",
+    "params": "参数",
+    "powerSummary": "电源线 {circuits} + {spare} 备用 · 箱间电源跳线 {n} 根 ≈ {m} m",
+    "routes": "走线：{orientation} · 电源 {power} · 网线 {data}、{grouping}",
+    "show": {
+      "both": "电源 + 网线",
+      "data": "只看网线",
+      "power": "只看电源"
+    },
+    "synced": "图纸、DXF 和 BOQ 都用这一份接线。",
+    "title": "接线图"
+  },
   "ws": {
     "addToLibrary": "加入产品库",
     "backLatest": "回到最新的 Rev",
