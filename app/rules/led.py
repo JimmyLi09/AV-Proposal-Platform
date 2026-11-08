@@ -322,7 +322,8 @@ def boq(values: dict, cabinet: dict | None, inputs: dict, library: dict, manual:
 ENVIRONMENT_LABEL = {"indoor": "Indoor", "outdoor": "Outdoor", "rental": "Rental"}
 INSTALLATION_LABEL = {"wall": "on wall", "floor": "on floor stand", "hanging": "hanging", "embedded": "embedded"}
 BOQ_EXTRA = ["environment_label", "installation_label", "cabinet_model", "cabinet_sizes", "brightness_nits",
-             "aspect_ratio", "load_pct", "power_spares", "data_spares", "processor_title"]
+             "aspect_ratio", "load_pct", "power_spares", "data_spares", "processor_title",
+             "mcb_a", "power_cable_mm2"]  # 后两个是规则参数（空开、线径），BOQ 接线规格行要写（CR-13）
 
 
 def boq_context(values: dict, cabinet: dict | None, inputs: dict) -> dict:
@@ -342,6 +343,9 @@ def boq_context(values: dict, cabinet: dict | None, inputs: dict) -> dict:
         ctx["load_pct"] = round(values["load_mp"] / values["capacity_mp"] * 100)
     if values.get("power_cables") is not None and values.get("circuits") is not None:
         ctx["power_spares"] = values["power_cables"] - values["circuits"]
+    for k in ("power_jumper_m", "data_jumper_m"):  # 跳线长度精确到 0.1 m，写进 BOQ 时保留一位小数（CR-13）
+        if values.get(k) is not None:
+            ctx[k] = f"{float(values[k]):.1f}"
     if values.get("data_cables") is not None and values.get("data_runs") is not None:
         ctx["data_spares"] = values["data_cables"] - values["data_runs"]
     return ctx

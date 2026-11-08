@@ -45,8 +45,7 @@ def test_143_client_boq_has_the_7_golden_lines():
                             "Overall screen resolution: 1792 × 1024", "Aspect ratio: 7:4",
                             "Spares: 12 modules, 1 power supply, 1 receiving card"]
     assert boq["rows"][3]["note"] == "Client may provide"
-    assert boq["rows"][4]["specs"] == ["DB box with MCB × 4 circuits",
-                                       "Power cables 4 + 1 spare, data cables CAT6 3 + 1 spare"]
+    assert boq["rows"][4]["specs"] == CASE["power_cabling_specs"]  # 接线规格行来自 W1 和 F6 / F7 / F9（CR-13）
     assert boq["group"] == "LED-1 Lobby" and boq["manual"] == []
 
 

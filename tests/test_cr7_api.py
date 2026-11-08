@@ -87,7 +87,9 @@ def test_multiface_led_proposal(tmp_path):
     # 同型号备品按整屏合计（S3）：不在每面重复，只在共用组出一行；共用组的线缆备用数按面加总
     shared = [r for r in boq["rows"] if r["group"] == "共用"]
     assert shared[-1]["title"] == "Spares: 80 modules, 3 power supply, 3 receiving card"
-    assert "Power cables 16 + 2 spare, data cables CAT6 16 + 2 spare" in shared[1]["specs"]
+    assert shared[1]["specs"][:2] == ["DB box with 20 A single-phase MCB × 16 circuits",
+                                      "3-core 2.5 mm² power cable × 18 (16 + 2 spare)"]
+    assert shared[1]["specs"][3] == "CAT6 data cable × 18 (16 + 2 spare)"
     assert not any(s.startswith("Spares") for r in boq["rows"] if r["group"] != "共用" for s in r["specs"])
     assert c.put(f"/api/proposals/{c.proposal}/boq", json={"rows": {}}).status_code == 409
     rows = list(load_workbook(io.BytesIO(c.get(f"/api/proposals/{c.proposal}/boq.xlsx").content)).active.iter_rows(values_only=True))
