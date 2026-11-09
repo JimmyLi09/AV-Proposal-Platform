@@ -193,7 +193,7 @@ function Sheets({ view, apply, reload }: { view: WorkspaceView; apply: (p: Promi
       {view.projection && <ProjectionDrawings view={view} />}
       {view.proposal.business_line === "PJ" && result.multi && <section className="card"><p className="muted">{t("pj.multiLater")}</p></section>}
       {result.diagram ? <DiagramTab view={view} diagram={result.diagram} />
-        : <section className="card"><p className="muted">{t(result.multi ? "ws.noDiagramMulti" : "ws.noDiagram")}</p></section>}
+        : <section className="card"><p className="muted">{t(result.multi && view.proposal.business_line === "PJ" ? "ws.noDiagramMulti" : "ws.noDiagram")}</p></section>}
       <AnnotateTab view={view} onSaved={reload} />
       {view.boq && <BoqTab view={view} boq={view.boq} onApply={apply} />}
     </>

@@ -9,7 +9,9 @@ import sqlalchemy as sa
 from alembic import command
 from alembic.config import Config
 from fastapi.testclient import TestClient
+from docx import Document
 from openpyxl import load_workbook
+from pptx import Presentation
 
 from app.db import MIGRATIONS, make_engine, migrate
 from app.main import create_app
@@ -108,7 +110,7 @@ def test_multiface_led_proposal(tmp_path):
     rows = list(load_workbook(io.BytesIO(c.get(f"{url}.xlsx").content)).active.iter_rows(values_only=True))
     assert (None, "B · Main", None, None) in rows and (len(boq["rows"]), "Cable trunking", 1, "lot") in rows
     assert (None, "- Hot-dip galvanised frame", None, None) in rows
-    assert v["result"]["diagram"] is None and v["drawing"] is None  # 示意图、图纸目前只做平面单屏
+    assert v["result"]["diagram"] is None and v["drawing"] is None  # B 面算不出箱体数：没有示意图；图纸下一步做
     en = c.get(f"/api/proposals/{c.proposal}", headers={"X-Lang": "en"}).json()["result"]
     leaks = [s for s in json.dumps([en["rules"], en["multi"]], ensure_ascii=False).split('"') if CJK.search(s)]
     assert leaks == []
@@ -140,3 +142,36 @@ def test_upgrade_adds_the_s5_output_limit_as_a_new_rule_version(tmp_path):
     assert [r.version for r in rows] == ["v1.4", "v1.5"] and "CR-7" in rows[1].reason
     new = json.loads(rows[1].content)
     assert new["rules"] == old["rules"] and new["params"][-1]["name"] == "output_max_px_w"
+
+
+def gmc_library(c):
+    """示例产品库拼不出 GMC：箱体改成 320 宽（尺寸资料里没有，只为让 5760 / 8000 能拼），加 16 口控制器、4 路输出的处理器。"""
+    lib = c.get("/api/products/LED").json()
+    content = lib["content"]
+    cab = next(p for p in content["products"] if p["id"] == "IC-25")
+    cab["cabinet_sizes_mm"] = [[320, 640], [320, 480]]
+    cab["cabinet_max"] = {"320x640": {"a": 0.48, "w": 100, "sample": True}, "320x480": {"a": 0.48, "w": 60, "sample": True}}
+    common = {"brand": "Sample", "status": "approved", "scenes": ["indoor"], "sample": True, "datasheet": ""}
+    content["products"] += [common | {"id": "SC-16", "category": "controller", "model": "SC-16", "capacity_px": 10_400_000, "ports": 16},
+                            common | {"id": "SP-8", "category": "processor", "model": "SP-8", "inputs": 4, "max_px": 13_500_000,
+                                      "outputs": 4}]
+    assert c.post("/api/products/LED", json={"base_id": lib["id"], "reason": "GMC", "content": content}).status_code == 201
+    assert c.post(f"/api/proposals/{c.proposal}/upgrade", json={"parts": ["library"]}).status_code == 200
+
+
+def test_multiface_led_diagram_in_the_proposal(tmp_path):
+    c = start(tmp_path, "LED")
+    gmc_library(c)
+    v = put_inputs(c, gmc_inputs())
+    assert v["rev"]["status"] == "calculated"
+    d = v["result"]["diagram"]
+    assert d["unmatched"] == [] and [r["id"] for r in d["faces"]] == ["A", "B", "C"]
+    assert d["nodes"]["processor"]["model"] == "SP-8" and d["nodes"]["B:controller"]["model"] == "SC-16"
+    doc = Document(io.BytesIO(c.get(f"/api/proposals/{c.proposal}/proposal.docx").content))
+    assert "系统图（Level 1）" in [p.text for p in doc.paragraphs if p.style.name.startswith("Heading")]
+    texts = [cell.text for t in doc.tables for row in t.rows for cell in row.cells]
+    assert "控制器 B" in texts and "配电箱 C" in texts and "LED 屏 A · Left" in texts
+    prs = Presentation(io.BytesIO(c.get(f"/api/proposals/{c.proposal}/proposal.pptx").content))
+    assert any(sh.has_text_frame and sh.text_frame.text == "System diagram" for s in prs.slides for sh in s.shapes)
+    en = c.get(f"/api/proposals/{c.proposal}", headers={"X-Lang": "en"}).json()["result"]["diagram"]
+    assert not CJK.search(en["svg"].replace("Wall-1", "")) and en["nodes"]["A:db_box"]["title"] == "DB box A"
