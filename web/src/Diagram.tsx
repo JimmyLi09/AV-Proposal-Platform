@@ -13,7 +13,7 @@ export default function DiagramTab({ view, diagram }: { view: WorkspaceView; dia
     <>
       <section className="card">
         <h2>Level 1 · {t("diagram.l1")}</h2>
-        <p className="muted">{t("diagram.l1Intro")}</p>
+        <p className="muted">{t(diagram.faces ? "diagram.l1IntroMulti" : "diagram.l1Intro")}</p>
         {diagram.unmatched.length > 0 && (
           <p className="error">{t("diagram.unmatched", { items: diagram.unmatched.join(t("common.semicolon")) })}</p>
         )}

@@ -264,3 +264,26 @@ def test_whole_screen_processor_with_sending_replaces_the_face_controllers():
     assert [ln["model"] for ln in out["boq"] if ln["rule"] in ("F11", "F13")] == ["VX-L"]
     assert ("PASS", "处理器 Sample VX-L 含发送：整屏 1 台，各面直接接它的网口") in [
         (c["check"], c["text"]) for c in out["multi"]["checks"] if c["rule"] == "S5"]
+
+
+def test_multiface_diagram_matches_the_internal_boq():
+    """多面屏示意图（Level 1 / 2）：信号源 → 整屏 1 台处理器 → 每面的控制器 → 每面的屏，每面的配电箱接自己那一面；
+    每台设备、每条线缆都能在内部明细里找到。"""
+    out = _cube(_processor("TWO-OUT", inputs=2, max_px=8_000_000, outputs=2))
+    d = out["diagram"]
+    assert d["unmatched"] == [] and d["svg"].startswith("<svg") and "LED 屏 B · Base" in d["svg"]
+    assert d["faces"] == [{"id": x, "screen": f"{x}:screen", "controller": f"{x}:controller", "db_box": f"{x}:db_box"} for x in "AB"]
+    keys = {ln["key"] for ln in out["boq"]}
+    assert all(k in keys for n in d["nodes"].values() if n["supply"] == "boq" for k in n["boq"])
+    assert d["nodes"]["processor"]["boq"] == ["TWO-OUT"] and d["nodes"]["B:screen"]["boq"] == ["B:GOB-20:640x480", "B:GOB-20:640x640"]
+    assert [(x["from"], x["to"], x["boq"]) for x in d["links"]] == [
+        ("source", "processor", None),
+        ("processor", "A:controller", None), ("A:controller", "A:screen", "A:data_cable"), ("A:db_box", "A:screen", "A:power_cable"),
+        ("processor", "B:controller", None), ("B:controller", "B:screen", "B:data_cable"), ("B:db_box", "B:screen", "B:power_cable")]
+
+    d = _cube(_processor("VX-L", sending=True, capacity_px=3_900_000, ports=16))["diagram"]  # 含发送：不画控制器
+    assert not any(k.endswith(":controller") for k in d["nodes"]) and d["unmatched"] == []
+    assert ("processor", "A:screen", "A:data_cable") in [(x["from"], x["to"], x["boq"]) for x in d["links"]]
+
+    d = _cube()["diagram"]  # 处理器没选出：框保留并标出来，不能悄悄从图上消失
+    assert d["nodes"]["processor"]["supply"] == "missing" and d["unmatched"] == ["视频处理器（F13 未选出（整屏））"]

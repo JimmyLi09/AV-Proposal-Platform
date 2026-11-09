@@ -10,6 +10,7 @@
 import math
 from decimal import Decimal
 
+from ..diagram import faces_svg
 from ..i18n import tr
 from . import led as L
 from . import pj as P
@@ -310,6 +311,7 @@ def calculate_led(content: dict, library: dict, inputs: dict, cabinet_id: str | 
         f["boq_context"] = L.boq_context(f["values"], cab, common | params | {"width_mm": f["width_mm"],
                                                                               "height_mm": f["height_mm"]})
     out["boq"] = _led_boq(out["faces"], cab, library, spares | pv, common)
+    out["diagram"] = _led_diagram(out["faces"], cab, library, pv, common, out["boq"])
     return out
 
 
@@ -324,6 +326,74 @@ def _led_boq(faces: list[dict], cab: dict, library: dict, whole: dict, inputs: d
         if line["rule"] in SPARE_RULES | PROCESSOR_RULES:
             lines.append(line | {"item": tr("整屏 · ", "Whole screen · ") + line["item"]})
     return lines
+
+
+def _led_diagram(faces: list[dict], cab: dict, library: dict, pv: dict, inputs: dict, boq_lines: list[dict]) -> dict | None:
+    """多面屏的 Level 1 / Level 2 示意图，和单屏一样由内部明细生成，每台设备、每条线缆都对应明细行：
+    信号源 → 视频处理器（整屏 1 台，每面 1 路输出）→ 每面的控制器 → 每面的屏；每面的配电箱接自己那一面。
+    处理器含发送时不画控制器，处理器直接用网线接各面。"""
+    if any(f["values"].get("cabinets") is None for f in faces):
+        return None
+    products = {p["id"]: p for p in library["products"]}
+    spare = tr("备用", "spare")
+    sources = inputs.get("signal_sources") or 1
+    sending = bool(pv.get("processor_sending"))
+    nodes = {"source": {"title": tr("信号源", "Content source"), "model": tr("播放器或电脑", "Player or PC"), "qty": sources,
+                        "detail": "", "boq": [], "supply": "owner"}}
+    if pv.get("processor_id") in products:
+        nodes["processor"] = {
+            "title": tr("处理器（含发送）", "Processor with sending") if sending else tr("视频处理器", "Video processor"),
+            "model": products[pv["processor_id"]]["model"], "qty": pv["processor_qty"],
+            "detail": tr("整屏 1 台 · 各面接网口", "Whole screen · faces on its ports") if sending
+            else tr(f"整屏 1 台 · 每面 1 路输出（{len(faces)} 路）", f"Whole screen · one output per face ({len(faces)})"),
+            "boq": [pv["processor_id"]], "supply": "boq"}
+    else:
+        nodes["processor"] = {"title": tr("视频处理器", "Video processor"), "model": "—", "qty": "", "boq": [], "supply": "missing",
+                              "detail": tr("F13 未选出（整屏）", "F13 not selected (whole screen)")}
+    links = [{"from": "source", "to": "processor", "cable": "HDMI", "qty": str(sources), "boq": None, "supply": "owner"}]
+    rows = []
+    for f in faces:
+        v, fid = f["values"], f["id"]
+        label = f"{fid} · {f['name']}" if f.get("name") else fid
+        row = {"id": fid, "screen": f"{fid}:screen"}
+        nodes[row["screen"]] = {
+            "title": tr(f"LED 屏 {label}", f"LED wall {label}"), "model": cab["model"],
+            "qty": tr(f"{v['cabinets']} 个箱体", f"{v['cabinets']} cabinets"),
+            "detail": f"{_n(f['width_mm'])} × {_n(f['height_mm'])} · P{_n(inputs.get('pixel_pitch_mm'))}",
+            "boq": [f"{fid}:{cab['id']}:{w}x{h}" for w, h, _ in v.get("cabinet_counts") or []], "supply": "boq"}
+        feed = "processor"
+        if not sending:
+            feed = row["controller"] = f"{fid}:controller"
+            nodes[feed] = {"title": tr(f"控制器 {fid}", f"Controller {fid}"), "model": products[v["controller_id"]]["model"],
+                           "qty": v["controller_qty"],
+                           "detail": tr(f"{v['ports']} 口", f"{v['ports']} ports") + f" · {v['capacity_mp']:.1f} MP",
+                           "boq": [f"{fid}:{v['controller_id']}"], "supply": "boq"} if v.get("controller_id") in products else {
+                "title": tr(f"控制器 {fid}", f"Controller {fid}"), "model": "—", "qty": "", "boq": [], "supply": "missing",
+                "detail": tr("F11 阻断：产品库里没有合适的", "F11 blocked: nothing suitable in the library")}
+            links.append({"from": "processor", "to": feed, "cable": "HDMI", "qty": "1", "boq": None, "supply": "included"})
+        if v.get("data_runs") is not None:
+            links.append({"from": feed, "to": row["screen"], "cable": "Cat6",
+                          "qty": f"{v['data_runs']} + {v['data_cables'] - v['data_runs']} {spare}",
+                          "boq": f"{fid}:data_cable", "supply": "boq"})
+        if v.get("db_boxes") is not None:
+            row["db_box"] = f"{fid}:db_box"
+            nodes[row["db_box"]] = {"title": tr(f"配电箱 {fid}", f"DB box {fid}"), "model": tr("定制", "Custom"),
+                                    "qty": v["db_boxes"], "detail": tr("每回路一个 MCB", "One MCB per circuit")
+                                    + f" · {v.get('power_kw', 0):.2f} kW", "boq": [f"{fid}:db_box"], "supply": "boq"}
+            if v.get("power_cables") is not None:
+                links.append({"from": row["db_box"], "to": row["screen"], "cable": tr("电源线", "Power cable"),
+                              "qty": f"{v['circuits']} + {v['power_cables'] - v['circuits']} {spare}",
+                              "boq": f"{fid}:power_cable", "supply": "boq"})
+        rows.append(row)
+    for x in [*nodes.values(), *links]:
+        x["manual"] = False  # 多面屏没有推荐页手动覆盖（CR-5）
+    keys = {ln["key"] for ln in boq_lines if ln["key"]}
+    paren = lambda x: tr(f"（{x}）", f" ({x})")  # noqa: E731
+    unmatched = [n["title"] + paren(k) for n in nodes.values() if n["supply"] == "boq" for k in n["boq"] if k not in keys]
+    unmatched += [n["title"] + paren(n["detail"]) for n in nodes.values() if n["supply"] == "missing"]
+    unmatched += [x["cable"] + paren(x["boq"]) for x in links if x["supply"] == "boq" and x["boq"] not in keys]
+    d = {"faces": rows, "nodes": nodes, "links": links, "unmatched": unmatched}
+    return d | {"svg": faces_svg(d)}
 
 
 # ---- 投影 · P18–P22 ----

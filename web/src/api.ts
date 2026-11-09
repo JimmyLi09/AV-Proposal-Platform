@@ -220,8 +220,9 @@ export type Suggestion = {
 export type DiagramNode = { title: string; model: string; qty: number | string; detail: string; boq: string[]; supply: string; manual?: boolean };
 export type DiagramLink = { from: string; to: string; cable: string; qty: string; boq: string | null; supply: string; manual?: boolean };
 export type Diagram = {
-  chain: string[];
-  power: string | null;
+  chain?: string[]; // 单屏：从左到右的设备
+  power?: string | null;
+  faces?: { id: string; screen: string; controller?: string; db_box?: string }[]; // 多面屏：每面一行（S5）
   nodes: Record<string, DiagramNode>;
   links: DiagramLink[];
   unmatched: string[];
