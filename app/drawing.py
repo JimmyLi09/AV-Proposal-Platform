@@ -73,18 +73,7 @@ def build(values: dict, inputs: dict, params: dict, edits: dict | None = None, m
     for cab in cabs:
         del cab["_cell"], cab["_w"], cab["_a"]
 
-    checks = []
-    for x in circuits:
-        if x["over_a"]:
-            checks.append({"check": "BLOCK", "text": tr(f"回路 {x['no']} 超载：{x['amps']} A > 可用 {usable.normalize():f} A",
-                                                     f"Circuit {x['no']} overloaded: {x['amps']} A > usable {usable.normalize():f} A")})
-        if x["over_chain"]:
-            checks.append({"check": "BLOCK", "text": tr(f"回路 {x['no']} 串接 {x['cabinets']} 箱，超过上限 {chain}",
-                                                     f"Circuit {x['no']} chains {x['cabinets']} cabinets, over the limit {chain}")})
-    for x in cables:
-        if x["over"]:
-            checks.append({"check": "BLOCK", "text": tr(f"网线 {x['no']} 超载：{x['px']:,} px > {int(cap_px):,} px",
-                                                     f"Data cable {x['no']} overloaded: {x['px']:,} px > {int(cap_px):,} px")})
+    checks = _over_checks(circuits, cables, usable, chain, cap_px)
     if "cabinets" in manual and len(cabs) != values.get("cabinets"):
         checks.append({"check": "NOTE", "text": tr(
             f"图上按 F3 排布是 {len(cabs)} 个箱体，F3 手动值是 {values.get('cabinets')} 个",
@@ -108,4 +97,97 @@ def build(values: dict, inputs: dict, params: dict, edits: dict | None = None, m
         "data_jumpers": len(cabs) - n_cables, "data_jumper_m": float(wiring.metres(data_mm)),
         "manual": {"power": len(power), "data": len(data)}, "edits": {"power": power, "data": data},
         "checks": checks, "blocked": any(x["check"] == "BLOCK" for x in checks),
+    }
+
+
+def _over_checks(circuits: list[dict], cables: list[dict], usable: Decimal, chain: int, cap_px: Decimal) -> list[dict]:
+    """超载的回路 / 网线（BLOCK，不能批准）。"""
+    checks = []
+    for x in circuits:
+        if x["over_a"]:
+            checks.append({"check": "BLOCK", "text": tr(f"回路 {x['no']} 超载：{x['amps']} A > 可用 {usable.normalize():f} A",
+                                                     f"Circuit {x['no']} overloaded: {x['amps']} A > usable {usable.normalize():f} A")})
+        if x["over_chain"]:
+            checks.append({"check": "BLOCK", "text": tr(f"回路 {x['no']} 串接 {x['cabinets']} 箱，超过上限 {chain}",
+                                                     f"Circuit {x['no']} chains {x['cabinets']} cabinets, over the limit {chain}")})
+    for x in cables:
+        if x["over"]:
+            checks.append({"check": "BLOCK", "text": tr(f"网线 {x['no']} 超载：{x['px']:,} px > {int(cap_px):,} px",
+                                                     f"Data cable {x['no']} overloaded: {x['px']:,} px > {int(cap_px):,} px")})
+    return checks
+
+
+def build_faces(faces: list[dict], inputs: dict, params: dict, edits: dict | None = None, ratings: dict | None = None) -> dict | None:
+    """多面屏一张展开总图（2026-11-09 Jimmy 选定）：每面按自己的 W1 接线（每面有自己的电源 / 信号输入点，回路按面算），
+    回路、网线编号整屏连续（A 面 1–13、B 面 14–31…），箱体编号前加面（A-R1C1）。墙面按面的顺序横向展开，
+    地面 / 顶面接在它前面那面墙的下 / 上方（和 S5 的展开画布一样）；面与面之间留空，只为看得清。
+    手动换回路 / 网线只能换到同一面的编号里。faces：多面屏结果里的每一面（有 values）。"""
+    edits = edits or {}
+    built = []
+    for f in faces:
+        d = build(f["values"], {"width_mm": f["width_mm"], "pixel_pitch_mm": inputs["pixel_pitch_mm"]}, params, None, set(), ratings)
+        if d is None:
+            return None
+        built.append(d)
+    walls = [i for i, f in enumerate(faces) if f.get("orientation", "wall") == "wall"] or list(range(len(faces)))
+    span = max(sum(built[i]["width"] for i in walls),
+               max(built[i]["height"] for i in walls) + sum(d["height"] for i, d in enumerate(built) if i not in walls))
+    gap = max(800, int(round(span / 10, -2)))  # 面与面之间留的空（mm），够画尺寸线和面的名字
+    origin, x, last_wall = {}, 0, walls[0]
+    for i, d in enumerate(built):
+        if i in walls:
+            origin[i], x, last_wall = (x, 0), x + d["width"] + gap, i
+    for i, d in enumerate(built):
+        if i not in walls:
+            wx, _ = origin[max([w for w in walls if w < i], default=last_wall)]
+            above = faces[i].get("orientation") == "ceiling"
+            stack = [j for j in origin if j not in walls and origin[j][0] == wx and (origin[j][1] > 0) == above]
+            if above:
+                origin[i] = (wx, max([origin[j][1] + built[j]["height"] for j in stack] + [built[w]["height"] for w in walls]) + gap)
+            else:
+                origin[i] = (wx, min([origin[j][1] for j in stack] + [0]) - gap - d["height"])
+    low = min(y for _, y in origin.values())
+    origin = {i: (ox, oy - low) for i, (ox, oy) in origin.items()}
+
+    letters: dict[tuple, str] = {}
+    for d in built:
+        for sz in d["sizes"].values():
+            letters.setdefault((sz["w"], sz["h"]), LETTERS[len(letters)])
+    sizes = {letters[k]: {"w": k[0], "h": k[1], "count": 0} for k in letters}
+    panels, cabinets, circuits, cables, notes = [], [], [], [], []
+    applied, manual = {"power": {}, "data": {}}, {"power": 0, "data": 0}
+    for i, (f, d) in enumerate(zip(faces, built)):
+        fid, (ox, oy) = f["id"], origin[i]
+        c0, d0 = len(circuits), len(cables)
+        n_c, n_d = len(d["circuits"]), len(d["cables"])
+        local = {k: {cid.split("-", 1)[1]: no - (c0 if k == "power" else d0) for cid, no in (edits.get(k) or {}).items()
+                     if cid.startswith(f"{fid}-")} for k in ("power", "data")}
+        if any(local.values()):  # 有手动调整：这一面按调整后的分组重新校验
+            d = build(f["values"], {"width_mm": f["width_mm"], "pixel_pitch_mm": inputs["pixel_pitch_mm"]}, params, local, set(), ratings)
+        size_of = {k: letters[(sz["w"], sz["h"])] for k, sz in d["sizes"].items()}
+        for sz in d["sizes"].values():
+            sizes[letters[(sz["w"], sz["h"])]]["count"] += sz["count"]
+        for c in d["cabinets"]:
+            cabinets.append(c | {"id": f"{fid}-{c['id']}", "local": c["id"], "face": fid, "x": c["x"] + ox, "y": c["y"] + oy,
+                                 "size": size_of[c["size"]], "circuit": c["circuit"] + c0, "cable": c["cable"] + d0})
+        circuits += [x | {"no": x["no"] + c0, "face": fid, "path": [f"{fid}-{p}" for p in x["path"]]} for x in d["circuits"]]
+        cables += [x | {"no": x["no"] + d0, "face": fid, "path": [f"{fid}-{p}" for p in x["path"]]} for x in d["cables"]]
+        notes += [x | {"text": f"{fid} · {x['text']}"} for x in d["checks"] if x["check"] == "NOTE"]
+        for k, base in (("power", c0), ("data", d0)):
+            applied[k] |= {f"{fid}-{cid}": no + base for cid, no in d["edits"][k].items()}
+            manual[k] += d["manual"][k]
+        panels.append({"id": fid, "label": f"{fid} · {f['name']}" if f.get("name") else fid, "orientation": f.get("orientation", "wall"),
+                       "x": ox, "y": oy, "width": d["width"], "height": d["height"], "cols": d["cols"], "col_w": d["col_w"],
+                       "rows": d["rows"], "circuits": [c0 + 1, c0 + n_c], "cables": [d0 + 1, d0 + n_d],
+                       "spare_circuits": d["spare_circuits"], "spare_cables": d["spare_cables"]})
+    first = built[0]
+    checks = _over_checks(circuits, cables, _d(first["circuit_cap_a"]), first["chain_max"], _d(first["cable_cap_px"])) + notes
+    total = lambda k: sum(p[k] for p in panels)  # noqa: E731
+    jumpers = {k: sum(d[k] for d in built) for k in ("power_jumpers", "power_jumper_m", "data_jumpers", "data_jumper_m")}
+    return {
+        "width": int(max(p["x"] + p["width"] for p in panels)), "height": int(max(p["y"] + p["height"] for p in panels)),
+        "panels": panels, "sizes": sizes, "cabinets": cabinets, "circuits": circuits, "cables": cables,
+        "circuit_cap_a": first["circuit_cap_a"], "chain_max": first["chain_max"], "cable_cap_px": first["cable_cap_px"],
+        "voltage": VOLTAGE, "spare_circuits": total("spare_circuits"), "spare_cables": total("spare_cables"),
+        **jumpers, "manual": manual, "edits": applied, "checks": checks, "blocked": any(x["check"] == "BLOCK" for x in checks),
     }

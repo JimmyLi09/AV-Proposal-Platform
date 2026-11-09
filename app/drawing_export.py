@@ -22,14 +22,17 @@ TEXT = {
            "circuit": "回路", "cable": "网线", "box": "箱", "over": "超载", "legend": "图例",
            "numbering": "编号从左下角 R1C1 开始 · 网线起点在左侧",
            "disclaimer": "本图为方案示意，箱体规格以厂家深化为准", "basis": "计算依据", "item": "项目",
-           "formula": "公式（代入数值）", "result": "结果", "rule": "规则", "manual": "手动调整"},
+           "formula": "公式（代入数值）", "result": "结果", "rule": "规则", "manual": "手动调整",
+           "faces_numbering": "每面编号从左下角 R1C1 开始 · 回路、网线编号整屏连续\n面与面之间的空白只为看得清，不是实际尺寸"},
     "en": {"title": "Cabinet & cabling drawing", "project": "Project", "size": "Size · Area", "cabinets": "Cabinets",
            "modules": "Modules", "resolution": "Resolution", "power": "Power · Circuits", "data": "Data cables",
            "reserved": "reserved", "spare": "spare", "circuit": "Circuit", "cable": "Cable", "box": "cab.",
            "over": "overload", "legend": "Legend", "numbering": "Numbering from bottom-left R1C1 · data cables start on the left",
            "disclaimer": "Concept drawing; cabinet specs subject to manufacturer detailing", "basis": "Calculation basis",
            "item": "Item", "formula": "Formula (with values)", "result": "Result", "rule": "Rule",
-           "manual": "Manually adjusted"},
+           "manual": "Manually adjusted",
+           "faces_numbering": "Each face numbered from its bottom-left R1C1 · circuit and cable numbers run\n"
+                              "across the whole screen · gaps between faces are for legibility only"},
 }
 
 
@@ -39,9 +42,11 @@ def notes(d: dict, meta: dict, lang: str) -> list[tuple[str, str]]:
     cabs = " + ".join(f"{k} {s['count']}" for k, s in d["sizes"].items()) + f" = {len(d['cabinets'])}"
     return [
         (t["project"], meta["project"]),
-        (t["size"], f"{d['width']} × {d['height']} mm · {v['area_m2']:.2f} ㎡"),
+        (t["size"], (" + ".join(f"{p['width']} × {p['height']}" for p in d["panels"]) if d.get("panels")  # 多面屏：每面的尺寸
+                     else f"{d['width']} × {d['height']}") + f" mm · {v['area_m2']:.2f} ㎡"),
         (t["modules"] + " · " + t["cabinets"], f"{v.get('modules', '—')} · {cabs}"),
-        (t["resolution"], f"{v.get('res_x', '—')} × {v.get('res_y', '—')}"),
+        (t["resolution"], " × ".join(map(str, d["canvas_px"])) if d.get("canvas_px")  # 多面屏：展开画布
+         else f"{v.get('res_x', '—')} × {v.get('res_y', '—')}"),
         (t["power"], f"{v['power_kw']:.2f} kW · {len(d['circuits'])} + {d['spare_circuits']} {t['reserved']}"),
         (t["data"], f"{len(d['cables'])} + {d['spare_cables']} {t['spare']}"),
     ]
@@ -51,21 +56,32 @@ def _circled(n: int) -> str:
     return chr(0x2460 + n - 1) if 1 <= n <= 20 else str(n)
 
 
+def panels(d: dict) -> list[dict]:
+    """图上的每一面（多面屏是展开总图里的每一面，单屏就是整张屏）：原点、尺寸、列宽、行高。"""
+    return d.get("panels") or [{"id": "", "label": None, "x": 0, "y": 0, "width": d["width"], "height": d["height"],
+                                "cols": d["cols"], "col_w": d["col_w"], "rows": d["rows"]}]
+
+
 def svg(d: dict, meta: dict, lang: str = "zh", layers: list[str] | None = None) -> str:
-    """layers：要显示的图层（默认全部）。每个箱体是 <g data-cab="R1C1">，页面上点它可以换回路 / 网线。"""
+    """layers：要显示的图层（默认全部）。每个箱体是 <g data-cab="R1C1">，页面上点它可以换回路 / 网线。
+    多面屏（d 里有 panels）：一张展开总图，每面上方写面的名字和尺寸，尺寸线按面画；说明栏每面一行汇总，超载的单独列出。"""
     t, shown = TEXT[lang], set(LAYERS if layers is None else layers)
     W, H = d["width"], d["height"]
-    s = 820 / W
-    left, top, gap = 40, 116, 110
+    multi = bool(d.get("panels"))
+    s = min(820 / max(p["width"] for p in panels(d)), 2600 / W, 1400 / H) if multi else 820 / W
+    left, top, gap = 40, 140 if multi else 116, 110
     note_x = left + W * s + gap
     width, height = note_x + 330, max(top + H * s + 70, 560)
+    if multi:  # 说明栏放得下：每面三行汇总，加上超载的
+        lines = 3 * len(d["panels"]) + sum(1 for c in d["circuits"] + d["cables"] if c["over"])
+        height = max(height, top + 16 * len(d["sizes"]) + 15 * lines + 300)
     X = lambda x: left + x * s  # noqa: E731
     Y = lambda y: top + (H - y) * s  # noqa: E731  CAD 坐标 y 向上
     over_c = {c["no"] for c in d["circuits"] if c["over"]}
     over_d = {c["no"] for c in d["cables"] if c["over"]}
     size_idx = {k: i for i, k in enumerate(d["sizes"])}
     out = [f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width:.0f} {height:.0f}" width="{width:.0f}"'
-           f' height="{height:.0f}" font-family="{FONT}" class="drawing">',
+           f' height="{height:.0f}" font-family="{FONT}" class="drawing{" wide" if multi else ""}">',
            f'<rect width="100%" height="100%" fill="#FFFFFF"/>',
            f'<text x="{left}" y="26" font-size="16" font-weight="700" fill="{NAVY}">{escape(t["title"])} · {escape(meta["project"])}</text>']
     # 箱体（AVP-CABINET）和图层
@@ -81,9 +97,9 @@ def svg(d: dict, meta: dict, lang: str = "zh", layers: list[str] | None = None) 
                      f' fill-opacity="0.14" pointer-events="none"/>'
                      f'<text class="layer-power" x="{x + 3:.1f}" y="{y + h - 4:.1f}" font-size="9.5" font-weight="700"'
                      f' fill="{col}">P{c["circuit"]}</text>')
-        if "id" in shown:
+        if "id" in shown:  # 多面屏格子里写面内编号（R1C1），面的名字写在上方
             g.append(f'<text class="layer-id" x="{x + w / 2:.1f}" y="{y + h * 0.42:.1f}" font-size="10" text-anchor="middle"'
-                     f' fill="{NAVY}">{c["id"]}</text>')
+                     f' fill="{NAVY}">{c.get("local", c["id"])}</text>')
         if "size" in shown:
             g.append(f'<text class="layer-size" x="{x + w / 2:.1f}" y="{y + h * 0.42 + 12:.1f}" font-size="9" text-anchor="middle"'
                      f' fill="{MUTED}">{c["size"]}</text>')
@@ -105,26 +121,32 @@ def svg(d: dict, meta: dict, lang: str = "zh", layers: list[str] | None = None) 
                 first = by_id[cable["path"][0]]
                 out.append(f'<circle class="layer-data" cx="{X(first["x"] + first["w"] / 2):.1f}"'
                            f' cy="{Y(first["y"] + first["h"] / 2):.1f}" r="3.5" fill="{col}" pointer-events="none"/>')
-    if "dim" in shown:  # 尺寸线：上方逐列 + 总宽，右侧逐行 + 总高
-        y1, y2 = top - 18, top - 46
-        for c in range(d["cols"]):
-            xa, xb = X(c * d["col_w"]), X((c + 1) * d["col_w"])
-            out.append(f'<g class="layer-dim"><line x1="{xa:.1f}" y1="{y1}" x2="{xb:.1f}" y2="{y1}" stroke="{MUTED}"/>'
-                       f'<line x1="{xa:.1f}" y1="{y1 - 4}" x2="{xa:.1f}" y2="{y1 + 4}" stroke="{MUTED}"/>'
-                       f'<text x="{(xa + xb) / 2:.1f}" y="{y1 - 4}" font-size="9.5" text-anchor="middle" fill="{MUTED}">{d["col_w"]}</text></g>')
-        out.append(f'<g class="layer-dim"><line x1="{X(0)}" y1="{y2}" x2="{X(W):.1f}" y2="{y2}" stroke="{NAVY}"/>'
-                   f'<text x="{X(W / 2):.1f}" y="{y2 - 5}" font-size="11.5" font-weight="700" text-anchor="middle" fill="{NAVY}">'
-                   f'{W} = {d["col_w"]} × {d["cols"]}</text></g>')
-        x1, x2, y = X(W) + 16, X(W) + 70, 0
-        for h in d["rows"]:
+    for p in panels(d):
+        px, py, pw, ph = p["x"], p["y"], p["width"], p["height"]
+        if p["label"]:  # 面的名字和尺寸
+            out.append(f'<text x="{X(px)}" y="{Y(py + ph) - 64:.1f}" font-size="13" font-weight="700" fill="{NAVY}">'
+                       f'{escape(p["label"])} · {pw} × {ph}</text>')
+        if "dim" not in shown:  # 尺寸线：上方逐列 + 总宽，右侧逐行 + 总高
+            continue
+        y1, y2 = Y(py + ph) - 18, Y(py + ph) - 46
+        for c in range(p["cols"]):
+            xa, xb = X(px + c * p["col_w"]), X(px + (c + 1) * p["col_w"])
+            out.append(f'<g class="layer-dim"><line x1="{xa:.1f}" y1="{y1:g}" x2="{xb:.1f}" y2="{y1:g}" stroke="{MUTED}"/>'
+                       f'<line x1="{xa:.1f}" y1="{y1 - 4:g}" x2="{xa:.1f}" y2="{y1 + 4:g}" stroke="{MUTED}"/>'
+                       f'<text x="{(xa + xb) / 2:.1f}" y="{y1 - 4:g}" font-size="9.5" text-anchor="middle" fill="{MUTED}">{p["col_w"]}</text></g>')
+        out.append(f'<g class="layer-dim"><line x1="{X(px)}" y1="{y2:g}" x2="{X(px + pw):.1f}" y2="{y2:g}" stroke="{NAVY}"/>'
+                   f'<text x="{X(px + pw / 2):.1f}" y="{y2 - 5:g}" font-size="11.5" font-weight="700" text-anchor="middle" fill="{NAVY}">'
+                   f'{pw} = {p["col_w"]} × {p["cols"]}</text></g>')
+        x1, x2, y = X(px + pw) + 16, X(px + pw) + 70, py
+        for h in p["rows"]:
             ya, yb = Y(y), Y(y + h)
             out.append(f'<g class="layer-dim"><line x1="{x1}" y1="{ya:.1f}" x2="{x1}" y2="{yb:.1f}" stroke="{MUTED}"/>'
                        f'<line x1="{x1 - 4}" y1="{yb:.1f}" x2="{x1 + 4}" y2="{yb:.1f}" stroke="{MUTED}"/>'
                        f'<text x="{x1 + 5}" y="{(ya + yb) / 2 + 3:.1f}" font-size="9.5" fill="{MUTED}">{h}</text></g>')
             y += h
-        out.append(f'<g class="layer-dim"><line x1="{x2}" y1="{Y(0):.1f}" x2="{x2}" y2="{Y(H):.1f}" stroke="{NAVY}"/>'
-                   f'<text x="{x2 + 6}" y="{Y(H / 2):.1f}" font-size="11.5" font-weight="700" fill="{NAVY}"'
-                   f' transform="rotate(90 {x2 + 6} {Y(H / 2):.1f})" text-anchor="middle">{H} = {" + ".join(str(h) for h in d["rows"][::-1])}</text></g>')
+        out.append(f'<g class="layer-dim"><line x1="{x2}" y1="{Y(py):.1f}" x2="{x2}" y2="{Y(py + ph):.1f}" stroke="{NAVY}"/>'
+                   f'<text x="{x2 + 6}" y="{Y(py + ph / 2):.1f}" font-size="11.5" font-weight="700" fill="{NAVY}"'
+                   f' transform="rotate(90 {x2 + 6} {Y(py + ph / 2):.1f})" text-anchor="middle">{ph} = {" + ".join(str(h) for h in p["rows"][::-1])}</text></g>')
     if "note" in shown:  # 说明栏
         y = top - 40
         out.append(f'<g class="layer-note"><rect x="{note_x - 12}" y="{y - 22}" width="330" height="{height - y + 10:.0f}"'
@@ -139,24 +161,39 @@ def svg(d: dict, meta: dict, lang: str = "zh", layers: list[str] | None = None) 
             out.append(f'<rect x="{note_x}" y="{y - 9}" width="14" height="10" fill="{SIZE_FILL[i % 4]}" stroke="#8F8676"/>'
                        f'<text x="{note_x + 20}" y="{y}" font-size="10.5" fill="{NAVY}">{k} {sz["w"]} × {sz["h"]} × {sz["count"]}</text>')
             y += 16
+        if multi:  # 每面一行汇总：回路、网线编号段和预留 / 备用；超载的单独列出
+            for p in d["panels"]:
+                (c1, c2), (d1, d2) = p["circuits"], p["cables"]
+                out.append(f'<text x="{note_x}" y="{y}" font-size="10.5" font-weight="600" fill="{NAVY}">{escape(p["label"])}</text>'
+                           f'<text x="{note_x}" y="{y + 15}" font-size="10.5" fill="{NAVY}">P{c1}–P{c2} {t["circuit"]} · '
+                           f'{c2 - c1 + 1} + {p["spare_circuits"]} {t["reserved"]}</text>'
+                           f'<text x="{note_x}" y="{y + 30}" font-size="10.5" fill="{NAVY}">{_circled(d1)}–{_circled(d2)} {t["cable"]} · '
+                           f'{d2 - d1 + 1} + {p["spare_cables"]} {t["spare"]}</text>')
+                y += 45
         for c in d["circuits"]:
+            if multi and not c["over"]:
+                continue
             col = RED if c["over"] else CIRCUIT_COLORS[(c["no"] - 1) % len(CIRCUIT_COLORS)]
             tail = f" · {t['over']}" if c["over"] else ""
             out.append(f'<text x="{note_x}" y="{y}" font-size="10.5" fill="{col}">P{c["no"]} {t["circuit"]} {c["no"]} · '
                        f'{c["cabinets"]} {t["box"]} · {c["watts"]} W · {c["amps"]} A{tail}</text>')
             y += 15
-        out.append(f'<text x="{note_x}" y="{y}" font-size="10.5" fill="{MUTED}">P{len(d["circuits"]) + 1} {t["circuit"]} '
-                   f'{len(d["circuits"]) + 1} · {t["reserved"]}</text>')
-        y += 18
+        if not multi:
+            out.append(f'<text x="{note_x}" y="{y}" font-size="10.5" fill="{MUTED}">P{len(d["circuits"]) + 1} {t["circuit"]} '
+                       f'{len(d["circuits"]) + 1} · {t["reserved"]}</text>')
+            y += 18
         for c in d["cables"]:
+            if multi and not c["over"]:
+                continue
             col = RED if c["over"] else CABLE_COLORS[(c["no"] - 1) % len(CABLE_COLORS)]
             tail = f" · {t['over']}" if c["over"] else ""
             out.append(f'<text x="{note_x}" y="{y}" font-size="10.5" fill="{col}">{_circled(c["no"])} {t["cable"]} · '
                        f'{c["cabinets"]} {t["box"]} · {c["px"]:,} px{tail}</text>')
             y += 15
-        out.append(f'<text x="{note_x}" y="{y}" font-size="10.5" fill="{MUTED}">{_circled(len(d["cables"]) + 1)} FOR SPARE · {t["spare"]}</text>')
+        if not multi:
+            out.append(f'<text x="{note_x}" y="{y}" font-size="10.5" fill="{MUTED}">{_circled(len(d["cables"]) + 1)} FOR SPARE · {t["spare"]}</text>')
         y += 24
-        for line in (t["numbering"], t["disclaimer"], meta["stamp"]):
+        for line in (*t["faces_numbering" if multi else "numbering"].split("\n"), t["disclaimer"], meta["stamp"]):
             out.append(f'<text x="{note_x}" y="{y}" font-size="9.5" fill="{MUTED}">{escape(line)}</text>')
             y += 14
         out.append("</g>")
@@ -269,24 +306,33 @@ def dxf(d: dict, meta: dict, lang: str = "zh") -> bytes:
         if len(pts) > 1:
             msp.add_lwpolyline(pts, dxfattribs={"layer": "AVP-DATA", "color": (cable["no"] - 1) % 6 + 1})
     dim = {"dimtxt": th, "dimasz": th * 0.8, "dimexe": th * 0.5, "dimexo": th * 0.3, "dimgap": th * 0.3}
-    for c in range(d["cols"]):
-        msp.add_linear_dim(base=(0, H + th * 4), p1=(c * d["col_w"], H), p2=((c + 1) * d["col_w"], H),
-                           override=dim, dxfattribs={"layer": "AVP-DIM"}).render()
-    msp.add_linear_dim(base=(0, H + th * 9), p1=(0, H), p2=(W, H), override=dim, dxfattribs={"layer": "AVP-DIM"}).render()
-    y = 0
-    for h in d["rows"]:
-        msp.add_linear_dim(base=(W + th * 4, 0), p1=(W, y), p2=(W, y + h), angle=90, override=dim,
+    for p in panels(d):  # 尺寸线按面画；多面屏每面上方写面的名字和尺寸
+        px, py, pw, ph = p["x"], p["y"], p["width"], p["height"]
+        for c in range(p["cols"]):
+            msp.add_linear_dim(base=(px, py + ph + th * 4), p1=(px + c * p["col_w"], py + ph),
+                               p2=(px + (c + 1) * p["col_w"], py + ph), override=dim, dxfattribs={"layer": "AVP-DIM"}).render()
+        msp.add_linear_dim(base=(px, py + ph + th * 9), p1=(px, py + ph), p2=(px + pw, py + ph), override=dim,
                            dxfattribs={"layer": "AVP-DIM"}).render()
-        y += h
-    msp.add_linear_dim(base=(W + th * 9, 0), p1=(W, 0), p2=(W, H), angle=90, override=dim,
-                       dxfattribs={"layer": "AVP-DIM"}).render()
+        y = py
+        for h in p["rows"]:
+            msp.add_linear_dim(base=(px + pw + th * 4, py), p1=(px + pw, y), p2=(px + pw, y + h), angle=90, override=dim,
+                               dxfattribs={"layer": "AVP-DIM"}).render()
+            y += h
+        msp.add_linear_dim(base=(px + pw + th * 9, py), p1=(px + pw, py), p2=(px + pw, py + ph), angle=90, override=dim,
+                           dxfattribs={"layer": "AVP-DIM"}).render()
+        if p["label"]:
+            msp.add_text(f"{p['label']} {pw}x{ph}", height=th * 1.6, dxfattribs={"layer": "AVP-NOTE"}).set_placement(
+                (px, py + ph + th * 12))
     t = TEXT[lang]
     lines = [t["title"]] + [f"{a}: {b}" for a, b in notes(d, meta, lang)]
     lines += [f"P{c['no']} {t['circuit']} {c['no']}: {c['cabinets']} {t['box']} · {c['watts']} W · {c['amps']} A"
               + (f" · {t['over']}" if c["over"] else "") for c in d["circuits"]]
     lines += [f"D{c['no']} {t['cable']}: {c['cabinets']} {t['box']} · {c['px']:,} px" + (f" · {t['over']}" if c["over"] else "")
               for c in d["cables"]]
-    lines += [f"D{len(d['cables']) + 1} FOR SPARE", t["numbering"], t["disclaimer"], meta["stamp"]]
+    lines += [f"D{len(d['cables']) + 1} FOR SPARE"] if not d.get("panels") else [
+        f"{p['label']}: P{p['circuits'][0]}–P{p['circuits'][1]} + {p['spare_circuits']} {t['reserved']} · "
+        f"D{p['cables'][0]}–D{p['cables'][1]} + {p['spare_cables']} {t['spare']}" for p in d["panels"]]
+    lines += [t["faces_numbering"].replace("\n", " ") if d.get("panels") else t["numbering"], t["disclaimer"], meta["stamp"]]
     msp.add_mtext("\\P".join(lines), dxfattribs={"layer": "AVP-NOTE", "char_height": th, "insert": (W + th * 16, H),
                                                  "width": th * 45})
     if meta["draft"]:
@@ -321,7 +367,8 @@ def cabinets_xlsx(d: dict, meta: dict, lang: str = "zh") -> bytes:
     ws.append(["ID", "Size 尺寸", "Circuit 回路", "Data cable 网线", "Row 行", "Column 列", "px", "W", "Manual 手动"])
     for cell in ws[ws.max_row]:
         cell.font = Font(bold=True)
-    for c in sorted(d["cabinets"], key=lambda c: (c["row"], c["col"])):
+    face = {p["id"]: i for i, p in enumerate(panels(d))}
+    for c in sorted(d["cabinets"], key=lambda c: (face.get(c.get("face", ""), 0), c["row"], c["col"])):
         ws.append([c["id"], f"{c['size']} {c['w']} × {c['h']}", c["circuit"], c["cable"], c["row"], c["col"], c["px"],
                    c["watts"], "✓" if c["manual"] else ""])
     for col, width in zip("ABCDEFGHI", (10, 16, 10, 14, 8, 10, 10, 10, 10)):

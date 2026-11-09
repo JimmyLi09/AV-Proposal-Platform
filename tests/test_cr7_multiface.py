@@ -287,3 +287,20 @@ def test_multiface_diagram_matches_the_internal_boq():
 
     d = _cube()["diagram"]  # 处理器没选出：框保留并标出来，不能悄悄从图上消失
     assert d["nodes"]["processor"]["supply"] == "missing" and d["unmatched"] == ["视频处理器（F13 未选出（整屏））"]
+
+
+def test_unfolded_drawing_puts_the_floor_face_under_the_wall():
+    """多面屏一张展开总图（S5 的展开方向）：墙面横向，地面接在墙的下方；回路、网线编号整屏连续。"""
+    from app.drawing import build_faces
+    rules, _ = load_seed("LED")
+    lib = led_library()
+    gob = next(p for p in lib["products"] if p["id"] == "GOB-20")
+    gob["cabinet_max"] = {"640x480": {"a": 0.6, "w": 100, "sample": True}, "640x640": {"a": 0.8, "w": 130, "sample": True}}
+    out = calculate(rules, lib, led_inputs(CASES["led_digital_cube_l_shape"]))
+    d = build_faces(out["faces"], out["values"], {p["name"]: p["value"] for p in rules["params"]}, None, gob["cabinet_max"])
+    a, b = d["panels"]
+    assert (a["id"], a["x"], a["y"], b["id"], b["x"], b["y"]) == ("A", 0, 2560 + 800, "B", 0, 0)  # 面与面之间留 800 mm
+    assert (d["width"], d["height"]) == (2560, 3360 + 800 + 2560)
+    assert b["circuits"][0] == a["circuits"][1] + 1 and b["cables"][0] == a["cables"][1] + 1
+    assert {c["face"] for c in d["cabinets"]} == {"A", "B"} and d["cabinets"][0]["id"] == "A-R1C1"
+    assert all(b["y"] <= c["y"] < b["y"] + b["height"] for c in d["cabinets"] if c["face"] == "B")

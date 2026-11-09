@@ -422,7 +422,7 @@ export type ManualOverride = {
 };
 
 // 拼接与线路图（CR-3）
-export type DrawingCabinet = { id: string; row: number; col: number; size: string; w: number; h: number; circuit: number; cable: number; manual: boolean; px: number; watts: number };
+export type DrawingCabinet = { id: string; row: number; col: number; size: string; w: number; h: number; circuit: number; cable: number; manual: boolean; px: number; watts: number; face?: string };
 export type Drawing = {
   width: number;
   height: number;
@@ -446,6 +446,8 @@ export type Drawing = {
   checks: { check: string; text: string }[];
   blocked: boolean;
   basis: { item: string; formula: string; result: string; rule: string }[];
+  // 多面屏一张展开总图：每面的原点、尺寸和回路 / 网线编号段（只能换到同一面的编号里）
+  panels?: { id: string; label: string; circuits: [number, number]; cables: [number, number] }[];
 };
 
 // 资料库（CR-8）
