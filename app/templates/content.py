@@ -1,4 +1,4 @@
-"""模板：客户版 BOQ 的默认行（第 6 步再加章节、信头、条款）。每次保存整份另存新版本。
+"""模板：客户版 BOQ 的默认行、方案书的固定条款和纸张（第 8 步）。每次保存整份另存新版本。
 
 行里的 {名字} 换成规则结果或输入；数量要么是固定数（例如 1 lot），要么直接取某个规则结果，模板不自己算数量。
 when（可选）：写一个规则结果的名字，它为 0 时这一行不出现（例如用了处理器含发送，就没有单独的控制器行）。
@@ -13,6 +13,10 @@ UNITS = ["sqm", "set", "lot", "pcs"]
 NAME = re.compile(r"\{(\w+)\}")
 LINE_NAMES = ["LED", "PJ"]
 CONTEXT = {"proposal_name", "project_name"}  # 除了规则里的名字，模板还能用方案名、项目名
+# 条款（第 8 步）：always 始终加入；missing_drawings 资料齐全度不是 A 级时加入（投影）；也可以写某个规则结果的名字，有值时加入
+CLAUSE_WHEN = {"always", "missing_drawings"}
+CLAUSE_CONTEXT = {"missing_drawings", "affected_items"}  # 资料齐全度条款里自动填的：缺哪些图、哪些数按手填算
+PAGES = ["A4", "A3L"]  # 方案书纸张：A4 竖向、A3 横向（投影专属图较宽）
 
 
 class TemplateError(ValueError):
@@ -65,3 +69,18 @@ def validate(content: dict, line: str, known: set[str]) -> None:
                                           or isinstance(qty, (int, float)) and qty >= 0):
             raise TemplateError(where + tr("：数量要填一个不小于 0 的数，或某个规则结果的名字",
                                              ": quantity must be a number ≥ 0 or a rule result name"))
+    if content.get("page", "A4") not in PAGES:
+        raise TemplateError(tr("纸张只能是 ", "Page must be ") + " / ".join(PAGES))
+    keys = set()
+    for i, c in enumerate(content.get("clauses") or [], 1):
+        where = tr(f"第 {i} 条条款", f"Clause {i}")
+        if not isinstance(c.get("key"), str) or not re.fullmatch(r"[a-z0-9_]{1,40}", c["key"]) or c["key"] in keys:
+            raise TemplateError(where + tr("：编号要用小写字母、数字、下划线，且不能重复",
+                                             ": key must be lowercase letters, digits or underscores, and unique"))
+        keys.add(c["key"])
+        for lang in ("zh", "en"):
+            _text(where + (tr("（中文）", " (Chinese)") if lang == "zh" else tr("（英文）", " (English)")), c.get(lang),
+                  known | CLAUSE_CONTEXT, required=True)
+        if c.get("when") not in CLAUSE_WHEN | known:
+            raise TemplateError(where + tr("：「加入条件」要填 always、missing_drawings 或某个规则结果的名字",
+                                             ": “added when” must be always, missing_drawings or a rule result name"))

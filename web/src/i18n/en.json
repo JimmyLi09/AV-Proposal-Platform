@@ -90,6 +90,13 @@
     "semicolon": "; ",
     "status": "Status"
   },
+  "completeness": {
+    "full": "All four drawings are available.",
+    "grade": "Drawings grade {grade}",
+    "missing": "Missing: {missing}; {affected} can only be filled in by hand. A data-completeness clause is added to the risks automatically and the results still come out; supply the drawings to raise the grade.",
+    "title": "Drawing completeness",
+    "unknown": "Choose in the inputs above which drawings you have (plan, elevation, section, ceiling plan); the grade shows here."
+  },
   "confirm": {
     "autosave": "Changes are saved to the draft about 1.2 s after you stop typing.",
     "conf": {
@@ -517,6 +524,7 @@
     "indoor": "Indoor",
     "local": "On site",
     "media_pc_only": "Media PC only",
+    "no": "No",
     "none": "None",
     "outdoor": "Outdoor",
     "pjlink": "PJLink",
@@ -526,7 +534,8 @@
     "rows": "Whole rows",
     "server_room": "Server room",
     "straight": "Straight",
-    "wall": "Wall"
+    "wall": "Wall",
+    "yes": "Yes"
   },
   "pj": {
     "download": "Download SVG",
@@ -732,7 +741,13 @@
     "review": "In review"
   },
   "templates": {
+    "addClause": "+ Add clause",
     "boq": "BOQ default lines",
+    "clauseEn": "Clause (English)",
+    "clauseNames": "The completeness clause can also use {missing_drawings} and {affected_items}.",
+    "clauseZh": "Clause (Chinese)",
+    "clauses": "Proposal clauses and page",
+    "clausesIntro": "Clauses in Risks and assumptions: edit the text directly; names in braces are filled from the project (e.g. {pixel_mm}). Not written by AI.",
     "description": "Description and spec lines",
     "down": "Move line {no} down",
     "intro": "Every proposal's client BOQ starts from these lines. {name} in the text is replaced by a rule result or input; the quantity is a fixed number (e.g. 1 lot) or a rule result. The template never calculates quantities.",
@@ -741,10 +756,19 @@
     "noteHint": "Note (italic)",
     "noteSource": "Note / source",
     "nothingToSave": "Change the template before saving",
+    "page": "Page",
+    "pages": {
+      "A3L": "A3 landscape (projection drawings are wide)",
+      "A4": "A4 portrait"
+    },
     "saveAs": "Save as template {version}",
     "sourceHint": "Source (internal)",
     "tag": "Template {version}",
-    "up": "Move line {no} up"
+    "up": "Move line {no} up",
+    "when": "Added when",
+    "whenAlways": "Always",
+    "whenMissing": "Automatically when the drawings grade is not A (projection)",
+    "whenValue": "When this rule result has a value"
   },
   "versions": {
     "by": "By",

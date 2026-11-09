@@ -297,7 +297,10 @@ export type ClientBoq = {
   readonly?: boolean; // 多面屏的 BOQ 目前只能看
 };
 export type TemplateRow = { key: string; title: string; specs: string[]; qty: number | string; unit: string; note?: string; source?: string };
-export type TemplateContent = { business_line: string; boq: { group: string; rows: TemplateRow[] } };
+// 固定条款（第 8 步）：when = always / missing_drawings（资料齐全度不是 A 级）/ 某个规则结果的名字（有值时加入）
+export type TemplateClause = { key: string; zh: string; en: string; when: string };
+export type TemplateContent = { business_line: string; boq: { group: string; rows: TemplateRow[] }; page?: string; clauses?: TemplateClause[] };
+export type Completeness = { grade: "A" | "B" | "C"; missing: string[]; affected: string[] };
 export type TemplateVersion = Version<TemplateContent> & { units: string[]; names: string[] };
 
 export type InputMeta = {
@@ -345,6 +348,7 @@ export type WorkspaceView = {
   boq: ClientBoq | null;
   drawing: Drawing | null;
   projection: Record<string, unknown> | null; // 投影专属图的数据（第 8 步）；图本身由服务器画
+  completeness: Completeness | null; // 投影资料齐全度（第 8 步）
   overridable: Record<string, string[]>;
   overrides: ManualOverride[];
   shapes: string[];

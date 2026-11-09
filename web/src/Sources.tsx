@@ -30,6 +30,7 @@ export default function SourcesPage({ view, inputs, setInputs, onApply, onReload
       <Conflicts view={view} onUse={onUse} />
       <ConfirmInputs view={view} inputs={inputs} setInputs={setInputs} onApply={onApply} error={error}
         hidden={isMulti(view, inputs) ? FACE_FIELDS[line] : []} />
+      {line === "PJ" && <CompletenessNote view={view} />}
     </>
   );
 }
@@ -138,6 +139,24 @@ function Files({ project, files, onUploaded }: { project: number; files: SourceF
           </tbody>
         </table>
       </div>
+    </section>
+  );
+}
+
+
+// 资料齐全度（第 8 步 · 投影）：在确认输入里勾了拿到哪些图，这里写等级；不是 A 级时风险与假设会自动加一条条款，计算照常出
+export function CompletenessNote({ view }: { view: WorkspaceView }) {
+  const c = view.completeness;
+  return (
+    <section className="card">
+      <h2>{t("completeness.title")}</h2>
+      {!c ? <p className="muted">{t("completeness.unknown")}</p> : (
+        <p className={c.grade === "A" ? "ok" : "warn"}>
+          <span className={`tag ${c.grade === "A" ? "ck-PASS" : "st-sample"}`}>{t("completeness.grade", { grade: c.grade })}</span>{" "}
+          {c.grade === "A" ? t("completeness.full") : t("completeness.missing", {
+            missing: c.missing.join(t("common.listSep")), affected: c.affected.join(t("common.listSep")) })}
+        </p>
+      )}
     </section>
   );
 }

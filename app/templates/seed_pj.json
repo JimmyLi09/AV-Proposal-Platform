@@ -1,5 +1,13 @@
 {
   "business_line": "PJ",
+  "page": "A3L",
+  "clauses": [
+    {"key": "blend", "when": "always", "zh": "融合带可能偏亮，暗场画面中重叠区域需经现场校正后才能完全消除。", "en": "Blend zones may look brighter; in dark scenes the overlaps are only fully removed after on-site calibration."},
+    {"key": "pixel", "when": "always", "zh": "清晰度受像素尺寸限制（本项目约 {pixel_mm} mm），近距离观看时画面颗粒感明显。", "en": "Sharpness is limited by the pixel size (about {pixel_mm} mm on this wall); the pixels show when viewed up close."},
+    {"key": "ceiling", "when": "always", "zh": "天花过矮会影响吊装和机位，需要现场复核天花高度和吊点。", "en": "A low ceiling affects mounting and projector positions; the ceiling height and fixing points need a site check."},
+    {"key": "vibration", "when": "always", "zh": "天花或建筑抖动可能导致融合错位，需定期校正。", "en": "Ceiling or building vibration can misalign the blend; recalibrate periodically."},
+    {"key": "completeness", "when": "missing_drawings", "zh": "本方案未取得{missing_drawings}，{affected_items}按手填值计算，需现场复核后确认。", "en": "The {missing_drawings} were not available; {affected_items} were calculated from values entered by hand and must be checked on site."}
+  ],
   "boq": {
     "group": "{proposal_name}",
     "rows": [

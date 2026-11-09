@@ -798,5 +798,21 @@
   },
   "按箱数最少要 ⌈总像素 ÷ 每网口带载⌉ 路；按行整行时用 W1 从上往下装整行的路数。再加备用。": {
     "en": "By cabinet count at least ⌈total pixels ÷ pixels per port⌉ runs; by whole rows, the runs W1 needs filling rows from the top. Plus spare."
+  },
+  "Plan drawing 平面图": {
+    "zh": "平面图",
+    "en": "Plan drawing"
+  },
+  "Elevation drawing 立面图": {
+    "zh": "立面图",
+    "en": "Elevation drawing"
+  },
+  "Section drawing 剖面图": {
+    "zh": "剖面图",
+    "en": "Section drawing"
+  },
+  "Ceiling plan (RCP) 天花图": {
+    "zh": "天花图",
+    "en": "Ceiling plan (RCP)"
   }
 }

@@ -90,6 +90,13 @@
     "semicolon": "；",
     "status": "状态"
   },
+  "completeness": {
+    "full": "四种图都有。",
+    "grade": "资料 {grade} 级",
+    "missing": "缺{missing}，{affected}只能手填。风险与假设里会自动加一条资料齐全度条款，计算结果照常出；补齐后可升级。",
+    "title": "资料齐全度",
+    "unknown": "在上面的确认输入里选拿到了哪些图（平面图、立面图、剖面图、天花图），这里会给出等级。"
+  },
   "confirm": {
     "autosave": "改了约 1.2 秒后自动保存成草稿。",
     "conf": {
@@ -517,6 +524,7 @@
     "indoor": "室内",
     "local": "现场",
     "media_pc_only": "只算播控电脑",
+    "no": "没有",
     "none": "无",
     "outdoor": "户外",
     "pjlink": "PJLink 网络中控",
@@ -526,7 +534,8 @@
     "rows": "按行整行",
     "server_room": "机房",
     "straight": "直走",
-    "wall": "壁挂"
+    "wall": "壁挂",
+    "yes": "有"
   },
   "pj": {
     "download": "下载 SVG",
@@ -732,7 +741,13 @@
     "review": "审核中"
   },
   "templates": {
+    "addClause": "＋ 新增条款",
     "boq": "BOQ 默认行",
+    "clauseEn": "条款（英文）",
+    "clauseNames": "资料齐全度条款还可以用 {missing_drawings}、{affected_items}。",
+    "clauseZh": "条款（中文）",
+    "clauses": "方案书的固定条款和纸张",
+    "clausesIntro": "风险与假设里的条款：文字可以直接改，花括号里是自动填入的项目数据（例如 {pixel_mm}）。不由 AI 撰写。",
     "description": "描述与规格",
     "down": "第 {no} 行下移",
     "intro": "客户版 BOQ 每个方案都从这里的行开始。文字里写 {名字} 会换成规则结果或输入；数量填一个固定数（例如 1 lot），或选一个规则结果。模板不自己算数量。",
@@ -741,10 +756,19 @@
     "noteHint": "备注（斜体）",
     "noteSource": "备注 / 来源",
     "nothingToSave": "修改模板后才能保存",
+    "page": "纸张",
+    "pages": {
+      "A3L": "A3 横向（投影专属图较宽）",
+      "A4": "A4 竖向"
+    },
     "saveAs": "另存为模板 {version}",
     "sourceHint": "来源（内部）",
     "tag": "模板 {version}",
-    "up": "第 {no} 行上移"
+    "up": "第 {no} 行上移",
+    "when": "加入条件",
+    "whenAlways": "始终加入",
+    "whenMissing": "资料齐全度不是 A 级时自动加入（投影）",
+    "whenValue": "这个规则结果有值时加入"
   },
   "versions": {
     "by": "修改人",

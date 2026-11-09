@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 from .api import current_user, file_out, get_db, iso, proposal_out, require_user
 from . import drawing_export, pj_drawings
 from .boq import build, build_multi, to_xlsx
+from .completeness import completeness
 from .drawing import build as build_drawing
 from .i18n import stored, text, tr, unit, use
 from .models import (ExtractedField, ProductLibraryVersion, Project, Proposal, Revision, RuleSetVersion, TemplateVersion,
@@ -207,6 +208,8 @@ def view(db: Session, prop: Proposal, rev=None) -> dict:
         "boq": client_boq(db, prop, used, result, rev.boq_edits),
         "drawing": drawing_of(used, result, rev.drawing_edits),
         "projection": projection_of(prop, used, result, rev),
+        # 资料齐全度（第 8 步 · 投影）：拿到了哪些图，A / B / C 级；不是 A 级时风险与假设自动加一条
+        "completeness": completeness(rev.inputs) if prop.business_line == "PJ" else None,
         "overridable": LINES[prop.business_line]["overridable"],
         "overrides": manual_list(rev, result),
         "shapes": multiface.SHAPES[prop.business_line],
