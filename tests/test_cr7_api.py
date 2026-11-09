@@ -86,11 +86,14 @@ def test_multiface_led_proposal(tmp_path):
     assert {r["group"] for r in boq["rows"]} == {"A · Left", "B · Main", "C · Right", "共用"}
     # 同型号备品按整屏合计（S3）：不在每面重复，只在共用组出一行；共用组的线缆备用数按面加总
     shared = [r for r in boq["rows"] if r["group"] == "共用"]
+    assert [r["key"] for r in shared] == ["processor", "server_pc", "power_cabling", "pooled:led_screen"]
     assert shared[-1]["title"] == "Spares: 80 modules, 3 power supply, 3 receiving card"
-    assert shared[1]["specs"][:2] == ["DB box with 20 A single-phase MCB × 16 circuits",
+    assert shared[2]["specs"][:2] == ["DB box with 20 A single-phase MCB × 16 circuits",
                                       "3-core 2.5 mm² power cable × 18 (16 + 2 spare)"]
-    assert shared[1]["specs"][3] == "CAT6 data cable × 18 (16 + 2 spare)"
+    assert shared[2]["specs"][3] == "CAT6 data cable × 18 (16 + 2 spare)"
     assert not any(s.startswith("Spares") for r in boq["rows"] if r["group"] != "共用" for s in r["specs"])
+    # 视频处理器整屏 1 台（S5），只在共用组；每面不再各有一行处理器
+    assert not any(r["key"].endswith(":processor") for r in boq["rows"])
     # 和单屏一样能改：按面的行改数量要写原因、标「手动」；手动添加的行放在共用组；导出照改过的出
     url = f"/api/proposals/{c.proposal}/boq"
     assert c.put(url, json={"rows": {"A:led_screen": {"qty": 24}}}).status_code == 422

@@ -22,6 +22,7 @@ export default function MultiView({ view, onUse }: { view: WorkspaceView; onUse:
     [t("multi.dbBoxes"), String(tot.db_boxes)],
     [t("multi.data"), String(tot.data_cables)],
     [t("multi.outputs"), String(tot.processor_outputs)],
+    [t("multi.processor"), display(r.rules, "F13")], // 整屏 1 台（S5）
   ] : [
     [t("multi.projectors"), String(tot.projectors)],
     [t("multi.canvas"), tot.canvas_px.join(" × ")],
