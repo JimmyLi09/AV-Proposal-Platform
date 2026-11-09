@@ -36,42 +36,22 @@ def _qty(spec, ctx: dict, unit: str):
 def build(template: dict, ctx: dict, edits: dict | None, manual: set = frozenset()) -> dict:
     """ctx：规则结果、输入和方案名；edits：这个 Rev 里人改过的内容（rev.boq_edits）；
     manual：推荐页手动覆盖过的结果名（CR-5），数量取自这些结果的行标 rule_manual。"""
-    edits = edits or {}
-    over = edits.get("rows") or {}
-    rows = []
-    for r in template["boq"]["rows"]:
-        if "when" in r and ctx.get(r["when"]) in (0, False):
-            continue
-        title, specs = fill(r["title"], ctx), [fill(s, ctx) for s in r["specs"]]
-        rule_qty = _qty(r["qty"], ctx, r["unit"])
-        o = over.get(r["key"], {})
-        rows.append({"key": r["key"], "title": o.get("title", title), "title_default": title,
-                     "specs": o.get("specs", specs), "specs_default": specs,
-                     "qty": o.get("qty", rule_qty), "rule_qty": rule_qty, "unit": r["unit"],
-                     "note": fill(r.get("note", ""), ctx), "source": r.get("source", ""),
-                     "manual": "qty" in o, "reason": o.get("reason"), "by": o.get("by"), "at": o.get("at"),
-                     "added": False, "rule_manual": r["qty"] in manual})
-    for a in edits.get("added") or []:
-        rows.append({"key": a["key"], "title": a["title"], "title_default": None, "specs": a["specs"],
-                     "specs_default": None, "qty": a["qty"], "rule_qty": None, "unit": a["unit"], "note": "",
-                     "source": "", "manual": True, "reason": None, "by": a["by"], "at": a["at"], "added": True,
-                     "rule_manual": False})
-    for n, row in enumerate(rows, 1):
-        row["no"] = n
-    group_default = fill(template["boq"]["group"], ctx)
-    return {"group": edits.get("group") or group_default, "group_default": group_default, "rows": rows,
-            "manual": [{k: row[k] for k in ("no", "key", "title", "rule_qty", "qty", "unit", "reason", "by", "at",
-                                            "added")} for row in rows if row["manual"]]}
+    return _edited(_defaults(template["boq"]["rows"], ctx, manual), edits, fill(template["boq"]["group"], ctx))
+
+
+def _defaults(rows: list[dict], ctx: dict, manual: set = frozenset()) -> list[dict]:
+    """模板行按规则结果填好的默认写法（还没套人改过的内容）。"""
+    return [{"key": r["key"], "title": fill(r["title"], ctx), "specs": [fill(s, ctx) for s in r["specs"]],
+             "qty": _qty(r["qty"], ctx, r["unit"]), "unit": r["unit"], "note": fill(r.get("note", ""), ctx),
+             "source": r.get("source", ""), "rule_manual": r["qty"] in manual}
+            for r in rows if not ("when" in r and ctx.get(r["when"]) in (0, False))]
 
 
 def build_multi(template: dict, faces: list[tuple[str, str, dict]], shared_title: str, shared_ctx: dict,
-                pooled: tuple = ()) -> dict:
+                pooled: tuple = (), edits: dict | None = None) -> dict:
     """多面屏（CR-7）：数量取自规则结果的行每面一组（faces：面编号、组标题、这一面的值）；固定数量的行（例如 1 set 的电脑）
     只出一次，放在最后的共用组。pooled：整屏合计的值（同型号备品），用到它们的规格行从每面拿掉，在共用组单独出一行。
-    目前只读，不能在页面上改。"""
-    def part(rows, ctx):
-        return build({**template, "boq": {**template["boq"], "rows": rows}}, ctx, None)["rows"] if rows else []
-
+    改法和单屏一样（edits），行的 key 前面加面编号；手动添加的行放在共用组。"""
     is_pooled = lambda s: bool(set(NAME.findall(s)) & set(pooled))  # noqa: E731
     by_rule = [r | {"specs": [s for s in r["specs"] if not is_pooled(s)]}
                for r in template["boq"]["rows"] if isinstance(r["qty"], str)]
@@ -80,12 +60,33 @@ def build_multi(template: dict, faces: list[tuple[str, str, dict]], shared_title
               for r in template["boq"]["rows"] if isinstance(r["qty"], str) for s in r["specs"] if is_pooled(s)]
     rows = []
     for fid, title, ctx in faces:
-        rows += [r | {"key": f"{fid}:{r['key']}", "group": title} for r in part(by_rule, ctx)]
-    rows += [r | {"group": shared_title} for r in part(fixed, shared_ctx)]
-    for n, row in enumerate(rows, 1):
+        rows += [r | {"key": f"{fid}:{r['key']}", "group": title} for r in _defaults(by_rule, ctx)]
+    rows += [r | {"group": shared_title} for r in _defaults(fixed, shared_ctx)]
+    return _edited(rows, edits, fill(template["boq"]["group"], shared_ctx), shared_title)
+
+
+def _edited(rows: list[dict], edits: dict | None, group_default: str, added_group: str | None = None) -> dict:
+    """把人改过的内容（标题、规格、数量和原因、手动添加的行、组标题）套到默认行上，编号。"""
+    edits = edits or {}
+    over = edits.get("rows") or {}
+    out = []
+    for r in rows:
+        o = over.get(r["key"], {})
+        out.append(r | {"title": o.get("title", r["title"]), "title_default": r["title"],
+                        "specs": o.get("specs", r["specs"]), "specs_default": r["specs"],
+                        "qty": o.get("qty", r["qty"]), "rule_qty": r["qty"],
+                        "manual": "qty" in o, "reason": o.get("reason"), "by": o.get("by"), "at": o.get("at"),
+                        "added": False})
+    for a in edits.get("added") or []:
+        out.append({"key": a["key"], "title": a["title"], "title_default": None, "specs": a["specs"],
+                    "specs_default": None, "qty": a["qty"], "rule_qty": None, "unit": a["unit"], "note": "",
+                    "source": "", "manual": True, "reason": None, "by": a["by"], "at": a["at"], "added": True,
+                    "rule_manual": False} | ({"group": added_group} if added_group else {}))
+    for n, row in enumerate(out, 1):
         row["no"] = n
-    group = fill(template["boq"]["group"], shared_ctx)
-    return {"group": group, "group_default": group, "rows": rows, "manual": [], "readonly": True}
+    return {"group": edits.get("group") or group_default, "group_default": group_default, "rows": out,
+            "manual": [{k: row[k] for k in ("no", "key", "title", "rule_qty", "qty", "unit", "reason", "by", "at",
+                                            "added")} for row in out if row["manual"]]}
 
 
 def to_xlsx(boq: dict, meta: dict) -> bytes:

@@ -47,8 +47,16 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
     }));
   }
 
-  if (boq.readonly) return <ReadonlyBoq view={view} boq={boq} />;
   const rules = boq.rows.filter((r) => !r.added);
+  const cols = showSource ? 4 : 3;
+  // 多面屏（CR-7）：每面一组，固定数量的行和手动添加的行在最后的共用组
+  const groupRow = (group: string | undefined, prev: string | undefined) =>
+    group && group !== prev && (
+      <tr className="group-row">
+        <td />
+        <td colSpan={cols}><i>{group}</i></td>
+      </tr>
+    );
   return (
     <>
       <section className="card">
@@ -57,6 +65,7 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
           {t("boq.intro")} <a href="#/templates">{t("nav.templates")}</a>
           {t("boq.introVersion", { version: view.template_version })}
         </p>
+        {rules.some((r) => r.group) && <p className="muted">{t("boq.multi")}</p>}
         {boq.manual.length > 0 && <p className="warn">{t("boq.manualCount", { n: boq.manual.length })}</p>}
         <div className="row">
           <label className="row tight check">
@@ -77,45 +86,48 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
             <tbody>
               <tr className="group-row">
                 <td />
-                <td colSpan={showSource ? 4 : 3}>
+                <td colSpan={cols}>
                   <input className="wide strong" aria-label={t("boq.group")} value={draft.group} onChange={(e) => setDraft({ ...draft, group: e.target.value })} />
                 </td>
               </tr>
-              {rules.map((r) => {
+              {rules.map((r, i) => {
                 const d = draft.rows[r.key];
                 const qtyChanged = d.qty !== "" && Number(d.qty) !== r.rule_qty;
                 return (
-                  <tr key={r.key}>
-                    <td>{r.no}</td>
-                    <td>
-                      <input className="wide strong" aria-label={t("boq.rowField", { no: r.no, field: t("boq.description") })} value={d.title} onChange={(e) => setRow(r.key, { title: e.target.value })} />
-                      <textarea aria-label={t("boq.rowField", { no: r.no, field: t("boq.specs") })} rows={Math.max(1, lines(d.specs).length)} placeholder={t("boq.specsHint")}
-                        value={d.specs} onChange={(e) => setRow(r.key, { specs: e.target.value })} />
-                      {r.note && <div className="note">*{r.note}</div>}
-                    </td>
-                    <td>
-                      <input type="number" step="any" min="0" className={`num ${qtyChanged ? "manual" : ""}`} aria-label={t("boq.rowField", { no: r.no, field: t("diagram.qty") })}
-                        value={d.qty} onChange={(e) => setRow(r.key, { qty: e.target.value })} />
-                      {r.rule_manual && !qtyChanged && (
-                        <div className="small">
-                          <span className="tag st-sample" title={t("manual.fromRec")}>{t("manual.tag")}</span>
-                        </div>
-                      )}
-                      {qtyChanged && (
-                        <div className="small">
-                          <span className="tag st-sample">{t("boq.manual")}</span> {t("boq.ruleValue")} <s>{r.rule_qty ?? "—"}</s>{" "}
-                          <button className="btn-link" onClick={() => setRow(r.key, { qty: qtyText(r.rule_qty), reason: "" })}>
-                            {t("boq.restore")}
-                          </button>
-                          <input aria-label={t("boq.rowField", { no: r.no, field: t("boq.reason") })} placeholder={t("boq.reasonHint")} value={d.reason}
-                            onChange={(e) => setRow(r.key, { reason: e.target.value })} />
-                          {r.manual && r.by && <div className="muted">{r.by} · {fmtDate(r.at!)}</div>}
-                        </div>
-                      )}
-                    </td>
-                    <td>{r.unit}</td>
-                    {showSource && <td className="muted small">{r.source || t("boq.templateDefault")}</td>}
-                  </tr>
+                  <Fragment key={r.key}>
+                    {groupRow(r.group, rules[i - 1]?.group)}
+                    <tr>
+                      <td>{r.no}</td>
+                      <td>
+                        <input className="wide strong" aria-label={t("boq.rowField", { no: r.no, field: t("boq.description") })} value={d.title} onChange={(e) => setRow(r.key, { title: e.target.value })} />
+                        <textarea aria-label={t("boq.rowField", { no: r.no, field: t("boq.specs") })} rows={Math.max(1, lines(d.specs).length)} placeholder={t("boq.specsHint")}
+                          value={d.specs} onChange={(e) => setRow(r.key, { specs: e.target.value })} />
+                        {r.note && <div className="note">*{r.note}</div>}
+                      </td>
+                      <td>
+                        <input type="number" step="any" min="0" className={`num ${qtyChanged ? "manual" : ""}`} aria-label={t("boq.rowField", { no: r.no, field: t("diagram.qty") })}
+                          value={d.qty} onChange={(e) => setRow(r.key, { qty: e.target.value })} />
+                        {r.rule_manual && !qtyChanged && (
+                          <div className="small">
+                            <span className="tag st-sample" title={t("manual.fromRec")}>{t("manual.tag")}</span>
+                          </div>
+                        )}
+                        {qtyChanged && (
+                          <div className="small">
+                            <span className="tag st-sample">{t("boq.manual")}</span> {t("boq.ruleValue")} <s>{r.rule_qty ?? "—"}</s>{" "}
+                            <button className="btn-link" onClick={() => setRow(r.key, { qty: qtyText(r.rule_qty), reason: "" })}>
+                              {t("boq.restore")}
+                            </button>
+                            <input aria-label={t("boq.rowField", { no: r.no, field: t("boq.reason") })} placeholder={t("boq.reasonHint")} value={d.reason}
+                              onChange={(e) => setRow(r.key, { reason: e.target.value })} />
+                            {r.manual && r.by && <div className="muted">{r.by} · {fmtDate(r.at!)}</div>}
+                          </div>
+                        )}
+                      </td>
+                      <td>{r.unit}</td>
+                      {showSource && <td className="muted small">{r.source || t("boq.templateDefault")}</td>}
+                    </tr>
+                  </Fragment>
                 );
               })}
               {draft.added.map((a, i) => (
@@ -200,58 +212,5 @@ export default function BoqTab({ view, boq, onApply }: { view: WorkspaceView; bo
         </details>
       </section>
     </>
-  );
-}
-
-/** 多面屏（CR-7）：每面一组，固定数量的行在最后的共用组；目前只能看，不能改。 */
-function ReadonlyBoq({ view, boq }: { view: WorkspaceView; boq: ClientBoq }) {
-  return (
-    <section className="card">
-      <h2>{t("ws.tabs.boq")}</h2>
-      <p className="muted">{t("boq.readonly")}</p>
-      <div className="table-wrap">
-        <table className="boq">
-          <thead>
-            <tr>
-              <th>No.</th>
-              <th>{t("boq.description")}</th>
-              <th>{t("diagram.qty")}</th>
-              <th>{t("boq.unit")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="group-row">
-              <td />
-              <td colSpan={3} className="strong">{boq.group}</td>
-            </tr>
-            {boq.rows.map((r, i) => (
-              <Fragment key={r.key}>
-                {r.group && r.group !== boq.rows[i - 1]?.group && (
-                  <tr className="group-row">
-                    <td />
-                    <td colSpan={3}><i>{r.group}</i></td>
-                  </tr>
-                )}
-                <tr>
-                  <td>{r.no}</td>
-                  <td>
-                    <b>{r.title}</b>
-                    {r.specs.map((s) => <div key={s}>- {s}</div>)}
-                    {r.note && <div className="note">*{r.note}</div>}
-                  </td>
-                  <td>{r.qty ?? "—"}</td>
-                  <td>{r.unit}</td>
-                </tr>
-              </Fragment>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="row">
-        <a className="btn-outline" href={`/api/proposals/${view.proposal.id}/boq.xlsx${revQuery(view)}`}>
-          {t("boq.export")}
-        </a>
-      </div>
-    </section>
   );
 }

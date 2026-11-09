@@ -294,7 +294,6 @@ export type ClientBoq = {
   group_default: string;
   rows: ClientBoqRow[];
   manual: Pick<ClientBoqRow, "no" | "key" | "title" | "rule_qty" | "qty" | "unit" | "reason" | "by" | "at" | "added">[];
-  readonly?: boolean; // 多面屏的 BOQ 目前只能看
 };
 export type TemplateRow = { key: string; title: string; specs: string[]; qty: number | string; unit: string; note?: string; source?: string };
 // 固定条款（第 8 步）：when = always / missing_drawings（资料齐全度不是 A 级）/ 某个规则结果的名字（有值时加入）

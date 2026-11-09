@@ -126,7 +126,8 @@ def client_boq(db: Session, prop: Proposal, used: dict, result: dict | None, edi
         if not result["multi"]["totals"]:
             return None
         faces = [(f["id"], f"{f['id']} · {f.get('name') or ''}".strip(" ·"), f["boq_context"] | names) for f in result["faces"]]
-        return build_multi(used["template"].content, faces, tr("共用", "Shared"), result["values"] | names, multiface.POOLED)
+        return build_multi(used["template"].content, faces, tr("共用", "Shared"), result["values"] | names, multiface.POOLED,
+                           edits)
     return build(used["template"].content, result["values"] | names, edits, set(result["manual"]))
 
 
@@ -413,8 +414,6 @@ def save_boq(proposal_id: int, body: BoqIn, user: User = Depends(require_user), 
     default = client_boq(db, prop, used, result, None)
     if default is None:
         raise HTTPException(409, tr("还没有计算结果，算完才能改 BOQ", "No results yet; calculate before editing the BOQ"))
-    if default.get("readonly"):
-        raise HTTPException(409, tr("多面屏的 BOQ 目前只能看，不能改", "A multi-face BOQ is read-only for now"))
     rules = {r["key"]: r for r in default["rows"]}
     old = rev.boq_edits or {}
     stamp = {"by": user.name, "at": iso(utcnow())}
