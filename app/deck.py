@@ -17,8 +17,13 @@ NAVY, MUTED, ORANGE = (0x15, 0x20, 0x3A), (0x6B, 0x65, 0x58), (0xC2, 0x41, 0x0C)
 # 默认页序（封面、最后一页固定）
 SLIDES = {
     "LED": ["cover", "overview", "config", "diagram", "schematic", "drawing", "annotated", "boq", "risks", "next"],
-    "PJ": ["cover", "overview", "config", "diagram", "schematic", "annotated", "boq", "risks", "next"],
+    # 投影 11 页：多出立面融合区、平面与剖面两页（第 8 步）
+    "PJ": ["cover", "overview", "config", "diagram", "schematic", "pj_elevation", "pj_plan_section", "annotated", "boq", "risks",
+           "next"],
 }
+# 这一页要用到的章节：方案里没有这一章（例如没有图纸、没有标注副本）就不出这一页
+NEED = {"diagram": "diagram", "schematic": "links", "drawing": "drawing", "annotated": "annotated", "boq": "boq",
+        "pj_elevation": "pj_elevation", "pj_plan_section": "pj_plan"}
 FIXED = {"cover", "next"}
 COVER_FIELDS = ["title", "project", "project_no", "client", "location", "date"]
 
@@ -29,14 +34,14 @@ def slide_title(key: str) -> str:
         "config": tr("推荐配置", "Recommended configuration"), "diagram": tr("系统图 L1", "System diagram"),
         "schematic": tr("示意图 L2", "Schematic"), "drawing": tr("拼接与线路图", "Cabinet and cabling drawing"),
         "annotated": tr("标注图", "Annotated drawing"), "boq": tr("数量与 BOQ", "Quantities and BOQ"),
+        "pj_elevation": tr("立面融合区", "Elevation · blend zones"), "pj_plan_section": tr("平面机位与剖面遮挡", "Plan and section"),
         "risks": tr("风险与假设", "Risks and assumptions"), "next": tr("下一步与联系", "Next steps and contact"),
     }[key]
 
 
 def available(line: str, have: set) -> list[str]:
     """这个方案实际有内容的页（没有图纸或标注副本的页不出）。have：方案文档里有的章节。"""
-    need = {"diagram": "diagram", "schematic": "links", "drawing": "drawing", "annotated": "annotated", "boq": "boq"}
-    return [k for k in SLIDES[line] if k not in need or need[k] in have]
+    return [k for k in SLIDES[line] if k not in NEED or NEED[k] in have]
 
 
 def sections_of(view: dict) -> set:
@@ -47,6 +52,8 @@ def sections_of(view: dict) -> set:
         have |= {"diagram", "links"}
     if view.get("drawing"):
         have.add("drawing")
+    if view.get("projection"):
+        have |= {"pj_elevation", "pj_plan", "pj_section"}
     if view.get("boq"):
         have.add("boq")
     if any(d.get("copy_path") for d in (view["rev"].get("annotations") or {}).values()):
@@ -153,8 +160,7 @@ def build(doc: dict, docs_other: dict | None, line: str, settings: dict, lang: s
     # 内置版式用空白页、自己画标题（默认母版是 4:3 的占位符）；公司母版用它的版式
     content_layout = _layout(prs, "Title Only", "Blank") if branded else _layout(prs, "Blank")
     title_layout = _layout(prs, "Title Slide", "Title Only") if branded else _layout(prs, "Blank")
-    need = {"diagram": "diagram", "schematic": "links", "drawing": "drawing", "annotated": "annotated", "boq": "boq"}
-    keys = [s["key"] for s in settings["slides"] if s["included"] and (s["key"] not in need or need[s["key"]] in by_key)]
+    keys = [s["key"] for s in settings["slides"] if s["included"] and (s["key"] not in NEED or NEED[s["key"]] in by_key)]
     titles = {s["key"]: s["title"] for s in settings["slides"]}
     if lang == "bi":
         with use("zh"):
@@ -215,12 +221,19 @@ def build(doc: dict, docs_other: dict | None, line: str, settings: dict, lang: s
             if other:
                 rows = [[f"{a} · {b[0].split(' · ', 1)[-1]}", v] for (a, v), b in zip(rows, other["config"]["rows"])]
             _table(s, M, top, width, rows[:14], size=11, widths=[0.55, 0.45])
-        elif key in ("diagram", "drawing"):
+        elif key in ("diagram", "drawing", "pj_elevation"):
             img = png(by_key[key]["svg"])
             pic = s.shapes.add_picture(io.BytesIO(img), M, top, width=width)
             if pic.height > H * 0.68:  # 太高就按高度缩
                 ratio = (H * 0.68) / pic.height
                 pic.height, pic.width = int(pic.height * ratio), int(pic.width * ratio)
+        elif key == "pj_plan_section":  # 平面机位图在左、剖面遮挡图在右，各占一半
+            half = Emu(int(width * 0.49))
+            for i, sec in enumerate(("pj_plan", "pj_section")):
+                pic = s.shapes.add_picture(io.BytesIO(png(by_key[sec]["svg"])), Emu(M + i * int(width * 0.51)), top, width=half)
+                if pic.height > H * 0.68:
+                    ratio = (H * 0.68) / pic.height
+                    pic.height, pic.width = int(pic.height * ratio), int(pic.width * ratio)
         elif key == "schematic":
             sec = by_key["links"]
             head, *nodes = sec["nodes"]

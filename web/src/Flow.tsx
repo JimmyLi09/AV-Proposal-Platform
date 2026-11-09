@@ -5,6 +5,7 @@ import BoqTab from "./Boq";
 import DiagramTab from "./Diagram";
 import DrawingTab from "./Drawing";
 import IntakePage from "./Intake";
+import ProjectionDrawings from "./Projection";
 import ReviewTab from "./Review";
 import SourcesPage from "./Sources";
 import DesignPage from "./Workspace";
@@ -189,6 +190,8 @@ function Sheets({ view, apply, reload }: { view: WorkspaceView; apply: (p: Promi
   return (
     <>
       {view.drawing && <DrawingTab view={view} drawing={view.drawing} onApply={apply} />}
+      {view.projection && <ProjectionDrawings view={view} />}
+      {view.proposal.business_line === "PJ" && result.multi && <section className="card"><p className="muted">{t("pj.multiLater")}</p></section>}
       {result.diagram ? <DiagramTab view={view} diagram={result.diagram} />
         : <section className="card"><p className="muted">{t(result.multi ? "ws.noDiagramMulti" : "ws.noDiagram")}</p></section>}
       <AnnotateTab view={view} onSaved={reload} />
