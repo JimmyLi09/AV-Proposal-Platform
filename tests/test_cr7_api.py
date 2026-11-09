@@ -82,7 +82,7 @@ def test_multiface_led_proposal(tmp_path):
     assert v["rev"]["status"] == "draft" and {"B · F6", "B · F8"} <= set(missing)
     assert [f["id"] for f in v["result"]["faces"]] == ["A", "B", "C"] and v["result"]["multi"]["totals"]["circuits"] == 16
     boq = v["boq"]
-    assert boq["readonly"] and [r["group"] for r in boq["rows"]][:1] == ["A · Left"]
+    assert [r["group"] for r in boq["rows"]][:1] == ["A · Left"]
     assert {r["group"] for r in boq["rows"]} == {"A · Left", "B · Main", "C · Right", "共用"}
     # 同型号备品按整屏合计（S3）：不在每面重复，只在共用组出一行；共用组的线缆备用数按面加总
     shared = [r for r in boq["rows"] if r["group"] == "共用"]
@@ -91,9 +91,20 @@ def test_multiface_led_proposal(tmp_path):
                                       "3-core 2.5 mm² power cable × 18 (16 + 2 spare)"]
     assert shared[1]["specs"][3] == "CAT6 data cable × 18 (16 + 2 spare)"
     assert not any(s.startswith("Spares") for r in boq["rows"] if r["group"] != "共用" for s in r["specs"])
-    assert c.put(f"/api/proposals/{c.proposal}/boq", json={"rows": {}}).status_code == 409
-    rows = list(load_workbook(io.BytesIO(c.get(f"/api/proposals/{c.proposal}/boq.xlsx").content)).active.iter_rows(values_only=True))
-    assert (None, "B · Main", None, None) in rows
+    # 和单屏一样能改：按面的行改数量要写原因、标「手动」；手动添加的行放在共用组；导出照改过的出
+    url = f"/api/proposals/{c.proposal}/boq"
+    assert c.put(url, json={"rows": {"A:led_screen": {"qty": 24}}}).status_code == 422
+    boq = c.put(url, json={"rows": {"A:led_screen": {"qty": 24, "reason": "按现场复尺"},
+                                    "C:structure": {"specs": ["Hot-dip galvanised frame"]}},
+                           "added": [{"title": "Cable trunking", "specs": [], "qty": 1, "unit": "lot"}]}).json()["boq"]
+    rows = {r["key"]: r for r in boq["rows"]}
+    assert rows["A:led_screen"]["qty"] == 24 and rows["A:led_screen"]["rule_qty"] == 23.96 and rows["A:led_screen"]["manual"]
+    assert rows["C:structure"]["specs"] == ["Hot-dip galvanised frame"] and rows["C:led_screen"]["qty"] == 23.96
+    assert boq["rows"][-1]["title"] == "Cable trunking" and boq["rows"][-1]["group"] == "共用"
+    assert [m["key"] for m in boq["manual"]] == ["A:led_screen", "x1"]
+    rows = list(load_workbook(io.BytesIO(c.get(f"{url}.xlsx").content)).active.iter_rows(values_only=True))
+    assert (None, "B · Main", None, None) in rows and (len(boq["rows"]), "Cable trunking", 1, "lot") in rows
+    assert (None, "- Hot-dip galvanised frame", None, None) in rows
     assert v["result"]["diagram"] is None and v["drawing"] is None  # 示意图、图纸目前只做平面单屏
     en = c.get(f"/api/proposals/{c.proposal}", headers={"X-Lang": "en"}).json()["result"]
     leaks = [s for s in json.dumps([en["rules"], en["multi"]], ensure_ascii=False).split('"') if CJK.search(s)]
