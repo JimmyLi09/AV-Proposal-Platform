@@ -48,16 +48,17 @@ def _defaults(rows: list[dict], ctx: dict, manual: set = frozenset()) -> list[di
 
 
 def build_multi(template: dict, faces: list[tuple[str, str, dict]], shared_title: str, shared_ctx: dict,
-                pooled: tuple = (), edits: dict | None = None) -> dict:
+                pooled: tuple = (), edits: dict | None = None, whole: tuple = ()) -> dict:
     """多面屏（CR-7）：数量取自规则结果的行每面一组（faces：面编号、组标题、这一面的值）；固定数量的行（例如 1 set 的电脑）
     只出一次，放在最后的共用组。pooled：整屏合计的值（同型号备品），用到它们的规格行从每面拿掉，在共用组单独出一行。
+    whole：整屏只有一份的数量（视频处理器，S5），数量取自它们的行也放在共用组。
     改法和单屏一样（edits），行的 key 前面加面编号；手动添加的行放在共用组。"""
     is_pooled = lambda s: bool(set(NAME.findall(s)) & set(pooled))  # noqa: E731
-    by_rule = [r | {"specs": [s for s in r["specs"] if not is_pooled(s)]}
-               for r in template["boq"]["rows"] if isinstance(r["qty"], str)]
-    fixed = [r for r in template["boq"]["rows"] if not isinstance(r["qty"], str)]
+    per_face = lambda r: isinstance(r["qty"], str) and r["qty"] not in whole  # noqa: E731
+    by_rule = [r | {"specs": [s for s in r["specs"] if not is_pooled(s)]} for r in template["boq"]["rows"] if per_face(r)]
+    fixed = [r for r in template["boq"]["rows"] if not per_face(r)]
     fixed += [{"key": f"pooled:{r['key']}", "title": s, "specs": [], "qty": 1, "unit": "lot"}
-              for r in template["boq"]["rows"] if isinstance(r["qty"], str) for s in r["specs"] if is_pooled(s)]
+              for r in template["boq"]["rows"] if per_face(r) for s in r["specs"] if is_pooled(s)]
     rows = []
     for fid, title, ctx in faces:
         rows += [r | {"key": f"{fid}:{r['key']}", "group": title} for r in _defaults(by_rule, ctx)]

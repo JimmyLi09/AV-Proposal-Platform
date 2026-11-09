@@ -171,8 +171,10 @@ def controller_pick(ctx: dict, catalog: dict) -> dict:
 
 
 def processor_pick(ctx: dict, catalog: dict) -> dict:
-    """F13：先找一台够用的处理器（含发送）；找不到再按信号源数量和分辨率选独立处理器（另配 F11 的控制器）。"""
+    """F13：先找一台够用的处理器（含发送）；找不到再按信号源数量和分辨率选独立处理器（另配 F11 的控制器）。
+    多面屏整屏选一台（S5）：ctx 带 processor_outputs（面数），独立处理器的输出路数要够，每面接 1 路；没写输出路数的待核对。"""
     load, runs, sources = ctx["total_pixels"], ctx["data_runs"], _sources(ctx)
+    need = ctx.get("processor_outputs")
     notes = [] if "signal_sources" in ctx else [tr("信号源数量没填，按 1 路计算", "Signal sources not filled in; 1 assumed")]
     if p := integrated_pick(ctx, catalog):
         cap = Decimal(p["capacity_px"])
@@ -190,16 +192,25 @@ def processor_pick(ctx: dict, catalog: dict) -> dict:
             "sample": p.get("sample", False),
         }
     for p in catalog.get("processors", []):
-        if not p.get("sending") and p.get("inputs") and p.get("max_px") and sources <= p["inputs"] and load <= p["max_px"]:
+        outs = p.get("outputs")
+        if (not p.get("sending") and p.get("inputs") and p.get("max_px") and sources <= p["inputs"] and load <= p["max_px"]
+                and (need is None or outs is None or need <= outs)):
+            trace = tr(f"{_n(sources)} 路信号源，{load / 1_000_000:.2f} MP ≤ {Decimal(p['max_px']) / 1_000_000:.2f} MP",
+                       f"{_n(sources)} signal sources, {load / 1_000_000:.2f} MP ≤ {Decimal(p['max_px']) / 1_000_000:.2f} MP")
+            if need is not None and outs is None:
+                notes.append(tr(f"输出路数待核对规格书（要 ≥ {_n(need)} 路，每面 1 路）",
+                                f"Output count to be checked against the datasheet (≥ {_n(need)} needed, one per face)"))
+            elif need is not None:
+                trace += tr(f"，{_n(Decimal(outs))} 路输出 ≥ {_n(need)} 面", f", {_n(Decimal(outs))} outputs ≥ {_n(need)} faces")
             return {
                 "outputs": {"processor": p["model"], "processor_id": p.get("id"), "processor_qty": Decimal(1),
                             "processor_sending": False},
-                "check": "NOTE" if notes else None, "note": tr("；", "; ").join(notes),
-                "trace": tr(f"{_n(sources)} 路信号源，{load / 1_000_000:.2f} MP ≤ {Decimal(p['max_px']) / 1_000_000:.2f} MP",
-                            f"{_n(sources)} signal sources, {load / 1_000_000:.2f} MP ≤ {Decimal(p['max_px']) / 1_000_000:.2f} MP"),
+                "check": "NOTE" if notes else None, "note": tr("；", "; ").join(notes), "trace": trace,
                 "sample": p.get("sample", False),
             }
-    notes.append(tr("产品库里没有输入数和分辨率都够的视频处理器", "No video processor in the library with enough inputs and resolution"))
+    notes.append(tr("产品库里没有输入数、分辨率和输出路数都够的视频处理器",
+                    "No video processor in the library with enough inputs, resolution and outputs") if need is not None else
+                 tr("产品库里没有输入数和分辨率都够的视频处理器", "No video processor in the library with enough inputs and resolution"))
     return {"check": "NOTE", "note": tr("；", "; ").join(notes), "sample": True}
 
 
@@ -259,6 +270,7 @@ def catalog(library: dict, cabinet: dict | None) -> dict:
                          "sample": c.get("sample", False)}
                         for c in active(library, "controller") if c.get("capacity_px") and c.get("ports")],
         "processors": [{"id": p["id"], "model": name(p), "inputs": p.get("inputs"), "max_px": p.get("max_px"),
+                        "outputs": p.get("outputs"),
                         "sending": bool(p.get("sending")), "capacity_px": p.get("capacity_px"), "ports": p.get("ports"),
                         "sample": p.get("sample", False)}
                        for p in active(library, "processor")

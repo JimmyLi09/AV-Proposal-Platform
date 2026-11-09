@@ -41,6 +41,7 @@ FIELDS = {
         "processor": COMMON + [
             ("inputs", "Inputs 输入数", "number"),
             ("max_px", "Max resolution 最大分辨率 px", "number"),
+            ("outputs", "Outputs 输出路数", "number"),  # 多面屏每面接 1 路输出（S5）
             # CR-2：处理器（含发送）——一台同时做视频处理和发送，不用另配控制器
             ("sending", "With sending 含发送", "flag"),
             ("capacity_px", "Load 带载像素 px（含发送时）", "number"),

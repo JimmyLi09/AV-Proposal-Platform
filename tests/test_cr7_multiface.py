@@ -210,3 +210,57 @@ def test_wide_face_blend_note_and_curved_needs_correction():
     out = calculate(PJ_RULES, load_library("PJ"), pj_inputs(case, shape="curved", corners=[], faces=[
         {"id": "A", "name": "Arc", "width_mm": 12000, "height_mm": 2700}]))
     assert check(out, "P22")["check"] == "BLOCK"  # 示例融合器不支持曲面校正
+
+
+def _processor(pid, **spec):
+    return {"id": pid, "category": "processor", "brand": "Sample", "model": pid, "status": "approved",
+            "scenes": ["indoor"], "sample": True, "datasheet": ""} | spec
+
+
+def _cube(*processors):
+    """Digital Cube：两面合计 1280 × 1680 + 1280 × 1280 = 3,788,800 px；示例处理器 SP-1 只有 2.3 MP，整屏用不了。"""
+    lib = led_library()
+    lib["products"] += list(processors)
+    return calculate(LED_RULES, lib, led_inputs(CASES["led_digital_cube_l_shape"]))
+
+
+def test_whole_screen_processor_with_outputs_for_every_face():
+    """S5：视频处理器整屏 1 台，按整屏像素选；独立处理器的输出路数要 ≥ 面数（每面 1 路），控制器仍按面配。"""
+    out = _cube(_processor("ONE-OUT", inputs=2, max_px=8_000_000, outputs=1),
+                _processor("TWO-OUT", inputs=2, max_px=8_000_000, outputs=2))
+    f13 = check(out, "F13")
+    assert [r["id"] for r in out["rules"]] == ["S1", "S2", "S3", "S4", "S5", "F13", "S6", "S7"]
+    assert f13["display"].endswith("TWO-OUT") and "2 路输出 ≥ 2 面" in f13["trace"]  # 1 路输出的跳过
+    assert ("PASS", "处理器 Sample TWO-OUT：整屏 1 台，2 路输出，每面 1 路（2 面）") in [
+        (c["check"], c["text"]) for c in out["multi"]["checks"] if c["rule"] == "S5"]
+    assert all(not any(r["id"] == "F13" for r in f["rules"]) for f in out["faces"])  # 不再按面选处理器
+    assert [face(out, x)["values"]["controller_qty"] for x in "AB"] == [1, 1]
+    assert [(ln["item"], ln["qty"]) for ln in out["boq"] if ln["rule"] == "F13"] == [("整屏 · 视频处理器", 1)]
+    assert out["values"]["processor_qty"] == 1 and out["values"]["processor_title"] == "Video processor"
+
+
+def test_whole_screen_processor_outputs_missing_or_too_few():
+    out = _cube(_processor("NO-OUT", inputs=2, max_px=8_000_000))
+    assert check(out, "F13")["check"] == "NOTE" and "输出路数待核对规格书（要 ≥ 2 路，每面 1 路）" in check(out, "F13")["note"]
+    assert ("NOTE", "处理器 Sample NO-OUT 的输出路数待核对规格书（要 ≥ 2 路，每面 1 路）") in [
+        (c["check"], c["text"]) for c in out["multi"]["checks"] if c["rule"] == "S5"]
+    out = _cube(_processor("ONE-OUT", inputs=2, max_px=8_000_000, outputs=1))
+    assert check(out, "F13")["note"] == "产品库里没有输入数、分辨率和输出路数都够的视频处理器"
+    assert "processor_id" not in out["values"] and not [ln for ln in out["boq"] if ln["rule"] == "F13"]
+
+
+def test_whole_screen_processor_with_sending_replaces_the_face_controllers():
+    """含发送的处理器够整屏用：整屏 1 台，各面的控制器包含在里面；只够一面用的含发送处理器不按面拿来用。"""
+    small = _processor("VX-S", sending=True, capacity_px=2_300_000, ports=8)  # 够 A 面（2.15 MP），不够整屏
+    big = _processor("VX-L", sending=True, capacity_px=3_900_000, ports=16)
+    out = _cube(small)
+    assert "processor_id" not in out["values"]
+    assert [face(out, x)["values"]["controller_id"] for x in "AB"] == ["SC-4", "SC-4"]
+    out = _cube(small, big)
+    assert check(out, "F13")["display"].endswith("VX-L") and out["values"]["processor_sending"]
+    for x in "AB":
+        f11 = next(r for r in face(out, x)["rules"] if r["id"] == "F11")
+        assert f11["check"] == "PASS" and face(out, x)["values"]["controller_qty"] == 0 and "VX-L" in f11["note"]
+    assert [ln["model"] for ln in out["boq"] if ln["rule"] in ("F11", "F13")] == ["VX-L"]
+    assert ("PASS", "处理器 Sample VX-L 含发送：整屏 1 台，各面直接接它的网口") in [
+        (c["check"], c["text"]) for c in out["multi"]["checks"] if c["rule"] == "S5"]

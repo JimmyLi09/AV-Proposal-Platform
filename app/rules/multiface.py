@@ -21,6 +21,8 @@ SHAPES = {"LED": ["flat", "L", "L_wall_floor", "U", "outside_corner", "curved", 
           "PJ": ["single", "L", "U", "curved", "ring", "wall_floor"]}
 PJ_FACE_RULES = {f"P{i}" for i in range(1, 11)}  # 每面单独跑的几何规则
 SPARE_RULES = {"F8", "F10"}  # 同型号备品按整屏合计
+PROCESSOR_RULES = {"F13"}  # 视频处理器整屏 1 台，每面接 1 路输出（S5）
+WHOLE = ("processor_qty",)  # 整屏只有一份的数量，客户版 BOQ 放在共用组
 POOLED = ("spare_modules", "spare_psu", "spare_rx_cards")  # 整屏合计的备品数，客户版 BOQ 只在共用组出一次
 
 # 资料文字里的关键词 → 屏形（只是先猜，人要确认）
@@ -153,8 +155,26 @@ def calculate_led(content: dict, library: dict, inputs: dict, cabinet_id: str | 
         out["rules"] = rows
         return out
 
-    for f in faces:
-        res = run(content, common | {"width_mm": f["width_mm"], "height_mm": f["height_mm"]} | pinputs, catalog)
+    # S5：视频处理器整屏 1 台。每面先按不含发送的处理器配控制器（F11），再按整屏的像素和网线数选处理器（F13）；
+    # 选出的是含发送的，再按面算一次，各面的控制器就包含在这台处理器里
+    face_content = {**content, "rules": [r for r in content["rules"] if r["id"] not in PROCESSOR_RULES]}
+    face_inputs = [common | {"width_mm": f["width_mm"], "height_mm": f["height_mm"]} | pinputs for f in faces]
+    split = catalog | {"processors": [p for p in catalog.get("processors", []) if not p["sending"]]}
+    results = [run(face_content, x, split) for x in face_inputs]
+    load = [_values(r["rules"]) for r in results]
+    proc_rules, pv = [], {}
+    if all(v.get(k) is not None for v in load for k in ("total_pixels", "data_runs")):
+        proc_rules = run({**content, "rules": [r for r in content["rules"] if r["id"] in PROCESSOR_RULES]},
+                         {"total_pixels": sum(num(v["total_pixels"]) for v in load),
+                          "data_runs": sum(num(v["data_runs"]) for v in load), "processor_outputs": len(faces)}
+                         | ({"signal_sources": common["signal_sources"]} if common.get("signal_sources") else {}),
+                         catalog)["rules"]
+        pv = _values(proc_rules)
+        if pv.get("processor_sending"):
+            chosen = [p for p in catalog["processors"] if p["id"] == pv["processor_id"]]
+            results = [run(face_content, x, catalog | {"processors": chosen}) for x in face_inputs]
+
+    for f, res in zip(faces, results):
         out["faces"].append({k: f.get(k) for k in ("id", "name", "orientation", "width_mm", "height_mm", "signal_point",
                                                   "power_point", "protection", "load")}
                             | {"rules": res["rules"], "choices": res["choices"], "values": _values(res["rules"])})
@@ -235,11 +255,27 @@ def calculate_led(content: dict, library: dict, inputs: dict, cabinet_id: str | 
     if not over:
         checks.append({"rule": "S5", "check": "PASS", "text": tr(f"每面输出不超过 {_n(limit)} px（最宽 {widest} px）",
                                                                f"Every face output ≤ {_n(limit)} px (widest {widest} px)")})
+    if pv.get("processor_id"):  # 整屏 1 台处理器（F13）：含发送的各面直接接网口；独立处理器每面接 1 路输出
+        outs = next(p for p in catalog["processors"] if p["id"] == pv["processor_id"]).get("outputs")
+        if pv.get("processor_sending"):
+            checks.append({"rule": "S5", "check": "PASS", "text": tr(
+                f"处理器 {pv['processor']} 含发送：整屏 1 台，各面直接接它的网口",
+                f"Processor {pv['processor']} has sending: one for the whole screen, every face connects to its ports")})
+        elif outs:
+            checks.append({"rule": "S5", "check": "PASS", "text": tr(
+                f"处理器 {pv['processor']}：整屏 1 台，{_n(outs)} 路输出，每面 1 路（{len(faces)} 面）",
+                f"Processor {pv['processor']}: one for the whole screen, {_n(outs)} outputs, one per face ({len(faces)} faces)")})
+        else:
+            checks.append({"rule": "S5", "check": "NOTE", "text": tr(
+                f"处理器 {pv['processor']} 的输出路数待核对规格书（要 ≥ {len(faces)} 路，每面 1 路）",
+                f"Processor {pv['processor']}: output count to be checked against the datasheet "
+                f"(≥ {len(faces)} needed, one per face)")})
     rows.append(_row("S5", tr("画布与处理器", "Canvas & processor"),
                      tr(f"{canvas[0]} × {canvas[1]} · {len(faces)} 路输出", f"{canvas[0]} × {canvas[1]} · {len(faces)} outputs"),
                      _worst(_rule_checks(checks, "S5")),
                      tr("墙面横向展开，地面 / 顶面纵向接上；每面接处理器的一路输出，各路同步",
                         "Walls unfold horizontally, floor / ceiling faces stack vertically; one synchronised processor output per face")))
+    rows += proc_rules  # F13 按整屏算的那一行，放在 S5 后面
 
     # S6 特殊面：地面要防护和承重，顶面要吊挂，有东西压在屏上要列出
     for f in faces:
@@ -269,23 +305,23 @@ def calculate_led(content: dict, library: dict, inputs: dict, cabinet_id: str | 
                      tr(f"{len(s7)} 条提示", f"{len(s7)} notes") if s7 else tr("一致", "Consistent"), _worst(s7) or "PASS"))
     out["rules"] = rows
     params = {p["name"]: p["value"] for p in content["params"] if p["name"] in L.BOQ_EXTRA}  # 空开、线径（CR-13）
-    out["values"] = L.boq_context({k: v for k, v in t.items() if not isinstance(v, list)}, cab, common | pinputs | params)
+    out["values"] = L.boq_context({k: v for k, v in t.items() if not isinstance(v, list)} | pv, cab, common | pinputs | params)
     for f in out["faces"]:  # 客户版 BOQ 按面分组用
         f["boq_context"] = L.boq_context(f["values"], cab, common | params | {"width_mm": f["width_mm"],
                                                                               "height_mm": f["height_mm"]})
-    out["boq"] = _led_boq(out["faces"], cab, library, spares)
+    out["boq"] = _led_boq(out["faces"], cab, library, spares | pv, common)
     return out
 
 
-def _led_boq(faces: list[dict], cab: dict, library: dict, spares: dict) -> list[dict]:
-    """内部明细：每面一组（编号前加面），备品按整屏合计成一组。"""
+def _led_boq(faces: list[dict], cab: dict, library: dict, whole: dict, inputs: dict) -> list[dict]:
+    """内部明细：每面一组（编号前加面），备品和视频处理器按整屏一组（whole：整屏的值）。"""
     lines = []
     for f in faces:
         v = {k: x for k, x in f["values"].items() if k not in POOLED}
         for line in L.boq(v, cab, {"width_mm": f["width_mm"], "height_mm": f["height_mm"]}, library):
             lines.append(line | {"key": f"{f['id']}:{line['key']}" if line["key"] else "", "item": f"{f['id']} · {line['item']}"})
-    for line in L.boq(spares, cab, {}, library):
-        if line["rule"] in SPARE_RULES:
+    for line in L.boq(whole, cab, inputs, library):
+        if line["rule"] in SPARE_RULES | PROCESSOR_RULES:
             lines.append(line | {"item": tr("整屏 · ", "Whole screen · ") + line["item"]})
     return lines
 

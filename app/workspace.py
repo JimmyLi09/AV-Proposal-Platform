@@ -127,7 +127,7 @@ def client_boq(db: Session, prop: Proposal, used: dict, result: dict | None, edi
             return None
         faces = [(f["id"], f"{f['id']} · {f.get('name') or ''}".strip(" ·"), f["boq_context"] | names) for f in result["faces"]]
         return build_multi(used["template"].content, faces, tr("共用", "Shared"), result["values"] | names, multiface.POOLED,
-                           edits)
+                           edits, multiface.WHOLE)
     return build(used["template"].content, result["values"] | names, edits, set(result["manual"]))
 
 
