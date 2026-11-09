@@ -262,3 +262,7 @@ a.file-link { display: inline-block; margin-right: 10px; }
 .modal { max-width: 460px; margin: 16px; }
 details.card > summary { cursor: pointer; }
 a.btn-primary, a.btn-outline { display: inline-flex; align-items: center; text-decoration: none; }
+
+/* 投影专属图（第 8 步） */
+.pj-drawing { margin: 12px 0 0; }
+.pj-drawing svg { max-width: 100%; height: auto; }

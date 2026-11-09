@@ -11,7 +11,7 @@ from datetime import date
 from html import escape
 from pathlib import Path
 
-from . import drawing_export
+from . import drawing_export, pj_drawings
 from . import workspace as ws
 from .i18n import tr, use
 from .models import Project, Proposal, Revision
@@ -140,6 +140,9 @@ def content(db, prop: Proposal, rev: Revision, lang: str, data_dir: Path) -> dic
             meta = {"project": f"{project.name} · {prop.name}", "stamp": stamp, "draft": draft, "values": result["values"]}
             sections.append({"key": "drawing", "title": tr("拼接与线路图", "Cabinet and cabling drawing"),
                              "svg": drawing_export.svg(v["drawing"], meta, lang)})
+        if v["projection"]:  # 投影专属图（第 8 步）：立面融合区、平面机位、剖面遮挡
+            for kind, title in pj_drawings.titles().items():
+                sections.append({"key": f"pj_{kind}", "title": title, "svg": pj_drawings.svg(kind, v["projection"], stamp)})
         images = [{"path": str(data_dir / doc["copy_path"]), "caption": doc.get("copy_name", "")}
                   for doc in (rev.annotations or {}).values() if doc.get("copy_path") and (data_dir / doc["copy_path"]).exists()]
         if images:
@@ -255,7 +258,8 @@ def pdf(doc: dict) -> bytes:
     return out.getvalue()
 
 
-BOARD_GROUPS = [["concept", "config"], ["boq"], ["diagram", "links"], ["drawing"], ["annotated"]]
+BOARD_GROUPS = [["concept", "config"], ["boq"], ["diagram", "links"], ["drawing"], ["pj_elevation"], ["pj_plan", "pj_section"],
+                ["annotated"]]
 
 
 def boards(doc: dict) -> bytes:

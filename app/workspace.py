@@ -12,7 +12,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from .api import current_user, file_out, get_db, iso, proposal_out, require_user
-from . import drawing_export
+from . import drawing_export, pj_drawings
 from .boq import build, build_multi, to_xlsx
 from .drawing import build as build_drawing
 from .i18n import stored, text, tr, unit, use
@@ -174,6 +174,15 @@ def drawing_of(used: dict, result: dict | None, edits: dict | None) -> dict | No
     return d
 
 
+def projection_of(prop: Proposal, used: dict, result: dict | None, rev) -> dict | None:
+    """投影专属图（第 8 步）的数据：立面融合区、平面机位、剖面遮挡共用。只做单面墙（多面投影下一步做）。"""
+    if prop.business_line != "PJ" or not result or not result["rules"] or result.get("faces"):
+        return None
+    params = {p["name"]: p["value"] for p in used["rules"].content["params"]}
+    manual = {k for k, m in (rev.input_meta or {}).items() if m.get("source") == "manual"}
+    return pj_drawings.data(result["values"], params, manual)
+
+
 def view(db: Session, prop: Proposal, rev=None) -> dict:
     from .flow import flow_view, project_brief
     from .review import review_view
@@ -197,6 +206,7 @@ def view(db: Session, prop: Proposal, rev=None) -> dict:
         "result": result,
         "boq": client_boq(db, prop, used, result, rev.boq_edits),
         "drawing": drawing_of(used, result, rev.drawing_edits),
+        "projection": projection_of(prop, used, result, rev),
         "overridable": LINES[prop.business_line]["overridable"],
         "overrides": manual_list(rev, result),
         "shapes": multiface.SHAPES[prop.business_line],
@@ -535,6 +545,24 @@ def export_wiring_svg(proposal_id: int, lang: Lang = "zh", rev: int | None = Non
     """方案配置页的接线示意图（CR-11），和图纸、DXF、BOQ 用同一份 W1 结果。"""
     d, _, base = _drawing_export(db, proposal_id, lang, rev)
     return _file(drawing_export.wiring_svg(d, lang), base.format(kind="Wiring") + ".svg", "image/svg+xml")
+
+
+@router.get("/{proposal_id}/projection/{kind}.svg")
+def export_projection_svg(proposal_id: int, kind: Literal[pj_drawings.KINDS], lang: Lang = "zh", rev: int | None = None,
+                          db: Session = Depends(get_db)):
+    """投影专属图（第 8 步）：elevation 立面融合区、plan 平面机位、section 剖面遮挡。"""
+    prop = get_proposal(db, proposal_id)
+    r = get_rev(prop, rev)
+    with use(lang):
+        used, result = compute(db, prop, r)
+        d = projection_of(prop, used, result, r)
+        if d is None:
+            raise HTTPException(409, tr("没有投影专属图：先算出单面投影墙的结果", "No projection drawings: calculate a single projection wall first"))
+        stamp = " · ".join([f"Rev {r.rev_no}", tr("规则 ", "Rules ") + used["rules"].version]
+                           + ([] if r.status == "approved" else ["DRAFT"]))
+        body = pj_drawings.svg(kind, d, stamp)
+    name = f"{safe_name(prop.name)}_{kind.capitalize()}_Rev{r.rev_no}{'' if r.status == 'approved' else '_DRAFT'}.svg"
+    return _file(body, name, "image/svg+xml")
 
 
 @router.get("/{proposal_id}/drawing.dxf")

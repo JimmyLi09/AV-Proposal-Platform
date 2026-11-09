@@ -344,6 +344,7 @@ export type WorkspaceView = {
   result: RunResult | null;
   boq: ClientBoq | null;
   drawing: Drawing | null;
+  projection: Record<string, unknown> | null; // 投影专属图的数据（第 8 步）；图本身由服务器画
   overridable: Record<string, string[]>;
   overrides: ManualOverride[];
   shapes: string[];
