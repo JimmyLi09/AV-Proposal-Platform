@@ -16,6 +16,7 @@ from . import drawing_export, pj_drawings
 from .boq import build, build_multi, to_xlsx
 from .completeness import completeness
 from .drawing import build as build_drawing
+from .drawing import build_faces
 from .i18n import stored, text, tr, unit, use
 from .models import (ExtractedField, ProductLibraryVersion, Project, Proposal, Revision, RuleSetVersion, TemplateVersion,
                      User, utcnow)
@@ -168,6 +169,14 @@ def drawing_of(used: dict, result: dict | None, edits: dict | None) -> dict | No
         return None
     params = {p["name"]: p["value"] for p in used["rules"].content["params"]}
     cabinet = (result.get("recommendation") or {}).get("cabinet") or {}
+    if result.get("multi"):  # 多面 LED 屏：一张展开总图，每面按自己的 W1 接线，编号整屏连续（多面投影没有这张图）
+        led = used["rules"].content["business_line"] == "LED"
+        d = build_faces(result["faces"], result["values"], params, edits, cabinet.get("cabinet_max")) if led and result["faces"] else None
+        if d:
+            d["canvas_px"] = result["multi"]["totals"]["canvas_px"]
+            d["basis"] = [{"item": f"{f['id']} · {r['title']}", "formula": r["trace"], "rule": r["id"], "result": r["display"]}
+                          for f in result["faces"] for r in f["rules"] if r["id"] in BASIS_RULES]
+        return d
     d = build_drawing(result["values"], result["values"], params, edits, set(result["manual"]), cabinet.get("cabinet_max"))
     if d:
         d["basis"] = [{"item": r["title"], "formula": r["trace"], "rule": r["id"],
@@ -495,10 +504,12 @@ def save_drawing(proposal_id: int, body: DrawingIn, user: User = Depends(require
     if auto is None:
         raise HTTPException(409, tr("还没有计算结果，算完才能调整图纸", "No results yet; calculate before adjusting the drawing"))
     ids = {c["id"]: c for c in auto["cabinets"]}
-    for kind, n in (("power", len(auto["circuits"])), ("data", len(auto["cables"]))):
+    faces = {p["id"]: p for p in auto.get("panels") or []}  # 多面屏：只能换到同一面的编号里
+    for kind, key in (("power", "circuits"), ("data", "cables")):
         for cid, no in getattr(body, kind).items():
-            if cid not in ids or not 1 <= no <= n:
-                raise HTTPException(422, tr(f"没有箱体 {cid}，或编号超出 1–{n}", f"No cabinet {cid}, or number outside 1–{n}"))
+            lo, hi = faces[ids[cid]["face"]][key] if faces and cid in ids else (1, len(auto[key]))
+            if cid not in ids or not lo <= no <= hi:
+                raise HTTPException(422, tr(f"没有箱体 {cid}，或编号超出 {lo}–{hi}", f"No cabinet {cid}, or number outside {lo}–{hi}"))
     rev.drawing_edits = {  # 和自动结果一样的不存
         "power": {k: v for k, v in body.power.items() if v != ids[k]["circuit"]},
         "data": {k: v for k, v in body.data.items() if v != ids[k]["cable"]},

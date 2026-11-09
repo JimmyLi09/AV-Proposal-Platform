@@ -25,8 +25,12 @@ export default function DrawingTab({ view, drawing: d, onApply }: { view: Worksp
     const c = cab && d.cabinets.find((x) => x.id === cab);
     if (!mode || !c) return;
     const edits = { power: { ...d.edits.power }, data: { ...d.edits.data } };
-    if (mode === "power") edits.power[c.id] = (c.circuit % d.circuits.length) + 1;
-    else edits.data[c.id] = (c.cable % d.cables.length) + 1;
+    // 多面屏只在这一面的编号里轮换（每面有自己的配电箱和信号输入点）
+    const face = d.panels?.find((p) => p.id === c.face);
+    const [lo, hi] = face ? face[mode === "power" ? "circuits" : "cables"] : [1, mode === "power" ? d.circuits.length : d.cables.length];
+    const next = (n: number) => (n >= hi ? lo : n + 1);
+    if (mode === "power") edits.power[c.id] = next(c.circuit);
+    else edits.data[c.id] = next(c.cable);
     onApply(send<WorkspaceView>("PUT", `/proposals/${id}/drawing`, edits));
   }
   const reset = () => {

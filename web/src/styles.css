@@ -188,6 +188,7 @@ table.faces input:not(.num) { width: 140px; }
 /* 拼接与线路图（CR-3） */
 .drawing-wrap { overflow-x: auto; border: 1px solid #E6E0D6; border-radius: 8px; background: #FFFFFF; }
 .drawing-wrap svg { max-width: 100%; height: auto; display: block; }
+.drawing-wrap svg.wide { max-width: none; } /* 多面屏展开总图：原尺寸，横向滚动 */
 .drawing-wrap.adjusting .cab { cursor: pointer; }
 .drawing-wrap.adjusting .cab:hover rect { stroke: #15203A; stroke-width: 2; }
 .drawing-wrap.hide-id .layer-id, .drawing-wrap.hide-size .layer-size, .drawing-wrap.hide-power .layer-power,

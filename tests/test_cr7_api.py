@@ -110,7 +110,7 @@ def test_multiface_led_proposal(tmp_path):
     rows = list(load_workbook(io.BytesIO(c.get(f"{url}.xlsx").content)).active.iter_rows(values_only=True))
     assert (None, "B · Main", None, None) in rows and (len(boq["rows"]), "Cable trunking", 1, "lot") in rows
     assert (None, "- Hot-dip galvanised frame", None, None) in rows
-    assert v["result"]["diagram"] is None and v["drawing"] is None  # B 面算不出箱体数：没有示意图；图纸下一步做
+    assert v["result"]["diagram"] is None and v["drawing"] is None  # B 面算不出箱体数：没有示意图和图纸
     en = c.get(f"/api/proposals/{c.proposal}", headers={"X-Lang": "en"}).json()["result"]
     leaks = [s for s in json.dumps([en["rules"], en["multi"]], ensure_ascii=False).split('"') if CJK.search(s)]
     assert leaks == []
@@ -175,3 +175,44 @@ def test_multiface_led_diagram_in_the_proposal(tmp_path):
     assert any(sh.has_text_frame and sh.text_frame.text == "System diagram" for s in prs.slides for sh in s.shapes)
     en = c.get(f"/api/proposals/{c.proposal}", headers={"X-Lang": "en"}).json()["result"]["diagram"]
     assert not CJK.search(en["svg"].replace("Wall-1", "")) and en["nodes"]["A:db_box"]["title"] == "DB box A"
+
+
+def test_multiface_led_unfolded_drawing(tmp_path):
+    """多面屏一张展开总图（2026-11-09 Jimmy 选定）：每面按自己的 W1 接线，回路、网线编号整屏连续，箱体编号前加面；
+    手动换回路只能换到同一面的编号里；SVG / DXF / PDF / 箱体清单 Excel 都能导出。"""
+    import ezdxf
+    c = start(tmp_path, "LED")
+    gmc_library(c)
+    v = put_inputs(c, gmc_inputs())
+    d = v["drawing"]
+    assert [p["label"] for p in d["panels"]] == ["A · Left", "B · Main", "C · Right"]
+    a, b, cc = d["panels"]
+    assert (a["x"], b["x"], cc["x"]) == (0, 5760 + 2000, 5760 + 2000 + 8000 + 2000) and d["width"] == 23520
+    assert b["circuits"][0] == a["circuits"][1] + 1 and cc["cables"][0] == b["cables"][1] + 1
+    assert len(d["circuits"]) == v["result"]["multi"]["totals"]["circuits"] and d["canvas_px"] == [7808, 1664]
+    assert sum(s["count"] for s in d["sizes"].values()) == len(d["cabinets"]) == v["result"]["multi"]["totals"]["cabinets"]
+    first_b = next(x for x in d["cabinets"] if x["id"] == "B-R1C1")
+    assert first_b["face"] == "B" and b["circuits"][0] <= first_b["circuit"] <= b["circuits"][1]
+    assert [x["item"] for x in d["basis"]][:2] == ["A · 箱体排布", "A · 分辨率"]
+
+    url = f"/api/proposals/{c.proposal}"
+    r = c.put(f"{url}/drawing", json={"power": {"B-R1C1": a["circuits"][0]}})  # A 面的回路：不行
+    assert r.status_code == 422 and f"{b['circuits'][0]}–{b['circuits'][1]}" in r.json()["detail"]
+    target = first_b["circuit"] + 1
+    d2 = c.put(f"{url}/drawing", json={"power": {"B-R1C1": target}}).json()["drawing"]
+    assert d2["edits"]["power"] == {"B-R1C1": target} and d2["manual"] == {"power": 1, "data": 0}
+    assert next(x for x in d2["cabinets"] if x["id"] == "B-R1C1")["circuit"] == target
+
+    svg = c.get(f"{url}/drawing.svg").text
+    assert 'class="drawing wide"' in svg and "A · Left · 5760 × 4160" in svg and 'data-cab="C-R1C1"' in svg
+    assert "5760 × 4160 + 8000 × 4160 + 5760 × 4160 mm" in svg and "7808 × 1664" in svg
+    doc = ezdxf.read(io.StringIO(c.get(f"{url}/drawing.dxf").content.decode("utf-8")))
+    texts = [e.dxf.text for e in doc.modelspace().query("TEXT")]
+    assert {"A · Left 5760x4160", "B · Main 8000x4160", "C · Right 5760x4160", "B-R1C1"} <= set(texts)
+    dims = len(doc.modelspace().query("DIMENSION"))
+    assert dims == sum(p["cols"] + 1 + len(p["rows"]) + 1 for p in d["panels"])
+    rows = list(load_workbook(io.BytesIO(c.get(f"{url}/cabinets.xlsx").content)).active.iter_rows(values_only=True))
+    assert rows[4][0] == "A-R1C1" and rows[-1][0].startswith("C-")
+    assert c.get(f"{url}/drawing.pdf").content[:4] == b"%PDF"
+    doc = Document(io.BytesIO(c.get(f"{url}/proposal.docx").content))
+    assert "拼接与线路图" in [p.text for p in doc.paragraphs if p.style.name.startswith("Heading")]
