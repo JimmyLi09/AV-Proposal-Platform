@@ -9,7 +9,7 @@ import tempfile
 import zipfile
 from pathlib import Path
 
-from ..extract.readers import MAX_OCR_PAGES, MAX_SIDE_PX, convert_dwg, ocr_lines
+from ..extract.readers import MAX_OCR_PAGES, MAX_SIDE_PX, convert_dwg, ocr_lines, render_page
 
 MAX_PAGES = 200  # 文字层最多读前 200 页
 MAX_ROWS = 2000  # 每个工作表最多读前 2000 行
@@ -42,7 +42,7 @@ def read_pdf(path: Path, out: dict) -> str:
             return "text_layer"
         for no, page in enumerate(pdf.pages[:MAX_OCR_PAGES], 1):  # 扫描件：整页渲染后识别
             dpi = min(200, MAX_SIDE_PX / (max(page.width, page.height) / 72))
-            if t := _ocr(page.to_image(resolution=dpi).original):
+            if t := _ocr(render_page(page, dpi)):
                 out["chunks"].append((f"p.{no}", t))
         return "ocr"
 
