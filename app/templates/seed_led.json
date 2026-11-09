@@ -1,5 +1,12 @@
 {
   "business_line": "LED",
+  "page": "A4",
+  "clauses": [
+    {"key": "power_point", "when": "always", "zh": "电源接驳点距屏幕的距离按假设计算（文件中未提供时）。", "en": "The distance from the power point to the screen is assumed where the files do not state it."},
+    {"key": "wall_load", "when": "always", "zh": "墙体须能承受屏体荷载，结构核算由他方负责。", "en": "The wall must carry the screen load; structural checks are by others."},
+    {"key": "site_survey", "when": "always", "zh": "数量以现场勘测和厂家深化为准。", "en": "Quantities are subject to site survey and manufacturer detailing."},
+    {"key": "exclusions", "when": "always", "zh": "不含土建、市电引入和网络布线。", "en": "Civil works, mains supply and network cabling are excluded."}
+  ],
   "boq": {
     "group": "{proposal_name}",
     "rows": [

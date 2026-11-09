@@ -31,7 +31,9 @@ export default function DesignPage({ view, apply, onCabinet, onUse }: {
     <>
       <section className="card from-04">
         <span className="tag ck-PASS">{t("flow.from04")}</span>{" "}
-        <span className="muted">{view.input_defs.filter((d) => ["pixel_pitch_mm", "width_mm", "height_mm", "viewing_distance_m"]
+        {view.completeness && <span className={`tag ${view.completeness.grade === "A" ? "ck-PASS" : "st-sample"}`}>
+          {t("completeness.grade", { grade: view.completeness.grade })}</span>}{" "}
+        <span className="muted">{view.input_defs.filter((d) => ["pixel_pitch_mm", "width_mm", "height_mm", "wall_width_mm", "wall_height_mm", "viewing_distance_m", "nearest_viewing_m"]
           .includes(d.name) && used[d.name] !== undefined).map((d) => `${d.label} ${showValue(used[d.name])}`).join(" · ")}</span>
         {pull.changed.length > 0 && !view.readonly && (
           <div className="warn pull">

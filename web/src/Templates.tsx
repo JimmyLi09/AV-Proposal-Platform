@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { api, send, TemplateContent, TemplateRow, TemplateVersion, Version } from "./api";
+import { api, send, TemplateClause, TemplateContent, TemplateRow, TemplateVersion, Version } from "./api";
 import { nextVersion } from "./Calc";
 import { t } from "./i18n";
 import { fmtDate, LineTabs } from "./labels";
@@ -11,7 +11,7 @@ function newKey(rows: TemplateRow[]) {
   return `line_${n}`;
 }
 
-/** 模板：客户版 BOQ 的默认行。保存时整份另存新版本（第 6 步再加章节、信头和标准条款）。 */
+/** 模板：客户版 BOQ 的默认行、方案书的固定条款和纸张（第 8 步）。保存时整份另存新版本。 */
 export default function Templates({ line }: { line: string }) {
   const [saved, setSaved] = useState<TemplateVersion | null>(null);
   const [draft, setDraft] = useState<TemplateContent | null>(null);
@@ -34,6 +34,9 @@ export default function Templates({ line }: { line: string }) {
   const rows = draft.boq.rows;
   const setRows = (next: TemplateRow[]) => setDraft({ ...draft, boq: { ...draft.boq, rows: next } });
   const setRow = (i: number, patch: Partial<TemplateRow>) => setRows(rows.map((r, j) => (j === i ? { ...r, ...patch } : r)));
+  const clauses = draft.clauses ?? [];
+  const setClauses = (next: TemplateClause[]) => setDraft({ ...draft, clauses: next });
+  const setClause = (i: number, patch: Partial<TemplateClause>) => setClauses(clauses.map((c, j) => (j === i ? { ...c, ...patch } : c)));
   function move(i: number, d: number) {
     const next = rows.slice();
     [next[i], next[i + d]] = [next[i + d], next[i]];
@@ -135,6 +138,47 @@ export default function Templates({ line }: { line: string }) {
         </details>
       </section>
 
+      <section className="card">
+        <h2>{t("templates.clauses")}</h2>
+        <p className="muted">{t("templates.clausesIntro")}</p>
+        <label className="row tight">
+          {t("templates.page")}
+          <select aria-label={t("templates.page")} value={draft.page ?? "A4"} onChange={(e) => setDraft({ ...draft, page: e.target.value })}>
+            {["A4", "A3L"].map((p) => <option key={p} value={p}>{t(`templates.pages.${p}`)}</option>)}
+          </select>
+        </label>
+        <div className="table-wrap">
+          <table className="clauses">
+            <thead>
+              <tr><th>{t("templates.clauseZh")}</th><th>{t("templates.clauseEn")}</th><th>{t("templates.when")}</th><th /></tr>
+            </thead>
+            <tbody>
+              {clauses.map((c, i) => (
+                <tr key={i}>
+                  <td><textarea rows={3} aria-label={`${t("templates.clauseZh")} ${i + 1}`} value={c.zh} onChange={(e) => setClause(i, { zh: e.target.value })} /></td>
+                  <td><textarea rows={3} aria-label={`${t("templates.clauseEn")} ${i + 1}`} value={c.en} onChange={(e) => setClause(i, { en: e.target.value })} /></td>
+                  <td>
+                    <input list="clause-when" aria-label={`${t("templates.when")} ${i + 1}`} value={c.when} onChange={(e) => setClause(i, { when: e.target.value })} />
+                    <div className="small muted">{t(c.when === "always" ? "templates.whenAlways" : c.when === "missing_drawings" ? "templates.whenMissing" : "templates.whenValue")}</div>
+                  </td>
+                  <td><button className="btn-link" onClick={() => setClauses(clauses.filter((_, j) => j !== i))}>{t("common.remove")}</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <datalist id="clause-when">
+          {["always", "missing_drawings", ...saved.names].map((n) => <option key={n} value={n} />)}
+        </datalist>
+        <div className="row">
+          <button className="btn-outline" onClick={() => {
+            let n = clauses.length + 1;
+            while (clauses.some((c) => c.key === `clause_${n}`)) n++;
+            setClauses([...clauses, { key: `clause_${n}`, zh: "", en: "", when: "always" }]);
+          }}>{t("templates.addClause")}</button>
+          <span className="muted small">{t("templates.clauseNames")}</span>
+        </div>
+      </section>
       <section className="card">
         <h2>{t("versions.title")}</h2>
         <div className="table-wrap">

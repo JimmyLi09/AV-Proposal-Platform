@@ -266,3 +266,5 @@ a.btn-primary, a.btn-outline { display: inline-flex; align-items: center; text-d
 /* 投影专属图（第 8 步） */
 .pj-drawing { margin: 12px 0 0; }
 .pj-drawing svg { max-width: 100%; height: auto; }
+.clauses td:nth-child(1), .clauses td:nth-child(2) { width: 38%; }
+.clauses textarea { width: 100%; box-sizing: border-box; }

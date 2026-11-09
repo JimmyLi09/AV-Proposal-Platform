@@ -13,7 +13,8 @@ from pathlib import Path
 
 from . import drawing_export, pj_drawings
 from . import workspace as ws
-from .i18n import tr, use
+from .boq import fill
+from .i18n import current, tr, use
 from .models import Project, Proposal, Revision
 
 NAVY, MUTED, ORANGE, LINE = "#15203A", "#6B6558", "#C2410C", "#E6E0D6"
@@ -64,7 +65,8 @@ def _concept(prop: Proposal, project: Project, v: dict) -> list[str]:
         f"{_n(x.get('projectors'))} × {x.get('projector_model', '—')} blended horizontally.")]
 
 
-STANDARD_RISKS = {
+# 第 8 步以前写在代码里的条款：没有条款的旧模板版本（例如升级前锁定的 Rev）照旧用这些，导出的文字不变
+LEGACY_CLAUSES = {
     "LED": [
         ("电源接驳点距屏幕的距离按假设计算（文件中未提供时）。", "The distance from the power point to the screen is assumed where the files do not state it."),
         ("墙体须能承受屏体荷载，结构核算由他方负责。", "The wall must carry the screen load; structural checks are by others."),
@@ -80,9 +82,25 @@ STANDARD_RISKS = {
 }
 
 
-def _risks(prop: Proposal, v: dict) -> list[str]:
+def clauses(template: dict, line: str, values: dict, comp: dict | None) -> list[str]:
+    """模板里的固定条款（第 8 步，可在模板页改、带版本），花括号换成项目数据。
+    missing_drawings 条款只在资料齐全度不是 A 级时加入；写了规则结果名字的，那个结果有值时加入。"""
+    if "clauses" not in template:
+        return [tr(*x) for x in LEGACY_CLAUSES[line]]
+    ctx = dict(values) | ({"missing_drawings": comp["missing_drawings"], "affected_items": comp["affected_items"]} if comp else {})
+    out = []
+    for c in template["clauses"]:
+        if c["when"] == "missing_drawings" and not (comp and comp["missing"]):
+            continue
+        if c["when"] not in ("always", "missing_drawings") and not ctx.get(c["when"]):
+            continue
+        out.append(fill(c[current()], ctx))
+    return out
+
+
+def _risks(prop: Proposal, v: dict, template: dict) -> list[str]:
     result = v["result"]
-    out = [tr(*x) for x in STANDARD_RISKS[prop.business_line]]
+    out = clauses(template, prop.business_line, result["values"], v["completeness"])
     if any(r.get("status") == "sample" for r in result.get("rules") or []):
         out.append(tr("部分系数是示例值，以最终确认的数值为准。", "Some coefficients are sample values, pending final confirmation."))
     for m in v["overrides"]:
@@ -147,7 +165,8 @@ def content(db, prop: Proposal, rev: Revision, lang: str, data_dir: Path) -> dic
                   for doc in (rev.annotations or {}).values() if doc.get("copy_path") and (data_dir / doc["copy_path"]).exists()]
         if images:
             sections.append({"key": "annotated", "title": tr("标注图", "Annotated drawings"), "images": images})
-        sections.append({"key": "risks", "title": tr("风险与假设", "Risks and assumptions"), "bullets": _risks(prop, v)})
+        template = ws.used_versions(db, prop, rev)["template"].content
+        sections.append({"key": "risks", "title": tr("风险与假设", "Risks and assumptions"), "bullets": _risks(prop, v, template)})
         sections.append({"key": "basis", "title": tr("附录：计算依据", "Appendix: calculation basis"),
                          "table": {"head": [tr("规则", "Rule"), tr("项目", "Item"), tr("公式（代入数值）", "Formula (with values)"),
                                             tr("结果", "Result")],
@@ -155,7 +174,7 @@ def content(db, prop: Proposal, rev: Revision, lang: str, data_dir: Path) -> dic
                                             for r in result["rules"]]}})
         title = tr("方案建议书", "Proposal") + f" · {prop.name}"
     return {"title": title, "project": project.name, "client": project.client, "stamp": stamp, "draft": draft,
-            "lang": lang, "cover": cover, "sections": sections, "rev_no": rev.rev_no,
+            "lang": lang, "cover": cover, "sections": sections, "rev_no": rev.rev_no, "page": template.get("page", "A4"),
             "versions": {k: v[k] for k in ("rules_version", "library_version", "template_version")}}
 
 
@@ -248,7 +267,8 @@ def pdf(doc: dict) -> bytes:
     with _browser() as b:
         page = b.new_page()
         page.set_content(html(doc), wait_until="load")
-        raw = page.pdf(format="A4", print_background=True, display_header_footer=True, header_template="<span></span>",
+        size = {"format": "A3", "landscape": True} if doc.get("page") == "A3L" else {"format": "A4"}  # 投影默认 A3 横向（模板里设）
+        raw = page.pdf(**size, print_background=True, display_header_footer=True, header_template="<span></span>",
                        footer_template=footer, margin={"top": "14mm", "bottom": "16mm", "left": "14mm", "right": "14mm"})
     writer = PdfWriter(clone_from=PdfReader(io.BytesIO(raw)))
     writer.add_metadata({"/Title": doc["title"], "/Subject": doc["stamp"], "/Keywords": doc["stamp"],
@@ -315,7 +335,11 @@ def docx(doc: dict) -> bytes:
     pngs = iter(_pngs(svgs))
     d = Document()
     sec = d.sections[0]
+    if doc.get("page") == "A3L":  # 投影默认 A3 横向（模板里设）
+        from docx.enum.section import WD_ORIENT
+        sec.orientation, sec.page_width, sec.page_height = WD_ORIENT.LANDSCAPE, Cm(42), Cm(29.7)
     sec.left_margin = sec.right_margin = Cm(2)
+    pic_w = sec.page_width - sec.left_margin - sec.right_margin  # 图占满版心（A4 竖向约 17 cm，A3 横向约 38 cm）
     style = d.styles["Normal"]
     style.font.name, style.font.size = "Microsoft YaHei", Pt(10)
     head = sec.header.paragraphs[0]
@@ -369,7 +393,7 @@ def docx(doc: dict) -> bytes:
                     cells[1].add_paragraph(f"*{r['note']}").runs[0].font.italic = True
                 cells[2].text, cells[3].text = _n(r["qty"]), r["unit"]
         if "svg" in s:
-            d.add_picture(io.BytesIO(next(pngs)), width=Cm(17))
+            d.add_picture(io.BytesIO(next(pngs)), width=pic_w)
         if "nodes" in s:
             t = d.add_table(rows=0, cols=4)
             t.style = "Table Grid"
@@ -387,7 +411,7 @@ def docx(doc: dict) -> bytes:
                 for c, x in zip(t.add_row().cells, row):
                     c.text = str(x)
         for img in s.get("images", []):
-            d.add_picture(img["path"], width=Cm(17))
+            d.add_picture(img["path"], width=pic_w)
             d.add_paragraph(img["caption"]).runs[0].font.italic = True
         for x in s.get("bullets", []):
             d.add_paragraph(x, style="List Bullet")

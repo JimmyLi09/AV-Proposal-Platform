@@ -15,6 +15,10 @@
     "source_location": "server_room",
     "central_control": "pjlink",
     "transport_mode": "by_distance",
-    "server_room_scope": "full"
+    "server_room_scope": "full",
+    "doc_plan": "yes",
+    "doc_elevation": "yes",
+    "doc_section": "no",
+    "doc_rcp": "no"
   }
 }
