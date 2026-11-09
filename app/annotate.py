@@ -12,6 +12,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from .api import get_db, iso, require_user
+from .extract.readers import render_page
 from .i18n import tr
 from .models import SourceFile, User, utcnow
 from .workspace import editable, get_proposal, get_rev
@@ -52,7 +53,7 @@ def base_image(state, f: SourceFile, page: int) -> Path:
         with pdfplumber.open(state.data_dir / f.stored_path) as pdf:
             p = pdf.pages[page - 1]
             dpi = PAGE_SIDE_PX / (max(p.width, p.height) / 72)
-            p.to_image(resolution=dpi).original.convert("RGB").save(out, quality=90)
+            render_page(p, dpi).convert("RGB").save(out, quality=90)
     return out
 
 

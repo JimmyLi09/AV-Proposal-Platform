@@ -6,6 +6,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+import threading
 from pathlib import Path
 
 from .dimensions import image_rects, pair
@@ -14,6 +15,17 @@ from .fields import LABELS, find_in_text, parse_value, to_mm
 MAX_PAGES = 30  # 文字层最多读前 30 页
 MAX_OCR_PAGES = 5  # 扫描件最多识别前 5 页（CPU 上较慢）
 MAX_SIDE_PX = 3000  # 送去识别的图片最长边
+
+# PDF 页面渲染（pdfplumber 的 to_image 用的是 PDFium）不能在几个线程里同时跑：后台读上传的文件、资料库扫描、
+# 标注页渲染页面同时进行时，服务器进程会崩溃（段错误）。所有页面渲染都排队过这一把锁。
+RENDER_LOCK = threading.Lock()
+
+
+def render_page(page, resolution: float):
+    """把 PDF 页面（或裁剪后的一块）渲染成图片。"""
+    with RENDER_LOCK:
+        return page.to_image(resolution=resolution).original
+
 
 _ocr = None
 
@@ -76,7 +88,7 @@ def read_pdf(path: Path, c: Collector) -> str:
             for no, page in enumerate(pages, 1):
                 def crop(b, p=page):
                     b = (max(b[0] - 6, 0), max(b[1] - 6, 0), min(b[2] + 6, p.width), min(b[3] + 6, p.height))
-                    return p.crop(b).to_image(resolution=150).original
+                    return render_page(p.crop(b), 150)
                 lines = [(line["text"], (line["x0"], line["top"], line["x1"], line["bottom"]))
                          for line in page.extract_text_lines()]
                 for text, box in lines:
@@ -86,7 +98,7 @@ def read_pdf(path: Path, c: Collector) -> str:
             return "text_layer"
         for no, page in enumerate(pdf.pages[:MAX_OCR_PAGES], 1):  # 扫描件：整页渲染后识别
             dpi = min(200, MAX_SIDE_PX / (max(page.width, page.height) / 72))
-            img = page.to_image(resolution=dpi).original
+            img = render_page(page, dpi)
             _ocr_image(img, c, page=no)
         return "ocr"
 
