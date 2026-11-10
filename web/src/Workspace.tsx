@@ -3,6 +3,7 @@ import { ManualOverride, RuleResult, send, Suggestion, WorkspaceView } from "./a
 import { CheckChip, Outcome, ResultsTable, StatusChip } from "./Calc";
 import { show as showValue } from "./Confirm";
 import MultiView, { MultiCalc } from "./Multi";
+import ProjectionDrawings from "./Projection";
 import { LoadBudget, WiringDiagram } from "./Wiring";
 import { t } from "./i18n";
 import { fmtDate } from "./labels";
@@ -57,6 +58,8 @@ export default function DesignPage({ view, apply, onCabinet, onUse }: {
             {view.drawing && <WiringDiagram view={view} drawing={view.drawing} />}
           </>
         )}
+      {/* 投影：05 就能看平面机位图（P20 转角冲突阻断时还进不了 06）；和 06 的是同一张 */}
+      {result && view.projection && <ProjectionDrawings view={view} kinds={["plan"]} title="pj.planTitle" intro="pj.planIntro" />}
       {result && (
         <details className="card">
           <summary><b>{t("ws.tabs.calc")}</b> <span className="muted small">{t("ws.calcIntro")}</span></summary>
