@@ -547,6 +547,8 @@
       "plan": "Lens distance from the wall, throw cones and available depth (P3, P4)",
       "section": "Light rays and the shadow zone for the person height in the rules (P10)"
     },
+    "planIntro": "Lens distance from the wall, throw cones and available depth (P3, P4); for multi-face projection each inside corner is circled with the P20 distance between the first projectors on either side. It is the same plan as in 06, so you can see a P20 clash here before recording how it is resolved.",
+    "planTitle": "Plan · projector positions",
     "title": "Projection drawings"
   },
   "products": {
