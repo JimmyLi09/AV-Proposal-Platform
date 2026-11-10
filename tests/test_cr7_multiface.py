@@ -340,3 +340,23 @@ def test_multiface_projection_drawings_side_by_side_when_not_a_room():
     plan = pj.svg("plan", D)
     assert "这个屏形按面分开画（每面墙在上），不是实际平面" in plan and plan.count('class="clash"') == 0
     assert plan.count('class="projector"') == 4
+
+
+def test_multiface_projection_diagram_matches_the_internal_boq():
+    """多面投影示意图：播控电脑 → 融合器 → 每面的投影机 → 每面的墙；每台设备、每条线缆都对应内部明细；
+    每面的视频线是这面的台数（P15 视频线 = 台数），合起来等于 P15，备用写在融合器上。"""
+    out = calculate(PJ_RULES, load_library("PJ"), pj_inputs(CASES["projection_u"]))
+    d = out["diagram"]
+    assert d["unmatched"] == [] and d["hub"] == "blender" and [r["id"] for r in d["faces"]] == ["A", "B", "C"]
+    keys = {ln["key"] for ln in out["boq"]}
+    assert all(k in keys for n in d["nodes"].values() if n["supply"] == "boq" for k in n["boq"])
+    video = [x for x in d["links"] if x["boq"] == "video_cable"]
+    v = values(out)
+    assert [x["qty"] for x in video] == ["2", "2", "2"] and sum(int(x["qty"]) for x in video) == v["video_lines"]
+    assert f"视频线 {v['video_lines']} + {v['video_spare']} 备用" in d["nodes"]["blender"]["detail"]
+    assert d["svg"].count("投影墙") == 3 and "投射 ×" not in d["svg"]
+
+    lib = load_library("PJ")
+    lib["products"] = [p for p in lib["products"] if p["category"] != "blender"]  # 没有融合器：框保留并标出来
+    d = calculate(PJ_RULES, lib, pj_inputs(CASES["projection_u"]))["diagram"]
+    assert d["nodes"]["blender"]["supply"] == "missing" and d["unmatched"] == ["融合器（P11 未选出）"]

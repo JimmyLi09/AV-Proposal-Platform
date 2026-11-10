@@ -121,8 +121,10 @@ def test_led_has_no_projection_drawings_and_multiface_projection_has_them(client
     assert plan.count('class="projector"') == sum(f["n"] for f in d["faces"]) and plan.count('class="clash"') == 1
     assert f"P20 {d['corners'][0]['distance_m']:.2f} m" in plan
     assert svg(client, "section").count('class="shadow"') == 2
+    assert v["result"]["diagram"]["unmatched"] == [] and [r["id"] for r in v["result"]["diagram"]["faces"]] == ["A", "B"]
     doc = Document(io.BytesIO(client.get(f"{client.base}/proposal.docx").content))
-    assert {"立面融合区图", "平面机位图", "剖面遮挡图"} <= {p.text for p in doc.paragraphs if p.style.name.startswith("Heading")}
+    assert {"系统图（Level 1）", "立面融合区图", "平面机位图", "剖面遮挡图"} <= {
+        p.text for p in doc.paragraphs if p.style.name.startswith("Heading")}
 
 
 def test_proposal_documents_and_deck_carry_the_drawings(client):

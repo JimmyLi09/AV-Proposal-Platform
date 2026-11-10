@@ -487,7 +487,51 @@ def calculate_pj(content: dict, library: dict, inputs: dict, cabinet_id: str | N
         k: first[k] for k in ("lens", "lens_id", "throw_ratio", "distance_m") if k in first}
     out["boq"] = P.boq(values, proj, common, library)
     out["values"] = P.boq_context(values, proj, common)
+    out["diagram"] = _pj_diagram(out["faces"], proj, values, out["boq"])
     return out
+
+
+def _pj_diagram(faces: list[dict], proj: dict, values: dict, boq_lines: list[dict]) -> dict:
+    """多面投影的 Level 1 / Level 2 示意图（和单面墙一样由内部明细生成）：播控电脑 → 融合器（每台投影机 1 路输出）→
+    每面的投影机 → 每面的墙，每面一行。视频线按 P15「视频线 = 台数」每面写这面的台数，备用写在融合器上（明细里是整套一行）。"""
+    from ..products.library import name
+    nodes = {"source": {"title": tr("播控电脑", "Media PC"), "model": "—", "qty": 1, "detail": "", "boq": ["media_pc"],
+                        "supply": "boq"}}
+    spare = (tr(f"视频线 {_n(values['video_lines'])} + {_n(values['video_spare'])} 备用",
+                f"Video {_n(values['video_lines'])} + {_n(values['video_spare'])} spare")
+             if values.get("video_lines") is not None else "")
+    nodes["blender"] = {"title": tr("融合器", "Blender"), "model": values["blender"], "qty": values["blender_qty"],
+                        "detail": tr(f"{_n(values['blender_outputs'])} 路输出", f"{_n(values['blender_outputs'])} outputs")
+                        + (" · " + spare if spare else ""), "boq": [values["blender_id"]], "supply": "boq"} \
+        if values.get("blender_qty") else {"title": tr("融合器", "Blender"), "model": "—", "qty": "", "boq": [], "supply": "missing",
+                                           "detail": tr("P11 未选出", "P11 not selected")}
+    links = [{"from": "source", "to": "blender", "cable": "HDMI", "qty": "1", "boq": None, "supply": "included"}]
+    rows = []
+    for f in faces:
+        fid, v = f["id"], f["values"]
+        label = f"{fid} · {f['name']}" if f.get("name") and f["name"] != fid else fid
+        row = {"id": fid, "projector": f"{fid}:projector", "screen": f"{fid}:screen"}
+        nodes[row["projector"]] = {"title": tr(f"投影机 {fid}", f"Projector {fid}"), "model": name(proj), "qty": v["projectors"],
+                                   "detail": f"{v.get('lens', '—')}", "boq": [proj["id"]], "supply": "boq"}
+        nodes[row["screen"]] = {"title": tr(f"投影墙 {label}", f"Wall {label}"), "model": "—",
+                                "qty": f"{_n(f['inputs'].get('wall_width_mm'))} × {_n(f['inputs'].get('wall_height_mm'))}",
+                                "detail": tr("幕面 / 涂料视现场", "Surface / paint subject to site"), "boq": [], "supply": "owner"}
+        if values.get("video_lines") is not None:
+            links.append({"from": "blender", "to": row["projector"], "cable": values.get("transport", ""),
+                          "qty": _n(v["projectors"]), "boq": "video_cable", "supply": "boq"})
+        links.append({"from": row["projector"], "to": row["screen"], "cable": tr("投射", "Projection"), "qty": "", "boq": None,
+                      "supply": "included"})
+        rows.append(row)
+    for x in [*nodes.values(), *links]:
+        x["manual"] = False
+    keys = {ln["key"] for ln in boq_lines if ln["key"]}
+    paren = lambda x: tr(f"（{x}）", f" ({x})")  # noqa: E731
+    unmatched = [n["title"] + paren(k) for n in nodes.values() if n["supply"] == "boq" for k in n["boq"] if k not in keys]
+    unmatched += [n["title"] + paren(n["detail"]) for n in nodes.values() if n["supply"] == "missing"]
+    unmatched += [x["cable"] + paren(x["boq"]) for x in links if x["supply"] == "boq" and x["boq"] not in keys]
+    d = {"faces": rows, "hub": "blender", "columns": ["projector", "screen"], "nodes": nodes, "links": links,
+         "unmatched": list(dict.fromkeys(unmatched))}
+    return d | {"svg": faces_svg(d)}
 
 
 def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None, run) -> dict:
