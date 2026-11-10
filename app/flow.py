@@ -139,11 +139,14 @@ def overload(drawing: dict | None) -> str:
 
 
 def gate_design(rev: Revision, out: dict) -> str:
-    """05 → 06：算完了，没有阻断（控制器带载、多面屏检查），接线没有超载。"""
+    """05 → 06：算完了，没有阻断（控制器带载、多面屏检查），接线没有超载。
+    接线只看自动分组：06 里手动换回路 / 网线造成的超载留在 06 改（标红、06 → 07 走不了、不能批准），不挡 05 → 06。
+    否则还没在 05 点过「下一步」就进了 06 的方案，一调超载 06 就被锁住，回到 05 又改不回来。"""
     from .review import blockers
-    if why := overload(out.get("drawing")):
+    auto = out.get("drawing_auto", out.get("drawing"))
+    if why := overload(auto):
         return why
-    items = blockers(rev, out, inputs=False)  # 04 的待确认字段在 04 提示，不挡 05
+    items = blockers(rev, out | {"drawing": auto}, inputs=False)  # 04 的待确认字段在 04 提示，不挡 05
     return items[0] if items else ""
 
 

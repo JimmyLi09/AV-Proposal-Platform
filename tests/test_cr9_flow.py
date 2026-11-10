@@ -227,3 +227,25 @@ def test_upgrade_marks_old_revs_official_and_binds_versions(tmp_path):
         prop = conn.execute(sa.text("select reached, updated_by from proposals")).one()
     assert [(r.rev_no, r.saved_at is not None, r.saved_by, r.rules_id) for r in revs] == [(0, True, 1, 1), (1, False, None, None)]
     assert (prop.reached, prop.updated_by) == (4, 1)
+
+
+def test_manual_overload_in_06_does_not_lock_06(tmp_path):
+    """05 还没点过「下一步」就进了 06，在 06 手动换回路造成超载：06 不能被锁住（否则回到 05 也改不回来）。
+    超载留在 06：标红、06 → 07 走不了、不能批准；在 06 改回后都恢复。参数造成的超载（05 改少回路数）照样挡 05 → 06。"""
+    c = start(tmp_path)
+    _, base = new_project(c)
+    c.put(f"{base}/inputs", json={"inputs": SAMPLE["input"]})
+    c.post(f"{base}/next", json={"step": "02-04"})
+    c.post("/api/products/LED/reference", json={"id": "VX600"})
+    v = c.post(f"{base}/upgrade", json={"parts": ["library"]}).json()
+    assert v["flow"]["reached"] == 2 and v["flow"]["gates"]["05"] == "" and step(v, "06")["state"] == "todo"
+
+    v = c.put(f"{base}/drawing", json={"power": {"R3C1": 1, "R3C2": 1}, "data": {}}).json()  # 回路 1 串 11 箱，超过上限
+    assert v["drawing"]["blocked"] and v["flow"]["reached"] == 2
+    assert v["flow"]["gates"]["05"] == "" and step(v, "06")["state"] != "lock"
+    assert v["flow"]["gates"]["06"].startswith("1 个回路超出带载") and any("超载" in b for b in v["blockers"])
+    v = c.put(f"{base}/drawing", json={}).json()  # 在 06 点「恢复自动」
+    assert not v["drawing"]["blocked"] and v["flow"]["gates"]["06"] == ""
+
+    v = c.put(f"{base}/overrides", json={"values": {"circuits": 2}, "reason": "试一下"}).json()  # 05 把回路数改少：自动分组就超载
+    assert v["flow"]["gates"]["05"] == "2 个回路超出带载，加回路或改参数" and step(v, "06")["state"] == "lock"
