@@ -63,14 +63,14 @@ ROW_GAP = 48  # 多面屏：每面一行，行间距
 
 
 def faces_svg(d: dict) -> str:
-    """多面屏（S5）：信号源、整屏 1 台处理器在左边居中；每面一行：控制器 → 屏 ← 配电箱（电源从右边接入）。"""
-    rows = d["faces"]
-    cols = ["source", "processor"] + (["controller"] if any("controller" in r for r in rows) else []) + ["screen"] + (
-        ["db_box"] if any("db_box" in r for r in rows) else [])
+    """多面屏（S5）：信号源、整屏 1 台处理器在左边居中；每面一行：控制器 → 屏 ← 配电箱（电源从右边接入）。
+    多面投影用同一个版式：d["hub"] = 融合器，每面一行的列是 d["columns"]（投影机 → 墙）。"""
+    rows, hub = d["faces"], d.get("hub", "processor")
+    cols = ["source", hub] + [c for c in d.get("columns", ("controller", "screen", "db_box")) if any(c in r for r in rows)]
     x_col = {c: PAD + i * (BOX_W + GAP) for i, c in enumerate(cols)}
     tall = len(rows) * BOX_H + (len(rows) - 1) * ROW_GAP
     width, height = PAD * 2 + len(cols) * BOX_W + (len(cols) - 1) * GAP, PAD * 2 + tall
-    pos = {"source": (x_col["source"], PAD + (tall - BOX_H) / 2), "processor": (x_col["processor"], PAD + (tall - BOX_H) / 2)}
+    pos = {"source": (x_col["source"], PAD + (tall - BOX_H) / 2), hub: (x_col[hub], PAD + (tall - BOX_H) / 2)}
     for i, r in enumerate(rows):
         for c in cols[2:]:
             if c in r:
@@ -84,7 +84,7 @@ def faces_svg(d: dict) -> str:
     for link in d["links"]:
         (x1, y1), (x2, y2) = pos[link["from"]], pos[link["to"]]
         owner = link["supply"] != "boq"
-        text = f"{link['cable']} × {link['qty']}"
+        text = f"{link['cable']} × {link['qty']}" if link["qty"] else link["cable"]  # 投射没有数量
         note = {"owner": tr("业主提供", "By owner"), "included": tr("随设备附带", "Included")}.get(link["supply"], "")
         ya, yb = y1 + BOX_H / 2, y2 + BOX_H / 2
         if x1 > x2:  # 电源：配电箱在屏右边，箭头向左
@@ -93,7 +93,7 @@ def faces_svg(d: dict) -> str:
             parts.append(_label((x1 + x2 + BOX_W) / 2, yb - 10, text, owner))
             continue
         xs = x1 + BOX_W
-        if link["from"] != "processor":  # 同一行：横向箭头
+        if link["from"] != hub:  # 同一行：横向箭头
             parts.append(f'<line x1="{xs}" y1="{ya}" x2="{x2 - 2}" y2="{yb}" stroke="{NAVY}" stroke-width="1.5"'
                          f' marker-end="url(#arrow)"/>')
             xl = (xs + x2) / 2
