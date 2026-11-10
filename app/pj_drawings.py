@@ -2,7 +2,9 @@
 
 图上不另算数量：台数、单台画面宽高、融合带、机位距离、镜头高度、挡光距离都来自 P2–P10 的结果（手动改过的用手动值），
 墙面、进深、天花、安装方式来自已确认的输入；这里只做几何摆放（第 i 台画面左边 = i × (w′ − o)，画面上下居中）。
-页面、PDF、Word、JPG Boards 和演示稿用同一张 SVG。V1 只画单面墙；多面投影的专属图下一步做。
+页面、PDF、Word、JPG Boards 和演示稿用同一张 SVG。
+多面投影（P18–P22）：每面按自己的 P2–P10 结果画；立面按面横向展开，剖面每面一张并排；平面在 L / U（内转角 90°）时
+画成真实的房间平面，标出 P20 转角两侧第 1 台机位的距离，其它屏形按面并排画。
 """
 from html import escape
 
@@ -80,10 +82,13 @@ def _frame(title: str, width: int, height: int, body: str, foot: list[str], stam
             + body + lines + "</svg>")
 
 
-def elevation_svg(d: dict, stamp: str = "") -> str:
-    """立面融合区图：墙面、每台画面（虚线框）、相邻画面的融合带（橙色），标墙宽、单台画面宽、融合带宽和比例。"""
-    W, left, top = 880, 64, 92
-    s = (W - 2 * left) / max(d["wall_w"], d["lefts"][-1] + d["img_w"])
+def _span(d: dict) -> int:
+    """一面墙在图上占的宽度（mm）：墙宽和画面总宽取大。"""
+    return max(d["wall_w"], d["lefts"][-1] + d["img_w"])
+
+
+def _elevation_body(d: dict, left: float, top: float, s: float) -> tuple[list[str], float]:
+    """一面墙的立面（墙左上角在 left, top，比例 s）；返回图形和最低点。"""
     wh, ih = d["wall_h"] * s, d["img_h"] * s
     img_top = top + (d["wall_h"] - d["img_h"]) / 2 * s  # 画面上下居中；比墙高时上下各超出一点
     body = [f'<rect class="wall" x="{left}" y="{top}" width="{d["wall_w"] * s:.1f}" height="{wh:.1f}" fill="#F1EEE8" '
@@ -107,6 +112,14 @@ def elevation_svg(d: dict, stamp: str = "") -> str:
     body.append(_dim_h(left, left + d["wall_w"] * s, bottom + 22, tr(f"墙宽 {d['wall_w']}", f"Wall width {d['wall_w']}"),
                        NAVY, above=False))
     body.append(_dim_v(left - 8, top, top + wh, str(d["wall_h"]), NAVY))
+    return body, bottom
+
+
+def elevation_svg(d: dict, stamp: str = "") -> str:
+    """立面融合区图：墙面、每台画面（虚线框）、相邻画面的融合带（橙色），标墙宽、单台画面宽、融合带宽和比例。"""
+    W, left, top = 880, 64, 92
+    s = (W - 2 * left) / _span(d)
+    body, bottom = _elevation_body(d, left, top, s)
     over = (d["img_h"] - d["wall_h"]) / 2
     foot = [tr(f"{d['n']} 台横向排开；相邻画面重叠 ≈ {d['overlap']} mm（P5，{d['overlap_pct']:.1f} %）；橙色是融合区。",
                f"{d['n']} projectors side by side; adjacent images overlap ≈ {d['overlap']} mm (P5, {d['overlap_pct']:.1f} %); "
@@ -119,10 +132,8 @@ def elevation_svg(d: dict, stamp: str = "") -> str:
     return _frame(tr("立面融合区图", "Elevation · blend zones"), W, int(bottom + 50 + 16 * len(foot)), "".join(body), foot, stamp)
 
 
-def plan_svg(d: dict, stamp: str = "") -> str:
-    """平面机位图（俯视）：墙在上，镜头前端离墙 d（P3 / P4），每台到自己画面两端的投射锥，可用进深边界。"""
-    W, left, top = 880, 70, 86
-    s = (W - 2 * left) / max(d["wall_w"], d["lefts"][-1] + d["img_w"])
+def _plan_body(d: dict, left: float, top: float, s: float) -> tuple[list[str], float, bool]:
+    """一面墙的平面（墙在上，左端在 left, top，比例 s）；返回图形、最远处（px）和机位是否超出进深。"""
     depth = d["depth"] or 0
     far = max(depth, d["distance"]) * s
     lens_y = top + d["distance"] * s
@@ -148,6 +159,15 @@ def plan_svg(d: dict, stamp: str = "") -> str:
     if d["n"] > 1:
         c1, c2 = left + (d["img_w"] / 2) * s, left + (d["pitch"] + d["img_w"] / 2) * s
         body.append(_dim_h(c1, c2, lens_y + 46, tr(f"中心间距 {d['pitch']}", f"Spacing {d['pitch']}"), MUTED, above=False))
+    return body, far, over
+
+
+def plan_svg(d: dict, stamp: str = "") -> str:
+    """平面机位图（俯视）：墙在上，镜头前端离墙 d（P3 / P4），每台到自己画面两端的投射锥，可用进深边界。"""
+    W, left, top = 880, 70, 86
+    s = (W - 2 * left) / _span(d)
+    depth = d["depth"] or 0
+    body, far, over = _plan_body(d, left, top, s)
     mount = {"ceiling": tr("吊顶", "ceiling"), "floor": tr("落地", "floor"), "wall": tr("壁挂", "wall")}.get(d["mounting"], d["mounting"])
     back = tr(f"镜头前端后方余 {_m(depth - d['distance'])} m（含机身）", f"{_m(depth - d['distance'])} m left behind the lens (incl. body)") \
         if d["depth"] and not over else ""
@@ -165,10 +185,24 @@ def section_svg(d: dict, stamp: str = "") -> str:
     人高 h 时离墙 P10 算出的距离以内会挡光（灰色三角）。"""
     W, H0 = 880, 330
     left, floor = 120, 60 + H0
-    top_mm = max(d["wall_h"], d["ceiling"] or 0, d["mount_h"] or 0, (d["wall_h"] + d["img_h"]) / 2) + 200
-    far_mm = max(d["depth"] or 0, d["distance"]) + 600
-    s = min(H0 / top_mm, (W - left - 220) / far_mm)
-    W = int(max(600, left + far_mm * s + 200))  # 宽度按内容收窄（演示稿里和平面图并排）
+    s = min(H0 / _section_top(d), (W - left - 220) / _section_far(d))
+    W = int(max(600, left + _section_far(d) * s + 200))  # 宽度按内容收窄（演示稿里和平面图并排）
+    body = _section_body(d, left, floor, s)
+    foot = _section_foot(d)
+    return _frame(tr("剖面遮挡图", "Section · shadow check"), W, int(floor + 128 + 16 * len(foot)), "".join(body), foot, stamp)
+
+
+def _section_top(d: dict) -> float:
+    return max(d["wall_h"], d["ceiling"] or 0, d["mount_h"] or 0, (d["wall_h"] + d["img_h"]) / 2) + 200
+
+
+def _section_far(d: dict) -> float:
+    return max(d["depth"] or 0, d["distance"]) + 600
+
+
+def _section_body(d: dict, left: float, floor: float, s: float) -> list[str]:
+    """一面墙的剖面（墙在 left，地面在 floor，比例 s）。"""
+    far_mm = _section_far(d)
     X = lambda mm: left + mm * s  # noqa: E731
     Y = lambda mm: floor - mm * s  # noqa: E731
     img_top = (d["wall_h"] + d["img_h"]) / 2
@@ -209,6 +243,10 @@ def section_svg(d: dict, stamp: str = "") -> str:
     if d["depth"]:
         body.append(_dim_h(left, X(d["depth"]), floor + 86, tr(f"可用进深 {_m(d['depth'])} m", f"Available depth {_m(d['depth'])} m"),
                            MUTED, above=False))
+    return body
+
+
+def _section_foot(d: dict) -> list[str]:
     foot = [tr(f"光线最低一条打到画面底边（地面）；人高 {_m(d['person'])} m 时，离墙 {_m(d['within'])} m 以内会挡光，在墙上留下人影（P10）。",
                f"The lowest ray reaches the image bottom (floor); a {_m(d['person'])} m tall person within {_m(d['within'])} m "
                "of the wall blocks the light and casts a shadow (P10).")] if d["within"] is not None else []
@@ -216,10 +254,163 @@ def section_svg(d: dict, stamp: str = "") -> str:
         foot.append(tr("机位高于天花，核对安装高度", "The lens is above the ceiling: check the mounting height"))
     if d["manual"]:
         foot.append(tr("手填的尺寸（没有剖面图）以现场复核为准", "Sizes filled in by hand (no section drawing) are subject to site checks"))
+    return foot
+
+
+# ---- 多面投影 ----
+
+def data_faces(faces: list[dict], values: dict, params: dict, manual_inputs: set, shape: str, corners: list[dict]) -> dict | None:
+    """多面投影三张图的数据：每面一份（和单面墙同样的结构，加面编号和名字），再加屏形和 P20 的转角结果。
+    faces：多面投影结果里的每一面（values 是这面 P1–P10 的结果，inputs 是这面自己的墙宽、墙高、进深、镜头高）；
+    values：整套方案的值（共用的输入：天花、安装方式、镜头型号…）；corners：P20 的结果（只有内转角 90° 才有）。"""
+    out = []
+    for f in faces:
+        d = data(values | (f.get("inputs") or {}) | f["values"], params, manual_inputs)
+        if d is None:
+            return None
+        named = f.get("name") and f["name"] != f["id"]
+        out.append(d | {"id": f["id"], "label": f"{f['id']} · {f['name']}" if named else f["id"]})
+    ids = [f["id"] for f in out]
+    # 相邻两面之间都有 P20 的内转角：按真实房间画平面
+    room = shape in ("L", "U") and [list(c["between"]) for c in corners] == [ids[i:i + 2] for i in range(len(ids) - 1)]
+    return {"faces": out, "shape": shape, "corners": corners, "room": room,
+            "clash_m": float(params.get("corner_clash_m") or 0)}
+
+
+def _face_line(d: dict) -> str:
+    return tr(f"{d['label']}：{d['n']} 台，单台画面 {d['img_w']} × {d['img_h']}"
+              + (f"，融合带 {d['overlap_pct']:.1f} % ≈ {d['overlap']}" if d["n"] > 1 else "") + f"，镜头前端离墙 {_m(d['distance'])} m",
+              f"{d['label']}: {d['n']} projectors, image {d['img_w']} × {d['img_h']}"
+              + (f", blend {d['overlap_pct']:.1f} % ≈ {d['overlap']}" if d["n"] > 1 else "") + f", lens front {_m(d['distance'])} m from the wall")
+
+
+def elevation_faces_svg(D: dict, stamp: str = "") -> str:
+    """多面投影的立面：每面横向展开（不跨角投射，面与面之间留空），各画自己的画面和融合带，墙底对齐。"""
+    faces, gap, left, top = D["faces"], 80, 64, 132
+    W = max(880, 320 * len(faces) + 160)
+    s = (W - 2 * left - gap * (len(faces) - 1)) / sum(_span(d) for d in faces)
+    tallest = max(d["wall_h"] for d in faces)
+    body, bottom, x = [], 0.0, left
+    for d in faces:
+        t = top + (tallest - d["wall_h"]) * s
+        body.append(_text(x, top - 64, f"{d['label']} · {d['wall_w']} × {d['wall_h']}", 13, NAVY, "start", "700"))
+        part, low = _elevation_body(d, x, t, s)
+        body += part
+        bottom, x = max(bottom, low), x + _span(d) * s + gap
+    foot = [_face_line(d) for d in faces] + [tr(
+        "每面单独排投影，不跨角投射；面与面之间的空白只为看得清 · 单位 mm",
+        "Each face is laid out on its own, no projection across corners; gaps between faces are for legibility only · units mm")]
+    if not all(d["blend_ok"] for d in faces):
+        foot.append(tr("有面的融合带不在 15–30 % 范围内（P5），换镜头或改台数",
+                       "A face's blend is outside 15–30 % (P5): change the lens or the count"))
+    return _frame(tr("立面融合区图", "Elevation · blend zones"), W, int(bottom + 50 + 16 * len(foot)), "".join(body), foot, stamp)
+
+
+def _room_walls(faces: list[dict]) -> list[tuple]:
+    """L / U 房间平面（mm，y 向下）：第一面是左墙，从下往上走，每到内转角向右转 90°（房间在走向的右手边）。
+    返回每面的（起点、走向、朝房间里的法线）；起点就是站在房间里看这面墙时的左端。"""
+    pos, u, walls = (0.0, 0.0), (0.0, -1.0), []
+    for d in faces:
+        n = (-u[1], u[0])
+        walls.append((pos, u, n))
+        pos, u = (pos[0] + u[0] * d["wall_w"], pos[1] + u[1] * d["wall_w"]), n
+    return walls
+
+
+def plan_faces_svg(D: dict, stamp: str = "") -> str:
+    """多面投影的平面：L / U（内转角 90°）画成房间平面，标 P20 转角两侧第 1 台机位的距离；其它屏形每面一张并排。"""
+    faces = D["faces"]
+    if not D["room"]:
+        gap, left, top = 90, 70, 110
+        W = max(880, 320 * len(faces) + 160)
+        s = (W - 2 * left - gap * (len(faces) - 1)) / sum(_span(d) for d in faces)
+        body, far, x = [], 0.0, left
+        for d in faces:
+            body.append(_text(x, top - 40, d["label"], 13, NAVY, "start", "700"))
+            part, f_px, _ = _plan_body(d, x, top, s)
+            body += part
+            far, x = max(far, f_px), x + _span(d) * s + gap
+        foot = [_face_line(d) for d in faces] + [tr("这个屏形按面分开画（每面墙在上），不是实际平面",
+                                                    "This shape is drawn face by face (each wall on top), not as the real plan")]
+        return _frame(tr("平面机位图", "Plan · projector positions"), W, int(top + far + 70 + 16 * len(foot)), "".join(body), foot, stamp)
+
+    walls = _room_walls(faces)
+    pts = []  # 每面每台机位（镜头前端）和画面两端，mm
+    for d, (p0, u, n) in zip(faces, walls):
+        row = []
+        for x in d["lefts"]:
+            a = (p0[0] + u[0] * x, p0[1] + u[1] * x)
+            b = (p0[0] + u[0] * (x + d["img_w"]), p0[1] + u[1] * (x + d["img_w"]))
+            c = (p0[0] + u[0] * (x + d["img_w"] / 2) + n[0] * d["distance"], p0[1] + u[1] * (x + d["img_w"] / 2) + n[1] * d["distance"])
+            row.append((a, b, c))
+        pts.append(row)
+    (e0, eu, _), last = walls[-1], faces[-1]["wall_w"]  # 最后一面墙的终点
+    xs = [w[0][0] for w in walls] + [e0[0] + eu[0] * last] + [c[0] for row in pts for _, _, c in row]
+    ys = [w[0][1] for w in walls] + [e0[1] + eu[1] * last] + [c[1] for row in pts for _, _, c in row]
+    W, margin, top = 880, 90, 70
+    s = min((W - 2 * margin) / (max(xs) - min(xs) or 1), 520 / (max(ys) - min(ys) or 1))
+    X = lambda v: margin + (v - min(xs)) * s  # noqa: E731
+    Y = lambda v: top + (v - min(ys)) * s  # noqa: E731
+    body = []
+    for d, (p0, u, n), row in zip(faces, walls, pts):
+        p1 = (p0[0] + u[0] * d["wall_w"], p0[1] + u[1] * d["wall_w"])
+        body.append(f'<line class="wall" x1="{X(p0[0]):.1f}" y1="{Y(p0[1]):.1f}" x2="{X(p1[0]):.1f}" y2="{Y(p1[1]):.1f}" '
+                    f'stroke="{NAVY}" stroke-width="4"/>')
+        mid = ((p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2)  # 面的名字写在墙外侧
+        anchor = "end" if n[0] > 0 else "start" if n[0] < 0 else "middle"
+        body.append(_text(X(mid[0]) - n[0] * 12, Y(mid[1]) - n[1] * 14 + 4, f"{d['label']} · {d['wall_w']}", 11, NAVY, anchor, "700"))
+        if d["depth"]:
+            q0 = (p0[0] + n[0] * d["depth"], p0[1] + n[1] * d["depth"])
+            q1 = (p1[0] + n[0] * d["depth"], p1[1] + n[1] * d["depth"])
+            body.append(f'<line class="depth" x1="{X(q0[0]):.1f}" y1="{Y(q0[1]):.1f}" x2="{X(q1[0]):.1f}" y2="{Y(q1[1]):.1f}" '
+                        f'stroke="{MUTED}" stroke-dasharray="8 4"/>')
+        over = d["depth"] is not None and d["distance"] > d["depth"]
+        for i, (a, b, c) in enumerate(row):
+            col = COLORS[i % len(COLORS)]
+            body.append(f'<polygon class="cone" points="{X(c[0]):.1f},{Y(c[1]):.1f} {X(a[0]):.1f},{Y(a[1]):.1f} {X(b[0]):.1f},{Y(b[1]):.1f}" '
+                        f'fill="{col}" fill-opacity="0.08" stroke="{col}" stroke-width="1"/>')
+            body.append(f'<circle class="projector" cx="{X(c[0]):.1f}" cy="{Y(c[1]):.1f}" r="6" fill="{RED if over else col}"/>')
+            body.append(_text(X(c[0]) + n[0] * 16, Y(c[1]) + n[1] * 16 + 4, f"{d['id']}{i + 1}", 10, col, "middle", "700"))
+    index = {d["id"]: k for k, d in enumerate(faces)}
+    for c in D["corners"]:  # P20：转角两侧第 1 台机位（a 面最后一台、b 面第一台）
+        a, b = c["between"]
+        p, q = pts[index[a]][-1][2], pts[index[b]][0][2]
+        col = {"BLOCK": RED, "NOTE": ORANGE}.get(c["result"], GREEN)
+        body.append(f'<line class="clash" x1="{X(p[0]):.1f}" y1="{Y(p[1]):.1f}" x2="{X(q[0]):.1f}" y2="{Y(q[1]):.1f}" stroke="{col}" '
+                    f'stroke-width="2" stroke-dasharray="4 3"/>')
+        cx, cy = (X(p[0]) + X(q[0])) / 2, (Y(p[1]) + Y(q[1])) / 2
+        body.append(f'<circle cx="{cx:.1f}" cy="{cy:.1f}" r="14" fill="none" stroke="{col}" stroke-width="2"/>')
+        body.append(_text(cx, cy + 40, f"P20 {c['distance_m']:.2f} m", 11, col, "middle", "700"))  # 写在机位编号下面
+    bottom = Y(max(ys))
+    foot = [_face_line(d) for d in faces]
+    for c in D["corners"]:
+        a, b = c["between"]
+        state = {"BLOCK": tr("阻断：错开挂高 / 镜头位移 / 改吊架，记录后才能继续", "blocked: stagger heights / lens shift / change mounts, and record it"),
+                 "NOTE": tr(f"已人工处理：{c['resolution']}", f"resolved by hand: {c['resolution']}")}.get(c["result"], tr("通过", "OK"))
+        foot.append(tr(f"{a} / {b} 内转角：两侧第 1 台机位相距 {c['distance_m']:.2f} m（P20，要 ≥ {D['clash_m']:g} m）· {state}",
+                       f"{a} / {b} inside corner: first projectors {c['distance_m']:.2f} m apart (P20, needs ≥ {D['clash_m']:g} m) · {state}"))
+    return _frame(tr("平面机位图", "Plan · projector positions"), W, int(bottom + 60 + 16 * len(foot)), "".join(body), foot, stamp)
+
+
+def section_faces_svg(D: dict, stamp: str = "") -> str:
+    """多面投影的剖面：每面一张并排（墙高、进深、镜头高可以不同），同一比例。"""
+    faces, H0 = D["faces"], 330
+    s = min(H0 / max(_section_top(d) for d in faces), 300 / max(_section_far(d) for d in faces))
+    floor = 70 + max(_section_top(d) for d in faces) * s  # 高度按内容
+    body, x = [], 120.0
+    for d in faces:
+        body.append(_text(x - 100, 48, d["label"], 13, NAVY, "start", "700"))
+        body += _section_body(d, x, floor, s)
+        x += _section_far(d) * s + 260
+    W = int(x - 120)
+    foot = [f"{d['id']} · {_section_foot(d)[0]}" for d in faces if _section_foot(d)]
+    foot += list(dict.fromkeys(line for d in faces for line in _section_foot(d)[1:]))  # 共同的提示只写一次
     return _frame(tr("剖面遮挡图", "Section · shadow check"), W, int(floor + 128 + 16 * len(foot)), "".join(body), foot, stamp)
 
 
 def svg(kind: str, d: dict, stamp: str = "") -> str:
+    if "faces" in d:  # 多面投影
+        return {"elevation": elevation_faces_svg, "plan": plan_faces_svg, "section": section_faces_svg}[kind](d, stamp)
     return {"elevation": elevation_svg, "plan": plan_svg, "section": section_svg}[kind](d, stamp)
 
 

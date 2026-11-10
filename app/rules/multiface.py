@@ -21,6 +21,7 @@ SINGLE = {"flat", "single"}
 SHAPES = {"LED": ["flat", "L", "L_wall_floor", "U", "outside_corner", "curved", "cube", "custom"],
           "PJ": ["single", "L", "U", "curved", "ring", "wall_floor"]}
 PJ_FACE_RULES = {f"P{i}" for i in range(1, 11)}  # 每面单独跑的几何规则
+PJ_FACE_INPUTS = {"wall_width_mm", "wall_height_mm", "available_depth_mm", "mount_height_m"}  # 每面可以不同的输入
 SPARE_RULES = {"F8", "F10"}  # 同型号备品按整屏合计
 PROCESSOR_RULES = {"F13"}  # 视频处理器整屏 1 台，每面接 1 路输出（S5）
 WHOLE = ("processor_qty",)  # 整屏只有一份的数量，客户版 BOQ 放在共用组
@@ -422,7 +423,8 @@ def calculate_pj(content: dict, library: dict, inputs: dict, cabinet_id: str | N
                                      ("mount_height_m", "mount_height_m")) if f.get(src) not in (None, "")}
         res = run(face_content, fin | pinputs, catalog)
         out["faces"].append({k: f.get(k) for k in ("id", "name", "width_mm", "height_mm")}
-                            | {"rules": res["rules"], "choices": {}, "values": _values(res["rules"])})
+                            | {"rules": res["rules"], "choices": {}, "values": _values(res["rules"]),
+                               "inputs": {k: v for k, v in fin.items() if k in PJ_FACE_INPUTS}})  # 专属图按面画要用
     rows.append(_row("P19", tr("按面排投影", "Projectors per face"),
                      " · ".join(f"{f['id']} {_n(f['values'].get('projectors'))}" for f in out["faces"]),
                      note=tr("每面独立按 P1–P10 排投影，不跨角投射；投影机在两端角线内均匀排开",

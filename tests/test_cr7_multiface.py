@@ -304,3 +304,39 @@ def test_unfolded_drawing_puts_the_floor_face_under_the_wall():
     assert b["circuits"][0] == a["circuits"][1] + 1 and b["cables"][0] == a["cables"][1] + 1
     assert {c["face"] for c in d["cabinets"]} == {"A", "B"} and d["cabinets"][0]["id"] == "A-R1C1"
     assert all(b["y"] <= c["y"] < b["y"] + b["height"] for c in d["cabinets"] if c["face"] == "B")
+
+
+def _pj_drawings(inputs):
+    from app import pj_drawings
+    out = calculate(PJ_RULES, load_library("PJ"), inputs)
+    params = {p["name"]: p["value"] for p in PJ_RULES["params"]}
+    return pj_drawings, pj_drawings.data_faces(out["faces"], out["values"], params, set(), out["multi"]["shape"],
+                                               out["multi"]["corners"])
+
+
+def test_multiface_projection_drawings_u_room_plan_with_corner_clash():
+    """多面投影专属图：U 形画成房间平面（A 左墙、B 正墙、C 右墙），两个内转角标 P20 的距离（0 m，阻断标红）；
+    每面按自己的结果画——C 面另给墙高和进深时只改 C 面。"""
+    case = CASES["projection_u"]
+    inputs = pj_inputs(case)
+    inputs["faces"][2] |= {"height_mm": 3000, "depth_mm": 4000}
+    pj, D = _pj_drawings(inputs)
+    assert D["room"] and [f["id"] for f in D["faces"]] == ["A", "B", "C"] and [f["n"] for f in D["faces"]] == [2, 2, 2]
+    assert [(f["wall_w"], f["wall_h"], f["depth"]) for f in D["faces"]] == [(8000, 2700, 3200), (7800, 2700, 3200), (8000, 3000, 4000)]
+    plan = pj.svg("plan", D)
+    assert plan.count('class="projector"') == 6 and plan.count('class="clash"') == 2 and plan.count('class="wall"') == 3
+    assert plan.count("P20 0.00 m") == 2 and pj.RED in plan.split('class="clash"')[1][:80]
+    assert "A / B 内转角：两侧第 1 台机位相距 0.00 m（P20，要 ≥ 0.6 m）· 阻断" in plan
+    elevation, section = pj.svg("elevation", D), pj.svg("section", D)
+    assert elevation.count('class="blend"') == 3 and "C · 8000 × 3000" in elevation
+    assert section.count('class="shadow"') == 3 and section == pj.svg("section", D)  # 每次画的一样
+
+
+def test_multiface_projection_drawings_side_by_side_when_not_a_room():
+    """墙 + 地面（不是内转角 90°）：平面按面并排画，写明不是实际平面；立面、剖面照样每面一张。"""
+    case = CASES["projection_corner_l"]
+    pj, D = _pj_drawings(pj_inputs(case, shape="wall_floor", corners=[{"between": ["A", "B"], "type": "fold_wall_to_floor"}]))
+    assert not D["room"] and D["corners"] == []
+    plan = pj.svg("plan", D)
+    assert "这个屏形按面分开画（每面墙在上），不是实际平面" in plan and plan.count('class="clash"') == 0
+    assert plan.count('class="projector"') == 4

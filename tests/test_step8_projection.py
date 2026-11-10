@@ -103,16 +103,26 @@ def test_english_and_draft_stamp(client):
     assert "DRAFT" not in svg(client, "elevation")
 
 
-def test_led_and_multiface_projection_have_no_projection_drawings(client):
+def test_led_has_no_projection_drawings_and_multiface_projection_has_them(client):
     pid = client.post(f"/api/projects/{client.project}/proposals", json={"business_line": "LED"}).json()["id"]
     client.put(f"/api/proposals/{pid}/inputs", json={"inputs": LED["input"]})
     assert client.get(f"/api/proposals/{pid}").json()["projection"] is None
     assert client.get(f"/api/proposals/{pid}/projection/plan.svg").status_code == 409
+    # 多面投影（L 形）：三张图每面都画；平面画成房间，标 P20；方案 Word 带三张图
     faces = [{"id": "A", "name": "Left", "orientation": "wall", "width_mm": 6000, "height_mm": 2700},
              {"id": "B", "name": "Main", "orientation": "wall", "width_mm": 9000, "height_mm": 2700}]
     v = client.put(f"{client.base}/inputs", json={"inputs": PJ["input"] | {"shape": "L", "faces": faces,
                                                                            "corners": [{"between": ["A", "B"], "type": "inside_90"}]}}).json()
-    assert v["result"]["faces"] and v["projection"] is None
+    d = v["projection"]
+    assert [f["label"] for f in d["faces"]] == ["A · Left", "B · Main"] and d["room"] and d["corners"][0]["between"] == ["A", "B"]
+    elevation = svg(client, "elevation")
+    assert "A · Left · 6000 × 2700" in elevation and "B · Main · 9000 × 2700" in elevation
+    plan = svg(client, "plan")
+    assert plan.count('class="projector"') == sum(f["n"] for f in d["faces"]) and plan.count('class="clash"') == 1
+    assert f"P20 {d['corners'][0]['distance_m']:.2f} m" in plan
+    assert svg(client, "section").count('class="shadow"') == 2
+    doc = Document(io.BytesIO(client.get(f"{client.base}/proposal.docx").content))
+    assert {"立面融合区图", "平面机位图", "剖面遮挡图"} <= {p.text for p in doc.paragraphs if p.style.name.startswith("Heading")}
 
 
 def test_proposal_documents_and_deck_carry_the_drawings(client):

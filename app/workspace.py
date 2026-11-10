@@ -186,11 +186,16 @@ def drawing_of(used: dict, result: dict | None, edits: dict | None) -> dict | No
 
 
 def projection_of(prop: Proposal, used: dict, result: dict | None, rev) -> dict | None:
-    """投影专属图（第 8 步）的数据：立面融合区、平面机位、剖面遮挡共用。只做单面墙（多面投影下一步做）。"""
-    if prop.business_line != "PJ" or not result or not result["rules"] or result.get("faces"):
+    """投影专属图（第 8 步）的数据：立面融合区、平面机位、剖面遮挡共用。多面投影每面按自己的结果画（P18–P22）。"""
+    if prop.business_line != "PJ" or not result or not result["rules"]:
         return None
     params = {p["name"]: p["value"] for p in used["rules"].content["params"]}
     manual = {k for k, m in (rev.input_meta or {}).items() if m.get("source") == "manual"}
+    if result.get("multi"):
+        if not result["multi"]["totals"]:  # 还有面没算出来
+            return None
+        return pj_drawings.data_faces(result["faces"], result["values"], params, manual, result["multi"]["shape"],
+                                      result["multi"]["corners"])
     return pj_drawings.data(result["values"], params, manual)
 
 
@@ -575,7 +580,7 @@ def export_projection_svg(proposal_id: int, kind: Literal[pj_drawings.KINDS], la
         used, result = compute(db, prop, r)
         d = projection_of(prop, used, result, r)
         if d is None:
-            raise HTTPException(409, tr("没有投影专属图：先算出单面投影墙的结果", "No projection drawings: calculate a single projection wall first"))
+            raise HTTPException(409, tr("没有投影专属图：先算出投影的结果", "No projection drawings: calculate the projection first"))
         stamp = " · ".join([f"Rev {r.rev_no}", tr("规则 ", "Rules ") + used["rules"].version]
                            + ([] if r.status == "approved" else ["DRAFT"]))
         body = pj_drawings.svg(kind, d, stamp)
