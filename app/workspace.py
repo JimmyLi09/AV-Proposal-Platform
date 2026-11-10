@@ -228,7 +228,12 @@ def view(db: Session, prop: Proposal, rev=None) -> dict:
         "similar": similar(db, prop, rev.inputs or {}),  # 相似以往项目（CR-8）
     }
     out |= review_view(db, prop, rev, out)
-    return out | flow_view(db, prop, rev, out)
+    # 05 → 06 的关卡只看自动分组（见 flow.gate_design）；有手动调整时另算一份，只给关卡用，不放进返回结果
+    edited = any((rev.drawing_edits or {}).values())
+    out["drawing_auto"] = drawing_of(used, result, None) if edited else out["drawing"]
+    out |= flow_view(db, prop, rev, out)
+    del out["drawing_auto"]
+    return out
 
 
 def manual_list(rev, result: dict | None) -> list[dict]:
