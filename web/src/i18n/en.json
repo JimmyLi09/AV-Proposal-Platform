@@ -542,7 +542,6 @@
   "pj": {
     "download": "Download SVG",
     "intro": "The elevation blend zones, plan positions and section shadow check are drawn from the P2–P10 results and the confirmed inputs; nothing is recalculated on the drawings. The proposal PDF, Word, JPG Boards and deck use the same drawings.",
-    "multiLater": "Projection drawings for multi-face walls (per face) come next; see the per-face results in 05 and the BOQ.",
     "notes": {
       "elevation": "Each image and the blend zones between neighbours (P4, P5)",
       "plan": "Lens distance from the wall, throw cones and available depth (P3, P4)",
