@@ -3,7 +3,6 @@ __pycache__/
 .pytest_cache/
 /data/
 web/node_modules/
-web/dist/
 app/config/deploy.local.yaml
 /build/
 /dist/

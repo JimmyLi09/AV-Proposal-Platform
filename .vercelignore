@@ -1,0 +1,6 @@
+.venv
+web/node_modules
+tests
+installer
+docs
+data

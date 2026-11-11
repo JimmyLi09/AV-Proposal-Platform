@@ -34,7 +34,10 @@ def ocr_lines(img) -> list[tuple[str, tuple[float, float, float, float]]]:
     """图片里的文字行：(文字, 外框)。识别模型第一次用时才加载。"""
     global _ocr
     if _ocr is None:
-        from rapidocr_onnxruntime import RapidOCR
+        try:
+            from rapidocr_onnxruntime import RapidOCR
+        except ImportError:  # Vercel 测试版不带 OCR
+            return []
         _ocr = RapidOCR()
     import numpy as np
     result, _ = _ocr(np.array(img.convert("RGB")))

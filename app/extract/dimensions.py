@@ -83,7 +83,10 @@ def pair(lines: list[tuple[str, Box]], rects: list[Box]) -> list[tuple[str, int,
 
 def image_rects(img) -> list[Box]:
     """图片上画出来的矩形（框线或色块），面积太小的不要。"""
-    import cv2
+    try:
+        import cv2
+    except ImportError:  # Vercel 测试版不带 OpenCV
+        return []
     import numpy as np
 
     gray = cv2.cvtColor(np.array(img.convert("RGB")), cv2.COLOR_RGB2GRAY)
