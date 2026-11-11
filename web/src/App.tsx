@@ -4,6 +4,7 @@ import Flow from "./Flow";
 import { Lang, lang as currentLang, setLang, t } from "./i18n";
 import { NewIntake } from "./Intake";
 import Knowledge from "./Knowledge";
+import Settings from "./Settings";
 import Login, { roleLabel } from "./Login";
 import Products from "./Products";
 import Rules from "./Rules";
@@ -52,7 +53,8 @@ export default function App() {
   const flow = hash.match(/^#\/proposals\/(\d+)(?:\/([\w-]+))?/);
   const intake = hash.match(/^#\/new(\/lead)?$/);
   const page = hash.startsWith("#/rules") ? "rules" : hash.startsWith("#/products") ? "products"
-    : hash.startsWith("#/templates") ? "templates" : hash.startsWith("#/knowledge") ? "knowledge" : "projects";
+    : hash.startsWith("#/templates") ? "templates" : hash.startsWith("#/knowledge") ? "knowledge"
+    : hash.startsWith("#/settings") ? "settings" : "projects";
   const line = hash.match(/^#\/(?:rules|products|templates)\/(LED|PJ)/)?.[1] ?? "LED"; // 库类页面按业务线分（CR-7）
 
   async function switchName() {
@@ -82,6 +84,9 @@ export default function App() {
         <a href="#/knowledge" className={`nav-item ${page === "knowledge" ? "active" : ""}`}>
           {t("nav.knowledge")}
         </a>
+        <a href="#/settings" className={`nav-item ${page === "settings" ? "active" : ""}`}>
+          {t("nav.settings")}
+        </a>
       </nav>
       <div className="body">
         <header className="top">
@@ -100,6 +105,7 @@ export default function App() {
           {page === "rules" ? <Rules key={line} line={line} /> : page === "products" ? <Products key={line} line={line} />
             : page === "templates" ? <Templates key={line} line={line} />
             : page === "knowledge" ? <Knowledge />
+            : page === "settings" ? <Settings />
             : flow ? <Flow key={flow[1]} id={Number(flow[1])} step={flow[2] ?? null} />
             : intake ? <NewIntake key={hash} lead={!!intake[1]} /> : <Workbench />}
         </main>

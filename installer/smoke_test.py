@@ -1,12 +1,14 @@
 """安装包验收（在 GitHub Actions 的 Windows 机器上，装好之后跑）。
 
 python installer/smoke_test.py fresh <资料目录>      服务能打开，能建项目，上传的样本能读出来，原件只读；
-                                                    算出结果后能导出 BOQ Excel、图纸 DXF 和技术方案 PDF（服务里的 Chromium 能用）
+                                                    算出结果后能导出 BOQ Excel、图纸 DXF 和技术方案 PDF（服务里的 Chromium 能用）；
+                                                    设置页有安装包的版本号，立即备份能做完
 python installer/smoke_test.py upgraded <资料目录>   再装一次（更新）之后，之前的项目还在
 """
 import stat
 import sys
 import time
+import zipfile
 from pathlib import Path
 
 import httpx
@@ -72,6 +74,19 @@ def fresh(c: httpx.Client, data: Path):
     stored = list((data / "files").rglob("*.*"))
     assert len(stored) == len(GRADES) and not any(p.stat().st_mode & stat.S_IWRITE for p in stored), stored  # 原件只读
     assert (data / "avp.db").exists()
+
+    # 设置页：版本号来自安装包；立即备份在服务里做完，zip 里有数据库和原件
+    ok(c.post("/api/backups", json={}))
+    end = time.time() + 300
+    while (s := ok(c.get("/api/settings")).json())["backup"]["running"]:
+        if time.time() > end:
+            raise SystemExit("备份超时")
+        time.sleep(2)
+    assert s["server"]["version"] and s["backup"]["error"] is None, (s["server"], s["backup"])
+    with zipfile.ZipFile(Path(s["server"]["backup_dir"]) / s["backup"]["name"]) as z:
+        names = z.namelist()
+    assert "avp.db" in names and sum(n.startswith("files/") for n in names) == len(GRADES), names
+    print("version", s["server"]["version"], "backup", s["backup"]["name"], s["backups"][0]["size"], "bytes")
 
 
 def upgraded(c: httpx.Client, data: Path):
