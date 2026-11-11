@@ -7,7 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import sessionmaker
 
-from . import annotate, api, flow, i18n, review, workspace
+from . import annotate, api, flow, i18n, review, settings, workspace
 from .db import make_engine, migrate
 from .knowledge import api as knowledge_api
 from .knowledge.scan import ensure_folders
@@ -49,6 +49,13 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
     app.state.deck_template = Path(cfg["deck_template"]) if cfg.get("deck_template") else None
     app.state.kb_dir = Path(cfg.get("knowledge_dir") or data_dir / "knowledge").resolve()
     app.state.kb_lock, app.state.kb_progress = threading.Lock(), None
+    # 设置页（服务器与存储、立即备份）
+    app.state.port = cfg.get("port")
+    app.state.project_platform = cfg.get("project_platform_url") or ""
+    app.state.backup_dir = Path(cfg.get("backup_dir") or data_dir / "backups").resolve()
+    app.state.backup_lock, app.state.backup_progress = threading.Lock(), None
+    version = Path(__file__).parent / "VERSION"  # 安装包构建时写入；源码运行没有
+    app.state.version = version.read_text(encoding="utf-8").strip() if version.exists() else None
     scan_at = str(cfg.get("knowledge_scan_at") or "")
     app.state.kb_scan_at = scan_at if re.fullmatch(r"([01]?\d|2[0-3]):[0-5]\d", scan_at) else "02:00"
     try:
@@ -59,7 +66,7 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
     with app.state.Session() as db:
         for module in (rules_api, products_api, templates_api):
             module.ensure_seed(db)
-    for module in (api, rules_api, products_api, templates_api, workspace, review, annotate, flow, knowledge_api):
+    for module in (api, rules_api, products_api, templates_api, workspace, review, annotate, flow, knowledge_api, settings):
         app.include_router(module.router, prefix="/api")
     if WEB_DIST.is_dir():
         app.mount("/", StaticFiles(directory=WEB_DIST, html=True), name="web")

@@ -3,6 +3,7 @@ import { api, send, User } from "./api";
 import { t, tOr } from "./i18n";
 
 const ROLES = ["Sales", "PM", "工程"]; // 存的是这几个值，显示按界面语言
+export { ROLES }; // 设置页改角色也用这几个值
 
 export function roleLabel(role: string) {
   return tOr(`login.roles.${role}`, role);

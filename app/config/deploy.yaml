@@ -16,3 +16,8 @@ knowledge_scan_at: "02:00"
 # 方案演示稿（PPT）的公司母版：.potx 或 .pptx 的完整路径，例：'D:\avp-data\templates\Audax.potx'。
 # 留空 = 用内置的 Audax 配色版式。
 deck_template: ""
+# 备份文件夹（设置页「立即备份」）：数据库和资料目录（原件、生成文件）打包成一个 zip 放这里，最好在另一块盘或网络盘。
+# 留空 = 资料目录下的 backups（例：D:\avp-data\backups）。资料库文件夹是公司共享的原资料，不打包。
+backup_dir: ""
+# 项目平台地址：设置页只显示，平台不连接它（项目只通过项目编号关联）
+project_platform_url: "http://192.168.1.241:3000"
