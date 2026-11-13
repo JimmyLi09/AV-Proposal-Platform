@@ -28,6 +28,11 @@ export default function SourcesPage({ view, inputs, setInputs, onApply, onReload
       <ShapeFaces view={view} inputs={inputs} setInputs={setInputs} />
       {view.result && <Choices result={view.result} onPick={(k, v) => setInputs({ ...inputs, [k]: v })} />}
       <Conflicts view={view} onUse={onUse} />
+      {view.result?.recommendation?.block && (
+        <p className="error card">
+          {view.result.recommendation.block} <a href="#/products">{t("nav.products")} →</a>
+        </p>
+      )}
       <ConfirmInputs view={view} inputs={inputs} setInputs={setInputs} onApply={onApply} error={error}
         hidden={isMulti(view, inputs) ? FACE_FIELDS[line] : []} />
       {line === "PJ" && <CompletenessNote view={view} />}
