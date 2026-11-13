@@ -466,6 +466,8 @@ export type KbOverview = {
   last_scan: { at: string; by: number | null; new: number; changed: number; removed: number; failed: number; total: number } | null;
   progress: { done: number; total: number } | null;
   failed: (KbFile & { note: string })[];
+  auto_scan: boolean;
+  unknown_folders: string[];
 };
 export type KbItem = {
   id: number;

@@ -105,6 +105,28 @@ def collect(root: Path, types: list[str]) -> tuple[dict, set[str]]:
     return found, standard
 
 
+def unknown_folders(root: Path) -> list[str]:
+    """资料库文件夹下不属于任何一类的子文件夹（例如 Cost）：不会被读取，页面上提示。"""
+    if not root.is_dir():
+        return []
+    known = {n.casefold() for names in TYPES.values() for n in names}
+    return sorted(p.name for p in root.iterdir() if p.is_dir() and p.name.casefold() not in known
+                  and not p.name.startswith("."))
+
+
+def has_changes(db: Session, root: Path, types: list[str]) -> bool:
+    """只看文件名、大小和修改时间，不读内容：有新增、改过或删掉的文件就要重扫。"""
+    found, _ = collect(root, types)
+    known = {f.rel_path: f for f in db.scalars(select(KbFile).where(KbFile.missing.is_(False), KbFile.doc_type.in_(types)))}
+    if set(found) != set(known):
+        return True
+    for rel, (path, *_rest) in found.items():
+        st, f = path.stat(), known[rel]
+        if f.size != st.st_size or f.mtime_ns != st.st_mtime_ns or f.read_status == "queued":
+            return True
+    return False
+
+
 def read_into(db: Session, f: KbFile, path: Path, oda: str | None) -> None:
     r = read(path, oda)
     f.read_method, f.read_note = r["method"], r["note"]

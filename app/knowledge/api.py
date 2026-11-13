@@ -22,7 +22,7 @@ from ..templates.content import TemplateError
 from ..templates.content import validate as validate_template
 from ..versions import latest, next_label
 from . import learn
-from .scan import TYPES, enabled_types, put_setting, refresh, scan, setting, type_dirs
+from .scan import TYPES, enabled_types, has_changes, put_setting, refresh, scan, setting, type_dirs, unknown_folders
 
 router = APIRouter(prefix="/kb")
 KINDS = ("product", "template", "project", "rule")
@@ -45,9 +45,14 @@ def _file(f: KbFile | None) -> dict | None:
 
 
 @router.get("")
-def overview(request: Request, db: Session = Depends(get_db)):
+def overview(request: Request, tasks: BackgroundTasks, db: Session = Depends(get_db)):
+    """打开资料库页时，文件夹里有新增、改过或删掉的文件就自动开始扫描（2026-11-13 试用反馈 3），不用等每晚的定时扫描。"""
     state = request.app.state
     dirs, types = type_dirs(state.kb_dir), enabled_types(db)
+    auto = False
+    if not state.kb_lock.locked() and has_changes(db, state.kb_dir, types):
+        tasks.add_task(scan, state, None)
+        auto = True
     counts = dict(db.execute(select(KbFile.doc_type, func.count()).where(KbFile.missing.is_(False))
                              .group_by(KbFile.doc_type)).all())
     status = dict(db.execute(select(KbFile.read_status, func.count()).where(KbFile.missing.is_(False))
@@ -58,7 +63,8 @@ def overview(request: Request, db: Session = Depends(get_db)):
             "counts": {"files": sum(counts.values()), "read": status.get("read", 0), "failed": status.get("failed", 0),
                        "pending": db.scalar(select(func.count()).where(KbItem.status == "pending"))},
             "last_scan": setting(db, "last_scan", None), "progress": state.kb_progress,
-            "failed": [_file(f) | {"note": stored(f.read_note)} for f in failed]}
+            "failed": [_file(f) | {"note": stored(f.read_note)} for f in failed],
+            "auto_scan": auto, "unknown_folders": unknown_folders(state.kb_dir)}
 
 
 class TypesIn(BaseModel):
@@ -66,10 +72,11 @@ class TypesIn(BaseModel):
 
 
 @router.put("/types")
-def set_types(body: TypesIn, request: Request, user: User = Depends(require_user), db: Session = Depends(get_db)):
+def set_types(body: TypesIn, request: Request, tasks: BackgroundTasks, user: User = Depends(require_user),
+              db: Session = Depends(get_db)):
     put_setting(db, "types", {"types": [t for t in TYPES if t in body.types], "by": user.name})
     db.commit()
-    return overview(request, db)
+    return overview(request, tasks, db)  # 新勾选的类型有文件：马上扫
 
 
 def _start(request: Request, tasks: BackgroundTasks, user: User) -> None:

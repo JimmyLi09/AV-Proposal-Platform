@@ -330,11 +330,12 @@
       "last": "Last scan: {at} {time} · {new} new · {changed} changed · {removed} removed · {failed} could not be read",
       "never": "Not scanned yet",
       "noFolder": "Folder not found: ask IT to set knowledge_dir in deploy.local.yaml",
-      "note": "Each document type has its own sub-folder; for past projects, one sub-folder per project. Original files are read-only: not moved or renamed. Rescanned automatically every night at {at}; new or changed files are read again.",
+      "note": "Each document type has its own sub-folder; for past projects, one sub-folder per project. Original files are read-only: not moved or renamed. Opening this page scans automatically when files were added or changed; there is also a rescan every night at {at}.",
       "scan": "Scan folder",
       "scanning": "Scanning: {done} of {total} files done",
       "title": "Import",
-      "types": "Document types to scan"
+      "types": "Document types to scan",
+      "unknown": "These folders are not one of the document types and are not read: {names}. Put files into the folders for past projects, specs, drawings, BOQ or templates. V1 has no prices, so a Cost folder is not read."
     },
     "intro": "Put past project files, spec sheets, drawings, BOQs and templates in the knowledge base folder. The platform reads them one by one on the company server: extracts text, dimensions and tables and builds a full-text index. All processed locally, no cloud AI.",
     "item": {
