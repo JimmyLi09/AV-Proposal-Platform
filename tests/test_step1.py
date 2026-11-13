@@ -99,8 +99,10 @@ def test_no_api_changes_or_deletes_an_original(client):
     login(client)
     p = new_project(client)
     f = upload(client, p["id"], "plan.pdf", b"original")
-    for method in ("put", "patch", "delete"):
+    for method in ("put", "patch"):
         assert getattr(client, method)(f"/api/files/{f['id']}").status_code == 405
+    # 2026-11-13 起可以「移除」：只从项目里拿掉，原件不删、不改（见 test_file_remove.py）
+    assert client.delete(f"/api/files/{f['id']}").status_code == 200
     assert client.get(f"/api/files/{f['id']}").content == b"original"
 
 

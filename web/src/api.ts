@@ -15,6 +15,8 @@ export type SourceFile = {
   read_method: string;
   read_note: string;
   fields_found: number;
+  removed_at: string | null;
+  removed_by: string | null;
 };
 
 export type Proposal = {
@@ -40,6 +42,7 @@ export type Project = {
   owner: User;
   created_at: string;
   files: SourceFile[];
+  removed_files: SourceFile[];
   proposals: Proposal[];
 };
 
@@ -338,6 +341,7 @@ export type WorkspaceView = {
   };
   pending: string[];
   files: SourceFile[];
+  removed_files: SourceFile[];
   candidates: Record<string, Candidate[]>;
   rules_version: string;
   library_version: string;

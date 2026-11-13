@@ -24,7 +24,7 @@ export default function SourcesPage({ view, inputs, setInputs, onApply, onReload
   const line = view.proposal.business_line;
   return (
     <>
-      <Files project={view.project.id} files={view.files} onUploaded={onReload} />
+      <Files project={view.project.id} files={view.files} removed={view.removed_files} onUploaded={onReload} />
       <ShapeFaces view={view} inputs={inputs} setInputs={setInputs} />
       {view.result && <Choices result={view.result} onPick={(k, v) => setInputs({ ...inputs, [k]: v })} />}
       <Conflicts view={view} onUse={onUse} />
@@ -35,7 +35,9 @@ export default function SourcesPage({ view, inputs, setInputs, onApply, onReload
   );
 }
 
-function Files({ project, files, onUploaded }: { project: number; files: SourceFile[]; onUploaded: () => void }) {
+function Files({ project, files, removed, onUploaded }: {
+  project: number; files: SourceFile[]; removed: SourceFile[]; onUploaded: () => void;
+}) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const reading = files.some((f) => f.read_status === "reading");
@@ -47,6 +49,18 @@ function Files({ project, files, onUploaded }: { project: number; files: SourceF
 
   async function reread() {
     await api(`/projects/${project}/read`, { method: "POST" });
+    onUploaded();
+  }
+
+  // 移除只是从项目里拿掉：原件留在服务器上，可以恢复；已经确认的输入值不变
+  async function remove(f: SourceFile) {
+    if (!window.confirm(t("project.removeConfirm", { name: f.filename }))) return;
+    await api(`/files/${f.id}`, { method: "DELETE" });
+    onUploaded();
+  }
+
+  async function restore(f: SourceFile) {
+    await api(`/files/${f.id}/restore`, { method: "POST" });
     onUploaded();
   }
 
@@ -100,6 +114,7 @@ function Files({ project, files, onUploaded }: { project: number; files: SourceF
               <th>{t("project.size")}</th>
               <th>{t("project.fingerprint")}</th>
               <th>{t("project.added")}</th>
+              <th />
             </tr>
           </thead>
           <tbody>
@@ -127,11 +142,16 @@ function Files({ project, files, onUploaded }: { project: number; files: SourceF
                 <td>
                   {fmtDate(f.uploaded_at)} · {f.uploaded_by}
                 </td>
+                <td>
+                  <button className="btn-link" disabled={f.read_status === "reading"} onClick={() => remove(f)}>
+                    {t("project.remove")}
+                  </button>
+                </td>
               </tr>
             ))}
             {files.length === 0 && (
               <tr>
-                <td colSpan={7} className="muted">
+                <td colSpan={8} className="muted">
                   {t("project.noFiles")}
                 </td>
               </tr>
@@ -139,6 +159,19 @@ function Files({ project, files, onUploaded }: { project: number; files: SourceF
           </tbody>
         </table>
       </div>
+      {removed.length > 0 && (
+        <details>
+          <summary className="muted">{t("project.removedFiles", { n: removed.length })}</summary>
+          <ul className="plain">
+            {removed.map((f) => (
+              <li key={f.id}>
+                {f.filename} · {t("project.removedBy", { name: f.removed_by ?? "—", date: fmtDate(f.removed_at!) })}{" "}
+                <button className="btn-link" onClick={() => restore(f)}>{t("project.restore")}</button>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
     </section>
   );
 }

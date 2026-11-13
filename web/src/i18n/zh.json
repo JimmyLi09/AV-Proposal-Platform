@@ -623,7 +623,12 @@
       "read": "已读取",
       "reading": "读取中…"
     },
+    "remove": "移除",
+    "removeConfirm": "从项目里移除「{name}」？原件仍留在服务器上，可以在下面「已移除的文件」里恢复；已经确认的输入值不变。",
+    "removedBy": "{name} 于 {date} 移除",
+    "removedFiles": "已移除的文件（{n}）",
     "reread": "重新解析",
+    "restore": "恢复",
     "size": "大小",
     "uploading": "上传中…"
   },
