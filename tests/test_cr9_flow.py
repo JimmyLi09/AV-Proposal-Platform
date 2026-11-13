@@ -249,3 +249,16 @@ def test_manual_overload_in_06_does_not_lock_06(tmp_path):
 
     v = c.put(f"{base}/overrides", json={"values": {"circuits": 2}, "reason": "试一下"}).json()  # 05 把回路数改少：自动分组就超载
     assert v["flow"]["gates"]["05"] == "2 个回路超出带载，加回路或改参数" and step(v, "06")["state"] == "lock"
+
+
+def test_no_cabinet_for_the_pitch_says_so(tmp_path):
+    """2026-11-13 试用反馈 2：点间距 1.53 产品库里没有箱体时，02–04 说真正的原因，不说「还缺箱体尺寸」。"""
+    c = start(tmp_path)
+    _, base = new_project(c)
+    v = c.put(f"{base}/inputs", json={"inputs": SAMPLE["input"] | {"pixel_pitch_mm": 1.53}}).json()
+    gate = v["flow"]["gates"]["02-04"]
+    assert gate.startswith("产品库里没有符合的箱体：P1.53 · 室内 · 前维护") and "P1.9、P2.5" in gate and "还缺" not in gate
+    assert v["result"]["recommendation"]["block"] == gate
+    # 规格书写三位小数（P1.538），人写 1.53：差 0.01 mm 以内算同一个箱体
+    v = c.put(f"{base}/inputs", json={"inputs": SAMPLE["input"] | {"pixel_pitch_mm": 1.89}}).json()
+    assert v["result"]["recommendation"]["cabinet"]["id"] == "IC-19"

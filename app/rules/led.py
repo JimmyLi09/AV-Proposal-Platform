@@ -239,6 +239,14 @@ OVERRIDABLE = {"F4": ["res_x", "res_y"], "F2": ["modules"], "F3": ["cabinets"], 
 # ---- 推荐与 BOQ ----
 
 PRODUCT_INPUTS = ["module_w_mm", "module_h_mm", "cabinet_sizes_mm"]  # 由选定的箱体带出，不用手填
+PITCH_TOLERANCE = Decimal("0.01")
+_LABELS = {"indoor": ("室内", "indoor"), "outdoor": ("户外", "outdoor"), "rental": ("租赁", "rental"),
+           "front": ("前维护", "front service"), "rear": ("后维护", "rear service")}
+
+
+def _label(value: str) -> str:
+    zh, en = _LABELS.get(value, (value, value))
+    return tr(zh, en)
 
 
 def recommend(inputs: dict, library: dict, cabinet_id: str | None = None) -> dict:
@@ -247,13 +255,20 @@ def recommend(inputs: dict, library: dict, cabinet_id: str | None = None) -> dic
     if missing:
         return {"cabinet": None, "candidates": [], "block": None, "missing": missing}
     pitch = Decimal(str(inputs["pixel_pitch_mm"]))
-    candidates = [p for p in active(library, "cabinet")
-                  if p.get("pixel_pitch_mm") and Decimal(str(p["pixel_pitch_mm"])) == pitch
+    cabinets = [p for p in active(library, "cabinet") if p.get("pixel_pitch_mm")]
+    # 规格书上的点间距常带三位小数（P1.538、P1.8605），图纸和人写 1.53、1.86：差 0.01 mm 以内算同一个
+    candidates = [p for p in cabinets
+                  if abs(Decimal(str(p["pixel_pitch_mm"])) - pitch) <= PITCH_TOLERANCE
                   and inputs["environment"] in p["scenes"] and p["maintenance"] in (inputs["maintenance"], "both")]
     chosen = next((p for p in candidates if p["id"] == cabinet_id), candidates[0] if candidates else None)
-    where = f"P{_n(pitch)} · {inputs['environment']} · {inputs['maintenance']}"
-    block = None if chosen else tr(f"产品库里没有符合的箱体：{where}，请先在产品库添加",
-                                   f"No matching cabinet in the library: {where}. Add one in the Product Library first")
+    env, svc = _label(inputs["environment"]), _label(inputs["maintenance"])
+    where = f"P{_n(pitch)} · {env} · {svc}"
+    have = "、".join(sorted({f"P{_n(Decimal(str(p['pixel_pitch_mm'])))}" for p in cabinets
+                             if inputs["environment"] in p["scenes"]}, key=lambda s: Decimal(s[1:]))) or "—"
+    block = None if chosen else tr(f"产品库里没有符合的箱体：{where}。库里现有（{env}）：{have}。"
+                                   "请先在产品库添加这个箱体，或改点间距",
+                                   f"No matching cabinet in the library: {where}. In the library ({env}): "
+                                   f"{have.replace('、', ', ')}. Add this cabinet in the Product Library first, or change the pitch")
     return {"cabinet": chosen, "candidates": candidates, "block": block, "missing": []}
 
 

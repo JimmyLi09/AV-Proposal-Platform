@@ -118,6 +118,8 @@ def gate_inputs(db: Session, prop: Proposal, rev: Revision, out: dict) -> str:
                   f"{_input_label(defs, name)} {rev.inputs.get(name)} is not a module multiple: pick a snap value first")
     if conflicts := (result.get("multi") or {}).get("conflicts"):
         return tr(f"{len(conflicts)} 处尺寸几份资料对不上，先选定", f"{len(conflicts)} sizes differ between sources: pick one first")
+    if block := (result.get("recommendation") or {}).get("block"):  # 选不出箱体：说真正的原因，不说「还缺箱体尺寸」
+        return block
     names = set((result.get("recommendation") or {}).get("missing") or [])
     names |= {m for r in result.get("rules") or [] for m in r.get("missing") or [] if m in defs}
     if names:
