@@ -213,6 +213,7 @@ def view(db: Session, prop: Proposal, rev=None) -> dict:
                 "annotations": rev.annotations or {}},
         "pending": pending(rev),
         "files": [file_out(f) for f in db.get(Project, prop.project_id).files],
+        "removed_files": [file_out(f) for f in db.get(Project, prop.project_id).removed_files],
         "candidates": candidates(db, prop),
         "rules_version": used["rules"].version,
         "library_version": used["library"].version,

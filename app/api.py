@@ -49,6 +49,7 @@ def file_out(f: SourceFile) -> dict:
         "size": f.size, "sha256": f.sha256, "uploaded_by": f.uploader.name, "uploaded_at": iso(f.uploaded_at),
         "read_status": f.read_status, "read_method": method_label(f.read_method),
         "read_note": stored(f.read_note), "fields_found": len(f.extracted),
+        "removed_at": iso(f.removed_at), "removed_by": f.remover.name if f.remover else None,
     }
 
 
@@ -67,6 +68,7 @@ def project_out(p: Project) -> dict:
         "location": p.location, "delivery": p.delivery, "notes": p.notes, "owner": user_out(p.owner),
         "created_at": iso(p.created_at),
         "files": [file_out(f) for f in p.files],
+        "removed_files": [file_out(f) for f in p.removed_files],
         "proposals": [proposal_out(x) for x in p.proposals],
     }
 
@@ -265,6 +267,31 @@ def extracted_crop(field_id: int, request: Request, db: Session = Depends(get_db
     if x is None or not x.crop_path:
         raise HTTPException(404, tr("没有原文截图", "No crop of the source"))
     return FileResponse(request.app.state.data_dir / x.crop_path)
+
+
+def _source(db: Session, file_id: int) -> SourceFile:
+    f = db.get(SourceFile, file_id)
+    if f is None:
+        raise HTTPException(404, tr("文件不存在", "File not found"))
+    return f
+
+
+@router.delete("/files/{file_id}")
+def remove_file(file_id: int, user: User = Depends(require_user), db: Session = Depends(get_db)):
+    """从项目里移除一个原件：不再列出、不再给候选值。磁盘上的原件不删，可以恢复；已确认的输入值不变。"""
+    f = _source(db, file_id)
+    if f.removed_at is None:
+        f.removed_at, f.removed_by = utcnow(), user.id
+        db.commit()
+    return project_out(db.get(Project, f.project_id))
+
+
+@router.post("/files/{file_id}/restore")
+def restore_file(file_id: int, _: User = Depends(require_user), db: Session = Depends(get_db)):
+    f = _source(db, file_id)
+    f.removed_at, f.removed_by = None, None
+    db.commit()
+    return project_out(db.get(Project, f.project_id))
 
 
 @router.get("/files/{file_id}")

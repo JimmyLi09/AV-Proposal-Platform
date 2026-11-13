@@ -45,12 +45,18 @@ class Project(Base):
     created_at: Mapped[datetime] = mapped_column(default=utcnow)
 
     owner: Mapped[User] = relationship(foreign_keys=[owner_id])
-    files: Mapped[list["SourceFile"]] = relationship(order_by="SourceFile.id")
+    # 只算没移除的原件；移除的文件仍在磁盘上，见 removed_files
+    files: Mapped[list["SourceFile"]] = relationship(
+        primaryjoin="and_(Project.id == SourceFile.project_id, SourceFile.removed_at.is_(None))",
+        order_by="SourceFile.id", viewonly=True)
+    removed_files: Mapped[list["SourceFile"]] = relationship(
+        primaryjoin="and_(Project.id == SourceFile.project_id, SourceFile.removed_at.is_not(None))",
+        order_by="SourceFile.id", viewonly=True)
     proposals: Mapped[list["Proposal"]] = relationship(order_by="Proposal.id")
 
 
 class SourceFile(Base):
-    """原件：只读，永不覆盖。没有任何修改或删除的接口。"""
+    """原件：只读，永不覆盖。可以「移除」：只是从项目里拿掉（记录谁、何时），磁盘上的原件不删，可以恢复。"""
     __tablename__ = "source_files"
 
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -69,8 +75,11 @@ class SourceFile(Base):
     read_note: Mapped[str | None] = mapped_column(Text)
     read_text: Mapped[str | None] = mapped_column(Text)  # 读到的文字（前 2000 字），供核对
     read_at: Mapped[datetime | None]
+    removed_at: Mapped[datetime | None]
+    removed_by: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
 
-    uploader: Mapped[User] = relationship()
+    uploader: Mapped[User] = relationship(foreign_keys=[uploaded_by])
+    remover: Mapped[User | None] = relationship(foreign_keys=[removed_by])
     extracted: Mapped[list["ExtractedField"]] = relationship(order_by="ExtractedField.id", back_populates="source_file")
 
 
