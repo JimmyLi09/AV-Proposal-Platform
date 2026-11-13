@@ -155,7 +155,8 @@ export default function Knowledge() {
   useEffect(() => {
     api<KbOverview>("/kb").then((o) => {
       setKb(o);
-      if (o.progress) watch(o.last_scan?.at);
+      // 文件夹里有新文件时服务器已经自动开始扫描
+      if (o.progress || o.auto_scan) watch(o.last_scan?.at);
     });
     loadLists();
     return () => clearTimeout(timer.current);
@@ -178,7 +179,10 @@ export default function Knowledge() {
 
   async function toggleType(key: string) {
     const types = kb!.types.filter((x) => (x.key === key ? !x.enabled : x.enabled)).map((x) => x.key);
-    await run(send<KbOverview>("PUT", "/kb/types", { types }).then(setKb));
+    await run(send<KbOverview>("PUT", "/kb/types", { types }).then((o) => {
+      setKb(o);
+      if (o.auto_scan) watch(o.last_scan?.at);
+    }));
   }
 
   async function decide(i: KbItem, action: "adopt" | "reject" | "undo") {
@@ -250,6 +254,9 @@ export default function Knowledge() {
                 : t("kb.import.never")}
           </span>
         </div>
+        {kb.unknown_folders.length > 0 && (
+          <p className="warn small">{t("kb.import.unknown", { names: kb.unknown_folders.join(" / ") })}</p>
+        )}
         <Upload onDone={() => watch(kb.last_scan?.at)} onError={setError} />
         <p className="muted small">{t("kb.import.note", { at: kb.scan_at })}</p>
         {kb.failed.length > 0 && (

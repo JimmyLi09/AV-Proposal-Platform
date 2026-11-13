@@ -272,3 +272,22 @@ def test_a_broken_file_is_marked_failed_and_the_scan_goes_on(c):
     assert kb["last_scan"]["failed"] == 1 and kb["counts"]["read"] == 11
     assert kb["failed"][0]["name"] == "broken.pdf" and kb["failed"][0]["note"].startswith("读取失败：")
     assert c.get("/api/kb", headers={"X-Lang": "en"}).json()["failed"][0]["note"].startswith("Read failed: ")
+
+
+def test_opening_the_page_scans_new_files_and_lists_unknown_folders(c):
+    """2026-11-13 试用反馈 3：资料放进文件夹后，打开资料库页就自动扫描；不认识的文件夹（Cost）列出来。"""
+    root = c.app_state.kb_dir
+    first = c.get("/api/kb").json()
+    assert first["auto_scan"] is True  # 夹具里的文件还没扫过：打开页面就开始扫
+    after = c.get("/api/kb").json()
+    assert after["auto_scan"] is False and after["counts"]["files"] > 0 and after["last_scan"]["by"] is None
+    n = after["counts"]["files"]
+
+    (root / "Cost").mkdir()
+    (root / "Cost" / "price.txt").write_text("100", encoding="utf-8")
+    spec = next(d for d in root.iterdir() if d.name in ("规格书", "specs"))
+    (spec / "new-spec.txt").write_text("P1.538 indoor cabinet 640 x 480", encoding="utf-8")
+    o = c.get("/api/kb").json()
+    assert o["auto_scan"] is True and o["unknown_folders"] == ["Cost"]
+    o = c.get("/api/kb").json()
+    assert o["auto_scan"] is False and o["counts"]["files"] == n + 1
