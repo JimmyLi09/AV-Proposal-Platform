@@ -1,6 +1,7 @@
 import { Fragment, useState } from "react";
 import { InputDef, RuleResult, RunResult } from "./api";
 import { t, tOr } from "./i18n";
+import { inputLabel } from "./labels";
 
 export const STATUSES = ["set", "review", "sample", "empty"];
 
@@ -161,7 +162,7 @@ export function ResultsTable({ base, after, label }: { base: RunResult; after?: 
 
 export function Outcome({ r }: { r: RuleResult }) {
   if (r.error) return <span className="error">{r.error}</span>;
-  if (r.missing.length) return <span className="warn">{t("calc.missing", { names: r.missing.join(", ") })}</span>;
+  if (r.missing.length) return <span className="warn">{t("calc.missing", { names: r.missing.map(inputLabel).join(t("common.listSep")) })}</span>;
   return (
     <span>
       {r.display} <CheckChip check={r.check} />

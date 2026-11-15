@@ -10,7 +10,7 @@ import ReviewTab from "./Review";
 import SourcesPage from "./Sources";
 import DesignPage from "./Workspace";
 import { t } from "./i18n";
-import { fmtDateTime } from "./labels";
+import { fmtDateTime, setInputLabels } from "./labels";
 import { STAGE_CODES } from "./Workbench";
 
 const go = (id: number, step: string) => {
@@ -35,6 +35,7 @@ export default function Flow({ id, step }: { id: number; step: string | null }) 
   const path = `/proposals/${id}${revNo === null ? "" : `?rev=${revNo}`}`;
 
   function show(v: WorkspaceView) {
+    setInputLabels(v.input_defs);
     setView(v);
     if (!sent.current || JSON.stringify(typing.current) === sent.current) setInputs(v.rev.inputs);
     sent.current = "";

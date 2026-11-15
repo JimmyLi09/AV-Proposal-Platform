@@ -262,3 +262,18 @@ def test_no_cabinet_for_the_pitch_says_so(tmp_path):
     # 规格书写三位小数（P1.538），人写 1.53：差 0.01 mm 以内算同一个箱体
     v = c.put(f"{base}/inputs", json={"inputs": SAMPLE["input"] | {"pixel_pitch_mm": 1.89}}).json()
     assert v["result"]["recommendation"]["cabinet"]["id"] == "IC-19"
+
+
+def test_multiface_projection_names_the_missing_inputs(tmp_path):
+    """2026-11-15 试用反馈：多面投影缺可用进深等输入时，02–04 不放行，并说出缺哪几项（不再是「A P4、B P2…」）。"""
+    _, pj = load_seed("PJ")
+    c = start(tmp_path)
+    _, base = new_project(c, business_line="PJ", name="Solano")
+    inputs = {k: v for k, v in pj["input"].items() if k not in ("available_depth_mm", "mount_height_m", "surface_gain")}
+    inputs |= {"shape": "L", "faces": [{"id": "A", "name": "Left", "width_mm": 5000}, {"id": "B", "name": "Right", "width_mm": 3000}],
+               "corners": [{"between": ["A", "B"], "type": "inside_90"}]}
+    v = c.put(f"{base}/inputs", json={"inputs": inputs}).json()
+    gate = v["flow"]["gates"]["02-04"]
+    assert gate.startswith("还缺：") and "可用进深" in gate and "幕面增益" in gate, gate
+    p19 = next(r for r in v["result"]["rules"] if r["id"] == "P19")
+    assert set(p19["missing"]) == {"available_depth_mm", "mount_height_m", "surface_gain"}
