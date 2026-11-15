@@ -42,3 +42,15 @@ export function fmtSize(bytes: number) {
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
 }
+
+// 当前方案的输入名 → 界面名（「缺少：」那类提示用；换方案时更新）
+const inputLabels: Record<string, string> = {};
+
+export function setInputLabels(defs: { name: string; label: string }[]) {
+  for (const k of Object.keys(inputLabels)) delete inputLabels[k];
+  for (const d of defs) inputLabels[d.name] = d.label;
+}
+
+export function inputLabel(name: string) {
+  return inputLabels[name] ?? name;
+}

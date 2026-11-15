@@ -71,6 +71,22 @@ def _row(rid: str, title: str, display: str = "", check: str | None = None, note
             "status": status, "params": [], "missing": missing or [], "error": None, "manual": []}
 
 
+def _face_missing(content: dict, faces: list[dict], label: str) -> list[str]:
+    """各面规则缺的输入：能对上输入表的直接给输入名（02–04 的关卡和页面都按名称显示「还缺：可用进深」），
+    对不上的（中间结果）才给「A 面 P4」这种规则号。"""
+    inputs = {i["name"] for i in content["inputs"]}
+    names, rules = [], []
+    for f in faces:
+        for r in f["rules"]:
+            if not (r["missing"] or r["error"]):
+                continue
+            hit = [m for m in r["missing"] if m in inputs]
+            names += [m for m in hit if m not in names]
+            if not hit:
+                rules.append(label.format(face=f["id"], rule=r["id"]))
+    return names or rules
+
+
 def _worst(checks: list[str]) -> str | None:
     order = [None, "PASS", "NOTE", "BLOCK"]
     return max(checks, key=order.index, default=None)
@@ -225,7 +241,7 @@ def calculate_led(content: dict, library: dict, inputs: dict, cabinet_id: str | 
                      _worst(_rule_checks(checks, "S3")), tr("回路、配电箱、数据线按面算；同型号备品按整屏合计",
                                                          "Circuits, DB boxes and data cables per face; spares pooled for the whole screen"),
                      trace=" + ".join(f"{f['id']} {f['values'].get('circuits', '—')}" for f in out["faces"]) + f" = {t['circuits']}",
-                     missing=[f"{f['id']} · {r['id']}" for f in out["faces"] for r in f["rules"] if r["missing"] or r["error"]]))
+                     missing=_face_missing(content, out["faces"], "{face} · {rule}")))
 
     # S4 转角：点间距一致；内角要确认哪面压哪面；外转角用转角箱体或 45° 切角模组
     checks.append({"rule": "S4", "check": "PASS", "text": tr(f"各面点间距一致（P{_n(inputs.get('pixel_pitch_mm'))}）",
@@ -429,7 +445,7 @@ def calculate_pj(content: dict, library: dict, inputs: dict, cabinet_id: str | N
                      " · ".join(f"{f['id']} {_n(f['values'].get('projectors'))}" for f in out["faces"]),
                      note=tr("每面独立按 P1–P10 排投影，不跨角投射；投影机在两端角线内均匀排开",
                              "Each face is laid out with P1–P10 on its own, no projection across corners; projectors spread evenly between the corner lines"),
-                     missing=[f"{f['id']} P{x}" for f in out["faces"] for r in f["rules"] if r["missing"] for x in [r["id"][1:]]]))
+                     missing=_face_missing(content, out["faces"], "{face} {rule}")))
     if rows[-1]["missing"]:
         out["rules"] = rows
         return out
