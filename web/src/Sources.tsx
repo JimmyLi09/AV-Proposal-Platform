@@ -4,6 +4,7 @@ import { Choices } from "./Calc";
 import ConfirmInputs from "./Confirm";
 import ShapeFaces, { isMulti } from "./Faces";
 import { Conflicts } from "./Multi";
+import ServerImport from "./ServerImport";
 import { t } from "./i18n";
 import { fmtDate, fmtSize } from "./labels";
 
@@ -108,6 +109,7 @@ function Files({ project, files, removed, onUploaded }: {
         </label>
       </div>
       {error && <p className="error">{error}</p>}
+      <ServerImport project={project} onDone={onUploaded} />
       <div className="table-wrap">
         <table>
           <thead>
