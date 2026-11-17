@@ -568,6 +568,14 @@
     "add": "Add product",
     "category": "Category",
     "done": "Done",
+    "excel": {
+      "export": "Export Excel",
+      "import": "Import Excel",
+      "reason": "Excel import: {name}",
+      "done": "{name}: {added} added, {updated} updated. They are in the draft below (changed rows highlighted); check them, then enter a reason and save a new version.",
+      "errors": "{n} rows not imported:",
+      "hint": "Use the file from Export Excel: one sheet per category. Rows whose ID matches an existing product update it, new IDs are added, empty cells change nothing. Max current / power per cabinet is not in Excel; fill it in the form below."
+    },
     "filter": {
       "all": "All",
       "blender": "Blenders",
@@ -595,6 +603,19 @@
     "sample": "Sample data",
     "sampleWarn": "Products marked Sample data are for testing the workflow; they are replaced once checklist group D is filled in.",
     "saveAs": "Save as library {version}",
+    "sheet": {
+      "read": "Read datasheet",
+      "busy": "Reading…",
+      "hint": "Upload a PDF / image / Excel / Word datasheet; the original is archived. Values are filled in only after you tick each one.",
+      "ocr": "This is a scan; numbers come from OCR. Check each against the source text.",
+      "unread": "No text could be read.",
+      "none": "No values for this category were found; fill them in by hand.",
+      "field": "Value",
+      "value": "Read",
+      "now": "Current",
+      "source": "Source text",
+      "apply": "Fill in ticked values"
+    },
     "specs": {
       "blender": "{outputs} outputs",
       "blenderCurved": "{outputs} outputs · curved correction",

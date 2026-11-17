@@ -568,6 +568,14 @@
     "add": "添加产品",
     "category": "类别",
     "done": "完成",
+    "excel": {
+      "export": "导出 Excel",
+      "import": "导入 Excel",
+      "reason": "Excel 导入：{name}",
+      "done": "{name}：新增 {added} 个、更新 {updated} 个产品，已放进下面的草稿（改过的行标黄），核对后填原因另存新版本。",
+      "errors": "{n} 行没有导入：",
+      "hint": "格式请用「导出 Excel」下载的文件：一类产品一个工作表，按「编号」对上已有产品就更新，新编号就新增，空格子不改。每箱最大电流 / 功率不在 Excel 里，请在下面的表单填。"
+    },
     "filter": {
       "all": "全部",
       "blender": "融合器",
@@ -595,6 +603,19 @@
     "sample": "示例数据",
     "sampleWarn": "标「示例数据」的产品用于测试流程；清单 D 组填好后替换。",
     "saveAs": "另存为产品库 {version}",
+    "sheet": {
+      "read": "读规格书",
+      "busy": "读取中…",
+      "hint": "上传 PDF / 图片 / Excel / Word 规格书，原件存档；认出的参数要逐项勾选才会填入。",
+      "ocr": "这份是扫描件，数字靠文字识别，请对照原文逐项核对。",
+      "unread": "读不出文字。",
+      "none": "没找到这一类产品的参数，请手动填写。",
+      "field": "参数",
+      "value": "读到的值",
+      "now": "现在的值",
+      "source": "原文",
+      "apply": "填入勾选的值"
+    },
     "specs": {
       "blender": "{outputs} 路输出",
       "blenderCurved": "{outputs} 路输出 · 曲面校正",

@@ -35,6 +35,7 @@ export default function Products({ line }: { line: string }) {
   const [editing, setEditing] = useState<number | null>(null);
   const [reason, setReason] = useState("");
   const [error, setError] = useState("");
+  const [imported, setImported] = useState<ExcelResult | null>(null);
 
   async function load() {
     const v = await api<LibraryVersion>(`/products/${line}`);
@@ -67,11 +68,29 @@ export default function Products({ line }: { line: string }) {
     setEditing(copy.products.length - 1);
   }
 
+  async function importExcel(file: File | undefined) {
+    if (!file) return;
+    const body = new FormData();
+    body.append("file", file);
+    body.append("content", JSON.stringify(draft));
+    setError("");
+    try {
+      const r = await api<ExcelResult>(`/products/${line}/excel`, { method: "POST", body });
+      setDraft({ ...draft!, products: r.products });
+      setImported({ ...r, name: file.name });
+      setEditing(null);
+      if (!reason && (r.added.length || r.updated.length)) setReason(t("products.excel.reason", { name: file.name }));
+    } catch (err) {
+      setError((err as Error).message);
+    }
+  }
+
   async function save() {
     setError("");
     try {
       await send("POST", `/products/${line}`, { base_id: saved!.id, reason, content: draft });
       setReason("");
+      setImported(null);
       await load();
     } catch (err) {
       setError((err as Error).message);
@@ -107,6 +126,11 @@ export default function Products({ line }: { line: string }) {
           <input type="checkbox" checked={preferredOnly} onChange={(e) => setPreferredOnly(e.target.checked)} /> {t("products.preferredOnly")}
         </label>
         <div className="grow" />
+        <a className="btn-outline" href={`/api/products/${line}/excel`}>{t("products.excel.export")}</a>
+        <label className="btn-outline">
+          {t("products.excel.import")}
+          <input type="file" accept=".xlsx,.xlsm" hidden onChange={(e) => { importExcel(e.target.files?.[0]); e.target.value = ""; }} />
+        </label>
         <select aria-label={t("products.add")} value="" onChange={(e) => e.target.value && add(e.target.value)}>
           <option value="">+ {t("products.add")}</option>
           {Object.entries(saved.categories).map(([k, v]) => (
@@ -116,6 +140,21 @@ export default function Products({ line }: { line: string }) {
           ))}
         </select>
       </div>
+
+      {imported && (
+        <section className="card">
+          <p className={imported.added.length || imported.updated.length ? "ok" : "muted"}>
+            {t("products.excel.done", { name: imported.name ?? "", added: imported.added.length, updated: imported.updated.length })}
+          </p>
+          {imported.errors.length > 0 && (
+            <>
+              <p className="warn">{t("products.excel.errors", { n: imported.errors.length })}</p>
+              <ul className="small">{imported.errors.map((e) => <li key={e}>{e}</li>)}</ul>
+            </>
+          )}
+          <p className="muted small">{t("products.excel.hint")}</p>
+        </section>
+      )}
 
       <section className="card">
         <div className="table-wrap">
@@ -150,7 +189,7 @@ export default function Products({ line }: { line: string }) {
       </section>
 
       {editing !== null && draft.products[editing] && (
-        <ProductForm product={draft.products[editing]} fields={saved.fields[draft.products[editing].category]}
+        <ProductForm line={line} product={draft.products[editing]} fields={saved.fields[draft.products[editing].category]}
           isNew={editing >= saved.content.products.length}
           onChange={(p) => setProduct(editing, p)}
           onRemove={() => {
@@ -207,7 +246,98 @@ export default function Products({ line }: { line: string }) {
   );
 }
 
-function ProductForm({ product, fields, isNew, onChange, onRemove, onDone }: {
+type ExcelResult = { products: Product[]; added: string[]; updated: string[]; errors: string[]; name?: string };
+type Found = { value: number; location: string; snippet: string };
+type SheetResult = { datasheet: string; values: Record<string, Found>; ocr: boolean; note: string; read: boolean };
+
+// 读规格书：认出的参数逐项列出原文，人勾选后才填进产品
+function Datasheet({ line, product, fields, onApply }: { line: string; product: Product; fields: FieldDef[]; onApply: (p: Product) => void }) {
+  const [result, setResult] = useState<SheetResult | null>(null);
+  const [picked, setPicked] = useState<Record<string, boolean>>({});
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+
+  async function read(file: File | undefined) {
+    if (!file) return;
+    const body = new FormData();
+    body.append("file", file);
+    body.append("category", product.category);
+    setBusy(true);
+    setError("");
+    setResult(null);
+    try {
+      const r = await api<SheetResult>(`/products/${line}/datasheet`, { method: "POST", body });
+      setResult(r);
+      setPicked({}); // 默认都不勾：逐项核对后再勾
+    } catch (err) {
+      setError((err as Error).message);
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function apply() {
+    const next: Product = { ...product, datasheet: result!.datasheet };
+    for (const [f, v] of Object.entries(result!.values)) if (picked[f]) next[f] = v.value;
+    onApply(next);
+    setResult(null);
+  }
+
+  const label = (name: string) => fields.find((f) => f.name === name)?.label ?? name;
+  const entries = result ? Object.entries(result.values) : [];
+  return (
+    <div className="wide">
+      <div className="row">
+        <label className="btn-outline">
+          {busy ? t("products.sheet.busy") : t("products.sheet.read")}
+          <input type="file" accept=".pdf,.jpg,.jpeg,.png,.xlsx,.xlsm,.docx" hidden disabled={busy}
+            onChange={(e) => { read(e.target.files?.[0]); e.target.value = ""; }} />
+        </label>
+        <span className="muted small">{t("products.sheet.hint")}</span>
+      </div>
+      {error && <p className="error">{error}</p>}
+      {result && (
+        <div className="card">
+          <p className="strong">{result.datasheet}</p>
+          {result.ocr && <p className="warn">{t("products.sheet.ocr")}</p>}
+          {!result.read && <p className="warn">{result.note || t("products.sheet.unread")}</p>}
+          {result.read && entries.length === 0 && <p className="warn">{t("products.sheet.none")}</p>}
+          {entries.length > 0 && (
+            <table>
+              <thead>
+                <tr>
+                  <th />
+                  <th>{t("products.sheet.field")}</th>
+                  <th>{t("products.sheet.value")}</th>
+                  <th>{t("products.sheet.now")}</th>
+                  <th>{t("products.sheet.source")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {entries.map(([f, v]) => (
+                  <tr key={f}>
+                    <td><input type="checkbox" aria-label={label(f)} checked={!!picked[f]} onChange={(e) => setPicked({ ...picked, [f]: e.target.checked })} /></td>
+                    <td>{label(f)}</td>
+                    <td className="strong">{v.value.toLocaleString()}</td>
+                    <td>{product[f] == null || product[f] === "" ? "—" : String(product[f])}</td>
+                    <td className="muted small">{v.location} · {v.snippet}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+          <div className="row">
+            <button className="btn-primary" disabled={!Object.values(picked).some(Boolean)} onClick={apply}>{t("products.sheet.apply")}</button>
+            <button className="btn-link" onClick={() => setResult(null)}>{t("common.cancel")}</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ProductForm({ line, product, fields, isNew, onChange, onRemove, onDone }: {
+  line: string;
   product: Product;
   fields: FieldDef[];
   isNew: boolean;
@@ -221,6 +351,7 @@ function ProductForm({ product, fields, isNew, onChange, onRemove, onDone }: {
       <h2>
         {product.model || t("products.newProduct")} <span className="sub">{t("products.info")}</span>
       </h2>
+      <Datasheet line={line} product={product} fields={fields} onApply={onChange} />
       {isNew && (
         <label>
           {t("products.id")}

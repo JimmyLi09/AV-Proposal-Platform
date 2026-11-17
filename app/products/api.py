@@ -1,4 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+import json
+import uuid
+import zipfile
+
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, Response, UploadFile
 from pydantic import BaseModel, Field
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -6,7 +10,9 @@ from sqlalchemy.orm import Session
 from ..api import get_db, require_user
 from ..i18n import text, tr
 from ..models import ProductLibraryVersion, User
+from ..storage import safe_name, save_original
 from ..versions import check_base, history, latest, next_label, version_out
+from .importer import datasheet_values, export_xlsx, import_xlsx
 from .library import CATEGORY_LABEL, FIELDS, SCENES, STATUSES, LibraryError, load_reference, load_seed, name, validate
 
 router = APIRouter(prefix="/products")
@@ -78,3 +84,48 @@ def add_reference(line: str, body: ReferenceIn, user: User = Depends(require_use
     db.add(v)
     db.commit()
     return version_out(v)
+
+
+# ---- 导入文件（2026-11-17）：Excel 批量导入 / 导出，规格书读参数 ----
+
+@router.get("/{line}/excel")
+def download_excel(line: str, db: Session = Depends(get_db)):
+    v = latest(db, ProductLibraryVersion, line)
+    return Response(export_xlsx(v.content, line),
+                    media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    headers={"Content-Disposition": f'attachment; filename="products-{line}-{v.version}.xlsx"'})
+
+
+@router.post("/{line}/excel")
+async def upload_excel(line: str, file: UploadFile = File(...), content: str = Form(...),
+                       user: User = Depends(require_user), db: Session = Depends(get_db)):
+    """把 Excel 合并进界面上的草稿（content），返回合并后的产品和每行的问题；不保存。"""
+    latest(db, ProductLibraryVersion, line)
+    try:
+        return import_xlsx(await file.read(), json.loads(content), line)
+    except (ValueError, KeyError, OSError, zipfile.BadZipFile) as e:  # 不是 xlsx、文件损坏
+        raise HTTPException(422, tr(f"读不了这个 Excel：{type(e).__name__}", f"Cannot read this Excel: {type(e).__name__}"))
+
+
+DATASHEET_TYPES = {"pdf", "jpg", "jpeg", "png", "xlsx", "xlsm", "docx"}
+
+
+@router.post("/{line}/datasheet")
+def read_datasheet(line: str, request: Request, file: UploadFile = File(...), category: str = Form(...),
+                   user: User = Depends(require_user)):
+    """读一份规格书：原件复制存档（只读），返回认出的参数和原文，由人勾选后填进产品。"""
+    from ..knowledge.read import read
+
+    if category not in FIELDS.get(line, {}):
+        raise HTTPException(422, tr("类别不对", "Wrong category"))
+    filename = (file.filename or "datasheet").rsplit("/", 1)[-1].rsplit("\\", 1)[-1]
+    kind = filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    if kind not in DATASHEET_TYPES:
+        raise HTTPException(422, tr("规格书请用 PDF、图片、Excel 或 Word", "Use a PDF, image, Excel or Word datasheet"))
+    state = request.app.state
+    rel = f"datasheets/{uuid.uuid4().hex}/{safe_name(filename)}"
+    save_original(state.data_dir, rel, file.file)
+    r = read(state.data_dir / rel, state.oda)
+    values = datasheet_values(r["chunks"], line, category) if r["chunks"] else {}
+    return {"datasheet": filename, "values": values, "ocr": r["method"] == "ocr", "note": text(r["note"]),
+            "read": bool(r["chunks"])}
