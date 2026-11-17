@@ -274,6 +274,16 @@
     "stepsLabel": "Proposal flow",
     "updated": "Last update: {at} · {by}"
   },
+  "import": {
+    "busy": "Importing…",
+    "count": "{n} readable files in this folder and below (PDF, image, Excel, DWG, DXF); other files are not imported.",
+    "done": "Imported {n} files; skipped {skipped} already in the project.",
+    "here": "Import this folder",
+    "noFolders": "No sub-folders",
+    "open": "Import from server folder",
+    "tooMany": "Too many files (limit {max}); open a sub-folder first.",
+    "top": "Top"
+  },
   "intake": {
     "addProposal": "+ Add a proposal",
     "bindNew": "Creating the project binds the latest rules, product library and template versions. Later library updates do not affect it unless you upgrade by hand.",

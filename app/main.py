@@ -7,7 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import sessionmaker
 
-from . import annotate, api, flow, i18n, review, settings, workspace
+from . import annotate, api, flow, i18n, review, server_import, settings, workspace
 from .db import make_engine, migrate
 from .knowledge import api as knowledge_api
 from .knowledge.scan import ensure_folders
@@ -48,6 +48,8 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
     app.state.oda = cfg.get("oda_converter") or None
     app.state.deck_template = Path(cfg["deck_template"]) if cfg.get("deck_template") else None
     app.state.kb_dir = Path(cfg.get("knowledge_dir") or data_dir / "knowledge").resolve()
+    # 服务器上的项目文件夹（例：D:\LED Projects），01 立项可以从这里导入文件；留空 = 不用
+    app.state.import_dir = Path(cfg["project_import_dir"]).resolve() if cfg.get("project_import_dir") else None
     app.state.kb_lock, app.state.kb_progress = threading.Lock(), None
     # 设置页（服务器与存储、立即备份）
     app.state.port = cfg.get("port")
@@ -66,7 +68,8 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
     with app.state.Session() as db:
         for module in (rules_api, products_api, templates_api):
             module.ensure_seed(db)
-    for module in (api, rules_api, products_api, templates_api, workspace, review, annotate, flow, knowledge_api, settings):
+    for module in (api, rules_api, products_api, templates_api, workspace, review, annotate, flow, knowledge_api, settings,
+                   server_import):
         app.include_router(module.router, prefix="/api")
     if WEB_DIST.is_dir():
         app.mount("/", StaticFiles(directory=WEB_DIST, html=True), name="web")
