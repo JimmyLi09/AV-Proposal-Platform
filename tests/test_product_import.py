@@ -113,3 +113,89 @@ def test_datasheet_rejects(client):
     client.delete("/api/session")
     assert client.post("/api/products/LED/datasheet", files={"file": ("a.pdf", b"x")},
                        data={"category": "controller"}).status_code == 401
+
+
+# ---- 2026-11-18：规格书批量导入（Word / PDF / 图片 / Excel / 旧版 .xls），可直接读服务器文件夹 ----
+SPECS = Path(__file__).parent / "fixtures" / "specs"
+ZH = "P1.538室内52扫-640X480 模组规格书V1.0.docx"
+EN = "P1.538 indoor 52scan -640X480 module specs V1.0.docx"
+XLS = "MCTRL700 controller spec.xls"
+
+
+def _items(r):
+    assert r.status_code == 200, r.text
+    return {i["file"]: i for i in r.json()["items"]}
+
+
+def test_batch_reads_word_and_old_excel(client):
+    login(client)
+    files = [("files", (n, (SPECS / n).read_bytes())) for n in (ZH, EN, XLS)]
+    files.append(("files", ("notes.txt", b"x")))
+    r = client.post("/api/products/LED/datasheets", files=files)
+    items = _items(r)
+    assert r.json()["skipped"] == ["notes.txt"]
+
+    zh = items[ZH]
+    assert (zh["category"], zh["model"], zh["read"], zh["ocr"]) == ("cabinet", "P1.538室内52扫-640X480", True, False)
+    got = {f: v["value"] for f, v in zh["values"]["cabinet"].items()}
+    assert got == {"pixel_pitch_mm": 1.538, "module_w_mm": 320, "module_h_mm": 160, "cabinet_sizes_mm": [[640, 480]],
+                   "brightness_nits": 600, "max_power_w_m2": 450, "maintenance": "front", "scenes": ["indoor"], "ip": "IP30"}
+    assert "像素间距" in zh["values"]["cabinet"]["pixel_pitch_mm"]["snippet"]  # 每个值带原文
+
+    en = items[EN]
+    assert en["category"] == "cabinet" and en["same_as"] == 0  # 中英文两份是同一个产品
+    assert {f: v["value"] for f, v in en["values"]["cabinet"].items()} == got
+
+    mc = items[XLS]
+    assert (mc["category"], mc["brand"], mc["id"]) == ("controller", "NovaStar", "MCTRL700-CONTROLLER")
+    assert {f: v["value"] for f, v in mc["values"]["controller"].items()} == {"capacity_px": 2300000, "ports": 6}
+    assert len(list(client.data_dir.glob("datasheets/*/*"))) == 3  # 原件都存档
+    assert _library(client)["version"] == "v1.0"  # 只是复核表，没改产品库
+
+
+def test_batch_from_the_server_folder(client):
+    login(client)
+    root = client.data_dir / "LED Projects"
+    (root / "Specs").mkdir(parents=True)
+    for n in (ZH, XLS):
+        (root / "Specs" / n).write_bytes((SPECS / n).read_bytes())
+    client.app.state.import_dir = root.resolve()
+    listing = client.get("/api/import-folder", params={"path": "Specs", "entries": 1}).json()
+    assert sorted(e["name"] for e in listing["entries"]) == sorted([ZH, XLS])
+    items = _items(client.post("/api/products/LED/datasheets/server", json={"paths": [f"Specs/{ZH}", f"Specs/{XLS}"]}))
+    assert items[ZH]["values"]["cabinet"]["pixel_pitch_mm"]["value"] == 1.538
+    assert (root / "Specs" / ZH).exists()  # 服务器上的原文件不动
+    assert client.post("/api/products/LED/datasheets/server", json={"paths": ["../avp.db"]}).status_code == 404
+
+
+def test_batch_knows_products_already_in_the_library(client):
+    login(client)
+    pdf = (KB / "VX1000_Spec_EN.pdf").read_bytes()
+    lib = _library(client)
+    content = {**lib["content"], "products": [*lib["content"]["products"], {
+        "id": "VX1000", "category": "controller", "brand": "NovaStar", "model": "VX1000", "status": "approved",
+        "scenes": ["indoor"], "datasheet": "", "sample": False, "capacity_px": None, "ports": None}]}
+    assert client.post("/api/products/LED", json={"base_id": lib["id"], "reason": "t", "content": content}).status_code == 201
+    item = _items(client.post("/api/products/LED/datasheets", files=[("files", ("VX1000_Spec_EN.pdf", pdf))]))["VX1000_Spec_EN.pdf"]
+    assert item["match"] == "VX1000" and item["id"] == "VX1000"
+
+
+def test_vx_series_is_a_processor_with_sending(client):
+    """VX 系列一体机：类别猜视频处理器；写了带载和网口 → 含发送（CR-2，可以代替控制器）。"""
+    login(client)
+    pdf = (KB / "VX1000_Spec_EN.pdf").read_bytes()
+    item = _items(client.post("/api/products/LED/datasheets", files=[("files", ("VX1000_Spec_EN.pdf", pdf))]))["VX1000_Spec_EN.pdf"]
+    assert (item["category"], item["model"], item["brand"], item["match"]) == ("processor", "VX1000", "NovaStar", None)
+    got = {f: v["value"] for f, v in item["values"]["processor"].items()}
+    assert got["sending"] is True and got["capacity_px"] == 6500000 and got["ports"] == 10
+
+
+def test_spec_patterns_for_module_datasheets():
+    from app.knowledge.learn import spec_values
+
+    fields = {"pixel_pitch_mm", "module_w_mm", "module_h_mm", "cabinet_sizes_mm", "brightness_nits", "max_power_w_m2"}
+    got = lambda t: {k: v[0] for k, v in spec_values([("¶1", t)], fields).items()}  # noqa: E731
+    assert got("点间距 P1.86\n模组尺寸 172.8*86.4mm\n亮度均匀性 ≥97%\n亮度 800") == \
+        {"pixel_pitch_mm": 1.86, "module_w_mm": 172.8, "module_h_mm": 86.4, "brightness_nits": 800}
+    assert got("Max power consumption 120 W/cabinet") == {}  # 每箱功耗不是 W/㎡
+    assert got("亮度调节 256级") == {}

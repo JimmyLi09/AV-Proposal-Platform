@@ -1,3 +1,4 @@
+# 2026-11-18 加入：xlrd（读旧版 .xls 规格书，免费开源）
 # 第 6 步加入：python-docx（可编辑 Word 方案）、python-pptx（方案演示稿 PPT）
 # CR-3 加入：playwright（无头 Chromium 打印技术方案 PDF）、pypdf（写 PDF 文件属性）
 # 第 4 步加入：ezdxf、openpyxl、pdfplumber、rapidocr（读文件与文字识别，免费开源，CPU 运行，识别模型随包自带）
@@ -16,6 +17,7 @@ playwright==1.56.0
 pypdf==6.21.2
 pypdfium2==5.14.0
 python-docx==1.2.0
+xlrd==2.0.2
 python-multipart==0.0.32
 python-pptx==1.0.2
 rapidocr-onnxruntime==1.4.4

@@ -116,24 +116,36 @@ def _first(m, conv):
     return conv(next(g for g in m.groups() if g))
 
 
+def _per_sqm(m) -> int | None:
+    return int(m[1]) if re.search(r"m2|m²|㎡|sqm|平方", m[0], re.I) else None  # 每箱的功耗不是 W/㎡
+
+
+# 规格书常见写法（2026-11-18 补中文模组规格书：像素间距、模组 / 箱体尺寸、表格里「栏名 | 值」）
 SPEC = {  # 字段: (正则, 换算)；只找这一类产品有的字段
-    "capacity_px": (r"(?:load(?:ing)?\s*capacity|max(?:imum)?\s*load(?:ing)?|带载(?:能力|像素)?)\D{0,20}?"
+    "capacity_px": (r"(?:load(?:ing)?\s*capacity|max(?:imum)?\s*load(?:ing)?|带载(?:能力|像素|面积)?)\D{0,20}?"
                     r"(\d[\d,.]*)\s*(million|mil|M(?![a-z])|万)?", _capacity),
-    "ports": (r"(\d{1,2})\s*(?:x|×)?\s*(?:gigabit\s*)?(?:ethernet|RJ-?45|network)\s*(?:output\s*)?ports?"
-              r"|(?:输出网口|网口)\D{0,6}?(\d{1,2})", lambda m: _first(m, int)),
+    "ports": (r"(?<![\w-])(\d{1,2})\s*(?:x|×)?\s*(?:gigabit\s*)?(?:(?:ethernet|RJ-?45|network)\s*)+(?:output\s*)?ports?"
+              r"|(?:ethernet|network)\s*(?:output\s*)?ports?\s*(?:qty|quantity|数量)?\D{0,6}?(\d{1,2})(?![\d.])"
+              r"|(?:输出网口|网口)(?:数量?|数)?\D{0,6}?(\d{1,2})|(\d{1,2})\s*(?:个|路)\s*(?:千兆)?网口", lambda m: _first(m, int)),
     "inputs": (r"(\d{1,2})\s*(?:x|×)?\s*(?:video\s*)?inputs?\b|(\d{1,2})\s*路\s*(?:视频)?输入", lambda m: _first(m, int)),
     "outputs": (r"(\d{1,2})\s*(?:x|×)?\s*(?:video\s*)?outputs?\b|(\d{1,2})\s*路\s*输出", lambda m: _first(m, int)),
-    "brightness_nits": (r"(\d[\d,]{2,5})\s*(?:nits|cd/m2|cd/m²|cd/㎡)", lambda m: _int(m[1])),
-    "max_power_w_m2": (r"max(?:imum)?\.?\s*power(?:\s*consumption)?\D{0,15}?(\d{2,4})\s*W\s*/\s*(?:m2|m²|㎡|sqm)",
-                       lambda m: int(m[1])),
+    "brightness_nits": (r"(\d[\d,]{2,5})\s*(?:nits|cd/m2|cd/m²|cd/㎡)"
+                        r"|(?:brightness|亮度)(?!\s*(?:均匀|uniform|调节|adjust|级))\D{0,20}?(\d[\d,]{2,5})(?!\s*(?:级|bit|%|Hz))",
+                        lambda m: _first(m, _int)),
+    "max_power_w_m2": (r"(?:max(?:imum)?\.?\s*power(?:\s*consumption)?|最大功耗|最大功率)\D{0,20}?(\d{2,4})"
+                       r"(?:\s*W\s*/\s*(?:m2|m²|㎡|sqm))?", _per_sqm),
     "weight_kg": (r"(?:weight|重量)\D{0,12}?(\d+(?:\.\d+)?)\s*kg", lambda m: _number(m[1])),
-    "pixel_pitch_mm": (r"(?:pixel\s*pitch|点间距)\D{0,8}?(\d{1,2}(?:\.\d{1,3})?)\s*mm", lambda m: _number(m[1])),
+    "pixel_pitch_mm": (r"(?:pixel\s*pitch|点间距|像素间距|点距)\D{0,15}?(\d{1,2}(?:\.\d{1,4})?)(?![\d.]*\s*[x×*])",
+                       lambda m: _number(m[1])),
     "lumens": (r"(\d{1,2}[,.]?\d{3})\s*(?:ANSI\s*)?(?:lm|lumens?)\b", lambda m: _int(m[1].replace(".", ""))),
     "power_w": (r"power\s*consumption\D{0,15}?(\d{2,4})\s*W\b(?!\s*/)", lambda m: int(m[1])),
     "noise_db": (r"(?:noise|噪音)\D{0,15}?(\d{2})\s*dB", lambda m: int(m[1])),
 }
 RESOLUTION = re.compile(r"(\d{3,4})\s*[x×]\s*(\d{3,4})\s*(?:pixels|\(?\s*(?:WUXGA|WXGA|4K|UHD|1080p|native))", re.I)
 THROW = re.compile(r"throw\s*ratio\D{0,10}?(\d\.\d{1,2})\s*(?:[-–~]\s*(\d\.\d{1,2}))?\s*:\s*1", re.I)
+_WXH = r"\D{0,25}?(\d{2,4}(?:\.\d+)?)\s*(?:mm)?\s*[x×*X]\s*(\d{2,4}(?:\.\d+)?)"
+MODULE = re.compile(r"(?:module\s*(?:size|dimensions?)|模组尺寸|模块尺寸|单元板尺寸)" + _WXH, re.I)
+CABINET = re.compile(r"(?:cabinet\s*(?:size|dimensions?)|箱体尺寸)" + _WXH, re.I)
 
 
 def spec_values(lines: list[tuple[str, str]], fields: set[str]) -> dict[str, tuple]:
@@ -147,6 +159,10 @@ def spec_values(lines: list[tuple[str, str]], fields: set[str]) -> dict[str, tup
                     out[field] = (value, location, m[0].strip())
         if {"native_px_w", "native_px_h"} <= fields and "native_px_w" not in out and (m := RESOLUTION.search(line)):
             out["native_px_w"], out["native_px_h"] = (int(m[1]), location, m[0]), (int(m[2]), location, m[0])
+        if {"module_w_mm", "module_h_mm"} <= fields and "module_w_mm" not in out and (m := MODULE.search(line)):
+            out["module_w_mm"], out["module_h_mm"] = (_number(m[1]), location, m[0]), (_number(m[2]), location, m[0])
+        if "cabinet_sizes_mm" in fields and "cabinet_sizes_mm" not in out and (m := CABINET.search(line)):
+            out["cabinet_sizes_mm"] = ([[_number(m[1]), _number(m[2])]], location, m[0])
         if "throw_ratio" in fields and "throw_ratio" not in out and (m := THROW.search(line)):
             out["throw_ratio"] = (float(m[1]), location, m[0])
             if m[2]:

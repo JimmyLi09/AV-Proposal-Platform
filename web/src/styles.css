@@ -269,3 +269,4 @@ a.btn-primary, a.btn-outline { display: inline-flex; align-items: center; text-d
 .pj-drawing svg { max-width: 100%; height: auto; }
 .clauses td:nth-child(1), .clauses td:nth-child(2) { width: 38%; }
 .clauses textarea { width: 100%; box-sizing: border-box; }
+.value-chip { display: inline-flex; margin: 0 12px 6px 0; white-space: nowrap; }

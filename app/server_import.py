@@ -55,9 +55,18 @@ def _sha(path: Path) -> str:
     return digest.hexdigest()
 
 
+def server_file(request: Request, rel: str) -> Path:
+    """设置的文件夹里的一个文件（规格书批量导入用）。"""
+    root = _root(request)
+    path = (root / rel).resolve()
+    if root not in path.parents or not path.is_file():
+        raise HTTPException(404, tr(f"文件不存在：{rel}", f"File not found: {rel}"))
+    return path
+
+
 @router.get("/import-folder")
-def browse(request: Request, path: str = ""):
-    """看一层：子文件夹，以及这一层（含下面各层）有多少个可导入的文件。"""
+def browse(request: Request, path: str = "", entries: bool = False):
+    """看一层：子文件夹，以及这一层（含下面各层）有多少个可导入的文件；entries=1 时列出这一层的文件。"""
     state = request.app.state
     if state.import_dir is None:
         return {"configured": False}
@@ -65,8 +74,13 @@ def browse(request: Request, path: str = ""):
     folder = _folder(root, path)
     dirs = sorted((d for d in folder.iterdir() if d.is_dir() and not d.name.startswith(".")), key=lambda d: d.name.lower())
     files = [p for p in folder.rglob("*") if _readable(p)]
-    return {"configured": True, "root": str(root), "path": folder.relative_to(root).as_posix().strip("."),
-            "folders": [d.name for d in dirs], "files": len(files), "max": MAX_FILES}
+    out = {"configured": True, "root": str(root), "path": folder.relative_to(root).as_posix().strip("."),
+           "folders": [d.name for d in dirs], "files": len(files), "max": MAX_FILES}
+    if entries:
+        out["entries"] = [{"name": p.name, "size": p.stat().st_size}
+                          for p in sorted(folder.iterdir(), key=lambda p: p.name.lower())
+                          if p.is_file() and not p.name.startswith(("~$", "."))][:500]
+    return out
 
 
 class ImportIn(BaseModel):
