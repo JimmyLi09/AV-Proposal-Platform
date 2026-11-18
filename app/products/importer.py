@@ -7,6 +7,7 @@
    每个值带原文，交给人逐项勾选后填进产品表单。只找格式确定的写法（同资料库 learn.SPEC），不推算。
 """
 import io
+import json
 import re
 
 from openpyxl import Workbook, load_workbook
@@ -184,5 +185,95 @@ def datasheet_values(chunks: list[tuple[str, str]], line: str, category: str) ->
     """规格书里认出的这一类产品的数值参数：{字段: {value, location, snippet}}。"""
     from ..knowledge.learn import spec_values
 
-    fields = {n for n, _, kind in FIELDS[line][category] if kind == "number"}
+    fields = {n for n, _, kind in FIELDS[line][category] if kind in ("number", "sizes")}
     return {f: {"value": v, "location": loc, "snippet": snip} for f, (v, loc, snip) in spec_values(chunks, fields).items()}
+
+
+# ---- 规格书批量导入（2026-11-18）：一次多份，猜类别 / 型号 / 品牌，人逐行复核 ----
+
+CATEGORY_WORDS = {
+    "cabinet": r"module|模组|模块|cabinet|箱体|\d+\s*scan|\d+\s*扫|pixel\s*pitch|像素间距|点间距|(?<![A-Za-z])P\d",
+    "controller": r"controller|控制器|sending\s*card|发送卡|MCTRL|loading\s*capacity|带载",
+    "processor": r"video\s*processor|视频处理器|拼接处理|processor|(?<![A-Za-z])VX\d|novapro|(?<![A-Za-z])J6",
+    "projector": r"projector|投影机|lumens?|流明",
+    "lens": r"(?<![a-z])lens|镜头|throw\s*ratio|投射比",
+    "blender": r"blend|融合|warp",
+}
+BRANDS = ["NovaStar", "Colorlight", "Linsn", "Huidu", "Kystar", "Absen", "Unilumin", "Leyard", "Liantronics", "MUXWAVE",
+          "Panasonic", "Epson", "Christie", "Barco", "Sony", "NEC", "Optoma", "ViewSonic", "BenQ", "Hitachi"]
+NOISE = re.compile(r"(?:模组)?规格书|规格|datasheet|data\s*sheet|specs?(?:ification)?s?|副本|copy|(?<![A-Za-z])V\d+(?:\.\d+)*(?![\w.])"
+                   r"|[（(]\d+[)）]", re.I)
+BATCH_MAX = 30
+
+
+def guess_category(line: str, filename: str, text_: str) -> str:
+    scores = {c: 3 * len(re.findall(p, filename, re.I)) + len(re.findall(p, text_[:20000], re.I))
+              for c, p in CATEGORY_WORDS.items() if c in FIELDS[line]}
+    return max(scores, key=lambda c: (scores[c], -list(FIELDS[line]).index(c)))
+
+
+def guess_model(filename: str) -> str:
+    stem = filename.rsplit(".", 1)[0]
+    stem = re.sub(r"(?<![A-Za-z])(?:EN|CN|ZH|ENG)(?![A-Za-z])|[（(]?(?:英文|中文)版?[)）]?", " ", NOISE.sub(" ", stem))
+    stem = re.sub(r"\s*[_]+\s*|\s+", " ", stem).strip(" -_–.")
+    return stem[:60] or filename
+
+
+def _slug(model: str, taken: set[str]) -> str:
+    base = re.sub(r"[^A-Z0-9.]+", "-", model.upper()).strip("-")[:30] or "NEW"
+    pid, n = base, 2
+    while pid in taken:
+        pid, n = f"{base}-{n}", n + 1
+    taken.add(pid)
+    return pid
+
+
+def _choices(line: str, text_: str) -> dict:
+    """维护方式、适用场景、防护等级：写明了才填，带原文。"""
+    out = {}
+    if "cabinet" in FIELDS[line]:
+        for pattern, value in ((r"前后维护|前后均可维护|front\s*(?:and|&|/)\s*rear\s*(?:service|maintenance|access)", "both"),
+                               (r"前维护|front\s*(?:service|maintenance|access)", "front"),
+                               (r"后维护|rear\s*(?:service|maintenance|access)", "rear")):
+            if m := re.search(pattern, text_, re.I):
+                out["maintenance"] = {"value": value, "location": "", "snippet": m[0]}
+                break
+        scenes = [v for p, v in ((r"indoor|室内", "indoor"), (r"outdoor|户外|室外", "outdoor"), (r"rental|租赁", "rental"))
+                  if re.search(p, text_[:5000], re.I)]
+        if scenes:
+            out["scenes"] = {"value": scenes, "location": "", "snippet": "、".join(WORDS["scenes"][x] for x in scenes)}
+        if m := re.search(r"(?<![A-Za-z])IP\s?([2-6][0-9])(?!\d)", text_):
+            out["ip"] = {"value": "IP" + m[1], "location": "", "snippet": m[0]}
+    return out
+
+
+def batch_item(line: str, filename: str, read_result: dict, products: list[dict], taken: set[str]) -> dict:
+    """一份规格书 → 复核表的一行。每类产品各算一套值，界面改类别时直接换。"""
+    from ..knowledge.learn import match_product
+
+    chunks = read_result["chunks"]
+    body = "\n".join(t for _, t in chunks)
+    category = guess_category(line, filename, body)
+    hit = match_product(filename, body, products)
+    model = guess_model(filename)
+    brand = next((b for b in BRANDS if re.search(rf"(?<![A-Za-z]){b}(?![A-Za-z])", filename + "\n" + body[:5000], re.I)), "")
+    values = {c: datasheet_values(chunks, line, c) | _choices(line, body) for c in FIELDS[line]} if chunks else {}
+    proc = values.get("processor", {})
+    if "capacity_px" in proc and "ports" in proc:  # CR-2：写了带载和网口的处理器就是含发送的（如 VX 系列）
+        proc["sending"] = {"value": True, "location": proc["capacity_px"]["location"],
+                           "snippet": f'{proc["capacity_px"]["snippet"]} · {proc["ports"]["snippet"]}'}
+    return {"file": filename, "category": category, "model": model, "brand": brand,
+            "id": hit["id"] if hit else _slug(model, taken), "match": hit["id"] if hit else None,
+            "values": values, "ocr": read_result["method"] == "ocr", "read": bool(chunks), "note": text(read_result["note"])}
+
+
+def mark_duplicates(items: list[dict]) -> None:
+    """同一产品的中英文两份规格书：类别相同、认出的数值完全一样（至少 2 个）。"""
+    seen = {}
+    for i, it in enumerate(items):
+        vals = {f: v["value"] for f, v in it["values"].get(it["category"], {}).items()
+                if f not in ("scenes", "maintenance", "ip")}
+        key = (it["category"], json.dumps(vals, sort_keys=True)) if len(vals) >= 2 else None
+        it["same_as"] = seen.get(key) if key else None
+        if key and key not in seen:
+            seen[key] = i

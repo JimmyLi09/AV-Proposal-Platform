@@ -3,6 +3,7 @@ import { api, FieldDef, LibraryContent, LibraryVersion, Product, send, Version }
 import { nextVersion, optionLabel, SizesInput } from "./Calc";
 import { t } from "./i18n";
 import { fmtDate, LineTabs } from "./labels";
+import SpecBatch from "./SpecBatch";
 
 const STATUSES = ["preferred", "approved", "retired"];
 const SCENES = ["indoor", "outdoor", "rental"];
@@ -36,6 +37,8 @@ export default function Products({ line }: { line: string }) {
   const [reason, setReason] = useState("");
   const [error, setError] = useState("");
   const [imported, setImported] = useState<ExcelResult | null>(null);
+  const [batch, setBatch] = useState(false);
+  const [merged, setMerged] = useState("");
 
   async function load() {
     const v = await api<LibraryVersion>(`/products/${line}`);
@@ -57,13 +60,17 @@ export default function Products({ line }: { line: string }) {
     setDraft(copy);
   }
 
+  function blank(category: string): Product {
+    const p: Product = { id: "", category, brand: "", model: "", status: "approved", scenes: [], sample: false };
+    if (saved!.fields[category].some((f) => f.name === "scenes")) p.scenes = ["indoor"];
+    else delete (p as Record<string, unknown>).scenes; // 投影产品不按室内外选型
+    for (const f of saved!.fields[category]) if (!(f.name in p)) p[f.name] = f.type === "text" ? "" : f.type === "maintenance" ? "front" : null;
+    return p;
+  }
+
   function add(category: string) {
-    const blank: Product = { id: "", category, brand: "", model: "", status: "approved", scenes: [], sample: false };
-    if (saved!.fields[category].some((f) => f.name === "scenes")) blank.scenes = ["indoor"];
-    else delete (blank as Record<string, unknown>).scenes; // 投影产品不按室内外选型
-    for (const f of saved!.fields[category]) if (!(f.name in blank)) blank[f.name] = f.type === "text" ? "" : f.type === "maintenance" ? "front" : null;
     const copy = structuredClone(draft!);
-    copy.products.push(blank);
+    copy.products.push(blank(category));
     setDraft(copy);
     setEditing(copy.products.length - 1);
   }
@@ -91,6 +98,7 @@ export default function Products({ line }: { line: string }) {
       await send("POST", `/products/${line}`, { base_id: saved!.id, reason, content: draft });
       setReason("");
       setImported(null);
+      setMerged("");
       await load();
     } catch (err) {
       setError((err as Error).message);
@@ -127,6 +135,7 @@ export default function Products({ line }: { line: string }) {
         </label>
         <div className="grow" />
         <a className="btn-outline" href={`/api/products/${line}/excel`}>{t("products.excel.export")}</a>
+        <button className="btn-outline" onClick={() => setBatch(true)}>{t("products.batch.open")}</button>
         <label className="btn-outline">
           {t("products.excel.import")}
           <input type="file" accept=".xlsx,.xlsm" hidden onChange={(e) => { importExcel(e.target.files?.[0]); e.target.value = ""; }} />
@@ -140,6 +149,19 @@ export default function Products({ line }: { line: string }) {
           ))}
         </select>
       </div>
+
+      {batch && (
+        <SpecBatch line={line} fields={saved.fields} categories={saved.categories} products={draft.products} blank={blank}
+          onClose={() => setBatch(false)}
+          onMerge={(products, added, updated) => {
+            setDraft({ ...draft, products });
+            setBatch(false);
+            setEditing(null);
+            setMerged(t("products.batch.done", { added, updated }));
+            if (!reason) setReason(t("products.batch.reason", { n: added + updated }));
+          }} />
+      )}
+      {merged && <p className="ok">{merged}</p>}
 
       {imported && (
         <section className="card">

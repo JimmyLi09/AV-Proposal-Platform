@@ -12,7 +12,7 @@ from ..i18n import text, tr
 from ..models import ProductLibraryVersion, User
 from ..storage import safe_name, save_original
 from ..versions import check_base, history, latest, next_label, version_out
-from .importer import datasheet_values, export_xlsx, import_xlsx
+from .importer import BATCH_MAX, batch_item, datasheet_values, export_xlsx, import_xlsx, mark_duplicates
 from .library import CATEGORY_LABEL, FIELDS, SCENES, STATUSES, LibraryError, load_reference, load_seed, name, validate
 
 router = APIRouter(prefix="/products")
@@ -107,7 +107,7 @@ async def upload_excel(line: str, file: UploadFile = File(...), content: str = F
         raise HTTPException(422, tr(f"读不了这个 Excel：{type(e).__name__}", f"Cannot read this Excel: {type(e).__name__}"))
 
 
-DATASHEET_TYPES = {"pdf", "jpg", "jpeg", "png", "xlsx", "xlsm", "docx"}
+DATASHEET_TYPES = {"pdf", "jpg", "jpeg", "png", "xlsx", "xlsm", "xls", "docx"}
 
 
 @router.post("/{line}/datasheet")
@@ -123,9 +123,65 @@ def read_datasheet(line: str, request: Request, file: UploadFile = File(...), ca
     if kind not in DATASHEET_TYPES:
         raise HTTPException(422, tr("规格书请用 PDF、图片、Excel 或 Word", "Use a PDF, image, Excel or Word datasheet"))
     state = request.app.state
-    rel = f"datasheets/{uuid.uuid4().hex}/{safe_name(filename)}"
-    save_original(state.data_dir, rel, file.file)
-    r = read(state.data_dir / rel, state.oda)
+    r = read(_archive(state, filename, file.file), state.oda)
     values = datasheet_values(r["chunks"], line, category) if r["chunks"] else {}
     return {"datasheet": filename, "values": values, "ocr": r["method"] == "ocr", "note": text(r["note"]),
             "read": bool(r["chunks"])}
+
+
+def _archive(state, filename: str, fh):
+    """规格书原件复制存档（只读）。"""
+    rel = f"datasheets/{uuid.uuid4().hex}/{safe_name(filename)}"
+    save_original(state.data_dir, rel, fh)
+    return state.data_dir / rel
+
+
+def _kind(filename: str) -> str:
+    return filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+
+
+def _batch(request: Request, db: Session, line: str, sources: list[tuple[str, object]]) -> dict:
+    """sources: [(文件名, 打开的文件)]。每份读一遍，列成复核表，不改产品库。"""
+    from ..knowledge.read import read
+
+    if not sources:
+        raise HTTPException(422, tr("请选文件", "Choose files"))
+    if len(sources) > BATCH_MAX:
+        raise HTTPException(422, tr(f"一次最多 {BATCH_MAX} 份", f"At most {BATCH_MAX} files at a time"))
+    products = latest(db, ProductLibraryVersion, line).content["products"]
+    taken = {p["id"] for p in products}
+    items, skipped = [], []
+    for filename, fh in sources:
+        if _kind(filename) not in DATASHEET_TYPES:
+            skipped.append(filename)
+            continue
+        state = request.app.state
+        items.append(batch_item(line, filename, read(_archive(state, filename, fh), state.oda), products, taken))
+    mark_duplicates(items)
+    return {"items": items, "skipped": skipped}
+
+
+@router.post("/{line}/datasheets")
+def batch_upload(line: str, request: Request, files: list[UploadFile] = File(...),
+                 user: User = Depends(require_user), db: Session = Depends(get_db)):
+    """规格书批量导入：从电脑上传多份。"""
+    return _batch(request, db, line, [((f.filename or "file").replace("\\", "/").rsplit("/", 1)[-1], f.file) for f in files])
+
+
+class ServerFiles(BaseModel):
+    paths: list[str]
+
+
+@router.post("/{line}/datasheets/server")
+def batch_server(line: str, body: ServerFiles, request: Request,
+                 user: User = Depends(require_user), db: Session = Depends(get_db)):
+    """规格书批量导入：直接读服务器文件夹（project_import_dir）里的文件，原文件不动。"""
+    from ..server_import import server_file
+
+    paths = [server_file(request, rel) for rel in body.paths]
+    handles = [open(p, "rb") for p in paths]
+    try:
+        return _batch(request, db, line, [(p.name, h) for p, h in zip(paths, handles)])
+    finally:
+        for h in handles:
+            h.close()

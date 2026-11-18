@@ -62,18 +62,35 @@ def read_excel(path: Path, out: dict) -> str:
     wb = load_workbook(path, data_only=True, read_only=True)
     try:
         for ws in wb.worksheets:
-            lines = []
-            for no, row in enumerate(ws.iter_rows(max_row=MAX_ROWS, values_only=True), 1):
-                cells = [_cell(v) for v in row]
-                if any(cells):
-                    out["rows"].append((ws.title, no, cells))
-                    lines.append((no, " | ".join(c for c in cells if c)))
-            for i in range(0, len(lines), ROWS_PER_CHUNK):
-                part = lines[i:i + ROWS_PER_CHUNK]
-                out["chunks"].append((f"{ws.title}!{part[0][0]}–{part[-1][0]}", "\n".join(t for _, t in part)))
+            _sheet(ws.title, ws.iter_rows(max_row=MAX_ROWS, values_only=True), out)
     finally:
         wb.close()
     return "excel"
+
+
+def read_xls(path: Path, out: dict) -> str:
+    """旧版 Excel（.xls，97–2003）。"""
+    import xlrd
+
+    book = xlrd.open_workbook(path, on_demand=True)
+    try:
+        for ws in book.sheets():
+            _sheet(ws.name, (ws.row_values(r) for r in range(min(ws.nrows, MAX_ROWS))), out)
+    finally:
+        book.release_resources()
+    return "excel"
+
+
+def _sheet(title: str, rows, out: dict) -> None:
+    lines = []
+    for no, row in enumerate(rows, 1):
+        cells = [_cell(v) for v in row]
+        if any(cells):
+            out["rows"].append((title, no, cells))
+            lines.append((no, " | ".join(c for c in cells if c)))
+    for i in range(0, len(lines), ROWS_PER_CHUNK):
+        part = lines[i:i + ROWS_PER_CHUNK]
+        out["chunks"].append((f"{title}!{part[0][0]}–{part[-1][0]}", "\n".join(t for _, t in part)))
 
 
 def read_dxf(path: Path, out: dict) -> str:
@@ -110,7 +127,7 @@ def read_text(path: Path, out: dict) -> str:
 
 
 READERS = {"pdf": read_pdf, "jpg": read_image, "jpeg": read_image, "png": read_image, "xlsx": read_excel,
-           "xlsm": read_excel, "dxf": read_dxf, "docx": read_docx, "txt": read_text, "csv": read_text}
+           "xlsm": read_excel, "xls": read_xls, "dxf": read_dxf, "docx": read_docx, "txt": read_text, "csv": read_text}
 
 
 def read(path: Path, oda: str | None) -> dict:
