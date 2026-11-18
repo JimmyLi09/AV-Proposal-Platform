@@ -7,7 +7,9 @@ type Found = { value: unknown; location: string; snippet: string };
 type Item = {
   file: string; category: string; model: string; brand: string; id: string; match: string | null;
   values: Record<string, Record<string, Found>>; ocr: boolean; read: boolean; note: string; same_as: number | null;
+  table?: boolean; // 按模板填的产品表里的一行
 };
+type Batch = { items: Item[]; skipped: string[]; errors?: string[] };
 type Row = Item & { use: boolean; off: Record<string, boolean> };
 type Listing = { configured: boolean; root?: string; path?: string; folders?: string[]; entries?: { name: string; size: number }[] };
 
@@ -33,21 +35,23 @@ export default function SpecBatch({ line, fields, categories, products, blank, o
 }) {
   const [rows, setRows] = useState<Row[] | null>(null);
   const [skipped, setSkipped] = useState<string[]>([]);
+  const [problems, setProblems] = useState<string[]>([]);
   const [server, setServer] = useState<Listing | null>(null);
   const [picked, setPicked] = useState<Record<string, boolean>>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
 
-  function loaded(r: { items: Item[]; skipped: string[] }) {
+  function loaded(r: Batch) {
     // 扫描件（文字识别）的值默认不勾；同一产品的第二份规格书默认不加
     setRows(r.items.map((it) => ({
       ...it, use: false,
       off: Object.fromEntries(Object.keys(it.values[it.category] ?? {}).map((f) => [f, it.ocr])),
     })));
     setSkipped(r.skipped);
+    setProblems(r.errors ?? []);
   }
 
-  async function run(job: () => Promise<{ items: Item[]; skipped: string[] }>) {
+  async function run(job: () => Promise<Batch>) {
     setBusy(true);
     setError("");
     try {
@@ -131,6 +135,7 @@ export default function SpecBatch({ line, fields, categories, products, blank, o
               onChange={(e) => { upload(e.target.files); e.target.value = ""; }} />
           </label>
           <button className="btn-outline" disabled={busy} onClick={() => browse("")}>{t("products.batch.server")}</button>
+          <a className="btn-link" href="/api/products/template.xlsx">{t("products.batch.template")}</a>
         </div>
       )}
       {error && <p className="error">{error}</p>}
@@ -175,6 +180,12 @@ export default function SpecBatch({ line, fields, categories, products, blank, o
       {rows && (
         <>
           {skipped.length > 0 && <p className="warn small">{t("products.batch.skipped", { files: skipped.join(", ") })}</p>}
+          {problems.length > 0 && (
+            <>
+              <p className="warn">{t("products.excel.errors", { n: problems.length })}</p>
+              <ul className="small">{problems.map((e) => <li key={e}>{e}</li>)}</ul>
+            </>
+          )}
           <div className="table-wrap">
             <table>
               <thead>
@@ -198,7 +209,7 @@ export default function SpecBatch({ line, fields, categories, products, blank, o
                       {r.same_as != null && <div className="muted">{t("products.batch.same", { n: r.same_as + 1 })}</div>}
                     </td>
                     <td>
-                      <select value={r.category} disabled={!!r.match}
+                      <select value={r.category} disabled={!!r.match || !!r.table}
                         onChange={(e) => set(i, { category: e.target.value, off: Object.fromEntries(Object.keys(r.values[e.target.value] ?? {}).map((f) => [f, r.ocr])) })}>
                         {Object.keys(fields).map((c) => <option key={c} value={c}>{categories[c] ?? c}</option>)}
                       </select>

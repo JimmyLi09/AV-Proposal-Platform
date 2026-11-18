@@ -199,3 +199,57 @@ def test_spec_patterns_for_module_datasheets():
         {"pixel_pitch_mm": 1.86, "module_w_mm": 172.8, "module_h_mm": 86.4, "brightness_nits": 800}
     assert got("Max power consumption 120 W/cabinet") == {}  # 每箱功耗不是 W/㎡
     assert got("亮度调节 256级") == {}
+
+
+# ---- 2026-11-19：导入模板；产品表 Excel 和规格书一起批量导入（也可以从服务器文件夹） ----
+
+def _template_with_rows(client):
+    wb = load_workbook(io.BytesIO(client.get("/api/products/template.xlsx").content))
+    assert wb.sheetnames == ["说明", "箱体", "控制器", "视频处理器", "投影机", "镜头", "融合器"]
+    assert wb["控制器"].max_row == 1  # 只有表头
+    head = [c.value for c in wb["控制器"][1]]
+    row = {h: None for h in head}
+    row.update({"编号 ID": "MCTRL4K", "品牌": "NovaStar", "型号": "MCTRL4K", "状态": "首选", "适用场景": "室内、租赁",
+                "带载像素 px": "8,800,000", "网口数": 16})
+    wb["控制器"].append([row[h] for h in head])
+    wb["控制器"].append(["SC-4"] + [None] * (len(head) - 1))  # 已有产品：空格子不改 → 不算改动也照样列出
+    wb["控制器"].append(["BAD", None, "X", None, None, None, None, "很多"] + [None] * (len(head) - 8))
+    buf = io.BytesIO()
+    wb.save(buf)
+    return buf.getvalue(), head
+
+
+def test_template_has_a_help_sheet_and_round_trips(client):
+    login(client)
+    data, head = _template_with_rows(client)
+    help_rows = [[c.value for c in r] for r in load_workbook(io.BytesIO(data))["说明"].iter_rows()]
+    assert ["控制器", "带载像素 px", "数字，可以带千分位逗号", 2300000] in help_rows
+    # 「导入 Excel」也认模板（说明页跳过）
+    out = client.post("/api/products/LED/excel", files={"file": ("t.xlsx", data)},
+                      data={"content": json.dumps(_library(client)["content"])}).json()
+    assert out["added"] == ["MCTRL4K"] and len(out["errors"]) == 1
+
+
+def test_product_table_and_datasheets_in_one_batch(client):
+    login(client)
+    data, _ = _template_with_rows(client)
+    files = [("files", ("产品表.xlsx", data)), ("files", (ZH, (SPECS / ZH).read_bytes()))]
+    r = client.post("/api/products/LED/datasheets", files=files)
+    assert r.status_code == 200, r.text
+    out = r.json()
+    rows = {i["id"]: i for i in out["items"]}
+    mc = rows["MCTRL4K"]
+    assert (mc["table"], mc["category"], mc["brand"], mc["model"], mc["match"]) == (True, "controller", "NovaStar", "MCTRL4K", None)
+    assert {f: v["value"] for f, v in mc["values"]["controller"].items()} == {
+        "status": "preferred", "scenes": ["indoor", "rental"], "capacity_px": 8800000, "ports": 16}
+    assert mc["file"] == "产品表.xlsx · 控制器!2"
+    assert rows["SC-4"]["match"] == "SC-4" and rows["SC-4"]["model"] == next(p["model"] for p in _library(client)["content"]["products"] if p["id"] == "SC-4")
+    assert len(out["errors"]) == 1 and "控制器!4" in out["errors"][0]
+    assert any(i["file"] == ZH and i["category"] == "cabinet" for i in out["items"])  # 规格书照常读
+
+
+def test_settings_show_the_server_folder(client):
+    login(client)
+    assert client.get("/api/settings").json()["server"]["import_dir"] is None
+    client.app.state.import_dir = (client.data_dir / "LED Projects").resolve()
+    assert client.get("/api/settings").json()["server"]["import_dir"].endswith("LED Projects")

@@ -8,7 +8,7 @@ type Backup = { name: string; size: number; at: string };
 type Progress = { running: boolean; done: number; total: number; by: string; started: string; name: string | null; error: string | null };
 type SettingsData = {
   users: (User & { proposals: number })[];
-  server: { port: number; data_dir: string; kb_dir: string; backup_dir: string; project_platform: string; dwg: boolean; version: string | null };
+  server: { port: number; data_dir: string; kb_dir: string; backup_dir: string; project_platform: string; dwg: boolean; version: string | null; import_dir: string | null };
   backups: Backup[];
   backup: Progress | null;
 };
@@ -61,6 +61,7 @@ export default function Settings() {
     [t("settings.projectPlatform"), sv.project_platform || t("settings.notSet"), t("settings.projectPlatformNote")],
     [t("settings.dataDir"), sv.data_dir],
     [t("settings.kbDir"), sv.kb_dir],
+    [t("settings.importDir"), sv.import_dir || t("settings.notSet"), t("settings.importDirNote")],
     [t("settings.backupDir"), sv.backup_dir],
     [t("settings.dwg"), t(sv.dwg ? "settings.dwgYes" : "settings.dwgNo")],
     [t("settings.version"), sv.version ?? t("settings.devVersion")],

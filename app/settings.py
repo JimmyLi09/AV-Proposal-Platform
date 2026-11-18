@@ -82,7 +82,8 @@ def settings(request: Request, db: Session = Depends(get_db)):
         "users": [user_out(u) | {"proposals": counts.get(u.id, 0)} for u in db.scalars(select(User).order_by(User.name))],
         "server": {"port": state.port, "data_dir": str(state.data_dir), "kb_dir": str(state.kb_dir),
                    "backup_dir": str(state.backup_dir), "project_platform": state.project_platform, "dwg": oda_available(state.oda),
-                   "version": state.version},
+                   "version": state.version,
+                   "import_dir": str(state.import_dir) if state.import_dir else None},
         "backups": list_backups(state.backup_dir),
         "backup": state.backup_progress,
     }

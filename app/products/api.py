@@ -12,7 +12,8 @@ from ..i18n import text, tr
 from ..models import ProductLibraryVersion, User
 from ..storage import safe_name, save_original
 from ..versions import check_base, history, latest, next_label, version_out
-from .importer import BATCH_MAX, batch_item, datasheet_values, export_xlsx, import_xlsx, mark_duplicates
+from .importer import (BATCH_MAX, batch_item, datasheet_values, export_xlsx, import_xlsx, mark_duplicates, table_items,
+                       template_xlsx)
 from .library import CATEGORY_LABEL, FIELDS, SCENES, STATUSES, LibraryError, load_reference, load_seed, name, validate
 
 router = APIRouter(prefix="/products")
@@ -24,6 +25,14 @@ def ensure_seed(db: Session) -> None:
             db.add(ProductLibraryVersion(business_line=line, version="v1.0", content=load_seed(line),
                                          reason={"LED": "示例产品，清单 D 组填好后替换"}.get(line, "示例产品，投影清单 v2 填好后替换")))
     db.commit()
+
+
+@router.get("/template.xlsx")
+def download_template(db: Session = Depends(get_db)):
+    """导入模板（两条业务线 + 说明页）。"""
+    data = template_xlsx({line: latest(db, ProductLibraryVersion, line).content for line in FIELDS})
+    return Response(data, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    headers={"Content-Disposition": 'attachment; filename="product-import-template.xlsx"'})
 
 
 @router.get("/{line}")
@@ -150,15 +159,21 @@ def _batch(request: Request, db: Session, line: str, sources: list[tuple[str, ob
         raise HTTPException(422, tr(f"一次最多 {BATCH_MAX} 份", f"At most {BATCH_MAX} files at a time"))
     products = latest(db, ProductLibraryVersion, line).content["products"]
     taken = {p["id"] for p in products}
-    items, skipped = [], []
+    items, skipped, errors = [], [], []
+    state = request.app.state
     for filename, fh in sources:
         if _kind(filename) not in DATASHEET_TYPES:
             skipped.append(filename)
             continue
-        state = request.app.state
-        items.append(batch_item(line, filename, read(_archive(state, filename, fh), state.oda), products, taken))
+        path = _archive(state, filename, fh)
+        table = table_items(path.read_bytes(), line, products, filename) if _kind(filename) in ("xlsx", "xlsm") else None
+        if table is not None:  # 按模板填的产品表：一行一个产品
+            items += table[0]
+            errors += table[1]
+        else:
+            items.append(batch_item(line, filename, read(path, state.oda), products, taken))
     mark_duplicates(items)
-    return {"items": items, "skipped": skipped}
+    return {"items": items, "skipped": skipped, "errors": errors}
 
 
 @router.post("/{line}/datasheets")
