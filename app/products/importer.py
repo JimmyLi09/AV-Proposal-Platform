@@ -11,6 +11,7 @@ import json
 import re
 
 from openpyxl import Workbook, load_workbook
+from openpyxl.styles import Font
 
 from ..i18n import CONTENT, text, tr
 from .library import CATEGORY_LABEL, FIELDS, LibraryError, validate
@@ -277,3 +278,117 @@ def mark_duplicates(items: list[dict]) -> None:
         it["same_as"] = seen.get(key) if key else None
         if key and key not in seen:
             seen[key] = i
+
+
+# ---- 产品表 Excel 也走批量导入（2026-11-19 Jimmy：Excel 和规格书一起导入，可直接读服务器文件夹） ----
+
+def table_items(data: bytes, line: str, products: list[dict], filename: str) -> tuple[list, list] | None:
+    """按模板格式的产品表（一类产品一个工作表、有「编号」栏）→ 复核表的行；不是这种格式返回 None（当规格书读）。"""
+    try:
+        wb = load_workbook(io.BytesIO(data), read_only=True, data_only=True)
+    except Exception:  # noqa: BLE001 —— 不是 xlsx 或文件坏了：交给规格书读取
+        return None
+    by_sheet = {k: c for c in FIELDS[line] for k in _keys(CATEGORY_LABEL[c], c)}
+    by_id = {p["id"]: p for p in products}
+    items, errors, seen = [], [], False
+    for ws in wb.worksheets:
+        category = by_sheet.get(_norm(ws.title))
+        if category is None:
+            continue
+        rows = ws.iter_rows(values_only=True)
+        cols = _header_map(line, category, list(next(rows, [])))
+        id_col = next((i for i, (n, _, _) in cols.items() if n == "id"), None)
+        if id_col is None:
+            continue
+        seen = True
+        for no, row in enumerate(rows, start=2):
+            pid = str(row[id_col]).strip() if id_col < len(row) and row[id_col] is not None else ""
+            if not pid:
+                continue
+            where = f"{ws.title}!{no}"
+            old = by_id.get(pid)
+            if old is not None and old["category"] != category:
+                errors.append(tr(f"{filename} {where}：编号 {pid} 已经是别的类别", f"{filename} {where}: ID {pid} belongs to another category"))
+                continue
+            values, raw = {}, {}
+            try:
+                for i, (name, kind, head) in cols.items():
+                    if name != "id" and i < len(row) and row[i] is not None and str(row[i]).strip():
+                        try:
+                            values[name], raw[name] = _parse(kind, row[i]), str(row[i]).strip()
+                        except (ValueError, KeyError, IndexError):
+                            raise LibraryError(tr(f"{head} 看不懂：{row[i]}", f"cannot read {head}: {row[i]}"))
+                validate({"business_line": line, "products": [(old or _blank(line, category, pid)) | values]}, line)
+            except LibraryError as e:
+                errors.append(f"{filename} {where}：{e}")
+                continue
+            brand, model = values.pop("brand", None), values.pop("model", None)
+            items.append({
+                "file": f"{filename} · {where}", "category": category, "id": pid, "match": pid if old else None,
+                "brand": brand or (old or {}).get("brand", ""), "model": model or (old or {}).get("model", "") or pid,
+                "values": {category: {f: {"value": v, "location": where, "snippet": raw[f]} for f, v in values.items()}},
+                "ocr": False, "read": True, "note": "", "table": True})
+    wb.close()
+    return (items, errors) if seen else None
+
+
+HELP = {
+    "id": ("编号，保存后不能改。和产品库已有编号相同 = 更新那个产品；新编号 = 新增", "IC-25"),
+    "text": ("文字", ""),
+    "number": ("数字，可以带千分位逗号", ""),
+    "status": ("首选 / 已批准 / 已停用", "首选"),
+    "scenes": ("室内、户外、租赁（多个用顿号或逗号隔开）", "室内、租赁"),
+    "maintenance": ("前维护 / 后维护 / 前后维护", "前维护"),
+    "bool": ("是 / 否", "否"),
+    "flag": ("是 / 否", "是"),
+    "sizes": ("宽x高 mm，多个尺寸用分号隔开，第一个是主尺寸", "640x480; 640x360"),
+    "ids": ("产品编号，多个用逗号隔开", "IC-25, IC-19"),
+}
+
+
+def template_xlsx(contents: dict[str, dict]) -> bytes:
+    """导入模板：两条业务线的工作表（只有表头）+「说明」页（每一栏的意思、写法和示例）。"""
+    wb = Workbook()
+    help_ws = wb.active
+    help_ws.title = "说明"
+    help_ws.append(["AV Proposal Platform · 产品库导入模板"])
+    for line_ in [
+        "用法：在对应的工作表里一行填一个产品，第一行表头不要改。空格子 = 不改 / 不填。",
+        "导入：产品库 →「规格书批量导入」（可以和规格书一起选，也可以直接选服务器文件夹里的这个文件）或「导入 Excel」。",
+        "LED 屏的工作表（箱体 / 控制器 / 视频处理器）在「LED 屏」页导入；投影的（投影机 / 镜头 / 融合器）在「投影」页导入。",
+        "导入只放进草稿，核对后填原因另存新版本。每箱最大电流 / 功率不在表里，导入后在产品表单里填。",
+        "",
+    ]:
+        help_ws.append([line_])
+    help_ws.append(["工作表", "栏", "写法", "示例"])
+    for line, content in contents.items():
+        for category in FIELDS[line]:
+            sheet = _head(CATEGORY_LABEL[category])
+            ws = wb.create_sheet(sheet[:31])
+            cols = _columns(line, category)
+            ws.append([_head(label) for _, label, _ in cols])
+            for i, (_, label, _) in enumerate(cols):
+                ws.column_dimensions[ws.cell(1, i + 1).column_letter].width = max(12, len(_head(label)) + 4)
+            ws.freeze_panes = "B2"
+            sample = next((p for p in content["products"] if p["category"] == category), {})
+            for name, label, kind in cols:
+                how, eg = HELP.get(kind, ("", ""))
+                value = _cell(kind, sample.get(name)) if sample.get(name) not in (None, "", []) else eg
+                if name == "sample":  # 真实产品留空或填「否」
+                    how, value = "真实产品留空或填「否」（只有测试用的示例产品填「是」）", "否"
+                elif name == "brand":
+                    value = {"cabinet": "Absen", "controller": "NovaStar", "processor": "NovaStar",
+                             "projector": "Panasonic", "lens": "Panasonic"}.get(category, "")
+                help_ws.append([sheet, _head(label), how, value])
+    for col, width in zip("ABCD", (12, 34, 56, 24)):
+        help_ws.column_dimensions[col].width = width
+    bold = Font(bold=True)
+    help_ws["A1"].font = Font(bold=True, size=14)
+    for cell in help_ws[7]:
+        cell.font = bold
+    for ws in wb.worksheets[1:]:
+        for cell in ws[1]:
+            cell.font = bold
+    buf = io.BytesIO()
+    wb.save(buf)
+    return buf.getvalue()
