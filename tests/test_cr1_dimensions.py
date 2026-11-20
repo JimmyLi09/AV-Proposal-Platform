@@ -19,7 +19,10 @@ def fields(result):
 
 
 @pytest.mark.parametrize("text,value", [("6400mm", 6400), (" 3520 mm ", 3520), ("← 4,480 →", 4480), ("4.48m", None),
-                                        ("2560", 2560), ("W4480", None), ("12", None), ("FFL +0.900", None)])
+                                        ("2560", 2560), ("W4480", None), ("12", None), ("FFL +0.900", None),
+                                        # 2026-11-20 排布图：尺寸后面括号里是像素数
+                                        ("3200[1280]", 3200), ("1920 [768]", 1920), ("3200mm (1280px)", 3200),
+                                        ("3200 [1]", None), ("[1280]", None)])
 def test_lone_value(text, value):
     assert lone_value(text) == value
 
@@ -86,3 +89,10 @@ def test_existing_samples_are_unchanged(tmp_path):
     for name, expected in EXPECTED.items():
         path = SAMPLES / name
         assert record(extract(path, path.suffix[1:].lower(), tmp_path, f"derived/{name}", None)) == expected
+
+
+def test_layout_drawing_with_pixel_counts_in_brackets():
+    """2026-11-20 模组 / 箱体排布图（黑底 CAD 截图）：「3200 [1280]」「1920 [768]」，标题是「模组排布图」不是 LED SCREEN。"""
+    lines = [("3200[1280]", (290, 43, 357, 63)), ("3200[1280]", (885, 41, 952, 63)), ("1920 [768]", (14, 218, 34, 279)),
+             ("1920[768]", (611, 218, 628, 277)), ("模组排布图", (248, 493, 312, 516)), ("箱体排布图", (837, 493, 901, 515))]
+    assert [(f, v) for f, v, *_ in pair(lines, [])] == [("width_mm", 3200), ("height_mm", 1920)]
