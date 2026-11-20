@@ -13,7 +13,9 @@ import re
 from .fields import to_mm
 
 Box = tuple[float, float, float, float]  # x0, y0, x1, y1（y 向下）
-LONE = re.compile(r"^[\s←→↔<>|\-–—]*(\d{1,3}(?:,\d{3})+|\d{3,6})\s*(mm|m)?[\s←→↔<>|\-–—]*$", re.I)
+# 2026-11-20：LED 排布图常在尺寸后面用括号标像素数「3200 [1280]」「1920 (768)」，括号里的不是尺寸，跳过
+LONE = re.compile(r"^[\s←→↔<>|\-–—]*(\d{1,3}(?:,\d{3})+|\d{3,6})\s*(mm|m)?"
+                  r"(?:\s*[\[(（【]\s*\d{2,5}\s*(?:px|pixels?|像素)?\s*[\])）】])?[\s←→↔<>|\-–—]*$", re.I)
 TITLE = re.compile(r"\bP\s?\d{1,2}(?:\.\d{1,3})?\b.*(?:LED|SCREEN|屏)|LED\s*(?:SCREEN|WALL|DISPLAY|屏)", re.I)
 NEAR = 0.5  # 离框体多远还算这块屏的尺寸：框体宽 / 高的一半
 
