@@ -216,3 +216,22 @@ def test_multiface_led_unfolded_drawing(tmp_path):
     assert c.get(f"{url}/drawing.pdf").content[:4] == b"%PDF"
     doc = Document(io.BytesIO(c.get(f"{url}/proposal.docx").content))
     assert "拼接与线路图" in [p.text for p in doc.paragraphs if p.style.name.startswith("Heading")]
+
+
+def test_hidden_overall_size_does_not_block_a_multiface_led(tmp_path):
+    """2026-11-20 Phoenix Electric Showroom：选了弧形（多面屏）后，确认表不列整屏宽 / 高，
+    但文件里读到的屏宽 / 屏高（中置信度）一直算「还有 2 个字段没确认」，下一步过不去。"""
+    c = start(tmp_path, "LED")
+    files = [("files", ("Dimension_lines.png", (SAMPLES / "Dimension_lines.png").read_bytes()))]
+    assert c.post(f"/api/projects/{c.project}/files", files=files).status_code == 201
+    v = c.post(f"/api/proposals/{c.proposal}/fill-from-files").json()
+    hidden = {"width_mm", "height_mm"} & set(v["pending"])
+    assert hidden, v["pending"]  # 平面单屏：照常要确认
+    for name in set(v["pending"]) - hidden:  # 确认表里看得到的照常确认
+        v = c.post(f"/api/proposals/{c.proposal}/confirm", json={"field": name}).json()
+    assert set(v["pending"]) == hidden
+    inputs = {k: x for k, x in LED_SAMPLE["input"].items() if k not in ("width_mm", "height_mm")} | v["rev"]["inputs"]
+    inputs |= {"shape": "curved", "faces": [{"id": "A", "name": "Curve", "orientation": "wall", "width_mm": 8320, "height_mm": 2560}]}
+    v = c.put(f"/api/proposals/{c.proposal}/inputs", json={"inputs": inputs}).json()
+    assert v["pending"] == []
+    assert "没确认" not in v["flow"]["gates"]["02-04"], v["flow"]["gates"]["02-04"]

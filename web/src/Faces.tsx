@@ -34,6 +34,11 @@ export default function ShapeFaces({ view, inputs, setInputs }: {
   const corners = (inputs.corners as CornerInput[] | undefined) ?? [];
   const multi = shape !== view.shapes[0];
   const [open, setOpen] = useState<string | null>(null);
+  // 文件里读到的整屏宽 / 高（2026-11-20）：多面屏时确认表不列，放到每一面的输入框下面，点一下填进这一面
+  const reads = {
+    width: readValues(view, inputs, led ? "width_mm" : "wall_width_mm"),
+    height: led ? readValues(view, inputs, "height_mm") : [],
+  };
 
   function setShape(s: string) {
     if (s === view.shapes[0]) {
@@ -42,8 +47,12 @@ export default function ShapeFaces({ view, inputs, setInputs }: {
       delete rest.corners;
       return setInputs({ ...rest, shape: s });
     }
-    const list = faces.length ? faces : Array.from({ length: START_FACES[s] ?? 2 }, (_, i) =>
-      ({ id: LETTERS[i], name: "", orientation: (s === "L_wall_floor" || s === "wall_floor") && i > 0 ? "floor" : "wall", width_mm: null, height_mm: null }));
+    const count = START_FACES[s] ?? 2;
+    const list = faces.length ? faces : Array.from({ length: count }, (_, i) =>
+      ({ id: LETTERS[i], name: "", orientation: (s === "L_wall_floor" || s === "wall_floor") && i > 0 ? "floor" : "wall",
+        // 弧形、环形只有一面：读到的尺寸只有一个时直接带进去（仍可改）
+        width_mm: count === 1 && reads.width.length === 1 ? reads.width[0] : null,
+        height_mm: count === 1 && reads.height.length === 1 ? reads.height[0] : null }));
     setInputs({ ...inputs, shape: s, faces: list, corners: cornersFor(s, list, corners) });
   }
   const setFaces = (list: FaceInput[]) => setInputs({ ...inputs, faces: list, corners: cornersFor(shape, list, corners) });
@@ -104,7 +113,7 @@ export default function ShapeFaces({ view, inputs, setInputs }: {
               </thead>
               <tbody>
                 {faces.map((f, i) => (
-                  <FaceRow key={f.id} f={f} led={led} open={open === f.id} onOpen={() => setOpen(open === f.id ? null : f.id)}
+                  <FaceRow key={f.id} f={f} led={led} reads={reads} open={open === f.id} onOpen={() => setOpen(open === f.id ? null : f.id)}
                     onChange={(patch) => setFace(i, patch)} onRemove={faces.length > 1 ? () => setFaces(faces.filter((_, j) => j !== i)) : undefined} />
                 ))}
               </tbody>
@@ -162,9 +171,16 @@ export default function ShapeFaces({ view, inputs, setInputs }: {
   );
 }
 
-function FaceRow({ f, led, open, onOpen, onChange, onRemove }: {
+/** 文件里读到的某个尺寸（各候选值 + 已填进整屏的值），去重，最多 3 个。 */
+function readValues(view: WorkspaceView, inputs: Record<string, unknown>, name: string): number[] {
+  const all = [inputs[name], ...(view.candidates[name] ?? []).map((c) => c.value)];
+  return [...new Set(all.filter((v): v is number => typeof v === "number" && v > 0))].slice(0, 3);
+}
+
+function FaceRow({ f, led, reads, open, onOpen, onChange, onRemove }: {
   f: FaceInput;
   led: boolean;
+  reads: { width: number[]; height: number[] };
   open: boolean;
   onOpen: () => void;
   onChange: (patch: Partial<FaceInput>) => void;
@@ -191,8 +207,14 @@ function FaceRow({ f, led, open, onOpen, onChange, onRemove }: {
             </select>
           </td>
         )}
-        <td><input aria-label={`${f.id} ${t("faces.width")}`} {...number("width_mm")} /></td>
-        <td><input aria-label={`${f.id} ${t("faces.height")}`} {...number("height_mm")} /></td>
+        <td>
+          <input aria-label={`${f.id} ${t("faces.width")}`} {...number("width_mm")} />
+          {f.width_mm == null && <Reads values={reads.width} onUse={(v) => onChange({ width_mm: v })} />}
+        </td>
+        <td>
+          <input aria-label={`${f.id} ${t("faces.height")}`} {...number("height_mm")} />
+          {led && f.height_mm == null && <Reads values={reads.height} onUse={(v) => onChange({ height_mm: v })} />}
+        </td>
         {led ? (
           <>
             <td><input aria-label={`${f.id} ${t("faces.signal")}`} {...text("signal_point")} /></td>
@@ -232,6 +254,18 @@ function FaceRow({ f, led, open, onOpen, onChange, onRemove }: {
         </tr>
       )}
     </>
+  );
+}
+
+function Reads({ values, onUse }: { values: number[]; onUse: (v: number) => void }) {
+  if (!values.length) return null;
+  return (
+    <div className="muted small">
+      {t("faces.read")}{" "}
+      {values.map((v) => (
+        <button key={v} className="btn-link" onClick={() => onUse(v)}>{v}</button>
+      ))}
+    </div>
   );
 }
 

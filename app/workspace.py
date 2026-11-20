@@ -40,10 +40,17 @@ def get_proposal(db: Session, proposal_id: int) -> Proposal:
 RANK = {"high": 0, "medium": 1, "low": 2}
 
 
+# 多面屏时尺寸在分面里填（CR-7），整屏的这几个字段不在确认表里，也就不该挡确认关
+FACE_FIELDS = {"width_mm", "height_mm", "wall_width_mm"}
+
+
 def pending(rev) -> list[str]:
-    """确认关：从文件读到、置信度为 medium / low，或几份文件读到的值不一样（CR-7），还没人确认的字段。"""
+    """确认关：从文件读到、置信度为 medium / low，或几份文件读到的值不一样（CR-7），还没人确认的字段。
+    多面屏时不算整屏宽 / 高（2026-11-20：界面里看不到这两个字段，却一直卡「还有 2 个字段需要确认」）。"""
+    hidden = FACE_FIELDS if multiface.is_multi(rev.inputs or {}) else set()
     return [k for k, m in (rev.input_meta or {}).items()
-            if m.get("source") == "file" and (m.get("confidence") != "high" or m.get("conflict")) and not m.get("confirmed_by")]
+            if k not in hidden and m.get("source") == "file" and (m.get("confidence") != "high" or m.get("conflict"))
+            and not m.get("confirmed_by")]
 
 
 # 读文件认出的是通用的屏宽 / 屏高；投影方案里对应墙宽 / 墙高
