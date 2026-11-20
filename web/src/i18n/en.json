@@ -228,6 +228,7 @@
     "perFacePj": "Projectors are laid out per face, never across a corner; empty height, depth and lens height use the confirmed inputs below.",
     "power": "Power input",
     "protection": "Protection (e.g. GOB)",
+    "read": "Read from files:",
     "refCircuits": "Reference circuits (supplier drawing / original design)",
     "refData": "Reference data cables",
     "resolution": "Manual fix for the clash",
