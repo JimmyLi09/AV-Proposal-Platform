@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { api, DeckSettings, RevCompare, send, WorkspaceView } from "./api";
 import { lang as currentLang, t, tOr } from "./i18n";
 import { fmtDate } from "./labels";
+import { Assumed } from "./Calc";
 import { ManualList } from "./Workspace";
 
 // 07 审批与导出（CR-9）：只有正式版本能提交（草稿先在 05 / 06 保存）；批准（可以自审，记录批准人和时间）/ 退回（必须写意见）；
@@ -37,6 +38,9 @@ export default function ReviewTab({ view, onApply, onOpenRev }: {
           )}
         </p>
         {hint && <p className="muted">{hint}</p>}
+        {/* 审批前看清楚哪些是系统先定的（待确定），这些也写进方案的「风险与假设」 */}
+        <Assumed result={view.result} />
+        {Object.keys(view.result?.auto ?? {}).length > 0 && <p className="warn">{t("review.autoSizes")}</p>}
         {view.locked && (
           <p className="muted small">
             {t("review.lockedVersions", {

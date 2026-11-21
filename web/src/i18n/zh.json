@@ -716,6 +716,7 @@
     "approve": "批准",
     "approvedBy": "批准：{name} · {date}",
     "author": "作者",
+    "autoSizes": "尺寸是系统先选的（待确定），见 05 顶部；方案的「风险与假设」里也写了。",
     "biOnly": "中英对照目前只有演示稿 PPT；BOQ Excel 是客户版英文格式。其它文件请选中文或 English。",
     "blockers": "提交审核前要先处理：",
     "boqManual": "BOQ 手动改动 {n} 行。",

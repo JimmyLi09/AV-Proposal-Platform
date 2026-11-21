@@ -98,9 +98,30 @@ def clauses(template: dict, line: str, values: dict, comp: dict | None) -> list[
     return out
 
 
+OPTION_LABELS = {"indoor": ("室内", "indoor"), "outdoor": ("户外", "outdoor"), "rental": ("租赁", "rental"),
+                 "wall": ("壁挂", "wall-mounted"), "floor": ("落地", "floor-standing"), "hanging": ("吊装", "hanging"),
+                 "embedded": ("嵌入", "embedded"), "front": ("前维护", "front service"), "rear": ("后维护", "rear service")}
+
+
+def _show_input(x) -> str:
+    if isinstance(x, list):
+        return " – ".join(str(i) for i in x)
+    return tr(*OPTION_LABELS[x]) if x in OPTION_LABELS else str(x)
+
+
 def _risks(prop: Proposal, v: dict, template: dict) -> list[str]:
     result = v["result"]
     out = clauses(template, prop.business_line, result["values"], v["completeness"])
+    # 2026-11-21：资料没写、系统先按缺省值算的输入，和系统先选的尺寸，都写明「待确定」
+    defs = {d["name"]: d["label"] for d in v.get("input_defs") or []}
+    if assumed := result.get("assumed"):
+        listed = tr("、", ", ").join(f"{defs.get(k, k)} {_show_input(x)}" for k, x in assumed.items())
+        out.append(tr(f"以下各项资料里没写，按公司缺省值计算，待确定：{listed}。",
+                      f"Not stated in the documents, calculated with company defaults, to be confirmed: {listed}."))
+    for k, a in (result.get("auto") or {}).items():
+        out.append(tr(f"{defs.get(k, k)}：设计 {a['from']}，现有产品拼不出，按 {a['to']} 计算，待确定。",
+                      f"{defs.get(k, k)}: {a['from']} in the design cannot be built with the products; calculated with {a['to']}, "
+                      "to be confirmed."))
     if any(r.get("status") == "sample" for r in result.get("rules") or []):
         out.append(tr("部分系数是示例值，以最终确认的数值为准。", "Some coefficients are sample values, pending final confirmation."))
     for m in v["overrides"]:

@@ -365,3 +365,25 @@ def test_pitch_is_picked_from_the_library_when_not_given():
     assert out["assumed"]["pixel_pitch_mm"] == 1.9  # 近看只能用更小的点间距
     out = calculate(CONTENT, LIBRARY, {"width_mm": 4480, "height_mm": 2560})  # 观看距离也没写：取首选箱体
     assert out["assumed"]["pixel_pitch_mm"] == 2.5 and out["assumed"]["viewing_distance_m"] == [2.5, 7.5]
+
+
+def test_assumptions_are_written_into_the_proposal_risks(tmp_path):
+    """审批和导出：系统先定的（缺省值、先选的尺寸）写进「风险与假设」，客户看得到是待确定。"""
+    from fastapi.testclient import TestClient
+
+    from app.main import create_app
+
+    with TestClient(create_app(tmp_path)) as c:
+        u = c.post("/api/users", json={"name": "JM", "role": "PM"}).json()
+        c.post("/api/session", json={"user_id": u["id"]})
+        p = c.post("/api/projects", json={"name": "Img", "client": "T"}).json()
+        prop = c.post(f"/api/projects/{p['id']}/proposals", json={"business_line": "LED"}).json()
+        base = f"/api/proposals/{prop['id']}"
+        c.put(f"{base}/inputs", json={"inputs": {"width_mm": 4500, "height_mm": 2560, "pixel_pitch_mm": 2.5}})
+        from app import proposal_doc
+        v = c.get(base).json()
+        assert v["result"]["assumed"]["environment"] == "indoor" and v["result"]["auto"]["width_mm"]["to"] == 4480
+        from types import SimpleNamespace
+        risks = proposal_doc._risks(SimpleNamespace(business_line="LED"), v, {"clauses": []})
+        assert any("资料里没写" in r and "使用环境 室内" in r for r in risks), risks
+        assert any(r.startswith("屏宽：设计 4500") and "按 4480 计算" in r for r in risks), risks
