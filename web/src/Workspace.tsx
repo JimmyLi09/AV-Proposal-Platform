@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ManualOverride, RuleResult, send, Suggestion, WorkspaceView } from "./api";
-import { CheckChip, Outcome, ResultsTable, StatusChip } from "./Calc";
+import { Assumed, CheckChip, Outcome, ResultsTable, StatusChip } from "./Calc";
 import { show as showValue } from "./Confirm";
 import MultiView, { MultiCalc } from "./Multi";
 import ProjectionDrawings from "./Projection";
@@ -91,6 +91,7 @@ function Recommendation({ view, onCabinet, onLibrary, onView }: {
         <h2>{t("ws.tabs.rec")}</h2>
         {view.overrides.length > 0 && <ManualList items={view.overrides} />}
         {rec.missing.length > 0 && <p className="warn">{t("ws.missing", { names: rec.missing.join(", ") })}</p>}
+        <Assumed result={result} />
         {Object.entries(result.auto ?? {}).map(([k, a]) => (
           <p key={k} className="warn">
             {t("calc.autoPicked", { name: inputLabel(k), from: a.from, to: a.to })}{" "}

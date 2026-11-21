@@ -334,3 +334,21 @@ def test_waiting_on_an_earlier_rule_names_the_rule():
     rules = {r["id"]: r for r in run(CONTENT, fixture_input(cabinet_sizes_mm=[[640, 480], [500, 500]]), CATALOG)["rules"]}
     assert rules["F3"]["check"] == "BLOCK"
     assert rules["F5"]["waiting"] == ["F3"]
+
+
+def test_image_only_inputs_get_defaults_to_be_confirmed():
+    """2026-11-21 只有图片：只读出宽、高、点间距，其它按规则集缺省值先算（待确定），不再「还缺 7 项」。"""
+    from app.rules.engine import calculate
+
+    out = calculate(CONTENT, LIBRARY, {"width_mm": 4480, "height_mm": 2560, "pixel_pitch_mm": 2.5})
+    assert out["assumed"] == {"environment": "indoor", "installation": "wall", "maintenance": "front",
+                              "brightness_required_nits": 600, "signal_sources": 1, "viewing_distance_m": [2.5, 7.5]}
+    assert not out["recommendation"]["missing"] and all(not r["missing"] for r in out["rules"])
+    # 填了的照填的算，不补
+    out = calculate(CONTENT, LIBRARY, {"width_mm": 4480, "height_mm": 2560, "pixel_pitch_mm": 2.5, "environment": "indoor",
+                                       "brightness_required_nits": 800})
+    assert "environment" not in out["assumed"] and "brightness_required_nits" not in out["assumed"]
+    # 老版本规则集没有缺省值参数：照旧缺什么说什么
+    old = copy.deepcopy(CONTENT)
+    old["params"] = [p for p in old["params"] if not p["name"].startswith("default_")]
+    assert calculate(old, LIBRARY, {"width_mm": 4480, "height_mm": 2560, "pixel_pitch_mm": 2.5})["recommendation"]["missing"]

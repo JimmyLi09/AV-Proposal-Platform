@@ -193,7 +193,9 @@ def test_upgrade_saves_new_led_rule_and_library_versions_and_keeps_user_edits(tm
     with engine.connect() as conn:
         sets = conn.execute(sa.text("select version, content, reason from rule_set_versions order by id")).all()
         libs = conn.execute(sa.text("select version, content from product_library_versions order by id")).all()
-    assert [s.version for s in sets] == ["v1.5", "v1.6"] and "CR-10" in sets[1].reason
+    # v1.7：2026-11-21 缺省值（0019）在 CR-10 之后再加一个版本，算式不变
+    assert [s.version for s in sets] == ["v1.5", "v1.6", "v1.7"] and "CR-10" in sets[1].reason and "缺省值" in sets[2].reason
+    assert json.loads(sets[2].content)["rules"] == json.loads(sets[1].content)["rules"]
     assert json.loads(sets[0].content) == old  # 旧版本原样保留
     new = json.loads(sets[1].content)
     params = {p["name"]: p["value"] for p in new["params"]}

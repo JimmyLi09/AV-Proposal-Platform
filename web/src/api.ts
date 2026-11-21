@@ -169,6 +169,7 @@ export type RuleResult = {
 export type RunResult = {
   choices: Record<string, number[]>;
   auto?: Record<string, { from: number; to: number; options: number[] }>; // 系统先选的尺寸（待确定）
+  assumed?: Record<string, unknown>; // 资料没写、系统按缺省值算的输入（待确定）
   rules: RuleResult[];
   recommendation: Recommendation;
   boq: BoqLine[];

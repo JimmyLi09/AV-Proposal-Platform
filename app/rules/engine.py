@@ -10,7 +10,8 @@ from . import led, multiface, pj
 from .expr import ExprError, evaluate, fmt, names, num, parse, substitute
 
 SEED = Path(__file__).parent / "seed"
-LINES = {"LED": {"steps": led.STEPS, "precheck": led.size_choices, "auto_pick": led.auto_pick, "cabinet_choices": led.cabinet_choices, "recommend": led.recommend,
+LINES = {"LED": {"steps": led.STEPS, "precheck": led.size_choices, "auto_pick": led.auto_pick, "cabinet_choices": led.cabinet_choices, "defaults": led.apply_defaults,
+                 "recommend": led.recommend,
                  "product_inputs": led.product_inputs, "catalog": led.catalog, "boq": led.boq,
                  "product_fed": led.PRODUCT_INPUTS, "diagram": led.diagram,
                  "boq_context": led.boq_context, "boq_extra": led.BOQ_EXTRA, "suggest": led.suggest,
@@ -275,9 +276,12 @@ def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None
               overrides: dict | None = None) -> dict:
     """完整流程：从产品库推荐 → 带出产品参数 → 跑规则 → 内部明细，以及客户版 BOQ 模板要用的值。
     overrides：这个 Rev 的手动覆盖（CR-5），BOQ、示意图、图纸都用手动值。多面屏（CR-7）按面算，见 multiface.py。"""
-    if multiface.is_multi(inputs):
-        return multiface.calculate(content, library, inputs, cabinet_id, run)
     line = LINES[content["business_line"]]
+    assumed = {}
+    if line.get("defaults"):  # 资料没写的输入先按缺省值算（待确定，2026-11-21）
+        inputs, assumed = line["defaults"](inputs, {p["name"]: p["value"] for p in content["params"]})
+    if multiface.is_multi(inputs):
+        return multiface.calculate(content, library, inputs, cabinet_id, run) | {"assumed": assumed}
     rec = line["recommend"](inputs, library, cabinet_id)
     catalog = line["catalog"](library, rec["cabinet"])
     out = run(content, {**inputs, **line["product_inputs"](rec["cabinet"])}, catalog, overrides)
@@ -304,6 +308,7 @@ def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None
                 out, inputs = again, snapped
                 out["choices"] = choices
     out["auto"] = auto
+    out["assumed"] = assumed
     values = {ln["name"]: ln["value"] for r in out["rules"] for ln in r["lines"]}
     manual = {n for r in out["rules"] for n in r["manual"]}
     out["manual"] = sorted(manual)

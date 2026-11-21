@@ -43,6 +43,27 @@ def cabinet_choices(ctx: dict) -> dict:
     return choices
 
 
+def apply_defaults(inputs: dict, params: dict) -> tuple[dict, dict]:
+    """2026-11-21 只有图片的项目：资料没写的使用环境、安装、维护、亮度、观看距离、信号源先按缺省值算（待确定）。
+    缺省值是规则集参数（default_*，界面可改、带版本）；老版本规则集没有这些参数就不补。尺寸和点间距不补。"""
+    out, assumed = dict(inputs), {}
+
+    def put(name, value):
+        if value is not None and out.get(name) in (None, "", []):
+            out[name] = assumed[name] = value
+
+    put("environment", params.get("default_environment"))
+    put("installation", params.get("default_installation"))
+    put("maintenance", params.get("default_maintenance"))
+    put("brightness_required_nits", params.get(f"default_brightness_{out.get('environment')}"))
+    put("signal_sources", params.get("default_signal_sources"))
+    pitch, per_mm, factor = out.get("pixel_pitch_mm"), params.get("viewing_m_per_mm"), params.get("default_viewing_max_factor")
+    if pitch and per_mm and factor:
+        near = round(float(pitch) * float(per_mm), 2)
+        put("viewing_distance_m", [near, round(near * float(factor), 2)])
+    return out, assumed
+
+
 def auto_pick(value, options: list):
     """系统先替人选一个（待确定）：离设计尺寸最近的；一样近取小的，不超出设计尺寸。"""
     return min(options, key=lambda x: (abs(x - value), x))

@@ -56,6 +56,8 @@
   "calc": {
     "after": "修改后",
     "asCalculated": "计算式",
+    "assumed": "待确定：资料里没写，系统先按缺省值算 ——",
+    "assumedTail": "。在下面填了就按填的算。",
     "autoOther": "另一个可选 {others}，到 02–04 改选。",
     "autoPicked": "待确定：{name} 设计是 {from}，现有箱体拼不出，系统先按 {to} 计算。",
     "check": {
