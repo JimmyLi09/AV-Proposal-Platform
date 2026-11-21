@@ -130,6 +130,8 @@ def read_excel(path: Path, c: Collector) -> str:
 
     wb = load_workbook(path, data_only=True, read_only=False)
     for ws in wb.worksheets:
+        if re.search(r"说明|readme|instruction", ws.title, re.I):  # 填写说明页（需求单模板）只给人看，里面的示例不读
+            continue
         for row in ws.iter_rows(max_row=200, max_col=30):
             for cell in row:
                 if not isinstance(cell.value, str) or len(cell.value) > 40:

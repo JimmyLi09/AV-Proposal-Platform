@@ -78,11 +78,11 @@ LABELS = {
     "brightness_required_nits": r"brightness|亮度",
     "viewing_distance_m": r"viewing\s*distance|观看距离|视距",
     "signal_sources": r"signal\s*sources?|信号源",
-    "mounting": r"mounting|projector\s*mount|投影安装方式",
     "ambient_lux": r"ambient\s*light|环境光|照度",
     "surface_gain": r"screen\s*gain|surface\s*gain|幕面增益|增益",
 }
-LABELS = PJ_MM | PJ_M | LABELS  # Excel 栏名先认投影的（「天花高度」「镜头高度」不能当成「高度」）
+# Excel 栏名先认投影的（「天花高度」「镜头高度」不能当成「高度」，「投影安装方式」不能当成 LED 的「安装方式」）
+LABELS = PJ_MM | PJ_M | {"mounting": r"projector\s*mount(?:ing)?|投影(?:机)?安装方式"} | LABELS
 # 墙宽 / 墙高 也读成屏宽 / 屏高，投影方案里对应墙宽 / 墙高（见 workspace.FIELD_ALIAS）
 LABELS["width_mm"] += r"|wall\s*width|墙宽|墙面宽度|幕宽|投影宽度"
 LABELS["height_mm"] += r"|wall\s*height|墙高|墙面高度|幕高|投影高度"
