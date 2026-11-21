@@ -25,7 +25,7 @@ export default function SourcesPage({ view, inputs, setInputs, onApply, onReload
   const line = view.proposal.business_line;
   return (
     <>
-      <Files project={view.project.id} files={view.files} removed={view.removed_files} onUploaded={onReload} />
+      <Files project={view.project.id} line={line} files={view.files} removed={view.removed_files} onUploaded={onReload} />
       <ShapeFaces view={view} inputs={inputs} setInputs={setInputs} />
       {view.result && <Choices result={view.result} onPick={(k, v) => setInputs({ ...inputs, [k]: v })} />}
       <Conflicts view={view} onUse={onUse} />
@@ -41,8 +41,8 @@ export default function SourcesPage({ view, inputs, setInputs, onApply, onReload
   );
 }
 
-function Files({ project, files, removed, onUploaded }: {
-  project: number; files: SourceFile[]; removed: SourceFile[]; onUploaded: () => void;
+function Files({ project, line, files, removed, onUploaded }: {
+  project: number; line: string; files: SourceFile[]; removed: SourceFile[]; onUploaded: () => void;
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -93,6 +93,10 @@ function Files({ project, files, removed, onUploaded }: {
           <h2>{t("project.files")}</h2>
           <p className="muted">{t("project.filesIntro")}</p>
           <p className="muted small">{t("project.grades")}</p>
+          <p className="small">
+            <a href={`/api/templates/requirement/${line}.xlsx`}>{t("project.requirementForm")}</a>{" "}
+            <span className="muted">{t("project.requirementFormNote")}</span>
+          </p>
         </div>
         {files.length > 0 && (
           <button className="btn-outline" disabled={reading} onClick={reread}>

@@ -7,7 +7,7 @@ from fastapi import FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import sessionmaker
 
-from . import annotate, api, flow, i18n, review, server_import, settings, workspace
+from . import annotate, api, flow, i18n, requirement_form, review, server_import, settings, workspace
 from .db import make_engine, migrate
 from .knowledge import api as knowledge_api
 from .knowledge.scan import ensure_folders
@@ -69,7 +69,7 @@ def create_app(data_dir: Path | None = None) -> FastAPI:
         for module in (rules_api, products_api, templates_api):
             module.ensure_seed(db)
     for module in (api, rules_api, products_api, templates_api, workspace, review, annotate, flow, knowledge_api, settings,
-                   server_import):
+                   server_import, requirement_form):
         app.include_router(module.router, prefix="/api")
     if WEB_DIST.is_dir():
         app.mount("/", StaticFiles(directory=WEB_DIST, html=True), name="web")

@@ -692,6 +692,8 @@
     "removeConfirm": "Remove \"{name}\" from the project? The original stays on the server and can be restored under \"Removed files\" below; confirmed inputs stay as they are.",
     "removedBy": "removed by {name} on {date}",
     "removedFiles": "Removed files ({n})",
+    "requirementForm": "Download the requirement form (Excel)",
+    "requirementFormNote": "Fill it in and upload it: it reads as grade A, with no field-by-field confirmation.",
     "reread": "Parse again",
     "restore": "Restore",
     "size": "Size",
