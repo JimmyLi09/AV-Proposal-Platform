@@ -862,5 +862,21 @@
   },
   "示例值": {
     "en": "Sample value"
+  },
+  "Max cabinets per power chain 每条电源线最多串接箱体（0 = 不限）": {
+    "zh": "每条电源线最多串接箱体（0 = 不限）",
+    "en": "Max cabinets per power chain (0 = no limit)"
+  },
+  "2026-11-21 Jimmy：去掉串接上限，回路只按电流算（以前取 10）；要限制时填箱数": {
+    "en": "2026-11-21 Jimmy: no chain limit; circuits by current only (was 10). Enter a number of cabinets to limit"
+  },
+  "每回路额定电流取空开和线径载流的小者，乘持续负载系数得可用电流；按最大单箱电流算每回路能带几箱，得回路数。每条电源线最多串接几箱默认不限（0）；填了箱数时再按串接算，两者取大。": {
+    "en": "Rated current per circuit = the smaller of MCB and cable ampacity; × continuous load factor = usable current. Cabinets per circuit by the largest cabinet current gives the number of circuits. The max cabinets per power chain is unlimited by default (0); when a number is set, circuits by chain are also counted and the larger is used."
+  },
+  "{circuits}（每回路最多 {cab_per_circuit} 箱，按电流）": {
+    "en": "{circuits} (up to {cab_per_circuit} cabinets per circuit, by current)"
+  },
+  "去掉每条电源线的串接上限，回路只按电流算（2026-11-21 Jimmy；升级时自动生成，其它算式和参数不变）": {
+    "en": "Removed the cabinets-per-power-chain limit; circuits by current only (2026-11-21 Jimmy; generated on upgrade, other formulas and parameters unchanged)"
   }
 }

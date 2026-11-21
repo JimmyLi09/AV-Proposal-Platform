@@ -139,7 +139,7 @@ def test_upgrade_adds_the_s5_output_limit_as_a_new_rule_version(tmp_path):
     migrate(engine)
     with engine.connect() as conn:
         rows = conn.execute(sa.text("select version, content, reason from rule_set_versions order by id")).all()
-    assert [r.version for r in rows] == ["v1.4", "v1.5"] and "CR-7" in rows[1].reason
+    assert [r.version for r in rows][:2] == ["v1.4", "v1.5"] and "CR-7" in rows[1].reason  # 之后的迁移再加版本
     new = json.loads(rows[1].content)
     assert new["rules"] == old["rules"] and new["params"][-1]["name"] == "output_max_px_w"
 

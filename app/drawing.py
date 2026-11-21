@@ -62,7 +62,7 @@ def build(values: dict, inputs: dict, params: dict, edits: dict | None = None, m
         power_mm += jumper
         circuits.append({"no": no, "cabinets": len(members), "path": [c["id"] for c in members], "watts": round(float(watts)),
                          "amps": float(amps.quantize(Decimal("0.01"), ROUND_HALF_UP)),
-                         "over_a": amps > usable, "over_chain": len(members) > chain,
+                         "over_a": amps > usable, "over_chain": 0 < chain < len(members),  # 0 = 不限（2026-11-21）
                          "over": amps > usable or len(members) > chain})
     cables, data_mm = [], Decimal(0)
     for no in range(1, n_cables + 1):
