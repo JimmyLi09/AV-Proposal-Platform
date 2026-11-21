@@ -22,6 +22,32 @@ def size_choices(ctx: dict) -> dict:
     return choices
 
 
+def cabinet_choices(ctx: dict) -> dict:
+    """2026-11-21：模组整除、但现有箱体拼不出（例：COB 600×337.5，屏高 1856.25 = 5.5 箱；F3 会阻断）时，
+    给箱体拼得出的两个最近尺寸（单屏用；多面屏照旧按面阻断）。"""
+    sizes = ctx.get("cabinet_sizes_mm")
+    if not sizes or len({w for w, _ in sizes}) != 1:
+        return {}
+    w = sizes[0][0]
+    fits = {"width_mm": lambda x: x % w == 0, "height_mm": lambda x: _stack(x, [h for _, h in sizes]) is not None}
+    choices = {}
+    for dim, module in (("width_mm", "module_w_mm"), ("height_mm", "module_h_mm")):
+        if dim not in ctx or module not in ctx or fits[dim](ctx[dim]):
+            continue
+        step, target = ctx[module], ctx[dim]
+        reach = int(max([w] + [h for _, h in sizes]) // step) + 1
+        low = next((target - k * step for k in range(1, reach + 1) if target - k * step > 0 and fits[dim](target - k * step)), None)
+        high = next((target + k * step for k in range(1, reach + 1) if fits[dim](target + k * step)), None)
+        if opts := [x for x in (low, high) if x is not None]:
+            choices[dim] = opts
+    return choices
+
+
+def auto_pick(value, options: list):
+    """系统先替人选一个（待确定）：离设计尺寸最近的；一样近取小的，不超出设计尺寸。"""
+    return min(options, key=lambda x: (abs(x - value), x))
+
+
 def _stack(height: Decimal, heights: list) -> list | None:
     """每列从上到下怎么叠：尽量多用排在前面的尺寸（主尺寸优先），拼不出返回 None。"""
     if not heights:
@@ -64,10 +90,20 @@ def cabinet_layout(ctx: dict, catalog: dict) -> dict:
     rated = [(cols * c, ratings.get(wiring.size_key(w, h)) or {}) for c, h in used]
     outputs["cabinets_w"] = (sum((n * Decimal(str(r["w"])) for n, r in rated), Decimal(0))
                              if all(r.get("w") for _, r in rated) else Decimal(0))
+    estimated = False
     if all(r.get("a") for _, r in rated):
         outputs["cabinet_max_a"] = max(Decimal(str(r["a"])) for _, r in rated)
         trace += f" · Σ {_n(outputs['cabinets_w'])} W · max {_n(outputs['cabinet_max_a'])} A"
-    return {"outputs": outputs, "trace": trace, "sample": any(r.get("sample") for _, r in rated)}
+    elif (wpm2 := ctx.get(f"w_per_m2_{ctx.get('environment')}")) and ctx.get("mains_v"):
+        # 2026-11-21：产品库没填每箱最大电流时先估算接着算（待确定）：最大那种箱体的面积 × 每平米功耗 ÷ 电压
+        biggest = max(w * h for _, h in used)
+        outputs["cabinet_max_a"] = (biggest / Decimal(1_000_000) * wpm2 / ctx["mains_v"]).quantize(Decimal("0.01"))
+        trace += tr(f" · 估算单箱电流 {_n(outputs['cabinet_max_a'])} A（产品库没有每箱最大电流：箱体面积 × {_n(wpm2)} W/㎡ ÷ "
+                    f"{_n(ctx['mains_v'])} V，待确定）",
+                    f" · estimated cabinet current {_n(outputs['cabinet_max_a'])} A (no max current in the library: cabinet area × "
+                    f"{_n(wpm2)} W/m² ÷ {_n(ctx['mains_v'])} V, to be confirmed)")
+        estimated = True
+    return {"outputs": outputs, "trace": trace, "sample": estimated or any(r.get("sample") for _, r in rated)}
 
 
 ROUTES = {"S": lambda: tr("S 形", "S path"), "straight": lambda: tr("直走", "straight")}

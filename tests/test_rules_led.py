@@ -140,8 +140,16 @@ def test_f3_primary_cabinet_size_first(r):
 
 
 def test_f3_blocks_when_cabinets_cannot_fill_width():
-    x = calc(width_mm=4800)  # 4800 是模组整数倍，但不是箱体宽 640 的整数倍
+    x = calc(width_mm=4800)  # 4800 是模组整数倍，但不是箱体宽 640 的整数倍（单屏时由 calculate 先替人选尺寸，见下）
     assert x["F3"]["check"] == "BLOCK" and "拼不出" in x["F3"]["note"]
+    assert x["F8"]["waiting"] == ["F3"]  # 下游规则说「等 F3」，不报错
+    assert led.cabinet_choices({k: Decimal(str(v)) for k, v in fixture_input(width_mm=4800).items()
+                                if isinstance(v, (int, float))} | {"cabinet_sizes_mm": [[640, 480], [640, 640]]}) == {"width_mm": [4480, 5120]}
+
+
+def test_f3_blocks_when_cabinet_widths_differ():
+    x = calc(cabinet_sizes_mm=[[640, 480], [500, 500]])
+    assert x["F3"]["check"] == "BLOCK" and "同宽" in x["F3"]["note"]
     assert "cabinets" in x["F8"]["missing"]  # 下游规则标缺失，不报错
 
 
@@ -159,7 +167,9 @@ def test_f5_falls_back_to_area_tier_without_cabinet_data():
     assert value(x["F5"], "power_kw") == pytest.approx(11.4688 * 0.8)
     assert x["F5"]["lines"][0]["when"] == "environment == 'outdoor'"  # 追溯里写明用的是面积算法
     assert x["F5"]["status"] == "sample"  # 户外功率密度是示例值
-    assert "cabinet_max_a" in x["F6"]["missing"]  # 没有单箱电流就算不出每回路带几箱
+    # 2026-11-21：没有单箱电流时按箱体面积 × 每平米功耗 ÷ 电压估算（待确定），接着算回路，不再一路「缺少」
+    assert not x["F6"]["missing"] and x["F6"]["status"] == "sample"
+    assert "估算单箱电流" in x["F3"]["trace"] and x["F3"]["status"] == "sample"
 
 
 def test_f6_load_budget_takes_the_larger_of_load_and_chain(r):
@@ -285,3 +295,42 @@ def test_tier_without_condition_must_be_last():
     out["cases"].insert(0, {"when": None, "expr": "1"})  # 没写条件的行挡住了后面的分档
     with pytest.raises(ExprError):
         validate(content, CONTENT)
+
+
+# ---- 2026-11-21 Displan wall：模组整除但箱体拼不出 → 系统先选一个（待确定），接着算完 ----
+
+def _cob_library():
+    lib = copy.deepcopy(LIBRARY)
+    cob = dict(IC25, id="COB-P093", model="Audax COB P0.93 600x337.5", pixel_pitch_mm=0.93, module_w_mm=150,
+               module_h_mm=168.75, cabinet_sizes_mm=[[600, 337.5]], status="preferred")
+    cob.pop("cabinet_max", None)
+    lib["products"].append(cob)
+    return lib
+
+
+def test_cabinets_that_cannot_fill_the_height_get_two_sizes():
+    ctx = {"width_mm": Decimal(9600), "height_mm": Decimal("1856.25"), "module_w_mm": Decimal(150),
+           "module_h_mm": Decimal("168.75"), "cabinet_sizes_mm": [[Decimal(600), Decimal("337.5")]]}
+    assert led.size_choices(ctx) == {}  # 模组整除
+    assert led.cabinet_choices(ctx) == {"height_mm": [Decimal("1687.5"), Decimal(2025)]}
+    assert led.auto_pick(Decimal("1856.25"), [Decimal("1687.5"), Decimal(2025)]) == Decimal("1687.5")  # 一样近取小的
+    assert led.auto_pick(Decimal(2000), [Decimal("1687.5"), Decimal(2025)]) == Decimal(2025)
+
+
+def test_system_picks_a_size_and_finishes_the_calculation():
+    from app.rules.engine import calculate
+
+    inputs = {k: v for k, v in fixture_input().items() if k not in ("module_w_mm", "module_h_mm")}
+    inputs |= {"pixel_pitch_mm": 0.93, "width_mm": 9600, "height_mm": 1856.25}
+    out = calculate(CONTENT, _cob_library(), inputs, "COB-P093")
+    assert out["auto"] == {"height_mm": {"from": 1856.25, "to": 1687.5, "options": [1687.5, 2025]}}
+    rules = {r["id"]: r for r in out["rules"]}
+    assert rules["F3"]["check"] != "BLOCK" and rules["F3"]["display"].startswith("80")  # 16 列 × 5 行
+    assert all(not r["missing"] for r in out["rules"]), [(r["id"], r["missing"]) for r in out["rules"] if r["missing"]]
+
+
+def test_waiting_on_an_earlier_rule_names_the_rule():
+    """F3 阻断（不同宽的箱体）时，后面的规则说「等 F3」，不列 cabinets_w 这种变量名。"""
+    rules = {r["id"]: r for r in run(CONTENT, fixture_input(cabinet_sizes_mm=[[640, 480], [500, 500]]), CATALOG)["rules"]}
+    assert rules["F3"]["check"] == "BLOCK"
+    assert rules["F5"]["waiting"] == ["F3"]

@@ -162,11 +162,13 @@ export type RuleResult = {
   params: { name: string; label: string; value: number | string | null; unit: string; status: string; source?: string;
     options?: (number | string)[] }[];
   missing: string[];
+  waiting?: string[]; // 缺的是前面规则的结果：等哪几条规则
   error: string | null;
   manual: string[];
 };
 export type RunResult = {
   choices: Record<string, number[]>;
+  auto?: Record<string, { from: number; to: number; options: number[] }>; // 系统先选的尺寸（待确定）
   rules: RuleResult[];
   recommendation: Recommendation;
   boq: BoqLine[];

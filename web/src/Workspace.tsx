@@ -6,7 +6,7 @@ import MultiView, { MultiCalc } from "./Multi";
 import ProjectionDrawings from "./Projection";
 import { LoadBudget, WiringDiagram } from "./Wiring";
 import { t } from "./i18n";
-import { fmtDate } from "./labels";
+import { fmtDate, inputLabel } from "./labels";
 import { productStatus } from "./Products";
 
 const TILES: Record<string, string[]> = {
@@ -91,6 +91,12 @@ function Recommendation({ view, onCabinet, onLibrary, onView }: {
         <h2>{t("ws.tabs.rec")}</h2>
         {view.overrides.length > 0 && <ManualList items={view.overrides} />}
         {rec.missing.length > 0 && <p className="warn">{t("ws.missing", { names: rec.missing.join(", ") })}</p>}
+        {Object.entries(result.auto ?? {}).map(([k, a]) => (
+          <p key={k} className="warn">
+            {t("calc.autoPicked", { name: inputLabel(k), from: a.from, to: a.to })}{" "}
+            {t("calc.autoOther", { others: a.options.filter((o) => o !== a.to).join(" / ") })}
+          </p>
+        ))}
         {rec.block && (
           <p className="error">
             {rec.block} <a href="#/products">{t("nav.products")} →</a>

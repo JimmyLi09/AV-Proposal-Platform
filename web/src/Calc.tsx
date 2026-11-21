@@ -84,25 +84,27 @@ export function InputsForm({ defs, hidden, inputs, setInputs }: {
   );
 }
 
-/** 尺寸不是模组整数倍时，给两个最近的有效尺寸让人选。 */
+/** 尺寸不是模组 / 箱体整数倍时，给两个最近的有效尺寸；系统已先选一个（待确定）时标出来，人可以改选。 */
 export function Choices({ result, onPick }: { result: RunResult; onPick: (name: string, value: number) => void }) {
   const entries = Object.entries(result.choices);
   if (!entries.length) return null;
   return (
-    <p className="warn">
-      {t("calc.choices")}
-      {entries.map(([k, opts]) => (
-        <span key={k}>
-          {" "}
-          {k}{" "}
-          {opts.map((o) => (
-            <button key={o} className="btn-outline small" onClick={() => onPick(k, o)}>
-              {o}
-            </button>
-          ))}
-        </span>
-      ))}
-    </p>
+    <div className="warn">
+      {entries.map(([k, opts]) => {
+        const auto = result.auto?.[k];
+        return (
+          <p key={k}>
+            {auto ? t("calc.autoPicked", { name: inputLabel(k), from: auto.from, to: auto.to }) : t("calc.choices")}{" "}
+            {!auto && inputLabel(k)}{" "}
+            {opts.map((o) => (
+              <button key={o} className={o === auto?.to ? "btn-primary small" : "btn-outline small"} onClick={() => onPick(k, o)}>
+                {o}
+              </button>
+            ))}
+          </p>
+        );
+      })}
+    </div>
   );
 }
 
@@ -162,10 +164,12 @@ export function ResultsTable({ base, after, label }: { base: RunResult; after?: 
 
 export function Outcome({ r }: { r: RuleResult }) {
   if (r.error) return <span className="error">{r.error}</span>;
+  if (r.waiting?.length) return <span className="warn">{t("calc.waiting", { rules: r.waiting.join(t("common.listSep")) })}</span>;
   if (r.missing.length) return <span className="warn">{t("calc.missing", { names: r.missing.map(inputLabel).join(t("common.listSep")) })}</span>;
   return (
     <span>
       {r.display} <CheckChip check={r.check} />
+      {!r.display && r.check === "BLOCK" && r.note && <span className="small error"> {r.note}</span>}
       {r.manual?.length > 0 && <span className="tag st-sample">{t("manual.tag")}</span>}
     </span>
   );

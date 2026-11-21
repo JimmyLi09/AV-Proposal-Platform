@@ -56,6 +56,8 @@
   "calc": {
     "after": "After change",
     "asCalculated": "As calculated",
+    "autoOther": "The other option is {others}; change it in 02–04.",
+    "autoPicked": "To be confirmed: {name} is {from} in the design and the cabinets cannot make it; the system calculates with {to} for now.",
     "check": {
       "BLOCK": "BLOCK",
       "NOTE": "NOTE",
@@ -72,6 +74,7 @@
       "sample": "Sample value · to fill",
       "set": "Set"
     },
+    "waiting": "Pending: waiting for {rules}",
     "when": "When {when}: ",
     "why": "Why this number"
   },
