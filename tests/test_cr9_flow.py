@@ -60,12 +60,10 @@ def test_royal_plaza_end_to_end(tmp_path):
     r = row(c, base)
     assert r["lead"] and r["stage"] == 1 and r["version"] == "—" and r["updated_by"] == "Jimmy"
 
-    # 02–04：宽度 4500 不是模组整数倍，不能往下走；选吸附值 4480 后可以
+    # 02–04：宽度 4500 不是模组整数倍：系统先按最近的 4480 算（待确定，2026-11-21 起不再挡下一步），人选定 4480
     v = c.put(f"{base}/inputs", json={"inputs": SAMPLE["input"] | {"width_mm": 4500}}).json()
-    assert v["flow"]["gates"]["02-04"] == "屏宽 4500 不是模组整数倍，先选吸附值"
-    assert step(v, "05") == {"key": "05", "state": "lock", "note": "先完成 02–04", "why": v["flow"]["gates"]["02-04"]}
-    r = c.post(f"{base}/next", json={"step": "02-04"})
-    assert r.status_code == 409 and "吸附" in r.json()["detail"]
+    assert v["flow"]["gates"]["02-04"] == ""
+    assert v["result"]["auto"] == {"width_mm": {"from": 4500, "to": 4480, "options": [4480, 4800]}}
     c.put(f"{base}/inputs", json={"inputs": SAMPLE["input"]})
     v = c.post(f"{base}/next", json={"step": "02-04"}).json()
     assert v["flow"]["reached"] == 2 and v["rev"]["rev_no"] == 1 and v["flow"]["pull"]["changed"] == []
@@ -162,7 +160,9 @@ def test_04_changes_wait_for_pull_or_keep(tmp_path):
     assert value(v, "cabinets") > cabinets and v["flow"]["pull"]["changed"] == []
 
     v = c.put(f"{base}/inputs", json={"inputs": SAMPLE["input"] | {"width_mm": 4500}}).json()
-    assert not v["flow"]["pull"]["ready"] and c.post(f"{base}/pull").status_code == 409  # 先选吸附值才能带
+    assert v["flow"]["pull"]["ready"]  # 系统先选了 4480（待确定），照样能带进 05
+    v = c.post(f"{base}/pull").json()
+    assert v["result"]["auto"]["width_mm"]["to"] == 4480
 
 
 def test_an_unchanged_draft_is_not_a_new_version(tmp_path):
@@ -198,7 +198,7 @@ def test_english_flow_has_no_chinese(tmp_path):
     _, base = new_project(c, delivery="")
     c.put(f"{base}/inputs", json={"inputs": SAMPLE["input"] | {"width_mm": 4500}})
     v = c.get(base, headers={"X-Lang": "en"}).json()
-    assert v["flow"]["gates"]["02-04"] == "Screen width 4500 is not a module multiple: pick a snap value first"
+    assert v["flow"]["gates"]["02-04"] == "" and v["result"]["auto"]["width_mm"]["to"] == 4480
     leaks = [s for s in json.dumps([v["flow"]["steps"], v["flow"]["version"]], ensure_ascii=False).split('"') if CJK.search(s)]
     assert leaks == []
     wb = c.get("/api/workbench", headers={"X-Lang": "en"}).json()

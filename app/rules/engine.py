@@ -10,7 +10,7 @@ from . import led, multiface, pj
 from .expr import ExprError, evaluate, fmt, names, num, parse, substitute
 
 SEED = Path(__file__).parent / "seed"
-LINES = {"LED": {"steps": led.STEPS, "precheck": led.size_choices, "recommend": led.recommend,
+LINES = {"LED": {"steps": led.STEPS, "precheck": led.size_choices, "auto_pick": led.auto_pick, "cabinet_choices": led.cabinet_choices, "recommend": led.recommend,
                  "product_inputs": led.product_inputs, "catalog": led.catalog, "boq": led.boq,
                  "product_fed": led.PRODUCT_INPUTS, "diagram": led.diagram,
                  "boq_context": led.boq_context, "boq_extra": led.BOQ_EXTRA, "suggest": led.suggest,
@@ -119,6 +119,14 @@ def validate(content: dict, base: dict) -> None:
             known.add(out["name"])
 
 
+def _is_num(v) -> bool:
+    try:
+        num(v)
+        return not isinstance(v, bool)
+    except Exception:  # noqa: BLE001
+        return False
+
+
 def run(content: dict, inputs: dict, catalog: dict, overrides: dict | None = None) -> dict:
     """overrides：手动覆盖的结果 {名字: 值}（CR-5）。规则照常算出规则值，再换成手动值，下游规则用手动值。"""
     line = LINES[content["business_line"]]
@@ -137,8 +145,15 @@ def run(content: dict, inputs: dict, catalog: dict, overrides: dict | None = Non
     choices = line["precheck"](ctx)
     if choices:
         return {"choices": {k: _plain(v) for k, v in choices.items()}, "rules": []}
-    return {"choices": {}, "rules": [_run_rule(r, ctx, status, params, catalog, line["steps"], overrides or {})
-                                     for r in content["rules"]]}
+    rules = [_run_rule(r, ctx, status, params, catalog, line["steps"], overrides or {}) for r in content["rules"]]
+    # 缺的是前面规则的结果（例：F3 箱体排布阻断，F5 缺 cabinets_w）：说「等 F3」，不列变量名（2026-11-21）
+    made_by = {}
+    for rule in content["rules"]:
+        outs = line["steps"][rule["step"]][2] if "step" in rule else [o["name"] for o in rule["outputs"]]
+        made_by.update({name: rule["id"] for name in outs})
+    for r in rules:
+        r["waiting"] = sorted({made_by[m] for m in r["missing"] if m in made_by}, key=lambda i: int(re.sub(r"\D", "", i) or 0))
+    return {"choices": {}, "rules": rules}
 
 
 def _manual(line: dict, manual, decimals=None):
@@ -264,8 +279,31 @@ def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None
         return multiface.calculate(content, library, inputs, cabinet_id, run)
     line = LINES[content["business_line"]]
     rec = line["recommend"](inputs, library, cabinet_id)
-    out = run(content, {**inputs, **line["product_inputs"](rec["cabinet"])}, line["catalog"](library, rec["cabinet"]),
-              overrides)
+    catalog = line["catalog"](library, rec["cabinet"])
+    out = run(content, {**inputs, **line["product_inputs"](rec["cabinet"])}, catalog, overrides)
+    auto = {}
+    if line.get("auto_pick"):
+        # 2026-11-21 Jimmy：系统自动判断给结论，有问题写「待确定」。尺寸不是模组整数倍、或现有箱体拼不出时，
+        # 先替人选一个最近的接着算（人可以改选另一个）
+        choices = out["choices"] or line["cabinet_choices"]({k: num(v) for k, v in
+                                                             {**inputs, **line["product_inputs"](rec["cabinet"])}.items()
+                                                             if isinstance(v, (int, float, str)) and _is_num(v)}
+                                                            | {"cabinet_sizes_mm": [[num(a), num(b)] for a, b in
+                                                                                    (rec["cabinet"] or {}).get("cabinet_sizes_mm") or []]})
+        choices = {k: [_plain(num(x)) for x in v] for k, v in choices.items()}
+        if choices:
+            for name, options in choices.items():
+                pick = line["auto_pick"](num(inputs[name]), [num(o) for o in options])
+                auto[name] = {"from": _plain(num(inputs[name])), "to": _plain(pick), "options": options}
+            snapped = {**inputs, **{k: a["to"] for k, a in auto.items()}}
+            again = run(content, {**snapped, **line["product_inputs"](rec["cabinet"])}, catalog, overrides)
+            if again["choices"]:  # 选了一个还是不行：照旧让人选
+                auto = {}
+                out["choices"] = choices
+            else:
+                out, inputs = again, snapped
+                out["choices"] = choices
+    out["auto"] = auto
     values = {ln["name"]: ln["value"] for r in out["rules"] for ln in r["lines"]}
     manual = {n for r in out["rules"] for n in r["manual"]}
     out["manual"] = sorted(manual)

@@ -56,12 +56,14 @@
   "calc": {
     "after": "修改后",
     "asCalculated": "计算式",
+    "autoOther": "另一个可选 {others}，到 02–04 改选。",
+    "autoPicked": "待确定：{name} 设计是 {from}，现有箱体拼不出，系统先按 {to} 计算。",
     "check": {
       "BLOCK": "阻断",
       "NOTE": "提示",
       "PASS": "通过"
     },
-    "choices": "尺寸不是模组的整数倍，请先选一个有效尺寸：",
+    "choices": "尺寸不是模组 / 箱体的整数倍，请先选一个有效尺寸：",
     "missing": "缺少：{names}",
     "params": "参数",
     "result": "结果",
@@ -72,6 +74,7 @@
       "sample": "示例值 · 待填",
       "set": "已定"
     },
+    "waiting": "待定：等 {rules} 的结果",
     "when": "当 {when}：",
     "why": "数字由来"
   },

@@ -113,7 +113,7 @@ def gate_inputs(db: Session, prop: Proposal, rev: Revision, out: dict) -> str:
     if result is None:
         return ""
     defs = {d["name"]: d["label"] for d in out["input_defs"]}
-    for name in result.get("choices") or {}:
+    for name in set(result.get("choices") or {}) - set(result.get("auto") or {}):  # 系统已先选的不挡（待确定）
         return tr(f"{_input_label(defs, name)} {rev.inputs.get(name)} 不是模组整数倍，先选吸附值",
                   f"{_input_label(defs, name)} {rev.inputs.get(name)} is not a module multiple: pick a snap value first")
     if conflicts := (result.get("multi") or {}).get("conflicts"):

@@ -126,13 +126,15 @@ def test_count_grouping_packs_cabinets_and_flags_nothing_when_it_fits():
     assert r["F11"]["check"] == "PASS" and v["ports_used"] == 3
 
 
-def test_cabinet_without_ratings_falls_back_for_power_but_needs_current_for_circuits():
+def test_cabinet_without_ratings_falls_back_for_power_and_estimates_current():
     lib = library_640x640()
     del next(p for p in lib["products"] if p["id"] == "IC-25")["cabinet_max"]
     out = calculate(RULES, lib, inputs())
     r = {x["id"]: x for x in out["rules"]}
     assert r["F5"]["lines"][0]["when"] == "environment == 'indoor'"  # 退回按面积 × 每平米功耗，追溯里看得到
-    assert "cabinet_max_a" in r["F6"]["missing"]
+    # 2026-11-21：单箱电流按 640×640 面积 × 500 W/㎡ ÷ 230 V 估算（待确定），回路照算
+    assert r["F3"]["lines"][-1]["name"] == "cabinet_max_a" and r["F3"]["lines"][-1]["value"] == 0.89
+    assert not r["F6"]["missing"] and r["F6"]["status"] == "sample"
 
 
 @pytest.fixture
