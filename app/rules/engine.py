@@ -279,7 +279,7 @@ def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None
     line = LINES[content["business_line"]]
     assumed = {}
     if line.get("defaults"):  # 资料没写的输入先按缺省值算（待确定，2026-11-21）
-        inputs, assumed = line["defaults"](inputs, {p["name"]: p["value"] for p in content["params"]})
+        inputs, assumed = line["defaults"](inputs, {p["name"]: p["value"] for p in content["params"]}, library)
     if multiface.is_multi(inputs):
         return multiface.calculate(content, library, inputs, cabinet_id, run) | {"assumed": assumed}
     rec = line["recommend"](inputs, library, cabinet_id)

@@ -38,8 +38,8 @@ def blockers(rev: Revision, out: dict, inputs: bool = True) -> list[str]:
     if block := (result.get("recommendation") or {}).get("block"):
         items.append(block)
     for r in result.get("rules") or []:
-        if r.get("check") == "BLOCK":
-            items.append(f"{r['id']} {r['title']}")
+        if r.get("check") == "BLOCK":  # 带上原因（例：控制器缺多少带载和网口），不只写规则名
+            items.append(f"{r['id']} {r['title']}" + (tr("：", ": ") + r["note"] if r.get("note") else ""))
     for c in (result.get("multi") or {}).get("checks") or []:
         if c.get("check") == "BLOCK":
             items.append(c["text"])

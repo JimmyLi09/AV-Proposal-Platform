@@ -352,3 +352,16 @@ def test_image_only_inputs_get_defaults_to_be_confirmed():
     old = copy.deepcopy(CONTENT)
     old["params"] = [p for p in old["params"] if not p["name"].startswith("default_")]
     assert calculate(old, LIBRARY, {"width_mm": 4480, "height_mm": 2560, "pixel_pitch_mm": 2.5})["recommendation"]["missing"]
+
+
+def test_pitch_is_picked_from_the_library_when_not_given():
+    """只有现场照片：读出尺寸和观看距离，没有点间距 → 从产品库挑（待确定）。
+    观看距离 4–6 m、每毫米 1 m：点间距不超过 4 mm，示例库里室内前维护有 P2.5、P1.9 → 取 P2.5。"""
+    from app.rules.engine import calculate
+
+    out = calculate(CONTENT, LIBRARY, {"width_mm": 4480, "height_mm": 2560, "viewing_distance_m": [4, 6]})
+    assert out["assumed"]["pixel_pitch_mm"] == 2.5 and out["recommendation"]["cabinet"]["id"] == "IC-25"
+    out = calculate(CONTENT, LIBRARY, {"width_mm": 4480, "height_mm": 2560, "viewing_distance_m": [2, 3]})
+    assert out["assumed"]["pixel_pitch_mm"] == 1.9  # 近看只能用更小的点间距
+    out = calculate(CONTENT, LIBRARY, {"width_mm": 4480, "height_mm": 2560})  # 观看距离也没写：取首选箱体
+    assert out["assumed"]["pixel_pitch_mm"] == 2.5 and out["assumed"]["viewing_distance_m"] == [2.5, 7.5]
