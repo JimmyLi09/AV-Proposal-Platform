@@ -39,7 +39,15 @@
     {"name": "spare_psu_ratio", "group": "Spares 备品", "label": "PSU / receiving card spare rate 电源 / 接收卡备品比例", "unit": "", "value": 0.02, "status": "sample"},
     {"name": "spare_psu_min", "group": "Spares 备品", "label": "PSU / receiving card spare minimum 电源 / 接收卡备品最少", "unit": "个", "value": 1, "status": "sample"},
     {"name": "viewing_m_per_mm", "group": "Checks 校核", "label": "Min. viewing distance 最近观看距离（每 mm 点间距）", "unit": "m", "value": 1.0, "status": "review"},
-    {"name": "output_max_px_w", "group": "Checks 校核", "label": "Output width limit 每路输出宽度上限（多面屏 S5）", "unit": "px", "value": 3840, "status": "sample"}
+    {"name": "output_max_px_w", "group": "Checks 校核", "label": "Output width limit 每路输出宽度上限（多面屏 S5）", "unit": "px", "value": 3840, "status": "sample"},
+    {"name": "default_environment", "group": "Defaults 缺省值", "label": "Default environment 缺省使用环境", "unit": "", "value": "indoor", "status": "sample", "options": ["indoor", "outdoor", "rental"], "source": "资料没写时系统先按这个算（待确定）；示例值，待 Jimmy 确认"},
+    {"name": "default_installation", "group": "Defaults 缺省值", "label": "Default installation 缺省安装方式", "unit": "", "value": "wall", "status": "sample", "options": ["wall", "floor", "hanging", "embedded"], "source": "资料没写时系统先按这个算（待确定）；示例值，待 Jimmy 确认"},
+    {"name": "default_maintenance", "group": "Defaults 缺省值", "label": "Default maintenance 缺省维护方式", "unit": "", "value": "front", "status": "sample", "options": ["front", "rear"], "source": "资料没写时系统先按这个算（待确定）；示例值，待 Jimmy 确认"},
+    {"name": "default_brightness_indoor", "group": "Defaults 缺省值", "label": "Default brightness, indoor 缺省亮度要求（室内）", "unit": "nits", "value": 600, "status": "sample", "source": "示例值，待 Jimmy 确认"},
+    {"name": "default_brightness_outdoor", "group": "Defaults 缺省值", "label": "Default brightness, outdoor 缺省亮度要求（户外）", "unit": "nits", "value": 5000, "status": "sample", "source": "示例值，待 Jimmy 确认"},
+    {"name": "default_brightness_rental", "group": "Defaults 缺省值", "label": "Default brightness, rental 缺省亮度要求（租赁）", "unit": "nits", "value": 1000, "status": "sample", "source": "示例值，待 Jimmy 确认"},
+    {"name": "default_viewing_max_factor", "group": "Defaults 缺省值", "label": "Default viewing range 缺省观看距离上限倍数", "unit": "×", "value": 3, "status": "sample", "source": "观看距离没写时：最近 = 点间距 × 每毫米点间距的观看距离，最远 = 最近 × 这个倍数；示例值"},
+    {"name": "default_signal_sources", "group": "Defaults 缺省值", "label": "Default signal sources 缺省信号源数量", "unit": "路", "value": 1, "status": "sample", "source": "示例值"}
   ],
   "rules": [
     {"id": "F1", "title": "Area 面积", "note": "屏宽 × 屏高。",

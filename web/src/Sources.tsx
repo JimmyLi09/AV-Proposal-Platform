@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, SourceFile, WorkspaceView } from "./api";
-import { Choices } from "./Calc";
+import { Assumed, Choices } from "./Calc";
 import ConfirmInputs from "./Confirm";
 import ShapeFaces, { isMulti } from "./Faces";
 import { Conflicts } from "./Multi";
@@ -28,6 +28,7 @@ export default function SourcesPage({ view, inputs, setInputs, onApply, onReload
       <Files project={view.project.id} line={line} files={view.files} removed={view.removed_files} onUploaded={onReload} />
       <ShapeFaces view={view} inputs={inputs} setInputs={setInputs} />
       {view.result && <Choices result={view.result} onPick={(k, v) => setInputs({ ...inputs, [k]: v })} />}
+      <Assumed result={view.result} />
       <Conflicts view={view} onUse={onUse} />
       {view.result?.recommendation?.block && (
         <p className="error card">

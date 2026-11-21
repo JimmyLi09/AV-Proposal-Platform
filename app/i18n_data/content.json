@@ -814,5 +814,53 @@
   "Ceiling plan (RCP) 天花图": {
     "zh": "天花图",
     "en": "Ceiling plan (RCP)"
+  },
+  "Defaults 缺省值": {
+    "zh": "缺省值",
+    "en": "Defaults"
+  },
+  "Default environment 缺省使用环境": {
+    "zh": "缺省使用环境",
+    "en": "Default environment"
+  },
+  "Default installation 缺省安装方式": {
+    "zh": "缺省安装方式",
+    "en": "Default installation"
+  },
+  "Default maintenance 缺省维护方式": {
+    "zh": "缺省维护方式",
+    "en": "Default maintenance"
+  },
+  "Default brightness, indoor 缺省亮度要求（室内）": {
+    "zh": "缺省亮度要求（室内）",
+    "en": "Default brightness, indoor"
+  },
+  "Default brightness, outdoor 缺省亮度要求（户外）": {
+    "zh": "缺省亮度要求（户外）",
+    "en": "Default brightness, outdoor"
+  },
+  "Default brightness, rental 缺省亮度要求（租赁）": {
+    "zh": "缺省亮度要求（租赁）",
+    "en": "Default brightness, rental"
+  },
+  "Default viewing range 缺省观看距离上限倍数": {
+    "zh": "缺省观看距离上限倍数",
+    "en": "Default viewing range factor"
+  },
+  "Default signal sources 缺省信号源数量": {
+    "zh": "缺省信号源数量",
+    "en": "Default signal sources"
+  },
+  "资料没写时系统先按这个算（待确定）；示例值，待 Jimmy 确认": {
+    "en": "Used when the documents do not say (to be confirmed); sample value, to be confirmed by Jimmy"
+  },
+  "示例值，待 Jimmy 确认": {
+    "en": "Sample value, to be confirmed by Jimmy"
+  },
+  "观看距离没写时：最近 = 点间距 × 每毫米点间距的观看距离，最远 = 最近 × 这个倍数；示例值": {
+    "en": "When the viewing distance is not given: nearest = pitch × viewing distance per mm of pitch, farthest = nearest × this factor; sample value"
+  },
+  "示例值": {
+    "en": "Sample value"
   }
 }

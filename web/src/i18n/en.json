@@ -56,6 +56,8 @@
   "calc": {
     "after": "After change",
     "asCalculated": "As calculated",
+    "assumed": "To be confirmed: not in the documents, so the system uses defaults —",
+    "assumedTail": ". Fill them in below to use your values.",
     "autoOther": "The other option is {others}; change it in 02–04.",
     "autoPicked": "To be confirmed: {name} is {from} in the design and the cabinets cannot make it; the system calculates with {to} for now.",
     "check": {
@@ -714,6 +716,7 @@
     "approve": "Approve",
     "approvedBy": "Approved by {name} · {date}",
     "author": "Author",
+    "autoSizes": "Some sizes were picked by the system (to be confirmed), see the top of 05; the proposal's Risks and assumptions say so too.",
     "biOnly": "Bilingual is only available for the deck (PPT) for now; the BOQ Excel is the English client format. Pick Chinese or English for the other files.",
     "blockers": "Before submitting for review, fix:",
     "boqManual": "{n} BOQ rows changed by hand.",

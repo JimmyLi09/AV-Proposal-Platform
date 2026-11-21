@@ -17,6 +17,7 @@ from . import workspace as ws
 from .api import get_db, iso, require_user
 from .i18n import tr
 from .models import Project, Proposal, Revision, User, utcnow
+from .rules import led
 from .rules.engine import calculate
 from .versions import latest
 
@@ -122,6 +123,8 @@ def gate_inputs(db: Session, prop: Proposal, rev: Revision, out: dict) -> str:
         return block
     names = set((result.get("recommendation") or {}).get("missing") or [])
     names |= {m for r in result.get("rules") or [] for m in r.get("missing") or [] if m in defs}
+    if (result.get("recommendation") or {}).get("missing"):  # 箱体还没选出来：模组、箱体尺寸是产品库带出的，不算人要填的
+        names -= set(led.PRODUCT_INPUTS)
     if names:
         return tr("还缺：", "Still missing: ") + "、".join(_input_label(defs, n) for n in sorted(names))
     return ""

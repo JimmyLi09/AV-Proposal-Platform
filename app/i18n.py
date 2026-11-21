@@ -42,6 +42,9 @@ STORED = {
     "CR-7：多面屏 S5 每路输出宽度上限（升级时自动生成，算式和其它参数不变）":
         "CR-7: multi-face S5 output width limit (generated on upgrade; formulas and other parameters unchanged)",
     "初始版本（投影 P1–P22，CR-7）": "Initial version (projection P1–P22, CR-7)",
+    "资料没写的输入先按缺省值算（待确定）：使用环境、安装、维护、亮度、观看距离、信号源（升级时自动生成，算式和其它参数不变）":
+        "Inputs missing from the documents use defaults (to be confirmed): environment, installation, maintenance, brightness, "
+        "viewing distance, signal sources (generated on upgrade; formulas and other parameters unchanged)",
     "示例产品，清单 D 组填好后替换": "Sample products; to be replaced once checklist group D is filled in",
     "示例产品，投影清单 v2 填好后替换": "Sample products; to be replaced once projection checklist v2 is filled in",
     "DWG 要在服务器装免费的 ODA File Converter 才能读取，目前只随项目保存":

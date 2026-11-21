@@ -43,6 +43,44 @@ def cabinet_choices(ctx: dict) -> dict:
     return choices
 
 
+def apply_defaults(inputs: dict, params: dict, library: dict | None = None) -> tuple[dict, dict]:
+    """2026-11-21 只有图片的项目：资料没写的使用环境、安装、维护、亮度、观看距离、信号源先按缺省值算（待确定）。
+    缺省值是规则集参数（default_*，界面可改、带版本）；老版本规则集没有这些参数就不补。尺寸和点间距不补。"""
+    out, assumed = dict(inputs), {}
+
+    def put(name, value):
+        if value is not None and out.get(name) in (None, "", []):
+            out[name] = assumed[name] = value
+
+    put("environment", params.get("default_environment"))
+    put("installation", params.get("default_installation"))
+    put("maintenance", params.get("default_maintenance"))
+    put("brightness_required_nits", params.get(f"default_brightness_{out.get('environment')}"))
+    put("signal_sources", params.get("default_signal_sources"))
+    if library and out.get("pixel_pitch_mm") in (None, "") and "default_environment" in params:
+        put("pixel_pitch_mm", _pitch_for(out, params, library))
+    pitch, per_mm, factor = out.get("pixel_pitch_mm"), params.get("viewing_m_per_mm"), params.get("default_viewing_max_factor")
+    if pitch and per_mm and factor:
+        near = round(float(pitch) * float(per_mm), 2)
+        put("viewing_distance_m", [near, round(near * float(factor), 2)])
+    return out, assumed
+
+
+def _pitch_for(inputs: dict, params: dict, library: dict):
+    """点间距没写（例：只有现场照片）：从产品库里挑。写了观看距离时，点间距不超过「最近观看距离 ÷ 每毫米观看距离」，
+    取满足的最大点间距（首选在前）；没写观看距离就取首选箱体。只在使用环境、维护方式对得上的箱体里挑。"""
+    fits = [p for p in active(library, "cabinet") if p.get("pixel_pitch_mm") and inputs.get("environment") in p["scenes"]
+            and p["maintenance"] in (inputs.get("maintenance"), "both")]
+    view, per_mm = inputs.get("viewing_distance_m"), params.get("viewing_m_per_mm")
+    if view and per_mm:
+        limit = float(view[0]) / float(per_mm)
+        fits = [p for p in fits if float(p["pixel_pitch_mm"]) <= limit + 1e-9]
+        fits.sort(key=lambda p: (-float(p["pixel_pitch_mm"]), p["status"] != "preferred"))
+    else:
+        fits.sort(key=lambda p: p["status"] != "preferred")
+    return fits[0]["pixel_pitch_mm"] if fits else None
+
+
 def auto_pick(value, options: list):
     """系统先替人选一个（待确定）：离设计尺寸最近的；一样近取小的，不超出设计尺寸。"""
     return min(options, key=lambda x: (abs(x - value), x))

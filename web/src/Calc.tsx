@@ -108,6 +108,20 @@ export function Choices({ result, onPick }: { result: RunResult; onPick: (name: 
   );
 }
 
+/** 资料没写、系统按缺省值算的输入（待确定，2026-11-21）。缺省值在规则引擎「缺省值」组里改。 */
+export function Assumed({ result }: { result: RunResult | null | undefined }) {
+  const entries = Object.entries(result?.assumed ?? {});
+  if (!entries.length) return null;
+  const show = (v: unknown) => (Array.isArray(v) ? v.join(" – ") : optionLabel(String(v)));
+  return (
+    <p className="warn">
+      {t("calc.assumed")}{" "}
+      {entries.map(([k, v]) => `${inputLabel(k)} ${show(v)}`).join(t("common.listSep"))}
+      {t("calc.assumedTail")}
+    </p>
+  );
+}
+
 /** 计算依据：每条规则的结果、代入数值的算式、状态；点一行展开。after 有值时并排显示修改后的结果。 */
 export function ResultsTable({ base, after, label }: { base: RunResult; after?: RunResult | null; label: string }) {
   const [open, setOpen] = useState<string | null>(null);

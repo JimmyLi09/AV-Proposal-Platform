@@ -40,7 +40,8 @@ def test_example_without_suitable_products_suggests_vx1000_and_vx16s():
     r = by_id(out)
     assert value(r["F4"], "total_pixels") == 3_604_480 and value(r["F9"], "data_runs") == 7  # 3.60 MP，7 路 + 1 备用
     assert r["F11"]["check"] == "BLOCK" and "processor_id" not in {x["name"] for x in r["F13"]["lines"]}
-    assert "按 1 路计算" in r["F13"]["note"]
+    # 信号源没写：2026-11-21 起按规则集缺省值 1 路算（待确定），以前是 F13 里写「按 1 路计算」
+    assert out["assumed"]["signal_sources"] == 1
     s = {x["model"]: (x["status"], x["reason"], x["load_pct"]) for x in out["suggestions"]}
     assert s == {"NovaStar VX400": ("no", "带载不够、网口不够", 139), "NovaStar VX600": ("no", "网口不够", 92),
                  "NovaStar VX1000": ("recommended", "", 55), "NovaStar VX16s": ("headroom", "", 35)}
