@@ -20,6 +20,15 @@ TITLE = re.compile(r"\bP\s?\d{1,2}(?:\.\d{1,3})?\b.*(?:LED|SCREEN|屏)|LED\s*(?:
 NEAR = 0.5  # 离框体多远还算这块屏的尺寸：框体宽 / 高的一半
 
 
+BRACKET_PX = re.compile(r"[\[(（【]\s*(\d{2,5})\s*(?:px|pixels?|像素)?\s*[\])）】]", re.I)
+
+
+def bracket_px(text: str) -> int | None:
+    """「3200 [1280]」括号里的像素数。"""
+    m = BRACKET_PX.search(text)
+    return int(m[1]) if m else None
+
+
 def lone_value(text: str) -> int | None:
     m = LONE.match(text)
     return to_mm(m[1], m[2] and m[2].lower()) if m else None
