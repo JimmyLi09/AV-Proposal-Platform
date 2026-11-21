@@ -9,7 +9,7 @@ import tempfile
 import threading
 from pathlib import Path
 
-from .dimensions import image_rects, pair
+from .dimensions import bracket_px, image_rects, pair
 from .fields import LABELS, find_in_text, parse_value, to_mm
 
 MAX_PAGES = 30  # 文字层最多读前 30 页
@@ -45,9 +45,19 @@ def ocr_lines(img) -> list[tuple[str, tuple[float, float, float, float]]]:
     return lines
 
 
+MIN_SIDE_PX = 1400  # 截图常常很小（字高十来个像素），先放大再识别
+
+
 def _shrink(img):
+    """送去识别前调大小：太大缩到 MAX_SIDE_PX，太小（微信 / QQ 截图）放大 2 倍。"""
+    from PIL import Image
+
     scale = MAX_SIDE_PX / max(img.size)
-    return img.resize((int(img.width * scale), int(img.height * scale))) if scale < 1 else img
+    if scale < 1:
+        return img.resize((int(img.width * scale), int(img.height * scale)))
+    if max(img.size) < MIN_SIDE_PX:
+        return img.resize((img.width * 2, img.height * 2), Image.LANCZOS)
+    return img
 
 
 class Collector:
@@ -62,10 +72,19 @@ class Collector:
             self.add(field, value, conf, page, location, snippet, crop)
 
     def dimensions(self, lines, rects, ocr: bool, page, location: str, crop):
-        """尺寸线配对：OCR 读到的给 low，PDF 文字层读到的给 medium，都要在确认关逐项确认。"""
+        """尺寸线配对：OCR 读到的给 low，PDF 文字层读到的给 medium，都要在确认关逐项确认。
+        2026-11-21：尺寸后面括号里写了像素数（「3200 [1280]」）时，点间距 = 尺寸 ÷ 像素数，作为 low 候选（待确定）；
+        宽、高两个方向都要有、而且算出来一样才给（小截图会把括号里的数认错）。"""
+        pitches = []
         for field, value, text, box in pair(lines, rects):
             self.add(field, value, "low" if ocr else "medium", page, f"{location} · 尺寸线", text,
                      lambda b=box: crop(b))
+            if (px := bracket_px(text)) and 0.3 <= value / px <= 40:
+                pitches.append((round(value / px, 3), f"{text}：{value} ÷ {px}", box))
+        if len(pitches) >= 2 and len({p for p, _, _ in pitches}) == 1:  # 宽、高两个方向都算出同一个值才给
+            value, snippet, box = pitches[0]
+            self.add("pixel_pitch_mm", int(value) if float(value).is_integer() else value, "low", page,
+                     f"{location} · 尺寸 ÷ 像素数", snippet, lambda b=box: crop(b))
 
     def add(self, field, value, conf, page, location, snippet, crop=None):
         if any(f["field"] == field and f["value"] == value for f in self.fields):

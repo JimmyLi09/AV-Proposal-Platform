@@ -96,3 +96,12 @@ def test_layout_drawing_with_pixel_counts_in_brackets():
     lines = [("3200[1280]", (290, 43, 357, 63)), ("3200[1280]", (885, 41, 952, 63)), ("1920 [768]", (14, 218, 34, 279)),
              ("1920[768]", (611, 218, 628, 277)), ("模组排布图", (248, 493, 312, 516)), ("箱体排布图", (837, 493, 901, 515))]
     assert [(f, v) for f, v, *_ in pair(lines, [])] == [("width_mm", 3200), ("height_mm", 1920)]
+
+
+def test_layout_screenshot_gives_size_and_pitch_to_be_confirmed(tmp_path):
+    """2026-11-21 只有图片的项目：黑底排布图小截图（自制，仿 Jimmy 的模组排布图）。
+    宽 / 高从尺寸线读；点间距 = 3200 ÷ 1280 = 1920 ÷ 768 = 2.5，两个方向一致才给，都是 low（必须确认）。"""
+    out = extract(SAMPLES / "Layout_drawing.png", "png", tmp_path, "x", None)
+    assert fields(out) == {("width_mm", 3200, "low"), ("height_mm", 1920, "low"), ("pixel_pitch_mm", 2.5, "low")}
+    pitch = next(f for f in out["fields"] if f["field"] == "pixel_pitch_mm")
+    assert pitch["snippet"].endswith("3200 ÷ 1280") and "像素数" in pitch["location"]

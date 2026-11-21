@@ -108,6 +108,26 @@ def dimension_image():
     img.save(OUT / "Dimension_lines.png")
 
 
+def layout_drawing():
+    """2026-11-21 仿模组 / 箱体排布图截图：黑底细线，尺寸后面括号写像素数「3200 [1280]」，高度竖排写在左边，截图只有 ~1100 px 宽。"""
+    img = Image.new("RGB", (1100, 520), "black")
+    d = ImageDraw.Draw(img)
+    font = ImageFont.truetype(FONT, 15)
+    x0, y0, x1, y1 = 90, 100, 560, 390
+    for i in range(11):
+        d.line([(x0 + i * (x1 - x0) / 10, y0), (x0 + i * (x1 - x0) / 10, y1)], fill=(0, 170, 170))
+    for j in range(13):
+        d.line([(x0, y0 + j * (y1 - y0) / 12), (x1, y0 + j * (y1 - y0) / 12)], fill=(200, 200, 200))
+    d.line([(x0, 62), (x1, 62)], fill=(0, 200, 0))
+    d.text(((x0 + x1) / 2 - 40, 40), "3200 [1280]", fill=(0, 220, 0), font=font)
+    d.line([(40, y0), (40, y1)], fill=(0, 200, 0))
+    label = Image.new("RGB", (110, 24), "black")
+    ImageDraw.Draw(label).text((4, 2), "1920 [768]", fill=(0, 220, 0), font=font)
+    img.paste(label.rotate(90, expand=True), (12, (y0 + y1) // 2 - 55))
+    d.text((260, 470), "MODULE LAYOUT", fill=(230, 220, 0), font=font)
+    img.save(OUT / "Layout_drawing.png")
+
+
 def dxf():
     """CAD 立面（DXF）：标注写在文字里。"""
     doc = ezdxf.new()
@@ -119,6 +139,6 @@ def dxf():
 
 
 if __name__ == "__main__":
-    for make in (text_pdf, excel, photo, scanned_pdf, render, dxf, dimension_image):
+    for make in (text_pdf, excel, photo, scanned_pdf, render, dxf, dimension_image, layout_drawing):
         make()
     print("samples written to", OUT)
