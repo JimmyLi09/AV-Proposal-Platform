@@ -129,7 +129,7 @@ def plan(width_mm, counts, pitch, ratings, circuits, p: dict) -> dict:
     for no, g in enumerate(power_groups(power_order, circuits), 1):
         amps = sum((c["a"] for c in g), Decimal(0)) if all(c["a"] is not None for c in g) else None
         power.append({"no": no, "cabinets": [c["id"] for c in g], "amps": amps, "jumper_mm": jumper_mm(g),
-                      "over_a": amps is not None and amps > usable, "over_chain": len(g) > chain})
+                      "over_a": amps is not None and amps > usable, "over_chain": 0 < chain < len(g)})  # 0 = 不限（2026-11-21）
     data = []
     for no, g in enumerate(data_groups(data_lines, cap, p.get("data_grouping") or "rows"), 1):
         px = sum((c["px"] for c in g), Decimal(0))

@@ -193,9 +193,16 @@ def test_upgrade_saves_new_led_rule_and_library_versions_and_keeps_user_edits(tm
     with engine.connect() as conn:
         sets = conn.execute(sa.text("select version, content, reason from rule_set_versions order by id")).all()
         libs = conn.execute(sa.text("select version, content from product_library_versions order by id")).all()
-    # v1.7：2026-11-21 缺省值（0019）在 CR-10 之后再加一个版本，算式不变
-    assert [s.version for s in sets] == ["v1.5", "v1.6", "v1.7"] and "CR-10" in sets[1].reason and "缺省值" in sets[2].reason
+    # v1.7：2026-11-21 缺省值（0019），算式不变；v1.8：去掉串接上限（0020），只换 F6 和 chain_max
+    assert [s.version for s in sets] == ["v1.5", "v1.6", "v1.7", "v1.8"] and "CR-10" in sets[1].reason
+    assert "缺省值" in sets[2].reason and "串接上限" in sets[3].reason
     assert json.loads(sets[2].content)["rules"] == json.loads(sets[1].content)["rules"]
+    last = json.loads(sets[3].content)
+    assert {p["name"]: p["value"] for p in last["params"]}["chain_max"] == 0
+    f6 = next(r for r in last["rules"] if r["id"] == "F6")
+    assert f6["outputs"][-2]["cases"][0] == {"when": "chain_max == 0", "expr": "0"} and "按电流" in f6["display"]
+    assert [r for r in last["rules"] if r["id"] != "F6"] == [r for r in json.loads(sets[2].content)["rules"] if r["id"] != "F6"]
+    validate(last, last)
     assert json.loads(sets[0].content) == old  # 旧版本原样保留
     new = json.loads(sets[1].content)
     params = {p["name"]: p["value"] for p in new["params"]}
@@ -208,3 +215,11 @@ def test_upgrade_saves_new_led_rule_and_library_versions_and_keeps_user_edits(tm
     assert ic25["cabinet_max"]["640x640"] == {"a": 0.96, "w": 200, "sample": False}
     out = calculate(new, json.loads(libs[1].content), SAMPLE["input"])
     assert next(ln["value"] for r in out["rules"] for ln in r["lines"] if ln["name"] == "circuits") == 4
+
+
+def test_no_chain_limit_counts_circuits_by_current_only():
+    """2026-11-21 Jimmy：去掉每条电源线串接上限（chain_max = 0），回路只按电流算；接线图不再报「串接超过上限」。"""
+    r, v, _ = run(with_params(chain_max=0))
+    assert v["circuits_by_chain"] == 0 and v["circuits"] == v["circuits_by_load"] == CASE["expect"]["F6_trace"]["by_load"]
+    r, v, _ = run(with_params(chain_max=0), overrides={"circuits": 2})  # 手动 2 路、每路 14 箱：电流够，不阻断
+    assert r["W1"]["check"] != "BLOCK" and v["power_group_sizes"] == [14, 14]

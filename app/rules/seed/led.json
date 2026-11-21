@@ -80,7 +80,7 @@
        {"name": "usable_kw", "unit": "kW", "decimals": 2, "cases": [{"expr": "usable_a * mains_v / 1000"}]},
        {"name": "cab_per_circuit", "unit": "个", "cases": [{"expr": "floor(usable_a / cabinet_max_a)"}]},
        {"name": "circuits_by_load", "unit": "路", "cases": [{"expr": "ceil(cabinets / cab_per_circuit)"}]},
-       {"name": "circuits_by_chain", "unit": "路", "cases": [{"expr": "ceil(cabinets / chain_max)"}]},
+       {"name": "circuits_by_chain", "unit": "路", "cases": [{"when": "chain_max == 0", "expr": "0"}, {"expr": "ceil(cabinets / chain_max)"}]},
        {"name": "circuits", "unit": "路", "cases": [{"expr": "max(circuits_by_load, circuits_by_chain)"}]}]},
     {"id": "F7", "title": "Power cables 电源线", "note": "回路数 + 备用。",
      "outputs": [{"name": "power_cables", "unit": "根", "cases": [{"expr": "circuits + spare_power_cables"}]}]},

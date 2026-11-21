@@ -195,7 +195,7 @@ def test_upgrade_removes_gst_with_a_new_rule_version_and_drops_costs(tmp_path):
     with engine.connect() as conn:
         rows = conn.execute(sa.text("select version, content, reason from rule_set_versions order by id")).all()
         tables = set(sa.inspect(conn).get_table_names())
-    assert [r.version for r in rows] == ["v1.4", "v1.5"]
+    assert [r.version for r in rows][:2] == ["v1.4", "v1.5"]  # 之后的迁移（例 0020 去掉串接上限）再加版本
     assert "gst_rate" in rows[0].content and "gst_rate" not in rows[1].content  # 旧版本不改
     assert json.loads(rows[1].content)["rules"] == old["rules"] and "CR-6" in rows[1].reason
     assert "cost_entries" not in tables and "template_versions" in tables
