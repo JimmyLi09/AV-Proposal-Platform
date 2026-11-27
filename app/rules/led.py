@@ -334,9 +334,19 @@ def recommend(inputs: dict, library: dict, cabinet_id: str | None = None) -> dic
     candidates = [p for p in cabinets
                   if abs(Decimal(str(p["pixel_pitch_mm"])) - pitch) <= PITCH_TOLERANCE
                   and inputs["environment"] in p["scenes"] and p["maintenance"] in (inputs["maintenance"], "both")]
+    # 2026-11-28：规格书批量导入的箱体常缺模组 / 箱体尺寸，选上了就一路「还缺：模组宽」。
+    # 资料齐的排前面（首选优先）；人点名的照用；只剩缺资料的才用，并说清缺什么、去产品库补
+    candidates.sort(key=lambda p: (bool(_incomplete(p)), p["status"] != "preferred"))
     chosen = next((p for p in candidates if p["id"] == cabinet_id), candidates[0] if candidates else None)
     env, svc = _label(inputs["environment"]), _label(inputs["maintenance"])
     where = f"P{_n(pitch)} · {env} · {svc}"
+    if chosen and (gaps := _incomplete(chosen)):
+        names = tr("、", ", ").join(gaps)
+        return {"cabinet": chosen, "candidates": candidates, "missing": [],
+                "block": tr(f"产品库里的箱体 {name(chosen)} 没填{names}，算不了排布。请到产品库补上（或用「规格书批量导入」重读它的规格书），"
+                            "或换一个资料齐的箱体",
+                            f"Cabinet {name(chosen)} in the Product Library has no {names}, so the layout cannot be calculated. "
+                            "Fill it in the Product Library (or re-read its datasheet with Import datasheets), or pick another cabinet")}
     have = "、".join(sorted({f"P{_n(Decimal(str(p['pixel_pitch_mm'])))}" for p in cabinets
                              if inputs["environment"] in p["scenes"]}, key=lambda s: Decimal(s[1:]))) or "—"
     block = None if chosen else tr(f"产品库里没有符合的箱体：{where}。库里现有（{env}）：{have}。"
@@ -344,6 +354,13 @@ def recommend(inputs: dict, library: dict, cabinet_id: str | None = None) -> dic
                                    f"No matching cabinet in the library: {where}. In the library ({env}): "
                                    f"{have.replace('、', ', ')}. Add this cabinet in the Product Library first, or change the pitch")
     return {"cabinet": chosen, "candidates": candidates, "block": block, "missing": []}
+
+
+def _incomplete(cabinet: dict) -> list[str]:
+    """排布要用、产品库里却没填的：模组宽 / 高、箱体尺寸。"""
+    need = (("module_w_mm", ("模组宽", "module width")), ("module_h_mm", ("模组高", "module height")),
+            ("cabinet_sizes_mm", ("箱体尺寸", "cabinet size")))
+    return [tr(*label) for key, label in need if not cabinet.get(key)]
 
 
 def product_inputs(cabinet: dict | None) -> dict:

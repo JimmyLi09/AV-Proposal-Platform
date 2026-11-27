@@ -253,3 +253,34 @@ def test_settings_show_the_server_folder(client):
     assert client.get("/api/settings").json()["server"]["import_dir"] is None
     client.app.state.import_dir = (client.data_dir / "LED Projects").resolve()
     assert client.get("/api/settings").json()["server"]["import_dir"].endswith("LED Projects")
+
+
+# ---- 2026-11-28 用 Jimmy 的真实规格书（G:\Works\LED Projects\Specs）调读取 ----
+
+def test_real_datasheet_wordings():
+    from app.knowledge.learn import spec_values
+
+    fields = {"module_w_mm", "module_h_mm", "cabinet_sizes_mm", "cabinet_max", "max_power_w_m2"}
+    got = lambda t: {k: v[0] for k, v in spec_values([("¶1", t)], fields).items()}  # noqa: E731
+    en = ("Module Resolution\n160(W) X 80(H)\nModule Size\n320mm(W) X 160mm(H)\nModule Maximum Power Consumption\nAbout 20W (typ.)\n"
+          "Cabinet Size\n640*480mm\nCabinet Maximum Current\nAbout 0.55 A\nCabinet Maximum Power Consumption\nAbout 120W")
+    assert got(en) == {"module_w_mm": 320, "module_h_mm": 160, "cabinet_sizes_mm": [[640, 480]],
+                                               "cabinet_max": {"640x480": {"a": 0.55, "w": 120, "sample": False}}}
+    zh = "模组分辨率\n宽256点X 高128点\n模组尺寸\n宽320mmX 高160mm\n箱体尺寸\n640*480mm\n箱体最大电流\n约 0.6 A\n箱体最大功耗\n约 136W"
+    assert got(zh) == {"module_w_mm": 320, "module_h_mm": 160, "cabinet_sizes_mm": [[640, 480]],
+                                               "cabinet_max": {"640x480": {"a": 0.6, "w": 136, "sample": False}}}
+    assert got("Module Size\n(W) 240mm X (h) 120mm x 8.0mm(d)") == {"module_w_mm": 240, "module_h_mm": 120}
+
+
+def test_reimporting_a_datasheet_updates_the_product_it_made(client):
+    """以前导入时没读到模组尺寸的产品：同一份规格书再导入 → 按文件名对上，改为更新，不重复新增。"""
+    login(client)
+    lib = _library(client)
+    old = {"id": "P1538-OLD", "category": "cabinet", "brand": "", "model": "P1.538室内52扫-640X480", "status": "approved",
+           "scenes": ["indoor"], "sample": False, "datasheet": ZH, "pixel_pitch_mm": 1.538, "module_w_mm": None,
+           "module_h_mm": None, "cabinet_sizes_mm": None, "maintenance": "front"}
+    blank = {f["name"]: None for f in lib["fields"]["cabinet"]}
+    content = {**lib["content"], "products": [*lib["content"]["products"], blank | old]}
+    assert client.post("/api/products/LED", json={"base_id": lib["id"], "reason": "t", "content": content}).status_code == 201
+    item = _items(client.post("/api/products/LED/datasheets", files=[("files", (ZH, (SPECS / ZH).read_bytes()))]))[ZH]
+    assert item["match"] == "P1538-OLD" and item["values"]["cabinet"]["module_w_mm"]["value"] == 320

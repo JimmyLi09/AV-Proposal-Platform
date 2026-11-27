@@ -186,7 +186,7 @@ def datasheet_values(chunks: list[tuple[str, str]], line: str, category: str) ->
     """规格书里认出的这一类产品的数值参数：{字段: {value, location, snippet}}。"""
     from ..knowledge.learn import spec_values
 
-    fields = {n for n, _, kind in FIELDS[line][category] if kind in ("number", "sizes")}
+    fields = {n for n, _, kind in FIELDS[line][category] if kind in ("number", "sizes", "ratings")}
     return {f: {"value": v, "location": loc, "snippet": snip} for f, (v, loc, snip) in spec_values(chunks, fields).items()}
 
 
@@ -255,7 +255,8 @@ def batch_item(line: str, filename: str, read_result: dict, products: list[dict]
     chunks = read_result["chunks"]
     body = "\n".join(t for _, t in chunks)
     category = guess_category(line, filename, body)
-    hit = match_product(filename, body, products)
+    # 同一份规格书再导入：按「规格书文件名」对上以前导入的产品，改为更新（补上次没读到的参数），不重复新增
+    hit = next((p for p in products if p.get("datasheet") == filename), None) or match_product(filename, body, products)
     model = guess_model(filename)
     brand = next((b for b in BRANDS if re.search(rf"(?<![A-Za-z]){b}(?![A-Za-z])", filename + "\n" + body[:5000], re.I)), "")
     values = {c: datasheet_values(chunks, line, c) | _choices(line, body) for c in FIELDS[line]} if chunks else {}
