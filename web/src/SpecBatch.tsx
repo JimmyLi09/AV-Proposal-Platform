@@ -17,6 +17,8 @@ const TYPES = ["pdf", "jpg", "jpeg", "png", "xlsx", "xlsm", "xls", "docx"];
 const kind = (name: string) => name.split(".").pop()!.toLowerCase();
 
 function show(v: unknown): string {
+  if (v && typeof v === "object" && !Array.isArray(v)) // 每箱最大电流 / 功率：{"640x480": {a, w}}
+    return Object.entries(v as Record<string, { a: number; w: number }>).map(([k, r]) => `${k} ${r.a} A / ${r.w} W`).join(", ");
   if (Array.isArray(v)) return v.map((x) => (Array.isArray(x) ? x.join("×") : optionLabel(String(x)))).join(", ");
   if (typeof v === "boolean") return optionLabel(v ? "yes" : "no");
   return typeof v === "number" ? v.toLocaleString() : optionLabel(String(v));

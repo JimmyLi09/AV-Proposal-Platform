@@ -269,7 +269,14 @@ export default function Products({ line }: { line: string }) {
 }
 
 type ExcelResult = { products: Product[]; added: string[]; updated: string[]; errors: string[]; name?: string };
-type Found = { value: number; location: string; snippet: string };
+type Found = { value: unknown; location: string; snippet: string };
+
+function showValue(v: unknown): string {
+  if (Array.isArray(v)) return v.map((x) => (Array.isArray(x) ? x.join("×") : String(x))).join(", ");
+  if (v && typeof v === "object") // 每箱最大电流 / 功率
+    return Object.entries(v as Record<string, { a: number; w: number }>).map(([k, r]) => `${k} ${r.a} A / ${r.w} W`).join(", ");
+  return typeof v === "number" ? v.toLocaleString() : String(v);
+}
 type SheetResult = { datasheet: string; values: Record<string, Found>; ocr: boolean; note: string; read: boolean };
 
 // 读规格书：认出的参数逐项列出原文，人勾选后才填进产品
@@ -340,7 +347,7 @@ function Datasheet({ line, product, fields, onApply }: { line: string; product: 
                   <tr key={f}>
                     <td><input type="checkbox" aria-label={label(f)} checked={!!picked[f]} onChange={(e) => setPicked({ ...picked, [f]: e.target.checked })} /></td>
                     <td>{label(f)}</td>
-                    <td className="strong">{v.value.toLocaleString()}</td>
+                    <td className="strong">{showValue(v.value)}</td>
                     <td>{product[f] == null || product[f] === "" ? "—" : String(product[f])}</td>
                     <td className="muted small">{v.location} · {v.snippet}</td>
                   </tr>

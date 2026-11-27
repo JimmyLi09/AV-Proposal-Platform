@@ -143,9 +143,14 @@ SPEC = {  # 字段: (正则, 换算)；只找这一类产品有的字段
 }
 RESOLUTION = re.compile(r"(\d{3,4})\s*[x×]\s*(\d{3,4})\s*(?:pixels|\(?\s*(?:WUXGA|WXGA|4K|UHD|1080p|native))", re.I)
 THROW = re.compile(r"throw\s*ratio\D{0,10}?(\d\.\d{1,2})\s*(?:[-–~]\s*(\d\.\d{1,2}))?\s*:\s*1", re.I)
-_WXH = r"\D{0,25}?(\d{2,4}(?:\.\d+)?)\s*(?:mm)?\s*[x×*X]\s*(\d{2,4}(?:\.\d+)?)"
+# 2026-11-28 用 Jimmy 的真实规格书调过：「320mm(W) X 160mm(H)」「宽320mmX 高160mm」「(W) 240mm X (h) 120mm」「640*480mm」
+_SIDE = r"\s*(?:\(\s*[WwHh]\s*\)|[宽高])?\s*"
+_WXH = r"\D{0,25}?(\d{2,4}(?:\.\d+)?)\s*(?:mm)?" + _SIDE + r"[x×*X]" + _SIDE + r"(\d{2,4}(?:\.\d+)?)"
 MODULE = re.compile(r"(?:module\s*(?:size|dimensions?)|模组尺寸|模块尺寸|单元板尺寸)" + _WXH, re.I)
 CABINET = re.compile(r"(?:cabinet\s*(?:size|dimensions?)|箱体尺寸)" + _WXH, re.I)
+# 每箱最大电流 / 功耗（「Cabinet Maximum Current About 0.55 A」「箱体最大功耗 约 136W」）→ 产品库的「每箱最大电流 / 功率」
+CAB_A = re.compile(r"(?:cabinet\s*max(?:imum)?\.?\s*current|箱体最大电流)\D{0,15}?(\d+(?:\.\d+)?)\s*A\b", re.I)
+CAB_W = re.compile(r"(?:cabinet\s*max(?:imum)?\.?\s*power(?:\s*consumption)?|箱体最大功[耗率])\D{0,15}?(\d{2,4}(?:\.\d+)?)\s*W\b", re.I)
 
 
 def spec_values(lines: list[tuple[str, str]], fields: set[str]) -> dict[str, tuple]:
@@ -163,10 +168,18 @@ def spec_values(lines: list[tuple[str, str]], fields: set[str]) -> dict[str, tup
             out["module_w_mm"], out["module_h_mm"] = (_number(m[1]), location, m[0]), (_number(m[2]), location, m[0])
         if "cabinet_sizes_mm" in fields and "cabinet_sizes_mm" not in out and (m := CABINET.search(line)):
             out["cabinet_sizes_mm"] = ([[_number(m[1]), _number(m[2])]], location, m[0])
+        if "cabinet_max" in fields:
+            for key, pattern in (("_cab_a", CAB_A), ("_cab_w", CAB_W)):
+                if key not in out and (m := pattern.search(line)):
+                    out[key] = (_number(m[1]), location, m[0])
         if "throw_ratio" in fields and "throw_ratio" not in out and (m := THROW.search(line)):
             out["throw_ratio"] = (float(m[1]), location, m[0])
             if m[2]:
                 out["throw_max"] = (float(m[2]), location, m[0])
+    a, w = out.pop("_cab_a", None), out.pop("_cab_w", None)
+    if a and w and "cabinet_sizes_mm" in out:  # 只有一个箱体尺寸时才对得上是哪种箱体
+        cw, ch = out["cabinet_sizes_mm"][0][0]
+        out["cabinet_max"] = ({f"{cw:g}x{ch:g}": {"a": a[0], "w": w[0], "sample": False}}, a[1], f"{a[2].strip()} · {w[2].strip()}")
     return out
 
 

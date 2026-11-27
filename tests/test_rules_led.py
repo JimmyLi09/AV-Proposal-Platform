@@ -387,3 +387,16 @@ def test_assumptions_are_written_into_the_proposal_risks(tmp_path):
         risks = proposal_doc._risks(SimpleNamespace(business_line="LED"), v, {"clauses": []})
         assert any("资料里没写" in r and "使用环境 室内" in r for r in risks), risks
         assert any(r.startswith("屏宽：设计 4500") and "按 4480 计算" in r for r in risks), risks
+
+
+def test_recommendation_prefers_cabinets_with_complete_data():
+    """2026-11-28 8SW Media Wall：P2 的箱体有 8 个，排第一的是规格书导入、没读到模组尺寸的 → 一路「还缺：模组宽」。
+    资料齐的排前面；只剩缺资料的才用，并说清缺什么。"""
+    lib = copy.deepcopy(LIBRARY)
+    gap = dict(IC25, id="P25-GAP", model="P2.5 imported", module_w_mm=None, module_h_mm=None, status="preferred")
+    lib["products"].insert(0, gap)
+    rec = led.recommend(fixture_input(), lib)
+    assert rec["cabinet"]["id"] == "IC-25" and rec["block"] is None and rec["candidates"][-1]["id"] == "P25-GAP"
+    lib["products"] = [p for p in lib["products"] if p["id"] != "IC-25"]
+    rec = led.recommend(fixture_input(), lib)
+    assert rec["cabinet"]["id"] == "P25-GAP" and "没填模组宽、模组高" in rec["block"] and "产品库" in rec["block"]
