@@ -120,6 +120,11 @@ def _per_sqm(m) -> int | None:
     return int(m[1]) if re.search(r"m2|m²|㎡|sqm|平方", m[0], re.I) else None  # 每箱的功耗不是 W/㎡
 
 
+def _nits(v):
+    """亮度只认 100–20000 nits：服务器上读出过 422500、288895（对比度、像素数一类的数）。读不出的接着找下一行。"""
+    return v if v and 100 <= v <= 20000 else None
+
+
 # 规格书常见写法（2026-11-18 补中文模组规格书：像素间距、模组 / 箱体尺寸、表格里「栏名 | 值」）
 SPEC = {  # 字段: (正则, 换算)；只找这一类产品有的字段
     "capacity_px": (r"(?:load(?:ing)?\s*capacity|max(?:imum)?\s*load(?:ing)?|带载(?:能力|像素|面积)?)\D{0,20}?"
@@ -131,7 +136,7 @@ SPEC = {  # 字段: (正则, 换算)；只找这一类产品有的字段
     "outputs": (r"(\d{1,2})\s*(?:x|×)?\s*(?:video\s*)?outputs?\b|(\d{1,2})\s*路\s*输出", lambda m: _first(m, int)),
     "brightness_nits": (r"(\d[\d,]{2,5})\s*(?:nits|cd/m2|cd/m²|cd/㎡)"
                         r"|(?:brightness|亮度)(?!\s*(?:均匀|uniform|调节|adjust|级))\D{0,20}?(\d[\d,]{2,5})(?!\s*(?:级|bit|%|Hz))",
-                        lambda m: _first(m, _int)),
+                        lambda m: _nits(_first(m, _int))),
     "max_power_w_m2": (r"(?:max(?:imum)?\.?\s*power(?:\s*consumption)?|最大功耗|最大功率)\D{0,20}?(\d{2,4})"
                        r"(?:\s*W\s*/\s*(?:m2|m²|㎡|sqm))?", _per_sqm),
     "weight_kg": (r"(?:weight|重量)\D{0,12}?(\d+(?:\.\d+)?)\s*kg", lambda m: _number(m[1])),

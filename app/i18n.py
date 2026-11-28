@@ -48,6 +48,9 @@ STORED = {
     "去掉每条电源线的串接上限，回路只按电流算（2026-11-21 Jimmy；升级时自动生成，其它算式和参数不变）":
         "Removed the cabinets-per-power-chain limit; circuits by current only (2026-11-21 Jimmy; generated on upgrade, "
         "other formulas and parameters unchanged)",
+    "资料没写幕面增益时先按缺省值算（待确定）（升级时自动生成，算式和其它参数不变）":
+        "Surface gain missing from the documents uses a default (to be confirmed) (generated on upgrade; formulas and other "
+        "parameters unchanged)",
     "示例产品，清单 D 组填好后替换": "Sample products; to be replaced once checklist group D is filled in",
     "示例产品，投影清单 v2 填好后替换": "Sample products; to be replaced once projection checklist v2 is filled in",
     "DWG 要在服务器装免费的 ODA File Converter 才能读取，目前只随项目保存":

@@ -284,3 +284,11 @@ def test_reimporting_a_datasheet_updates_the_product_it_made(client):
     assert client.post("/api/products/LED", json={"base_id": lib["id"], "reason": "t", "content": content}).status_code == 201
     item = _items(client.post("/api/products/LED/datasheets", files=[("files", (ZH, (SPECS / ZH).read_bytes()))]))[ZH]
     assert item["match"] == "P1538-OLD" and item["values"]["cabinet"]["module_w_mm"]["value"] == 320
+
+
+def test_brightness_ignores_numbers_that_cannot_be_nits():
+    """服务器上读出过亮度 422500、288895：不是亮度的数跳过，接着找下一行。"""
+    from app.knowledge.learn import spec_values
+
+    lines = [("¶1", "Brightness uniformity ≥97%  Contrast 422500"), ("¶2", "亮度 288895"), ("¶3", "Brightness 800 nits")]
+    assert spec_values(lines, {"brightness_nits"})["brightness_nits"][0] == 800

@@ -20,7 +20,7 @@ LINES = {"LED": {"steps": led.STEPS, "precheck": led.size_choices, "auto_pick": 
                 "product_inputs": pj.product_inputs, "catalog": pj.catalog, "boq": pj.boq,
                 "product_fed": pj.PRODUCT_INPUTS, "diagram": pj.diagram,
                 "boq_context": pj.boq_context, "boq_extra": pj.BOQ_EXTRA, "suggest": pj.suggest,
-                "overridable": pj.OVERRIDABLE}}
+                "overridable": pj.OVERRIDABLE, "defaults": pj.apply_defaults}}
 STATUSES = ["set", "review", "sample", "empty"]  # 越往后越不确定
 
 
@@ -139,6 +139,8 @@ def run(content: dict, inputs: dict, catalog: dict, overrides: dict | None = Non
             ctx[p["name"]] = num(p["value"])
     cabinet = catalog.get("cabinet") or {}
     for k, v in cabinet.items():
+        if v is None:  # 产品库没填（例：亮度）：当作缺，不当 0
+            continue
         ctx[f"cabinet_{k}"] = num(v)
         status[f"cabinet_{k}"] = "sample" if cabinet.get("sample") else "set"
     ctx.update({k: num(v) for k, v in inputs.items() if v not in (None, "", [])})
@@ -167,6 +169,21 @@ def _manual(line: dict, manual, decimals=None):
 
 def _manual_trace(line: dict) -> str:
     return tr(f" → 手动 {line['display']}", f" → manual {line['display']}") if line.get("manual") else ""
+
+
+PRODUCT_LABELS = {"brightness_nits": ("亮度", "brightness")}
+
+
+def _unchecked(result: dict, missing: list[str]) -> dict:
+    """检查类规则缺的是产品库的值（例：箱体没填亮度）：不挡计算，写「待确定」（2026-11-21 原则）。"""
+    names_ = [m.removeprefix("cabinet_") for m in missing]
+    zh = "、".join(PRODUCT_LABELS.get(n, (n, n))[0] for n in names_)
+    en = ", ".join(PRODUCT_LABELS.get(n, (n, n))[1] for n in names_)
+    result.update(check="NOTE", status="review", display=tr("待确定", "To be confirmed"),
+                  note=tr(f"产品库里这个箱体没填{zh}，没法检查，待确定；到产品库补上后重算",
+                          f"The cabinet has no {en} in the product library, so this cannot be checked (to be confirmed); "
+                          "fill it in and recalculate"))
+    return result
 
 
 def _run_rule(rule, ctx, status, params, catalog, steps, overrides) -> dict:
@@ -217,6 +234,8 @@ def _run_rule(rule, ctx, status, params, catalog, steps, overrides) -> dict:
                 tree = parse(case["expr"])
                 used |= names(tree)
                 if missing := sorted(names(tree) - ctx.keys()):
+                    if rule.get("check") and all(m.startswith("cabinet_") for m in missing):
+                        return _unchecked(result, missing)
                     result["missing"] = missing
                     return result
                 value = evaluate(tree, ctx)
@@ -289,24 +308,30 @@ def calculate(content: dict, library: dict, inputs: dict, cabinet_id: str | None
     if line.get("auto_pick"):
         # 2026-11-21 Jimmy：系统自动判断给结论，有问题写「待确定」。尺寸不是模组整数倍、或现有箱体拼不出时，
         # 先替人选一个最近的接着算（人可以改选另一个）
-        choices = out["choices"] or line["cabinet_choices"]({k: num(v) for k, v in
-                                                             {**inputs, **line["product_inputs"](rec["cabinet"])}.items()
-                                                             if isinstance(v, (int, float, str)) and _is_num(v)}
-                                                            | {"cabinet_sizes_mm": [[num(a), num(b)] for a, b in
-                                                                                    (rec["cabinet"] or {}).get("cabinet_sizes_mm") or []]})
-        choices = {k: [_plain(num(x)) for x in v] for k, v in choices.items()}
-        if choices:
+        # 先按模组吸附，再按箱体（例：8SW 13500 × 5920：宽不是模组整数倍，高是模组整数倍但 480 高的箱体拼不出），最多两轮
+        work, seen = dict(inputs), {}
+        for _ in range(2):
+            ctx = {**work, **line["product_inputs"](rec["cabinet"])}
+            choices = out["choices"] or line["cabinet_choices"](
+                {k: num(v) for k, v in ctx.items() if isinstance(v, (int, float, str)) and _is_num(v)}
+                | {"cabinet_sizes_mm": [[num(a), num(b)] for a, b in (rec["cabinet"] or {}).get("cabinet_sizes_mm") or []]})
+            choices = {k: [_plain(num(x)) for x in v] for k, v in choices.items()}
+            if not choices:
+                break
             for name, options in choices.items():
-                pick = line["auto_pick"](num(inputs[name]), [num(o) for o in options])
+                pick = line["auto_pick"](num(work[name]), [num(o) for o in options])
                 auto[name] = {"from": _plain(num(inputs[name])), "to": _plain(pick), "options": options}
-            snapped = {**inputs, **{k: a["to"] for k, a in auto.items()}}
-            again = run(content, {**snapped, **line["product_inputs"](rec["cabinet"])}, catalog, overrides)
+                work[name] = auto[name]["to"]
+            seen.update(choices)
+            again = run(content, {**work, **line["product_inputs"](rec["cabinet"])}, catalog, overrides)
             if again["choices"]:  # 选了一个还是不行：照旧让人选
                 auto = {}
                 out["choices"] = choices
-            else:
-                out, inputs = again, snapped
-                out["choices"] = choices
+                break
+            out = again
+        if auto:
+            inputs = work
+            out["choices"] = seen
     out["auto"] = auto
     out["assumed"] = assumed
     values = {ln["name"]: ln["value"] for r in out["rules"] for ln in r["lines"]}

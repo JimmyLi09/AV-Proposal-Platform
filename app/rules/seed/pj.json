@@ -30,6 +30,7 @@
     {"name": "projector_power_w", "label": "Projector power 投影机功率", "unit": "W", "type": "number"}
   ],
   "params": [
+    {"name": "default_surface_gain", "group": "Defaults 缺省值", "label": "Default surface gain 缺省幕面增益", "unit": "", "value": 1.0, "status": "sample", "source": "资料没写时系统先按这个算（待确定）；示例值，待 Jimmy 确认"},
     {"name": "overlap_min", "group": "Blending 融合", "label": "Blend minimum 融合带下限", "unit": "", "value": 0.15, "status": "set"},
     {"name": "overlap_max", "group": "Blending 融合", "label": "Blend maximum 融合带上限", "unit": "", "value": 0.3, "status": "set"},
     {"name": "target_nits", "group": "Brightness 亮度", "label": "Target brightness 目标亮度", "unit": "nits", "value": 100, "status": "sample"},

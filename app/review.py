@@ -33,7 +33,8 @@ def blockers(rev: Revision, out: dict, inputs: bool = True) -> list[str]:
         items.append(tr(f"还有 {len(out['pending'])} 个字段待确认", f"{len(out['pending'])} fields still need confirming"))
     result = out["result"]
     if rev.status not in ("calculated", *ws.LOCKED) or not result:
-        items.append(tr("还没有算完（有缺少的输入或计算出错）", "Not fully calculated (missing inputs or a calculation error)"))
+        # 算不完时说真正的原因（例：箱体拼不出、没有放得进进深的镜头），不只写「还没有算完」（2026-11-28）
+        items += _stuck(result) or [tr("还没有算完（有缺少的输入或计算出错）", "Not fully calculated (missing inputs or a calculation error)")]
         return items
     if block := (result.get("recommendation") or {}).get("block"):
         items.append(block)
@@ -46,6 +47,20 @@ def blockers(rev: Revision, out: dict, inputs: bool = True) -> list[str]:
     if (out.get("drawing") or {}).get("blocked"):
         items.append(tr("图纸有超载的回路或网线", "The drawing has an overloaded circuit or data cable"))
     return items
+
+
+def _stuck(result: dict | None) -> list[str]:
+    """没算完的原因：阻断的规则（多面屏带面号）和计算出错。"""
+    if not result:
+        return []
+    out = []
+    groups = [("", result.get("rules") or [])] + [(f"{f['id']} · ", f.get("rules") or []) for f in result.get("faces") or []]
+    for face, rules in groups:
+        for r in rules:
+            if r.get("check") == "BLOCK" or r.get("error"):
+                why = r.get("error") or r.get("note") or ""
+                out.append(f"{face}{r['id']} {r['title']}" + (tr("：", ": ") + why if why else ""))
+    return out
 
 
 def _plain(x):

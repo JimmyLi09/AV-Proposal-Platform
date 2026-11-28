@@ -223,3 +223,47 @@ def test_no_chain_limit_counts_circuits_by_current_only():
     assert v["circuits_by_chain"] == 0 and v["circuits"] == v["circuits_by_load"] == CASE["expect"]["F6_trace"]["by_load"]
     r, v, _ = run(with_params(chain_max=0), overrides={"circuits": 2})  # 手动 2 路、每路 14 箱：电流够，不阻断
     assert r["W1"]["check"] != "BLOCK" and v["power_group_sizes"] == [14, 14]
+
+
+def test_no_chain_limit_drawing_is_not_overloaded(tmp_path):
+    """2026-11-28 全流程跑 Phoenix Sea：串接上限改成 0 后，06 的拼接图把每一路都算成「超出带载」，05 走不下去。"""
+    from conftest import count_grouping
+
+    with TestClient(create_app(tmp_path)) as c:
+        user = c.post("/api/users", json={"name": "Jimmy", "role": "PM"}).json()
+        c.post("/api/session", json={"user_id": user["id"]})
+        latest = c.get("/api/rules/LED").json()
+        content = copy.deepcopy(latest["content"])
+        next(p for p in content["params"] if p["name"] == "chain_max")["value"] = 0
+        assert c.post("/api/rules/LED", json={"content": content, "base_id": latest["id"], "reason": "x"}).status_code == 201
+        count_grouping(c.app)
+        pid = c.post("/api/projects", json={"name": "Royal", "client": "x"}).json()["id"]
+        prop = c.post(f"/api/projects/{pid}/proposals", json={"name": "LED", "business_line": "LED"}).json()["id"]
+        v = c.put(f"/api/proposals/{prop}/inputs", json={"inputs": SAMPLE["input"]}).json()
+        assert v["drawing"]["circuits"] and not any(x["over"] for x in v["drawing"]["circuits"])
+        assert v["flow"]["gates"]["05"] == ""
+
+
+def test_upgrade_adds_the_projection_gain_default(tmp_path):
+    """0021：在最新的投影规则集上另存一个新版本，只多一个「缺省幕面增益」参数（示例值 1.0），旧版本不改。"""
+    engine = make_engine(tmp_path / "avp.db")
+    cfg = Config()
+    cfg.set_main_option("script_location", str(MIGRATIONS))
+    with engine.begin() as conn:
+        cfg.attributes["connection"] = conn
+        command.upgrade(cfg, "0020")
+    pj, _ = load_seed("PJ")
+    old = copy.deepcopy(pj)
+    old["params"] = [p for p in old["params"] if p["name"] != "default_surface_gain"]
+    table = sa.table("rule_set_versions", sa.column("business_line"), sa.column("version"), sa.column("content", sa.JSON),
+                     sa.column("reason"), sa.column("created_at", sa.DateTime))
+    with engine.begin() as conn:
+        conn.execute(table.insert().values(business_line="PJ", version="v1.5", content=old, reason="试用", created_at=sa.func.now()))
+    migrate(engine)
+    with engine.connect() as conn:
+        sets = conn.execute(sa.text("select version, content from rule_set_versions where business_line = 'PJ' order by id")).all()
+    assert [s.version for s in sets] == ["v1.5", "v1.6"]
+    new = json.loads(sets[1].content)
+    assert json.loads(sets[0].content) == old and new["rules"] == old["rules"]
+    assert [p for p in new["params"] if p["name"] != "default_surface_gain"] == old["params"]
+    assert {p["name"]: p["value"] for p in new["params"]}["default_surface_gain"] == 1.0

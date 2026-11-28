@@ -400,3 +400,34 @@ def test_recommendation_prefers_cabinets_with_complete_data():
     lib["products"] = [p for p in lib["products"] if p["id"] != "IC-25"]
     rec = led.recommend(fixture_input(), lib)
     assert rec["cabinet"]["id"] == "P25-GAP" and "没填模组宽、模组高" in rec["block"] and "产品库" in rec["block"]
+
+
+# ---- 2026-11-28 全流程用真实项目跑一遍时找到的 ----
+
+def _p2_library():
+    lib = copy.deepcopy(LIBRARY)
+    lib["products"].append(dict(IC25, id="P2-640x480", model="P2 640x480", pixel_pitch_mm=2, cabinet_sizes_mm=[[640, 480]],
+                                status="preferred", brightness_nits=None))
+    return lib
+
+
+def test_snaps_to_the_module_then_to_the_cabinet():
+    """8SW Media Wall 13500 × 5920、P2 640 × 480：宽不是模组整数倍，高是模组整数倍但 480 高的箱体拼不出——两个都先选好，接着算完。"""
+    from app.rules.engine import calculate
+
+    inputs = {k: v for k, v in fixture_input().items() if k not in ("module_w_mm", "module_h_mm", "cabinet_sizes_mm")}
+    inputs |= {"pixel_pitch_mm": 2, "width_mm": 13500, "height_mm": 5920}
+    out = calculate(CONTENT, _p2_library(), inputs, "P2-640x480")
+    assert out["auto"] == {"width_mm": {"from": 13500, "to": 13440, "options": [13440, 13760]},
+                           "height_mm": {"from": 5920, "to": 5760, "options": [5760, 6240]}}
+    assert all(not r["missing"] and not r["error"] for r in out["rules"])
+
+
+def test_unknown_product_brightness_is_to_be_confirmed_not_an_error():
+    """Displan wall：产品库的 COB 箱体没填亮度，F15 写「待确定」，不再「计算出错」挡住整个方案。"""
+    from app.rules.engine import calculate
+
+    inputs = {k: v for k, v in fixture_input().items() if k not in ("module_w_mm", "module_h_mm", "cabinet_sizes_mm")}
+    inputs |= {"pixel_pitch_mm": 2, "width_mm": 3840, "height_mm": 1920}
+    f15 = next(r for r in calculate(CONTENT, _p2_library(), inputs, "P2-640x480")["rules"] if r["id"] == "F15")
+    assert f15["error"] is None and f15["missing"] == [] and f15["check"] == "NOTE" and "亮度" in f15["note"]
