@@ -104,6 +104,10 @@ def _input_label(defs: dict, name: str) -> str:
 def gate_inputs(db: Session, prop: Proposal, rev: Revision, out: dict) -> str:
     """02–04 → 05：确认后的输入齐了、没有待确认的字段、尺寸是模组整数倍（选了吸附值）、多面屏几份资料对得上。"""
     if not rev.inputs:
+        if any(f.removed_at is None and f.read_status != "reading" for f in db.get(Project, prop.project_id).files):
+            # 传了资料却一个尺寸都没认出（例：效果图没有数字）
+            return tr("资料里没认出尺寸：手填尺寸，或请对方填《项目需求单》（本页可下载）",
+                      "No sizes found in the files: fill them in, or ask for the requirement form (download on this page)")
         return tr("先上传图纸或手填尺寸", "Upload drawings or fill in the size first")
     if n := len(ws.pending(rev)):
         return tr(f"还有 {n} 个字段没确认", f"{n} fields not confirmed")

@@ -274,6 +274,33 @@ def test_multiface_projection_names_the_missing_inputs(tmp_path):
                "corners": [{"between": ["A", "B"], "type": "inside_90"}]}
     v = c.put(f"{base}/inputs", json={"inputs": inputs}).json()
     gate = v["flow"]["gates"]["02-04"]
-    assert gate.startswith("还缺：") and "可用进深" in gate and "幕面增益" in gate, gate
+    # 幕面增益没写时按缺省值算（待确定，2026-11-28），不再缺
+    assert gate.startswith("还缺：") and "可用进深" in gate and "幕面增益" not in gate, gate
     p19 = next(r for r in v["result"]["rules"] if r["id"] == "P19")
-    assert set(p19["missing"]) == {"available_depth_mm", "mount_height_m", "surface_gain"}
+    assert set(p19["missing"]) == {"available_depth_mm", "mount_height_m"}
+
+
+def test_stuck_calculation_says_why_and_files_without_sizes_point_to_the_form(tmp_path):
+    """2026-11-28 全流程跑真实项目：Solano 每面进深 0.3 m 放不下镜头——05 说是哪一面、哪条规则、什么原因，
+    不再只写「还没有算完」；传了资料却一个尺寸都没认出时，02–04 提示填《项目需求单》。"""
+    _, pj = load_seed("PJ")
+    c = start(tmp_path)
+    _, base = new_project(c, business_line="PJ", name="Solano")
+    inputs = pj["input"] | {"shape": "L", "corners": [{"between": ["A", "B"], "type": "inside_90"}],
+                            "faces": [{"id": "A", "name": "Left", "width_mm": 5000, "depth_mm": 300},
+                                      {"id": "B", "name": "Right", "width_mm": 3000, "depth_mm": 300}]}
+    gate = c.put(f"{base}/inputs", json={"inputs": inputs}).json()["flow"]["gates"]["05"]
+    assert gate.startswith("A · P3") and "0.3 m" in gate, gate
+
+
+def test_files_without_any_size_point_to_the_requirement_form(tmp_path):
+    """效果图没有任何数字：02–04 提示手填或请对方填《项目需求单》，不再只说「先上传图纸」。"""
+    from PIL import Image
+
+    c = start(tmp_path)
+    p, base = new_project(c)
+    path = tmp_path / "render.png"
+    Image.new("RGB", (400, 300), "white").save(path)
+    assert c.post(f"/api/projects/{p['id']}/files", files={"files": ("render.png", path.read_bytes())}).status_code == 201
+    gate = c.get(base).json()["flow"]["gates"]["02-04"]
+    assert "项目需求单" in gate, gate

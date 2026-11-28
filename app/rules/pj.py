@@ -179,6 +179,15 @@ PRODUCT_INPUTS = ["native_px_w", "native_px_h", "projector_lumens", "projector_p
 OVERRIDABLE: dict[str, list[str]] = {}  # 推荐页手动覆盖（CR-5）目前只做 LED
 
 
+def apply_defaults(inputs: dict, params: dict, library: dict | None = None) -> tuple[dict, dict]:
+    """资料没写幕面增益时先按缺省值算（待确定，2026-11-28；规则集参数 default_surface_gain，界面可改、带版本）。
+    老版本规则集没有这个参数就不补。"""
+    gain = params.get("default_surface_gain")
+    if gain is None or inputs.get("surface_gain") not in (None, ""):
+        return inputs, {}
+    return {**inputs, "surface_gain": gain}, {"surface_gain": gain}
+
+
 def size_choices(ctx: dict) -> dict:
     return {}
 

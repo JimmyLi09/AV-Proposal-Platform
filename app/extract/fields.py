@@ -44,6 +44,9 @@ CHOICES = {
     # 投影安装方式（2026-11-13）
     "mounting": [("ceiling", r"ceiling[\s-]*mount|吊顶|吊装|吸顶"), ("floor", r"floor|table|落地|桌面|地台"),
                  ("wall", r"wall[\s-]*mount|壁挂|墙装")],
+    # 投影《项目需求单》的下拉（2026-11-28）；只在 Excel 按栏名读，图纸文字不读
+    "central_control": [("none", r"none|no\b|无|没有|不要"), ("pjlink", r"pjlink|yes|有|要")],
+    "server_room_scope": [("media_pc_only", r"media\s*pc|播放电脑|只算"), ("full", r"full|all|全部")],
 }
 
 # 图纸里的自由文字更容易误判，只认明确的写法（Excel 有栏名时用上面宽松的 CHOICES）
@@ -82,7 +85,9 @@ LABELS = {
     "surface_gain": r"screen\s*gain|surface\s*gain|幕面增益|增益",
 }
 # Excel 栏名先认投影的（「天花高度」「镜头高度」不能当成「高度」，「投影安装方式」不能当成 LED 的「安装方式」）
-LABELS = PJ_MM | PJ_M | {"mounting": r"projector\s*mount(?:ing)?|投影(?:机)?安装方式"} | LABELS
+LABELS = PJ_MM | PJ_M | {"mounting": r"projector\s*mount(?:ing)?|投影(?:机)?安装方式",
+                         "central_control": r"central\s*control|中控",
+                         "server_room_scope": r"server\s*room\s*power|机房功率"} | LABELS
 # 墙宽 / 墙高 也读成屏宽 / 屏高，投影方案里对应墙宽 / 墙高（见 workspace.FIELD_ALIAS）
 LABELS["width_mm"] += r"|wall\s*width|墙宽|墙面宽度|幕宽|投影宽度"
 LABELS["height_mm"] += r"|wall\s*height|墙高|墙面高度|幕高|投影高度"

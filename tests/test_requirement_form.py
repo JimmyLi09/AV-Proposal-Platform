@@ -13,7 +13,8 @@ EXPECT = {
     "LED": {"width_mm": 4480, "height_mm": 2560, "pixel_pitch_mm": 2.5, "environment": "indoor", "installation": "wall",
             "maintenance": "front", "brightness_required_nits": 600, "viewing_distance_m": [4, 6], "signal_sources": 1},
     "PJ": {"width_mm": 18325, "height_mm": 2700, "available_depth_mm": 3200, "ceiling_height_mm": 3000, "mounting": "ceiling",
-           "mount_height_m": 2.8, "ambient_lux": 150, "surface_gain": 1, "nearest_viewing_m": 1.5, "signal_run_m": 35},
+           "mount_height_m": 2.8, "ambient_lux": 150, "surface_gain": 1, "nearest_viewing_m": 1.5, "signal_run_m": 35,
+           "central_control": "none", "server_room_scope": "full"},
 }
 
 

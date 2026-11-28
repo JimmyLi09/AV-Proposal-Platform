@@ -878,5 +878,9 @@
   },
   "去掉每条电源线的串接上限，回路只按电流算（2026-11-21 Jimmy；升级时自动生成，其它算式和参数不变）": {
     "en": "Removed the cabinets-per-power-chain limit; circuits by current only (2026-11-21 Jimmy; generated on upgrade, other formulas and parameters unchanged)"
+  },
+  "Default surface gain 缺省幕面增益": {
+    "zh": "缺省幕面增益",
+    "en": "Default surface gain"
   }
 }
